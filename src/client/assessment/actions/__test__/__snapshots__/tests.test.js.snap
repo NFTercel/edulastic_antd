@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test finish test activity should return an action 1`] = `
+Object {
+  "type": "[test] finish test",
+}
+`;
+
+exports[`Test load previous response should return an action 1`] = `
+Object {
+  "type": "[test] load previouls responses",
+}
+`;
+
+exports[`Test load test should return an action 1`] = `
+Object {
+  "payload": Object {
+    "test": Object {
+      "testId": "6te42hgfd67821fa",
+    },
+    "testId": undefined,
+  },
+  "type": "[test] load test",
+}
+`;

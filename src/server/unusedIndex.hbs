@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+      <base href='/' />
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1, initial-scale=1, user-scalable=no">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <link rel="shortcut icon" type="image/png" href="//cdn.edulastic.com/JS/webresources/images/as/favicon.png" />
+      <link rel="apple-touch-icon" type="image/png" href="//cdn.edulastic.com/JS/webresources/images/as/favicon.png">
+      <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+      <title>{{title}}</title>
+</head>
+
+<body id="body">
+      <section id="react-app"></section>
+      <section id="modal-root"></section>
+      <script src="https://cdn.ravenjs.com/3.26.2/raven.min.js" crossorigin="anonymous">
+      </script>
+      <script>
+            Raven.config('http://8a02eaf36de84240a77c0dd7aaa6bdfe@ec2-107-22-35-151.compute-1.amazonaws.com/2', {
+                  whitelistUrls: [/edulastic-poc\.snapwiz\.net/]
+            }).install()
+      </script>
+      <script type="text/javascript" src="assets/index.js"></script>
+</body>
+
+</html>

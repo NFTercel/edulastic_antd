@@ -1,0 +1,13 @@
+{
+  "common": {
+    "liveClassBoard": "LIVE CLASS BOARD",
+    "expressGrader": "EXPRESS GRADER",
+    "reports": "REPORTS",
+    "print": "PRINT",
+    "redirect": "REDIRECT",
+    "more": "MORE",
+    "attempts": "ATTEMPTS",
+    "avg_time": "AVG TIME (SECONDS)"
+
+  }
+}

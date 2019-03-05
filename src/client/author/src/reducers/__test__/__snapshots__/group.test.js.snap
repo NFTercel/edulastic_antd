@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`group should return the initial state 1`] = `Array []`;
+
+exports[`group should return the set group students state 1`] = `Array []`;
+
+exports[`group should return the set groups state 1`] = `
+Array [
+  1,
+  3,
+  4,
+]
+`;

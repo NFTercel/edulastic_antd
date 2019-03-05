@@ -1,0 +1,248 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`item detail delete widget should return an action 1`] = `
+Object {
+  "payload": Object {
+    "rowIndex": 1,
+    "widgetIndex": 1,
+  },
+  "type": "[itemDetail] delete widget",
+}
+`;
+
+exports[`item detail delete widget should return an action 2`] = `
+Object {
+  "payload": Object {
+    "rowIndex": 1,
+    "widgetIndex": 2,
+  },
+  "type": "[itemDetail] delete widget",
+}
+`;
+
+exports[`item detail get item detail by id should return an action 1`] = `
+Object {
+  "payload": Object {
+    "id": "5bf28847dc39e409216aea00",
+    "params": Object {
+      "data": true,
+      "validation": true,
+    },
+  },
+  "type": "[itemDetail] receive request",
+}
+`;
+
+exports[`item detail move item detail widget should return an action 1`] = `
+Object {
+  "payload": Object {
+    "from": Object {
+      "rowIndex": 1,
+      "tabIndex": 1,
+      "widgetIndex": 2,
+    },
+    "to": Object {
+      "rowIndex": 1,
+      "tabIndex": 1,
+      "widgetIndex": 1,
+    },
+  },
+  "type": "[itemDetail] move widget",
+}
+`;
+
+exports[`item detail move item detail widget should return an action 2`] = `
+Object {
+  "payload": Object {
+    "from": Object {
+      "rowIndex": 2,
+      "tabIndex": 1,
+      "widgetIndex": 2,
+    },
+    "to": Object {
+      "rowIndex": 2,
+      "tabIndex": 1,
+      "widgetIndex": 1,
+    },
+  },
+  "type": "[itemDetail] move widget",
+}
+`;
+
+exports[`item detail move item detail widget should return an action 3`] = `
+Object {
+  "payload": Object {
+    "from": Object {
+      "rowIndex": 1,
+      "tabIndex": 3,
+      "widgetIndex": 2,
+    },
+    "to": Object {
+      "rowIndex": 1,
+      "tabIndex": 1,
+      "widgetIndex": 2,
+    },
+  },
+  "type": "[itemDetail] move widget",
+}
+`;
+
+exports[`item detail set item detail data should return an action 1`] = `
+Object {
+  "payload": Object {
+    "item": Object {
+      "rows": Array [
+        Object {
+          "columns": Array [],
+          "dimension": "100%",
+          "tabs": Array [
+            "Tab 1",
+            "Tab 2",
+          ],
+          "widgets": Array [
+            Object {
+              "reference": "5c0a0fb6bad08e5cf69a4d94",
+              "tabIndex": 1,
+              "title": "Multiple choice",
+              "type": "clozeDragDrop",
+              "widgetType": "question",
+            },
+            Object {
+              "reference": "5c0a1ac6bad08e5cf69a4d96",
+              "tabIndex": 1,
+              "title": "Multiple choice",
+              "type": "clozeDragDrop",
+              "widgetType": "question",
+            },
+            Object {
+              "reference": "5c0a1b2ebad08e5cf69a4d97",
+              "tabIndex": 1,
+              "title": "Multiple choice",
+              "type": "clozeDragDrop",
+              "widgetType": "question",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  "type": "[itemDetail] set data",
+}
+`;
+
+exports[`item detail set item detail dragging should return an action 1`] = `
+Object {
+  "payload": Object {
+    "dragging": false,
+  },
+  "type": "[itemDetail] set dragging",
+}
+`;
+
+exports[`item detail set item detail dragging should return an action 2`] = `
+Object {
+  "payload": Object {
+    "dragging": true,
+  },
+  "type": "[itemDetail] set dragging",
+}
+`;
+
+exports[`item detail update item detail by id should return an action 1`] = `
+Object {
+  "payload": Object {
+    "data": Object {
+      "rows": Array [
+        Object {
+          "columns": Array [],
+          "dimension": "100%",
+          "tabs": Array [
+            "Tab 1",
+            "Tab 2",
+          ],
+          "widgets": Array [
+            Object {
+              "reference": "5c0a0fb6bad08e5cf69a4d94",
+              "tabIndex": 1,
+              "title": "Multiple choice",
+              "type": "clozeDragDrop",
+              "widgetType": "question",
+            },
+            Object {
+              "reference": "5c0a1ac6bad08e5cf69a4d96",
+              "tabIndex": 1,
+              "title": "Multiple choice",
+              "type": "clozeDragDrop",
+              "widgetType": "question",
+            },
+            Object {
+              "reference": "5c0a1b2ebad08e5cf69a4d97",
+              "tabIndex": 1,
+              "title": "Multiple choice",
+              "type": "clozeDragDrop",
+              "widgetType": "question",
+            },
+          ],
+        },
+      ],
+    },
+    "id": "5bf28847dc39e409216aea00",
+  },
+  "type": "[itemDetail] update by id request",
+}
+`;
+
+exports[`item detail update item detail dimention should return an action 1`] = `
+Object {
+  "payload": Object {
+    "left": Object {
+      "left": 500,
+      "right": 400,
+    },
+    "right": undefined,
+  },
+  "type": "[itemDetail] update dimension",
+}
+`;
+
+exports[`item detail update tab title should return an action 1`] = `
+Object {
+  "payload": Object {
+    "rowIndex": 1,
+    "tabIndex": 2,
+    "value": "Test1",
+  },
+  "type": "[itemDetail] update tab title",
+}
+`;
+
+exports[`item detail update tab title should return an action 2`] = `
+Object {
+  "payload": Object {
+    "rowIndex": 2,
+    "tabIndex": 1,
+    "value": "Test2",
+  },
+  "type": "[itemDetail] update tab title",
+}
+`;
+
+exports[`item detail use tabs should return an action 1`] = `
+Object {
+  "payload": Object {
+    "isUseTabs": true,
+    "rowIndex": 1,
+  },
+  "type": "[itemDetail] is use tabs",
+}
+`;
+
+exports[`item detail use tabs should return an action 2`] = `
+Object {
+  "payload": Object {
+    "isUseTabs": false,
+    "rowIndex": 1,
+  },
+  "type": "[itemDetail] is use tabs",
+}
+`;

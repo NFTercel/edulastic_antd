@@ -1,0 +1,15 @@
+{
+  "name": "@edulastic/localization",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "i18next": "^11.9.0",
+    "i18next-browser-languagedetector": "^2.2.3",
+    "i18next-xhr-backend": "^1.5.1",
+    "react-i18next": "^8.0.4"
+  }
+}

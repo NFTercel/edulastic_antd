@@ -1,0 +1,186 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`question should return the initial state 1`] = `
+Object {
+  "entity": Object {
+    "alignment": 1,
+  },
+  "error": null,
+  "loading": false,
+  "saveError": null,
+  "saving": false,
+}
+`;
+
+exports[`question should return the receive question error state 1`] = `
+Object {
+  "entity": Object {
+    "alignment": 1,
+  },
+  "error": "unexpected error happened when receive question",
+  "loading": false,
+  "saveError": null,
+  "saving": false,
+}
+`;
+
+exports[`question should return the receive question request state 1`] = `
+Object {
+  "entity": Object {
+    "alignment": 1,
+  },
+  "error": null,
+  "loading": true,
+  "saveError": null,
+  "saving": false,
+}
+`;
+
+exports[`question should return the receive question success state 1`] = `
+Object {
+  "entity": Object {
+    "data": Object {
+      "multiple_responses": false,
+      "options": Array [
+        Object {
+          "label": "Red",
+          "value": 0,
+        },
+        Object {
+          "label": "Violet",
+          "value": 1,
+        },
+        Object {
+          "label": "Green",
+          "value": 2,
+        },
+      ],
+      "smallSize": true,
+      "stimulus": "<p>What is the capital city of England?</p>",
+      "type": "multipleChoice",
+      "ui_style": Object {
+        "type": "horizontal",
+      },
+      "validation": Object {
+        "alt_responses": Array [],
+        "scoring_type": "exactMatch",
+        "valid_response": Object {
+          "score": 1,
+          "value": Array [
+            1,
+          ],
+        },
+      },
+    },
+  },
+  "error": null,
+  "loading": false,
+  "saveError": null,
+  "saving": false,
+}
+`;
+
+exports[`question should return the save question error state 1`] = `
+Object {
+  "entity": Object {
+    "alignment": 1,
+  },
+  "error": null,
+  "loading": false,
+  "saveError": "unexpected error happend when save question",
+  "saving": false,
+}
+`;
+
+exports[`question should return the save question request state 1`] = `
+Object {
+  "entity": Object {
+    "alignment": 1,
+  },
+  "error": null,
+  "loading": false,
+  "saveError": null,
+  "saving": true,
+}
+`;
+
+exports[`question should return the save question success state 1`] = `
+Object {
+  "entity": Object {
+    "alignment": 1,
+  },
+  "error": null,
+  "loading": false,
+  "saveError": null,
+  "saving": false,
+}
+`;
+
+exports[`question should return the set question  state 1`] = `
+Object {
+  "entity": Object {
+    "data": Object {},
+  },
+  "error": null,
+  "loading": false,
+  "saveError": null,
+  "saving": false,
+}
+`;
+
+exports[`question should return the set question  state 2`] = `
+Object {
+  "entity": Object {
+    "data": Object {},
+  },
+  "error": null,
+  "loading": false,
+  "saveError": null,
+  "saving": false,
+}
+`;
+
+exports[`question should return the set question data state 1`] = `
+Object {
+  "entity": Object {
+    "alignment": 1,
+    "data": Object {
+      "multiple_responses": false,
+      "options": Array [
+        Object {
+          "label": "Red",
+          "value": 0,
+        },
+        Object {
+          "label": "Violet",
+          "value": 1,
+        },
+        Object {
+          "label": "Green",
+          "value": 2,
+        },
+      ],
+      "smallSize": true,
+      "stimulus": "<p>What is the capital city of England?</p>",
+      "type": "multipleChoice",
+      "ui_style": Object {
+        "type": "horizontal",
+      },
+      "validation": Object {
+        "alt_responses": Array [],
+        "scoring_type": "exactMatch",
+        "valid_response": Object {
+          "score": 1,
+          "value": Array [
+            1,
+          ],
+        },
+      },
+    },
+  },
+  "error": null,
+  "loading": false,
+  "saveError": null,
+  "saving": false,
+}
+`;

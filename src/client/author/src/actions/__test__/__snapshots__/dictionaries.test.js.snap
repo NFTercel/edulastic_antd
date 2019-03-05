@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Dictionaries get DicCurriculums should return an action 1`] = `
+Object {
+  "type": "[dictionaries] receive curriculums request",
+}
+`;
+
+exports[`Dictionaries get DicStandardsForCurriculum should return an action 1`] = `
+Object {
+  "payload": Object {
+    "curriculumId": "5e26tw6q21",
+    "grades": 5,
+    "search": "search",
+  },
+  "type": "[dictionaries] receive standards request",
+}
+`;

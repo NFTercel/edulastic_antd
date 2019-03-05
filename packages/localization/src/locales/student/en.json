@@ -1,0 +1,71 @@
+{
+  "common": {
+    "activeModeTexts": {
+      "freeDraw": {
+        "title": "FreeHand Draw Tool",
+        "description": "Tap and drag to draw lines"
+      },
+      "drawSimpleLine": {
+        "title": "Draw Single Line",
+        "description": "Tap and drag to draw the line"
+      },
+      "drawBreakingLine": {
+        "title": "Draw Breaking Line",
+        "description": "Tap to set the point of line and double tap to set last point and finish the drawing"
+      },
+      "drawSquare": {
+        "title": "Draw Square",
+        "description": "Tap to draw small square"
+      },
+      "drawСircle": {
+        "title": "Draw Circle",
+        "description": "Tap to draw small circle"
+      },
+      "drawTriangle": {
+        "title": "Draw Triangle",
+        "description": "Tap to draw small triangle"
+      },
+      "move": {
+        "title": "Move elements",
+        "description": "Tap and drag"
+      },
+      "drawText": {
+        "title": "Create plain text",
+        "description": "Tap to create and double tap to edit"
+      }
+    },
+    "layout": {
+      "nextbtn": "next",
+      "questionlist": {
+        "question": "question"
+      },
+      "selectbox": {
+        "question": "Question"
+      },
+      "dashboard": {
+        "headerbackbtn": "BACK TO SELECT A QUESTION TYPE",
+        "title": "Multiple Choice - Standard",
+        "hideanswerbtn": "Hide Answer",
+        "showanswerbtn": "Show Answer",
+        "previewbtn": "preview",
+        "savebtn": "save",
+        "settingbtn": "settings",
+        "editbtn": "edit"
+      }
+    },
+    "test": {
+      "checkanswer": "Check Answer",
+      "hint": "hint",
+      "bookmark": "bookmark"
+    }
+  },
+  "component": {
+    "multiplechoice": {
+      "thisisstem": "[This is the stem.]",
+      "setcorrectanswers": "Set Correct Answer(s)",
+      "addnewchoice": "Add New Choice",
+      "multiplechoiceoptions": "Multiple Choice Options",
+      "composequestion": "Compose Question"
+    }
+  }
+}

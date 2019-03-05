@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`preview should return the change preview tab1 state 1`] = `
+Object {
+  "list": Array [],
+  "previewTab": "check",
+}
+`;
+
+exports[`preview should return the change preview tab2 state 1`] = `
+Object {
+  "list": Array [],
+  "previewTab": "preview",
+}
+`;
+
+exports[`preview should return the change preview tab3 state 1`] = `
+Object {
+  "list": Array [],
+  "previewTab": "clear",
+}
+`;
+
+exports[`preview should return the initial state 1`] = `
+Object {
+  "list": Array [],
+  "previewTab": "clear",
+}
+`;
+
+exports[`preview should return the preview update list state 1`] = `
+Object {
+  "list": Array [
+    1,
+    3,
+    4,
+    5,
+    7,
+  ],
+  "previewTab": "clear",
+}
+`;

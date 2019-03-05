@@ -1,0 +1,15 @@
+{
+  "common": {
+    "noClassesTitle": "No archived classes",
+    "noClassesSubTitle": "You have no archived classes available",
+    "active": "ACTIVE",
+    "archive": "ARCHIVE",
+    "visitClass": "VISIT CLASS",
+    "instructor": "Instructor",
+    "grade": "Grade",
+    "subject": "Subject",
+    "standard": "Standard",
+    "startDate": "Start Date",
+    "endDate": "End Date"
+  }
+}

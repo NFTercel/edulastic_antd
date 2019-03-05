@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`group fetch groups should return an action 1`] = `
+Object {
+  "type": "[group] fetch owner groups",
+}
+`;
+
+exports[`group fetch students of group action should return an action 1`] = `
+Object {
+  "payload": Object {
+    "id": "53wqwri21567",
+  },
+  "type": "[group] fetch students of group",
+}
+`;

@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Questions add answer should return an action 1`] = `
+Object {
+  "payload": Object {
+    "answer": undefined,
+    "qid": Object {
+      "qid": "5e245t52td186247824t",
+    },
+  },
+  "type": "[questions] add answer",
+}
+`;
+
+exports[`Questions add questions should return an action 1`] = `
+Object {
+  "payload": Object {
+    "question": Object {},
+  },
+  "type": "author question",
+}
+`;
+
+exports[`Questions go to questions should return an action 1`] = `
+Object {
+  "payload": Object {
+    "question": Object {
+      "question": Object {},
+    },
+  },
+  "type": "[questions] goto question",
+}
+`;
+
+exports[`Questions load questions should return an action 1`] = `
+Object {
+  "payload": Object {
+    "questions": Object {
+      "questions": Array [],
+    },
+  },
+  "type": "[questions] load questions",
+}
+`;

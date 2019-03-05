@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`View change preview should return an action 1`] = `
+Object {
+  "payload": Object {
+    "view": "check",
+  },
+  "type": "[view] change view",
+}
+`;
+
+exports[`View change preview should return an action 2`] = `
+Object {
+  "payload": Object {
+    "view": "show",
+  },
+  "type": "[view] change view",
+}
+`;
+
+exports[`View change view should return an action 1`] = `
+Object {
+  "payload": Object {
+    "view": "edit",
+  },
+  "type": "[view] CHANGE_VIEW",
+}
+`;
+
+exports[`View change view should return an action 2`] = `
+Object {
+  "payload": Object {
+    "view": "metadata",
+  },
+  "type": "[view] CHANGE_VIEW",
+}
+`;
+
+exports[`View change view should return an action 3`] = `
+Object {
+  "payload": Object {
+    "view": "preview",
+  },
+  "type": "[view] CHANGE_VIEW",
+}
+`;

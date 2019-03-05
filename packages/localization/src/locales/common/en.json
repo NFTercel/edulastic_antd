@@ -1,0 +1,22 @@
+{
+  "itemHeader": {
+    "reference": "Reference"
+  },
+  "progress": {
+    "loading": "loading"
+  },
+  "pagination": {
+    "of": "of",
+    "to": "to",
+    "previous": "Previous",
+    "next": "Next",
+    "quit": "Quit",
+    "checkanswer": "Check answer"
+  },
+  "exitConfirmation": {
+    "title": "Are you sure?",
+    "body": "This will take you out of the assignment but you will be able to finish it later if you are within the end date specified for the assignment.",
+    "buttonProceed": "Proceed",
+    "buttonCancel": "Cancel"
+  }
+}

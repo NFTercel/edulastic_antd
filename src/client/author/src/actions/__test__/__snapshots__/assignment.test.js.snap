@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Assignment add assignment should return an action 1`] = `
+Object {
+  "payload": Object {
+    "data": Object {},
+  },
+  "type": "[assignments] add assignment",
+}
+`;
+
+exports[`Assignment delete assignment should return an action 1`] = `
+Object {
+  "payload": Object {
+    "id": 1,
+  },
+  "type": "[assignments] delete assignment",
+}
+`;
+
+exports[`Assignment fetch assignment should return an action 1`] = `
+Object {
+  "type": "[assignments] fetch assignments",
+}
+`;
+
+exports[`Assignment set assignment should return an action 1`] = `
+Object {
+  "payload": Object {
+    "data": Object {},
+  },
+  "type": "[assignments] set assignment",
+}
+`;
+
+exports[`Assignment update assignment should return an action 1`] = `
+Object {
+  "payload": Object {
+    "data": Object {},
+  },
+  "type": "[assignments] update assignment",
+}
+`;

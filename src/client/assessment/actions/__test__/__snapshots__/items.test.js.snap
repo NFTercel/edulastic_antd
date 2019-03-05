@@ -1,0 +1,110 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Items create item should return an action 1`] = `
+Object {
+  "payload": Object {
+    "payload": Object {
+      "columns": Array [],
+      "rows": Array [
+        Object {
+          "dimension": "100%",
+          "tabs": Array [],
+          "widgets": Array [
+            Object {
+              "reference": "5c0f0c9ed8c7f4453f5bb51f",
+              "tabIndex": 0,
+              "title": "Multiple choice",
+              "type": "multipleChoice",
+              "widgetType": "question",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  "type": "[items] create item request",
+}
+`;
+
+exports[`Items go to item should return an action 1`] = `
+Object {
+  "payload": Object {
+    "item": Object {
+      "item": Object {
+        "columns": Array [],
+        "rows": Array [
+          Object {
+            "dimension": "100%",
+            "tabs": Array [],
+            "widgets": Array [
+              Object {
+                "reference": "5c0f0c9ed8c7f4453f5bb51f",
+                "tabIndex": 0,
+                "title": "Multiple choice",
+                "type": "multipleChoice",
+                "widgetType": "question",
+              },
+            ],
+          },
+        ],
+      },
+    },
+  },
+  "type": "[items] goto a particular item",
+}
+`;
+
+exports[`Items load user response should return an action 1`] = `
+Object {
+  "payload": Object {
+    "itemId": Object {
+      "item": 3,
+    },
+  },
+  "type": "[items] load user response",
+}
+`;
+
+exports[`Items receive item by id should return an action 1`] = `
+Object {
+  "payload": Object {
+    "id": Object {
+      "id": 1,
+    },
+  },
+  "type": "[items] receive item request",
+}
+`;
+
+exports[`Items receive item should return an action 1`] = `
+Object {
+  "payload": Object {
+    "limit": 10,
+    "page": 5,
+    "search": "",
+  },
+  "type": "[items] receive items request",
+}
+`;
+
+exports[`Items save user response should return an action 1`] = `
+Object {
+  "payload": Object {
+    "itemId": Object {
+      "item": 2,
+    },
+  },
+  "type": "[items] save user response",
+}
+`;
+
+exports[`Items update item by id should return an action 1`] = `
+Object {
+  "payload": Object {
+    "payload": Object {
+      "id": 2,
+    },
+  },
+  "type": "[items] update item request",
+}
+`;

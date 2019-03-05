@@ -1,0 +1,21 @@
+{
+  "common": {
+    "dueOn": "Due on",
+    "assessment": "A",
+    "practice": "P",
+    "opensIn": "Opens in",
+    "submittedTag": "SUBMITTED",
+    "notStartedTag": "NOT STARTED",
+    "inProgress": "IN PROGRESS",
+    "startAssignment": "START ASSIGNMENT",
+    "retake": "RETAKE",
+    "resume": "RESUME",
+    "lockAssignment": "NOT AVAILABLE",
+    "review": "REVIEW",
+    "attemps": "Attempts",
+    "correctAnswer": "Correct Answer",
+    "score": "Score",
+    "finishedIn": "Finished in",
+    "missed": "MISSED"
+  }
+}

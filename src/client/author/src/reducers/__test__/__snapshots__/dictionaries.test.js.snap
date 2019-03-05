@@ -1,0 +1,112 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`dictionaries should return the initial state 1`] = `
+Object {
+  "curriculums": Object {
+    "curriculums": Array [],
+    "error": null,
+    "loading": false,
+  },
+  "standards": Object {
+    "error": null,
+    "loading": false,
+    "standards": Array [],
+  },
+}
+`;
+
+exports[`dictionaries should return the receive dictionary curriculums error state 1`] = `
+Object {
+  "curriculums": Object {
+    "curriculums": Array [],
+    "error": "unexpected error happened",
+    "loading": false,
+  },
+  "standards": Object {
+    "error": null,
+    "loading": false,
+    "standards": Array [],
+  },
+}
+`;
+
+exports[`dictionaries should return the receive dictionary curriculums request state 1`] = `
+Object {
+  "curriculums": Object {
+    "curriculums": Array [],
+    "error": null,
+    "loading": true,
+  },
+  "standards": Object {
+    "error": null,
+    "loading": false,
+    "standards": Array [],
+  },
+}
+`;
+
+exports[`dictionaries should return the receive dictionary curriculums success state 1`] = `
+Object {
+  "curriculums": Object {
+    "curriculums": Object {
+      "curriculumId": "5wrg64u51qhiuytuiogazcv",
+      "grades": 5,
+      "search": "match",
+    },
+    "error": null,
+    "loading": false,
+  },
+  "standards": Object {
+    "error": null,
+    "loading": false,
+    "standards": Array [],
+  },
+}
+`;
+
+exports[`dictionaries should return the receive dictionary standard error state 1`] = `
+Object {
+  "curriculums": Object {
+    "curriculums": Array [],
+    "error": null,
+    "loading": false,
+  },
+  "standards": Object {
+    "error": "receive dictionary standard error happened",
+    "loading": false,
+    "standards": Array [],
+  },
+}
+`;
+
+exports[`dictionaries should return the receive dictionary standard request state 1`] = `
+Object {
+  "curriculums": Object {
+    "curriculums": Array [],
+    "error": null,
+    "loading": false,
+  },
+  "standards": Object {
+    "error": null,
+    "loading": true,
+    "standards": Array [],
+  },
+}
+`;
+
+exports[`dictionaries should return the receive dictionary standard success state 1`] = `
+Object {
+  "curriculums": Object {
+    "curriculums": Array [],
+    "error": null,
+    "loading": false,
+  },
+  "standards": Object {
+    "error": null,
+    "loading": false,
+    "standards": Object {
+      "curriculumId": 5,
+    },
+  },
+}
+`;

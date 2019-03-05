@@ -1,0 +1,122 @@
+{
+  "common": {
+    "layout": {
+      "dashboard": {
+        "headerbackbtn": "BACK TO SELECT A QUESTION TYPE",
+        "title": "Multiple Choice - Standard",
+        "hideanswerbtn": "Hide Answer",
+        "showanswerbtn": "Show Answer",
+        "previewbtn": "preview",
+        "savebtn": "save",
+        "settingbtn": "settings",
+        "editbtn": "edit"
+      }
+    },
+    "initialoptionslist": {
+      "itemprefix": "Choice",
+      "itemd": "[Choice D]",
+      "itemc": "[Choice C]",
+      "itemb": "[Choice B]",
+      "itema": "[Choice A]"
+    }
+  },
+
+  "component": {
+    "backToItemList": "Back to item list",
+    "multiplechoice": {
+      "thisisstem": "[This is the stem.]",
+      "setcorrectanswers": "Set Correct Answer(s)",
+      "addnewchoice": "Add New Choice",
+      "multiplechoiceoptions": "Multiple Choice Options",
+      "composequestion": "Compose Question"
+    },
+    "questioneditor": {
+      "buttonbar": {
+        "clear": "Clear",
+        "showanswers": "Show Answers",
+        "checkanswer": "Check Answer",
+        "save": "Save",
+        "preview": "Preview",
+        "edit": "Edit",
+        "help": "Help",
+        "settings": "Settings",
+        "source": "Source",
+        "layout": "Layout"
+      }
+    },
+    "common": {
+      "modal": {
+        "cancel": "Cancel",
+        "apply": "Apply"
+      }
+    },
+    "orderList": {
+      "correctanswer": {
+        "points": "Points"
+      },
+      "orderlistedit": {
+        "addnewchoicebtn": "Add new choice"
+      },
+      "orderlistreportitem": {
+        "correctanswer": " Correct Answer:"
+      },
+      "question": {
+        "composequestion": "Compose question",
+        "enteryourquestion": "Enter your question"
+      },
+      "correctanswers": {
+        "setcorrectanswers": "Set correct answer(s)",
+        "correct": "Correct",
+        "alternate": "Alternate"
+      },
+      "questionsorderlist": {
+        "stimulusplaceholder": "[This is the stem.]"
+      }
+    },
+    "backToItemDetail": "Back to item detail",
+    "item": {
+      "view": "View",
+      "by": "By"
+    },
+    "itemlist": {
+      "header": {
+        "create": "Create",
+        "itemlist": "Item List"
+      }
+    },
+    "itemAdd": {
+      "itemlist": "Item List",
+      "backToItemList": "Back to Item List"
+    },
+    "itemDetail": {
+      "itemDetail": "Item Detail",
+      "backToItemList": "Back to Item List",
+      "backText": "Back to Item Detail",
+      "addNew": "Add New"
+    },
+    "itemdetail": {
+      "backText": "Back to Item Detail",
+      "addnew": {
+        "addnew": "Add New"
+      }
+    },
+    "settingsBar": {
+      "leftColumn": "Left Column",
+      "rightColumn": "Right Column",
+      "useTabs": "Use Tabs",
+      "layout": "Layout",
+      "showVerticalDivider": "Show vertical divider",
+      "enableScrolling": "Enable Scrolling For Long Content",
+      "tags": "Tags"
+    },
+    "pickupcomponent": {
+      "headertitle": "Select a type of Question or Feature",
+      "backToAddNew": "Back to Add New",
+      "backToSelect": "Back to Select Question Type or Feature"
+    },
+    "feedback": {
+      "viewSolution": "VIEW SOLUTION",
+      "save": "SAVE"
+    }
+  }
+}

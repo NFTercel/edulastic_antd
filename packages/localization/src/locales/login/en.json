@@ -1,0 +1,70 @@
+{
+    "common": {
+        "edulastictext": "Edulastic",
+        "donthaveanaccount": "Don't have an account yet? ",
+        "signupbtn": "SIGN UP",
+        "loginboxheading": "Login",
+        "googlesigninbtn": "SIGN IN WITH GOOGLE",
+        "office365signinbtn": "SIGN IN WITH OFFICE 365",
+        "cleversigninbtn": "SIGN IN WITH CLEVER",
+        "formboxheading": "Or you can always...",
+        "loginidinputlabel": "Username / Email",
+        "loginpasswordinputlabel": "Password",
+        "remembermetext": "REMEMBER ME",
+        "forgotpasswordtext": "FORGOT PASSWORD?",
+        "signinbtn": "SIGN IN",
+        "copyright": "Edulastic @ 2018 - All rights reserved.",
+        "validation": {
+            "emptyemailid": "Please input your Email!",
+            "validemail": "The input is not valid Email!",
+            "emptypassword": "Please input your password!"
+        }
+    },
+    "component": {
+        "signup": {
+            "infotext": "Edulastic doesn't share your information with third parties.Your data will be completely private and secure.",
+            "iamstudent": "No, I'm a Student.",
+            "iamteacher": "No, I'm a Teacher.",
+            "signupasstudent": "SIGN ME UP AS A STUDENT!",
+            "signupasteacher": "SIGN ME UP AS A TEACHER!",
+            "alreadyhaveanaccount": "Already have an account?",
+            "signupboxheading": "Sign up",
+            "googlesignupbtn": "SIGN UP WITH GOOGLE",
+            "office365signupbtn": "SIGN UP WITH OFFICE 365",
+            "formboxheading": "Or you can...",
+            "signupnamelabel": "Name",
+            "signuppasswordlabel": "Password",
+            "teacher": {
+                "signupnamelabel": "Teacher Name",
+                "signupidlabel": "Email",
+                "signupteacher": "SIGN UP AS TEACHER",
+                "forteacher": "for Teachers",
+                "validinputname": "Please input Teacher Name!"
+            },
+            "admin": {
+                "signupnamelabel": "Administrator Name",
+                "signupidlabel": "Username / Email",
+                "signupadminbtn": "SIGN UP AS ADMINISTRATOR",
+                "foradmin": "for Administrators",
+                "validinputname": "Please input Administrators Name!"
+            },
+            "student": {
+                "signupclasslabel": "Class Code",
+                "signupidlabel": "Username / Email",
+                "signupstudentbtn": "SIGN UP AS STUDENT",
+                "forstudent": "for Students",
+                "validclasscode": "Please input valid class code!",
+                "validinputname": "Please input Student Name!"
+            },
+            "getstarted": {
+                "getstartedtext": "Get started with free account!",
+                "subtext": "Join the growing community of teachers who are using Edulastic assessment",
+                "subtext2": "to promote learning.",
+                "createaccount": "Create your Free Account",
+                "imstudent": "I'M STUDENT",
+                "imteacher": "I'M TEACHER",
+                "imadmin": "I'M ADMINISTRATOR"
+            }
+        }
+    }
+}

@@ -1,0 +1,135 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`items should handle [items] receive item error 1`] = `
+Object {
+  "error": "something went wrong",
+  "item": null,
+  "loading": false,
+}
+`;
+
+exports[`items should handle [items] receive item request 1`] = `
+Object {
+  "error": null,
+  "item": null,
+  "loading": true,
+}
+`;
+
+exports[`items should handle [items] receive item success 1`] = `
+Object {
+  "error": null,
+  "item": undefined,
+  "loading": false,
+}
+`;
+
+exports[`items should handle [items] receive items error 1`] = `
+Object {
+  "count": 0,
+  "error": "something went wrong",
+  "items": Array [],
+  "limit": 5,
+  "loading": false,
+  "page": 1,
+}
+`;
+
+exports[`items should handle [items] receive items request 1`] = `
+Object {
+  "count": 0,
+  "error": null,
+  "items": Array [],
+  "limit": 5,
+  "loading": true,
+  "page": 1,
+}
+`;
+
+exports[`items should handle [items] receive items success 1`] = `
+Object {
+  "count": 0,
+  "error": null,
+  "items": undefined,
+  "limit": 10,
+  "loading": false,
+  "page": 1,
+}
+`;
+
+exports[`items should have the expected watchers 1`] = `
+Object {
+  "fork": Array [
+    Object {
+      "@@redux-saga/IO": true,
+      "FORK": Object {
+        "args": Array [
+          "[items] receive item request",
+          "@@redux-saga-test-plan/json/function/receiveItemSaga",
+        ],
+        "context": null,
+        "fn": "@@redux-saga-test-plan/json/function/takeEvery",
+      },
+    },
+    Object {
+      "@@redux-saga/IO": true,
+      "FORK": Object {
+        "args": Array [
+          "[items] receive items request",
+          "@@redux-saga-test-plan/json/function/receiveItemsSaga",
+        ],
+        "context": null,
+        "fn": "@@redux-saga-test-plan/json/function/takeLatest",
+      },
+    },
+    Object {
+      "@@redux-saga/IO": true,
+      "FORK": Object {
+        "args": Array [
+          "[items] create item request",
+          "@@redux-saga-test-plan/json/function/createItemSaga",
+        ],
+        "context": null,
+        "fn": "@@redux-saga-test-plan/json/function/takeLatest",
+      },
+    },
+    Object {
+      "@@redux-saga/IO": true,
+      "FORK": Object {
+        "args": Array [
+          "[items] update item request",
+          "@@redux-saga-test-plan/json/function/updateItemSaga",
+        ],
+        "context": null,
+        "fn": "@@redux-saga-test-plan/json/function/takeLatest",
+      },
+    },
+  ],
+  "take": Array [
+    Object {
+      "@@redux-saga/IO": true,
+      "TAKE": Object {
+        "pattern": "[items] receive item request",
+      },
+    },
+    Object {
+      "@@redux-saga/IO": true,
+      "TAKE": Object {
+        "pattern": "[items] receive items request",
+      },
+    },
+    Object {
+      "@@redux-saga/IO": true,
+      "TAKE": Object {
+        "pattern": "[items] create item request",
+      },
+    },
+    Object {
+      "@@redux-saga/IO": true,
+      "TAKE": Object {
+        "pattern": "[items] update item request",
+      },
+    },
+  ],
+}
+`;

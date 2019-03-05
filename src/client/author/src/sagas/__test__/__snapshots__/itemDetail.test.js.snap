@@ -1,0 +1,77 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`item details should have the expected watchers 1`] = `
+Object {
+  "fork": Array [
+    Object {
+      "@@redux-saga/IO": true,
+      "FORK": Object {
+        "args": Array [
+          "[itemDetail] receive request",
+          "@@redux-saga-test-plan/json/function/receiveItemSaga",
+        ],
+        "context": null,
+        "fn": "@@redux-saga-test-plan/json/function/takeEvery",
+      },
+    },
+    Object {
+      "@@redux-saga/IO": true,
+      "FORK": Object {
+        "args": Array [
+          "[itemDetail] update by id request",
+          "@@redux-saga-test-plan/json/function/updateItemSaga",
+        ],
+        "context": null,
+        "fn": "@@redux-saga-test-plan/json/function/takeEvery",
+      },
+    },
+  ],
+  "take": Array [
+    Object {
+      "@@redux-saga/IO": true,
+      "TAKE": Object {
+        "pattern": "[itemDetail] receive request",
+      },
+    },
+    Object {
+      "@@redux-saga/IO": true,
+      "TAKE": Object {
+        "pattern": "[itemDetail] update by id request",
+      },
+    },
+  ],
+}
+`;
+
+exports[`item should handle [itemDetail] receive error 1`] = `
+Object {
+  "dragging": false,
+  "error": "Unexpected issues",
+  "item": null,
+  "loading": false,
+  "updateError": null,
+  "updating": false,
+}
+`;
+
+exports[`item should handle [itemDetail] receive request 1`] = `
+Object {
+  "dragging": false,
+  "error": null,
+  "item": null,
+  "loading": true,
+  "updateError": null,
+  "updating": false,
+}
+`;
+
+exports[`item should handle [itemDetail] receive success 1`] = `
+Object {
+  "dragging": false,
+  "error": null,
+  "item": undefined,
+  "loading": false,
+  "updateError": null,
+  "updating": false,
+}
+`;

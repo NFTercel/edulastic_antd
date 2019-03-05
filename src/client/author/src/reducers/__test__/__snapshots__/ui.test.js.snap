@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ui should return the initial state 1`] = `
+Object {
+  "flag": false,
+  "sidebar": false,
+}
+`;
+
+exports[`ui should return the responsive toggle menu state 1`] = `
+Object {
+  "flag": false,
+  "sidebar": true,
+}
+`;
+
+exports[`ui should return the toggle menu state 1`] = `
+Object {
+  "flag": true,
+  "sidebar": false,
+}
+`;

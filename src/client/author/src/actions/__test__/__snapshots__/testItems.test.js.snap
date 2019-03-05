@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test items receive test items should return an action 1`] = `
+Object {
+  "payload": Object {},
+  "type": "[testItems] receive items request",
+}
+`;
+
+exports[`test items set test items should return an action 1`] = `
+Object {
+  "payload": Object {
+    "data": Array [
+      Object {
+        "index": 1,
+      },
+      Object {
+        "index": 2,
+      },
+      Object {
+        "index": 3,
+      },
+    ],
+  },
+  "type": "[testItems] set items request",
+}
+`;

@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Assessment assessment should return an action 1`] = `
+Object {
+  "type": "[answers] check answers",
+}
+`;

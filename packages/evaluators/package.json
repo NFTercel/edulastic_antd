@@ -1,0 +1,39 @@
+{
+  "name": "@edulastic/evaluators",
+  "version": "0.1.0",
+  "description": "question evaluators for edulastic-poc",
+  "main": "lib/index.js",
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {},
+  "scripts": {
+    "test": "ava --watch",
+    "build": "rimraf ./lib && babel ./src --out-dir lib --copy-files",
+    "build:watch": "babel ./src --out-dir lib --copy-files -w"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.1.0",
+    "ava": "1.0.0-rc.2",
+    "@babel/cli": "^7.1.5",
+    "@babel/register": "^7.0.0",
+    "rimraf": "^2.6.2"
+  },
+  "ava": {
+    "files": [
+      "test/**/*.js",
+      "!test/**/data/**"
+    ],
+    "sources": [
+      "src/**/*.js"
+    ],
+    "cache": "true",
+    "verbose": "true",
+    "require": [
+      "@babel/register"
+    ],
+    "babel": {
+      "testOptions": {}
+    }
+  }
+}

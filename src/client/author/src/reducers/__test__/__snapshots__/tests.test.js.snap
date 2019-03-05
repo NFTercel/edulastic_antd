@@ -1,0 +1,642 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`tests should return the create test request state 1`] = `
+Object {
+  "count": 0,
+  "creating": false,
+  "entities": Array [],
+  "entity": Object {
+    "analytics": Object {
+      "likes": "0",
+      "usage": "0",
+    },
+    "assignments": Array [],
+    "collections": "",
+    "courses": Array [],
+    "createdBy": Object {
+      "email": "",
+      "firstName": "",
+      "id": "",
+      "lastName": "",
+    },
+    "description": "",
+    "grades": Array [],
+    "renderingType": "assessment",
+    "scoring": Object {
+      "testItems": Array [],
+      "total": 0,
+    },
+    "standardsTag": Object {
+      "curriculum": "",
+      "standards": Array [],
+    },
+    "status": "draft",
+    "subjects": Array [],
+    "tags": Array [],
+    "testItems": Array [],
+    "thumbnail": "https://fakeimg.pl/500x135/",
+    "title": "New Test",
+  },
+  "error": null,
+  "limit": 5,
+  "loading": false,
+  "page": 1,
+}
+`;
+
+exports[`tests should return the create test success state 1`] = `
+Object {
+  "count": 0,
+  "creating": false,
+  "entities": Array [],
+  "entity": Object {
+    "analytics": Object {
+      "likes": "0",
+      "usage": "0",
+    },
+    "assignments": Array [],
+    "collections": "",
+    "courses": Array [],
+    "createdBy": Object {
+      "email": "",
+      "firstName": "",
+      "id": "",
+      "lastName": "",
+    },
+    "description": "",
+    "grades": Array [],
+    "renderingType": "assessment",
+    "scoring": Object {
+      "testItems": Array [],
+      "total": 0,
+    },
+    "standardsTag": Object {
+      "curriculum": "",
+      "standards": Array [],
+    },
+    "status": "draft",
+    "subjects": Array [],
+    "tags": Array [],
+    "testItems": Array [],
+    "thumbnail": "https://fakeimg.pl/500x135/",
+    "title": "New Test",
+  },
+  "error": null,
+  "limit": 5,
+  "loading": false,
+  "page": 1,
+}
+`;
+
+exports[`tests should return the create tests error state 1`] = `
+Object {
+  "count": 0,
+  "creating": false,
+  "entities": Array [],
+  "entity": Object {
+    "analytics": Object {
+      "likes": "0",
+      "usage": "0",
+    },
+    "assignments": Array [],
+    "collections": "",
+    "courses": Array [],
+    "createdBy": Object {
+      "email": "",
+      "firstName": "",
+      "id": "",
+      "lastName": "",
+    },
+    "description": "",
+    "grades": Array [],
+    "renderingType": "assessment",
+    "scoring": Object {
+      "testItems": Array [],
+      "total": 0,
+    },
+    "standardsTag": Object {
+      "curriculum": "",
+      "standards": Array [],
+    },
+    "status": "draft",
+    "subjects": Array [],
+    "tags": Array [],
+    "testItems": Array [],
+    "thumbnail": "https://fakeimg.pl/500x135/",
+    "title": "New Test",
+  },
+  "error": null,
+  "limit": 5,
+  "loading": false,
+  "page": 1,
+}
+`;
+
+exports[`tests should return the initial state 1`] = `
+Object {
+  "count": 0,
+  "creating": false,
+  "entities": Array [],
+  "entity": Object {
+    "analytics": Object {
+      "likes": "0",
+      "usage": "0",
+    },
+    "assignments": Array [],
+    "collections": "",
+    "courses": Array [],
+    "createdBy": Object {
+      "email": "",
+      "firstName": "",
+      "id": "",
+      "lastName": "",
+    },
+    "description": "",
+    "grades": Array [],
+    "renderingType": "assessment",
+    "scoring": Object {
+      "testItems": Array [],
+      "total": 0,
+    },
+    "standardsTag": Object {
+      "curriculum": "",
+      "standards": Array [],
+    },
+    "status": "draft",
+    "subjects": Array [],
+    "tags": Array [],
+    "testItems": Array [],
+    "thumbnail": "https://fakeimg.pl/500x135/",
+    "title": "New Test",
+  },
+  "error": null,
+  "limit": 5,
+  "loading": false,
+  "page": 1,
+}
+`;
+
+exports[`tests should return the initial state 2`] = `
+Object {
+  "analytics": Object {
+    "likes": "0",
+    "usage": "0",
+  },
+  "assignments": Array [],
+  "collections": "",
+  "courses": Array [],
+  "createdBy": Object {
+    "email": "",
+    "firstName": "",
+    "id": "",
+    "lastName": "",
+  },
+  "description": "",
+  "grades": Array [],
+  "renderingType": "assessment",
+  "scoring": Object {
+    "testItems": Array [],
+    "total": 0,
+  },
+  "standardsTag": Object {
+    "curriculum": "",
+    "standards": Array [],
+  },
+  "status": "draft",
+  "subjects": Array [],
+  "tags": Array [],
+  "testItems": Array [],
+  "thumbnail": "https://fakeimg.pl/500x135/",
+  "title": "New Test",
+}
+`;
+
+exports[`tests should return the receive test id error state 1`] = `
+Object {
+  "analytics": Object {
+    "likes": "0",
+    "usage": "0",
+  },
+  "assignments": Array [],
+  "collections": "",
+  "courses": Array [],
+  "createdBy": Object {
+    "email": "",
+    "firstName": "",
+    "id": "",
+    "lastName": "",
+  },
+  "description": "",
+  "grades": Array [],
+  "renderingType": "assessment",
+  "scoring": Object {
+    "testItems": Array [],
+    "total": 0,
+  },
+  "standardsTag": Object {
+    "curriculum": "",
+    "standards": Array [],
+  },
+  "status": "draft",
+  "subjects": Array [],
+  "tags": Array [],
+  "testItems": Array [],
+  "thumbnail": "https://fakeimg.pl/500x135/",
+  "title": "New Test",
+}
+`;
+
+exports[`tests should return the receive test id request state 1`] = `
+Object {
+  "analytics": Object {
+    "likes": "0",
+    "usage": "0",
+  },
+  "assignments": Array [],
+  "collections": "",
+  "courses": Array [],
+  "createdBy": Object {
+    "email": "",
+    "firstName": "",
+    "id": "",
+    "lastName": "",
+  },
+  "description": "",
+  "grades": Array [],
+  "renderingType": "assessment",
+  "scoring": Object {
+    "testItems": Array [],
+    "total": 0,
+  },
+  "standardsTag": Object {
+    "curriculum": "",
+    "standards": Array [],
+  },
+  "status": "draft",
+  "subjects": Array [],
+  "tags": Array [],
+  "testItems": Array [],
+  "thumbnail": "https://fakeimg.pl/500x135/",
+  "title": "New Test",
+}
+`;
+
+exports[`tests should return the receive test id success state 1`] = `
+Object {
+  "analytics": Object {
+    "likes": "0",
+    "usage": "0",
+  },
+  "assignments": Array [],
+  "collections": "",
+  "courses": Array [],
+  "createdBy": Object {
+    "email": "",
+    "firstName": "",
+    "id": "",
+    "lastName": "",
+  },
+  "description": "",
+  "grades": Array [],
+  "renderingType": "assessment",
+  "scoring": Object {
+    "testItems": Array [],
+    "total": 0,
+  },
+  "standardsTag": Object {
+    "curriculum": "",
+    "standards": Array [],
+  },
+  "status": "draft",
+  "subjects": Array [],
+  "tags": Array [],
+  "testItems": Array [],
+  "thumbnail": "https://fakeimg.pl/500x135/",
+  "title": "New Test",
+}
+`;
+
+exports[`tests should return the receive tests error state 1`] = `
+Object {
+  "count": 0,
+  "creating": false,
+  "entities": Array [],
+  "entity": Object {
+    "analytics": Object {
+      "likes": "0",
+      "usage": "0",
+    },
+    "assignments": Array [],
+    "collections": "",
+    "courses": Array [],
+    "createdBy": Object {
+      "email": "",
+      "firstName": "",
+      "id": "",
+      "lastName": "",
+    },
+    "description": "",
+    "grades": Array [],
+    "renderingType": "assessment",
+    "scoring": Object {
+      "testItems": Array [],
+      "total": 0,
+    },
+    "standardsTag": Object {
+      "curriculum": "",
+      "standards": Array [],
+    },
+    "status": "draft",
+    "subjects": Array [],
+    "tags": Array [],
+    "testItems": Array [],
+    "thumbnail": "https://fakeimg.pl/500x135/",
+    "title": "New Test",
+  },
+  "error": null,
+  "limit": 5,
+  "loading": false,
+  "page": 1,
+}
+`;
+
+exports[`tests should return the receive tests request state 1`] = `
+Object {
+  "count": 0,
+  "creating": false,
+  "entities": Array [],
+  "entity": Object {
+    "analytics": Object {
+      "likes": "0",
+      "usage": "0",
+    },
+    "assignments": Array [],
+    "collections": "",
+    "courses": Array [],
+    "createdBy": Object {
+      "email": "",
+      "firstName": "",
+      "id": "",
+      "lastName": "",
+    },
+    "description": "",
+    "grades": Array [],
+    "renderingType": "assessment",
+    "scoring": Object {
+      "testItems": Array [],
+      "total": 0,
+    },
+    "standardsTag": Object {
+      "curriculum": "",
+      "standards": Array [],
+    },
+    "status": "draft",
+    "subjects": Array [],
+    "tags": Array [],
+    "testItems": Array [],
+    "thumbnail": "https://fakeimg.pl/500x135/",
+    "title": "New Test",
+  },
+  "error": null,
+  "limit": 5,
+  "loading": false,
+  "page": 1,
+}
+`;
+
+exports[`tests should return the receive tests success state 1`] = `
+Object {
+  "count": 0,
+  "creating": false,
+  "entities": Array [],
+  "entity": Object {
+    "analytics": Object {
+      "likes": "0",
+      "usage": "0",
+    },
+    "assignments": Array [],
+    "collections": "",
+    "courses": Array [],
+    "createdBy": Object {
+      "email": "",
+      "firstName": "",
+      "id": "",
+      "lastName": "",
+    },
+    "description": "",
+    "grades": Array [],
+    "renderingType": "assessment",
+    "scoring": Object {
+      "testItems": Array [],
+      "total": 0,
+    },
+    "standardsTag": Object {
+      "curriculum": "",
+      "standards": Array [],
+    },
+    "status": "draft",
+    "subjects": Array [],
+    "tags": Array [],
+    "testItems": Array [],
+    "thumbnail": "https://fakeimg.pl/500x135/",
+    "title": "New Test",
+  },
+  "error": null,
+  "limit": 5,
+  "loading": false,
+  "page": 1,
+}
+`;
+
+exports[`tests should return the set assignment state 1`] = `
+Object {
+  "count": 0,
+  "creating": false,
+  "entities": Array [],
+  "entity": Object {
+    "analytics": Object {
+      "likes": "0",
+      "usage": "0",
+    },
+    "assignments": Array [],
+    "collections": "",
+    "courses": Array [],
+    "createdBy": Object {
+      "email": "",
+      "firstName": "",
+      "id": "",
+      "lastName": "",
+    },
+    "description": "",
+    "grades": Array [],
+    "renderingType": "assessment",
+    "scoring": Object {
+      "testItems": Array [],
+      "total": 0,
+    },
+    "standardsTag": Object {
+      "curriculum": "",
+      "standards": Array [],
+    },
+    "status": "draft",
+    "subjects": Array [],
+    "tags": Array [],
+    "testItems": Array [],
+    "thumbnail": "https://fakeimg.pl/500x135/",
+    "title": "New Test",
+  },
+  "error": null,
+  "limit": 5,
+  "loading": false,
+  "page": 1,
+}
+`;
+
+exports[`tests should return the set default test data state 1`] = `
+Object {
+  "count": 0,
+  "creating": false,
+  "entities": Array [],
+  "entity": Object {
+    "analytics": Object {
+      "likes": "0",
+      "usage": "0",
+    },
+    "assignments": Array [],
+    "collections": "",
+    "courses": Array [],
+    "createdBy": Object {
+      "email": "",
+      "firstName": "",
+      "id": "",
+      "lastName": "",
+    },
+    "description": "",
+    "grades": Array [],
+    "renderingType": "assessment",
+    "scoring": Object {
+      "testItems": Array [],
+      "total": 0,
+    },
+    "standardsTag": Object {
+      "curriculum": "",
+      "standards": Array [],
+    },
+    "status": "draft",
+    "subjects": Array [],
+    "tags": Array [],
+    "testItems": Array [],
+    "thumbnail": "https://fakeimg.pl/500x135/",
+    "title": "New Test",
+  },
+  "error": null,
+  "limit": 5,
+  "loading": false,
+  "page": 1,
+}
+`;
+
+exports[`tests should return the update test error state 1`] = `
+Object {
+  "analytics": Object {
+    "likes": "0",
+    "usage": "0",
+  },
+  "assignments": Array [],
+  "collections": "",
+  "courses": Array [],
+  "createdBy": Object {
+    "email": "",
+    "firstName": "",
+    "id": "",
+    "lastName": "",
+  },
+  "description": "",
+  "grades": Array [],
+  "renderingType": "assessment",
+  "scoring": Object {
+    "testItems": Array [],
+    "total": 0,
+  },
+  "standardsTag": Object {
+    "curriculum": "",
+    "standards": Array [],
+  },
+  "status": "draft",
+  "subjects": Array [],
+  "tags": Array [],
+  "testItems": Array [],
+  "thumbnail": "https://fakeimg.pl/500x135/",
+  "title": "New Test",
+}
+`;
+
+exports[`tests should return the update test request state 1`] = `
+Object {
+  "analytics": Object {
+    "likes": "0",
+    "usage": "0",
+  },
+  "assignments": Array [],
+  "collections": "",
+  "courses": Array [],
+  "createdBy": Object {
+    "email": "",
+    "firstName": "",
+    "id": "",
+    "lastName": "",
+  },
+  "description": "",
+  "grades": Array [],
+  "renderingType": "assessment",
+  "scoring": Object {
+    "testItems": Array [],
+    "total": 0,
+  },
+  "standardsTag": Object {
+    "curriculum": "",
+    "standards": Array [],
+  },
+  "status": "draft",
+  "subjects": Array [],
+  "tags": Array [],
+  "testItems": Array [],
+  "thumbnail": "https://fakeimg.pl/500x135/",
+  "title": "New Test",
+}
+`;
+
+exports[`tests should return the update test success state 1`] = `
+Object {
+  "analytics": Object {
+    "likes": "0",
+    "usage": "0",
+  },
+  "assignments": Array [],
+  "collections": "",
+  "courses": Array [],
+  "createdBy": Object {
+    "email": "",
+    "firstName": "",
+    "id": "",
+    "lastName": "",
+  },
+  "description": "",
+  "grades": Array [],
+  "renderingType": "assessment",
+  "scoring": Object {
+    "testItems": Array [],
+    "total": 0,
+  },
+  "standardsTag": Object {
+    "curriculum": "",
+    "standards": Array [],
+  },
+  "status": "draft",
+  "subjects": Array [],
+  "tags": Array [],
+  "testItems": Array [],
+  "thumbnail": "https://fakeimg.pl/500x135/",
+  "title": "New Test",
+}
+`;

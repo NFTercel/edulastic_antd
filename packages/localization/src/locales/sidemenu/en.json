@@ -1,0 +1,13 @@
+{
+  "common": {
+    "dashboard": "Dashboardd",
+    "assignments": "Assignmentsd",
+    "skillReport": "SkillReportd",
+    "manageClass": "Manage Classd",
+    "report": "Reporte",
+    "userRoleStudent": "student",
+    "helpButtonText": "Help Center",
+    "signOutText": "SIGN OUT",
+    "myProfileText": "MY PROFILE"
+  }
+}

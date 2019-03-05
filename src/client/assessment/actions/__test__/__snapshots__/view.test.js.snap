@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`View change preview should return an action 1`] = `
+Object {
+  "payload": Object {
+    "view": Object {
+      "view": "check",
+    },
+  },
+  "type": "[view] change view",
+}
+`;

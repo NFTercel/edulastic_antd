@@ -1,0 +1,251 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Question receive question by id should return an action 1`] = `
+Object {
+  "payload": Object {
+    "id": "5c0fd3ea025fa415ffeb6895",
+  },
+  "type": "[question] receive question request",
+}
+`;
+
+exports[`Question receive question by id should return an action 2`] = `
+Object {
+  "payload": Object {
+    "id": "5c0fd3ea025fa415ffeb6896",
+  },
+  "type": "[question] receive question request",
+}
+`;
+
+exports[`Question receive question by id should return an action 3`] = `
+Object {
+  "payload": Object {
+    "id": "5c0fd3ea025fa415ffeb6897",
+  },
+  "type": "[question] receive question request",
+}
+`;
+
+exports[`Question save question should return an action 1`] = `
+Object {
+  "type": "[question] save question request",
+}
+`;
+
+exports[`Question set question alignment add row should return an action 1`] = `
+Object {
+  "payload": Object {
+    "alignmentRow": undefined,
+  },
+  "type": "[question] set question alignment add row",
+}
+`;
+
+exports[`Question set question alignment row should return an action 1`] = `
+Object {
+  "payload": Object {
+    "alignmentRow": 1,
+    "index": 1,
+  },
+  "type": "[question] set question alignment row",
+}
+`;
+
+exports[`Question set question alignment row should return an action 2`] = `
+Object {
+  "payload": Object {
+    "alignmentRow": 1,
+    "index": 2,
+  },
+  "type": "[question] set question alignment row",
+}
+`;
+
+exports[`Question set question alignment row standard should return an action 1`] = `
+Object {
+  "payload": Object {
+    "alignmentStandards": 2,
+    "index": 1,
+  },
+  "type": "[question] set question alignment row standards",
+}
+`;
+
+exports[`Question set question alignment row standard should return an action 2`] = `
+Object {
+  "payload": Object {
+    "alignmentStandards": 1,
+    "index": 2,
+  },
+  "type": "[question] set question alignment row standards",
+}
+`;
+
+exports[`Question set question data should return an action 1`] = `
+Object {
+  "payload": Object {
+    "data": Object {
+      "data": Object {
+        "multiple_responses": false,
+        "options": Array [
+          Object {
+            "label": "Red",
+            "value": 0,
+          },
+          Object {
+            "label": "Violet",
+            "value": 1,
+          },
+          Object {
+            "label": "<p>Green</p>",
+            "value": 2,
+          },
+        ],
+        "smallSize": true,
+        "stimulus": "Which color has the smallest walvelenght?",
+        "type": "multipleChoice",
+        "ui_style": Object {
+          "type": "horizontal",
+        },
+        "validation": Object {
+          "alt_responses": Array [],
+          "scoring_type": "exactMatch",
+          "valid_response": Object {
+            "score": 1,
+            "value": Array [
+              1,
+            ],
+          },
+        },
+      },
+    },
+  },
+  "type": "[question] set question data",
+}
+`;
+
+exports[`Question set question data should return an action 2`] = `
+Object {
+  "payload": Object {
+    "data": Object {
+      "data": Object {
+        "multiple_responses": false,
+        "options": Array [
+          Object {
+            "label": "Moscow",
+            "value": 0,
+          },
+          Object {
+            "label": "Paris",
+            "value": 1,
+          },
+          Object {
+            "label": "<p>London</p>",
+            "value": 2,
+          },
+        ],
+        "smallSize": true,
+        "stimulus": "What is the capital city of London?",
+        "type": "multipleChoice",
+        "ui_style": Object {
+          "type": "horizontal",
+        },
+        "validation": Object {
+          "alt_responses": Array [],
+          "scoring_type": "exactMatch",
+          "valid_response": Object {
+            "score": 2,
+            "value": Array [
+              2,
+            ],
+          },
+        },
+      },
+    },
+  },
+  "type": "[question] set question data",
+}
+`;
+
+exports[`Question set question should return an action 1`] = `
+Object {
+  "payload": Object {
+    "data": Object {
+      "multiple_responses": false,
+      "options": Array [
+        Object {
+          "label": "Red",
+          "value": 0,
+        },
+        Object {
+          "label": "Violet",
+          "value": 1,
+        },
+        Object {
+          "label": "<p>Green</p>",
+          "value": 2,
+        },
+      ],
+      "smallSize": true,
+      "stimulus": "Which color has the smallest walvelenght?",
+      "type": "multipleChoice",
+      "ui_style": Object {
+        "type": "horizontal",
+      },
+      "validation": Object {
+        "alt_responses": Array [],
+        "scoring_type": "exactMatch",
+        "valid_response": Object {
+          "score": 1,
+          "value": Array [
+            1,
+          ],
+        },
+      },
+    },
+  },
+  "type": "[question] set question",
+}
+`;
+
+exports[`Question set question should return an action 2`] = `
+Object {
+  "payload": Object {
+    "data": Object {
+      "multiple_responses": false,
+      "options": Array [
+        Object {
+          "label": "245",
+          "value": 0,
+        },
+        Object {
+          "label": "256",
+          "value": 1,
+        },
+        Object {
+          "label": "<p>247</p>",
+          "value": 2,
+        },
+      ],
+      "smallSize": true,
+      "stimulus": "How many countries are there in the world?",
+      "type": "multipleChoice",
+      "ui_style": Object {
+        "type": "horizontal",
+      },
+      "validation": Object {
+        "alt_responses": Array [],
+        "scoring_type": "exactMatch",
+        "valid_response": Object {
+          "score": 2,
+          "value": Array [
+            2,
+          ],
+        },
+      },
+    },
+  },
+  "type": "[question] set question",
+}
+`;

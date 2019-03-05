@@ -1,0 +1,18 @@
+{
+  "delete": "Delete",
+  "edit": "Edit",
+  "move": "Move",
+  "cancel": "Cancel",
+  "apply": "Apply",
+  "confirm": "Confirm",
+  "proceed": "Proceed",
+  "all": "ALL",
+  "notStarted": "NOT STARTED",
+  "inProgress": "IN PROGRESS",
+  "submitted": "SUBMITTED",
+  "graded": "GRADED",
+  "submit": "SUBMIT",
+  "missed": "MISSED",
+  "flagged": "FLAGGED",
+  "skipped": "SKIPPED"
+}

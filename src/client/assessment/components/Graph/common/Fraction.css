@@ -1,0 +1,22 @@
+.numberline-fraction {
+  text-align: center;
+}
+
+.numberline-fraction span {
+  float: left;
+  text-align: center;
+  line-height: 1.2em;
+}
+
+.numberline-fraction hr {
+  margin: 0 0 1px;
+  border-top: 1px solid #000;
+}
+
+.numberline-fraction div {
+  line-height: 2.5em;
+  margin-right: 3px;
+  display: inline;
+  float: left;
+  text-align: center;
+}

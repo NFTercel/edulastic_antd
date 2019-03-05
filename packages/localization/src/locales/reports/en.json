@@ -1,0 +1,16 @@
+{
+  "common": {
+    "skillSummary": "Skill Summary",
+    "tableHeaderTitleDomains": "Domains",
+    "tableHeaderTitleTotalQuestions": "Total Questions",
+    "tableHeaderTitlePercentage": "Percentage",
+    "tableHeaderTitleHints": "Hints",
+    "tableHeaderTitleGrade": "Grade",
+    "tableHeaderTitleTopicName": "Topic Name",
+    "tableHeaderTitlePercentScore": "Percent Score",
+    "backButton": "BACK TO REPORT LIST",
+    "solutionLabel": "Solution",
+    "answerLabel": "Answer",
+    "teacherFeedbackLabel": "Teacher Feedback"
+  }
+}

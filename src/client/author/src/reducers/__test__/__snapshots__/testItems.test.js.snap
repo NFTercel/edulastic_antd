@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[` 1`] = `
+Object {
+  "count": 0,
+  "error": null,
+  "items": Array [],
+  "limit": 5,
+  "loading": false,
+  "page": 1,
+  "selectedItems": Object {},
+}
+`;
+
+exports[`test items should return the initial state 1`] = `
+Object {
+  "count": 0,
+  "error": null,
+  "items": Array [],
+  "limit": 5,
+  "loading": false,
+  "page": 1,
+}
+`;
+
+exports[`test items should return the receive test items error state 1`] = `
+Object {
+  "count": 0,
+  "error": "unexpected error happened when receive test items",
+  "items": Array [],
+  "limit": 5,
+  "loading": false,
+  "page": 1,
+}
+`;
+
+exports[`test items should return the receive test items request state 1`] = `
+Object {
+  "count": 0,
+  "error": null,
+  "items": Array [],
+  "limit": 5,
+  "loading": true,
+  "page": 1,
+}
+`;
+
+exports[`test items should return the receive test items success state 1`] = `
+Object {
+  "count": 2,
+  "error": null,
+  "items": Array [
+    Object {
+      "columns": Array [],
+      "rows": Array [
+        Object {
+          "dimension": "100%",
+          "tabs": Array [],
+          "widgets": Array [
+            Object {
+              "reference": "5c0f0c9ed8c7f4453f5bb51f",
+              "tabIndex": 0,
+              "title": "Multiple choice",
+              "type": "multipleChoice",
+              "widgetType": "question",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+  "limit": 5,
+  "loading": false,
+  "page": 1,
+}
+`;

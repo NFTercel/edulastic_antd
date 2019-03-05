@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Items receive item by id should return an action 1`] = `
+Object {
+  "payload": Object {
+    "id": Object {
+      "id": 5,
+    },
+  },
+  "type": "[items] receive item request",
+}
+`;
+
+exports[`Items receive item by id should return an action 2`] = `
+Object {
+  "payload": Object {
+    "payload": Object {
+      "columns": Array [],
+      "rows": Array [
+        Object {
+          "dimension": "100%",
+          "tabs": Array [],
+          "widgets": Array [
+            Object {
+              "reference": "5c0f0c9ed8c7f4453f5bb51f",
+              "tabIndex": 0,
+              "title": "Multiple choice",
+              "type": "multipleChoice",
+              "widgetType": "question",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  "type": "[items] create item request",
+}
+`;
+
+exports[`Items receive item by id should return an action 3`] = `
+Object {
+  "payload": Object {
+    "payload": Object {
+      "columns": Array [],
+      "rows": Array [
+        Object {
+          "dimension": "100%",
+          "tabs": Array [],
+          "widgets": Array [
+            Object {
+              "reference": "5c0f0c9ed8c7f4453f5bb51f",
+              "tabIndex": 0,
+              "title": "Multiple choice",
+              "type": "multipleChoice",
+              "widgetType": "question",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  "type": "[items] update item request",
+}
+`;
+
+exports[`Items receive items should return an action 1`] = `
+Object {
+  "payload": Object {
+    "limit": 5,
+    "page": 1,
+    "search": "items",
+  },
+  "type": "[items] receive items request",
+}
+`;

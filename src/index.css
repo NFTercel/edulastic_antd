@@ -1,0 +1,17 @@
+
+.jsxLabel {
+  color: #333!important;
+  background-color: #e8e8e8;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  padding: 10px;
+  height: 32px;
+  font-size: 12px;
+  line-height: 12px;
+  white-space: nowrap;
+  opacity: 1;
+}
+
+.jsxLabelHighlighted {
+  background-color: #ddd;
+}

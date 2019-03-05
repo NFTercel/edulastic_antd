@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`view should return the change preview state1 1`] = `
+Object {
+  "preview": "clear",
+  "showAnswers": false,
+  "view": "edit",
+}
+`;
+
+exports[`view should return the change preview state2 1`] = `
+Object {
+  "preview": "check",
+  "showAnswers": false,
+  "view": "edit",
+}
+`;
+
+exports[`view should return the change view state1 1`] = `
+Object {
+  "preview": "clear",
+  "showAnswers": false,
+  "view": "edit",
+}
+`;
+
+exports[`view should return the change view state2 1`] = `
+Object {
+  "preview": "clear",
+  "showAnswers": false,
+  "view": "preview",
+}
+`;
+
+exports[`view should return the initial state 1`] = `
+Object {
+  "preview": "clear",
+  "showAnswers": false,
+  "view": "edit",
+}
+`;

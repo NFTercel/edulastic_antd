@@ -1,0 +1,17 @@
+{
+  "common": {
+    "title": {
+      "firstNameInputLabel": "First Name",
+      "lastNameInputLabel": "Last Name",
+      "emailInputLabel": "Email",
+      "passwordInputLabel": "Password",
+      "firstName": "Please input your First name",
+      "lastName": "Please input your Last name",
+      "email": "Please input your E-mail!",
+      "validemail": "'The input is not valid E-mail!'",
+      "password": "Please input your password!",
+      "cancel": "cancel",
+      "save": "save"
+    }
+  }
+}

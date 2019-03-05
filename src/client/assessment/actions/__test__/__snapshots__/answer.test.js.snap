@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Answer set user answer should return an action 1`] = `
+Object {
+  "payload": Object {
+    "data": undefined,
+    "id": Object {
+      "data": Object {},
+      "id": "1qjfl125991weplz24667",
+    },
+  },
+  "type": "[answers] set answer",
+}
+`;

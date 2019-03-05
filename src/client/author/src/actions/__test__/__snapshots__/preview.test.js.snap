@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Preview change preview tab should return an action 1`] = `
+Object {
+  "payload": Object {
+    "previewTab": "check",
+  },
+  "type": "[preview] CHANGE_PREVIEW_TAB",
+}
+`;
+
+exports[`Preview change preview tab should return an action 2`] = `
+Object {
+  "payload": Object {
+    "previewTab": "show",
+  },
+  "type": "[preview] CHANGE_PREVIEW_TAB",
+}
+`;
+
+exports[`Preview change preview tab should return an action 3`] = `
+Object {
+  "payload": Object {
+    "previewTab": "clear",
+  },
+  "type": "[preview] CHANGE_PREVIEW_TAB",
+}
+`;
+
+exports[`Preview update preview list should return an action 1`] = `
+Object {
+  "payload": Object {
+    "list": Object {},
+  },
+  "type": "[preview] PREVIEW_UPDATE_LIST",
+}
+`;

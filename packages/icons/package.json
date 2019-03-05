@@ -1,0 +1,15 @@
+{
+  "name": "@edulastic/icons",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@edulastic/colors": "1.0.0",
+    "prop-types": "^15.6.2",
+    "react": "^16.5.2",
+    "styled-components": "^3.4.9"
+  }
+}

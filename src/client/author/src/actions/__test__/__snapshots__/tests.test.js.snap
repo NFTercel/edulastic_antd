@@ -1,0 +1,266 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`tests create test should return an action 1`] = `
+Object {
+  "payload": Object {
+    "data": Object {
+      "analytics": Object {
+        "likes": "0",
+        "usage": "0",
+      },
+      "assignments": Array [],
+      "collections": "",
+      "courses": Array [],
+      "createdBy": Object {},
+      "description": "",
+      "grades": Array [],
+      "renderingType": "assessment",
+      "scoring": Object {
+        "testItems": Array [
+          Object {
+            "points": 0,
+          },
+          Object {
+            "points": 0,
+          },
+        ],
+        "total": 0,
+      },
+      "standardsTag": Object {
+        "curriculum": "",
+        "standards": Array [],
+      },
+      "status": "draft",
+      "subjects": Array [],
+      "tags": Array [],
+      "testItems": Array [
+        "5bf28847dc39e409216aea00",
+        "5bf28d4edc39e409216aea04",
+      ],
+      "thumbnail": "https://fakeimg.pl/500x135/",
+      "title": "New Test",
+    },
+  },
+  "type": "[tests] create test request",
+}
+`;
+
+exports[`tests create test should return an action 2`] = `
+Object {
+  "payload": Object {
+    "data": Object {
+      "analytics": Object {
+        "likes": "20",
+        "usage": "10",
+      },
+      "assignments": Array [],
+      "collections": "",
+      "courses": Array [
+        "1",
+      ],
+      "createdBy": Object {},
+      "description": "Unit test items",
+      "grades": Array [],
+      "renderingType": "assessment",
+      "scoring": Object {
+        "testItems": Array [
+          Object {
+            "points": 0,
+          },
+          Object {
+            "points": 0,
+          },
+        ],
+        "total": 0,
+      },
+      "standardsTag": Object {
+        "curriculum": "",
+        "standards": Array [],
+      },
+      "status": "draft",
+      "subjects": Array [
+        "Math",
+      ],
+      "tags": Array [],
+      "testItems": Array [
+        "5bf28847dc39e409216aea02",
+        "5bf28d4edc39e409216aea06",
+      ],
+      "thumbnail": "https://fakeimg.pl/500x135/",
+      "title": "New Test2",
+    },
+  },
+  "type": "[tests] create test request",
+}
+`;
+
+exports[`tests receive test by id should return an action 1`] = `
+Object {
+  "payload": Object {
+    "id": "5bf2a3e0da9400105cac6cf6",
+  },
+  "type": "[tests] receive test by id request",
+}
+`;
+
+exports[`tests receive test by id should return an action 2`] = `
+Object {
+  "payload": Object {
+    "id": "5bf2a3e0da9400105cac6cf7",
+  },
+  "type": "[tests] receive test by id request",
+}
+`;
+
+exports[`tests receive test by id should return an action 3`] = `
+Object {
+  "payload": Object {
+    "id": "5bf2a3e0da9400105cac6cf8",
+  },
+  "type": "[tests] receive test by id request",
+}
+`;
+
+exports[`tests receive tests should return an action 1`] = `
+Object {
+  "payload": 1,
+  "type": "[tests] receive list request",
+}
+`;
+
+exports[`tests receive tests should return an action 2`] = `
+Object {
+  "payload": 2,
+  "type": "[tests] receive list request",
+}
+`;
+
+exports[`tests receive tests should return an action 3`] = `
+Object {
+  "payload": 2,
+  "type": "[tests] receive list request",
+}
+`;
+
+exports[`tests set default test data should return an action 1`] = `
+Object {
+  "type": "[tests] set default test data",
+}
+`;
+
+exports[`tests set test data should return an action 1`] = `
+Object {
+  "payload": Object {
+    "data": Object {
+      "createBy": Object {
+        "email": "andrey@snapwiz.com",
+        "firstName": "andrey",
+        "lastName": "vasilev",
+      },
+      "sharing": Array [
+        Object {
+          "email": "andrey@snapwiz.com",
+          "permission": "rxw",
+        },
+      ],
+    },
+  },
+  "type": "[tests] set test data",
+}
+`;
+
+exports[`tests update test should return an action 1`] = `
+Object {
+  "payload": Object {
+    "data": undefined,
+    "id": Object {
+      "analytics": Object {
+        "likes": "0",
+        "usage": "0",
+      },
+      "assignments": Array [],
+      "collections": "",
+      "courses": Array [],
+      "createdBy": Object {},
+      "description": "",
+      "grades": Array [],
+      "renderingType": "assessment",
+      "scoring": Object {
+        "testItems": Array [
+          Object {
+            "points": 0,
+          },
+          Object {
+            "points": 0,
+          },
+        ],
+        "total": 0,
+      },
+      "standardsTag": Object {
+        "curriculum": "",
+        "standards": Array [],
+      },
+      "status": "draft",
+      "subjects": Array [],
+      "tags": Array [],
+      "testItems": Array [
+        "5bf28847dc39e409216aea00",
+        "5bf28d4edc39e409216aea04",
+      ],
+      "thumbnail": "https://fakeimg.pl/500x135/",
+      "title": "New Test",
+    },
+  },
+  "type": "[tests] update test request",
+}
+`;
+
+exports[`tests update test should return an action 2`] = `
+Object {
+  "payload": Object {
+    "data": undefined,
+    "id": Object {
+      "analytics": Object {
+        "likes": "20",
+        "usage": "10",
+      },
+      "assignments": Array [],
+      "collections": "",
+      "courses": Array [
+        "1",
+      ],
+      "createdBy": Object {},
+      "description": "Unit test items",
+      "grades": Array [],
+      "renderingType": "assessment",
+      "scoring": Object {
+        "testItems": Array [
+          Object {
+            "points": 0,
+          },
+          Object {
+            "points": 0,
+          },
+        ],
+        "total": 0,
+      },
+      "standardsTag": Object {
+        "curriculum": "",
+        "standards": Array [],
+      },
+      "status": "draft",
+      "subjects": Array [
+        "Math",
+      ],
+      "tags": Array [],
+      "testItems": Array [
+        "5bf28847dc39e409216aea02",
+        "5bf28d4edc39e409216aea06",
+      ],
+      "thumbnail": "https://fakeimg.pl/500x135/",
+      "title": "New Test2",
+    },
+  },
+  "type": "[tests] update test request",
+}
+`;

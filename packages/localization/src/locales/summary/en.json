@@ -1,0 +1,16 @@
+{
+  "common": {
+    "headingText": "Congratulations, you reached out the end of the test!",
+    "message": "If you need to review your answers, select the question number you wish to review. A flag icon appears for any questions that you marked for review.",
+    "markedQuestionLineOne": "You have marked these questions.",
+    "markedQuestionLineTwo": "Review them before submitting your test.",
+    "skippedQues": "Please review your skipped questions before submitting the test",
+    "markedForReview": "You have marked for review these questions.",
+    "nextStep": "Next Step: When you are done reviewing your answers, select Submit test. You cannot change your answers after you submit the test",
+    "questionsLabel": "Questions"
+  },
+  "confirmation": {
+    "submitAssignment": "Submit assignment?",
+    "confirmationMessage": "This is your last chance to continue working on the assignment. You can click on CANCEL to go back to the test or SUBMIT to end."
+  }
+}

@@ -1,0 +1,67 @@
+// Brand Colors
+$brand-blue:      #00b0ff;
+$brand-darkblue:  #0288d1;
+$brand-green:     #1fe3a1;
+$brand-darkgreen: #4aac8b;
+$brand-red:       #ee1658;
+$brand-yellow:    rgb(244, 167, 0);
+$brand-darkergrey:#444444;
+$brand-darkgrey:  #cfcfcf;
+$brand-grey:      #e5e5e5;
+$brand-lightgrey: #f3f3f3;
+$brand-white:     #ffffff;
+
+// Color Roles
+$primary:   $brand-green;
+$secondary: $brand-blue;
+$warning:   $brand-yellow;
+$danger:    $brand-red;
+$muted:     $brand-darkgrey;
+
+// Typography
+$font-mono:        'Courier', monospace;
+$font-sans:        'Source Sans Pro', Arial, sans-serif;
+$font-serif:       'Bree Serif', Times, serif;
+$base-font-color:  $brand-darkergrey;
+$base-font-family: $font-sans;
+$base-font-size:   16px;
+$font-normal:      400;
+$font-semibold:    600;
+$font-bold:        700;
+$base-line-height: 1.5;
+$headings:         (6, 5, 4, 3, 2, 1);
+
+// Header Colors
+$header-text-color:   $base-font-color;
+$header-bg-color:     $brand-lightgrey;
+$listheader-bg-color: $brand-darkblue;
+
+// Main Section Colors
+$main-bg-color: $brand-lightgrey;
+
+// Main Quiz Content Colors
+$main-content-text-color:   $base-font-color;
+$main-content-bg-color:     $brand-white;
+$main-content-font-size:    $base-font-size;
+$main-content-font-family:  $base-font-family;
+
+// Question List Colors
+$sidebar-text-color:  #878282;
+$sidebar-bg-color:    $brand-lightgrey;
+$sidebar-font-size:   $base-font-size;
+$sidebar-content-border-color: $primary;
+$sidebar-active-text-color: $primary;
+$sidebar-active-circle-color: $secondary;
+$sidebar-font-family: $base-font-family;
+
+// Button Control Colors
+$control-btn-text-color:      $brand-white;
+$control-btn-primary-color:   $primary;
+$control-btn-secondary-color: $secondary;
+$control-btn-muted-color:     $muted;
+
+
+// Quiz Select Colors
+$select-text-color:   $base-font-color;
+$select-bg-color:     $brand-white;
+$select-arrow-color:  $secondary;

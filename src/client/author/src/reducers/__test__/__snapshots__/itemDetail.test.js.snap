@@ -1,0 +1,251 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`item detail should return the delete item detail widget state 1`] = `
+Object {
+  "dragging": false,
+  "error": null,
+  "item": Object {
+    "rows": Array [
+      Object {
+        "dimension": "100%",
+        "tabs": Array [],
+        "widgets": Array [],
+      },
+    ],
+  },
+  "loading": false,
+  "updateError": null,
+  "updating": false,
+}
+`;
+
+exports[`item detail should return the delete item detail widget state 2`] = `
+Object {
+  "dragging": false,
+  "error": null,
+  "item": Object {
+    "rows": Array [
+      Object {
+        "dimension": "100%",
+        "tabs": Array [
+          undefined,
+          undefined,
+          "tab1",
+        ],
+        "widgets": Array [],
+      },
+    ],
+  },
+  "loading": false,
+  "updateError": null,
+  "updating": false,
+}
+`;
+
+exports[`item detail should return the initial state 1`] = `
+Object {
+  "dragging": false,
+  "error": null,
+  "item": Object {
+    "rows": Array [
+      Object {
+        "dimension": "100%",
+        "tabs": Array [],
+        "widgets": Array [],
+      },
+    ],
+  },
+  "loading": false,
+  "updateError": null,
+  "updating": false,
+}
+`;
+
+exports[`item detail should return the receive item detail error state 1`] = `
+Object {
+  "dragging": false,
+  "error": "receive item detail error",
+  "item": Object {
+    "rows": Array [
+      Object {
+        "dimension": "100%",
+        "tabs": Array [],
+        "widgets": Array [],
+      },
+    ],
+  },
+  "loading": false,
+  "updateError": null,
+  "updating": false,
+}
+`;
+
+exports[`item detail should return the receive item detail request state 1`] = `
+Object {
+  "dragging": false,
+  "error": null,
+  "item": undefined,
+  "loading": false,
+  "updateError": null,
+  "updating": false,
+}
+`;
+
+exports[`item detail should return the receive item detail success state 1`] = `
+Object {
+  "dragging": false,
+  "error": null,
+  "item": Object {
+    "rows": Array [
+      Object {
+        "dimension": "100%",
+        "tabs": Array [],
+        "widgets": Array [],
+      },
+    ],
+  },
+  "loading": true,
+  "updateError": null,
+  "updating": false,
+}
+`;
+
+exports[`item detail should return the set dragging state 1`] = `
+Object {
+  "dragging": 5,
+  "error": null,
+  "item": Object {
+    "rows": Array [
+      Object {
+        "dimension": "100%",
+        "tabs": Array [],
+        "widgets": Array [],
+      },
+    ],
+  },
+  "loading": false,
+  "updateError": null,
+  "updating": false,
+}
+`;
+
+exports[`item detail should return the set item detail data state 1`] = `
+Object {
+  "dragging": false,
+  "error": null,
+  "item": Object {
+    "columns": Array [],
+    "rows": Array [
+      Object {
+        "dimension": "100%",
+        "tabs": Array [],
+        "widgets": Array [
+          Object {
+            "reference": "5c0f0c9ed8c7f4453f5bb51f",
+            "tabIndex": 0,
+            "title": "Multiple choice",
+            "type": "multipleChoice",
+            "widgetType": "question",
+          },
+        ],
+      },
+    ],
+  },
+  "loading": false,
+  "updateError": null,
+  "updating": false,
+}
+`;
+
+exports[`item detail should return the update item detail dimension state 1`] = `
+Object {
+  "dragging": false,
+  "error": null,
+  "item": Object {
+    "rows": Array [
+      Object {
+        "dimension": 10,
+        "tabs": Array [],
+        "widgets": Array [],
+      },
+      Object {
+        "dimension": 20,
+        "tabs": Array [
+          "Tab 1",
+          "Tab 2",
+        ],
+        "widgets": Array [],
+      },
+    ],
+  },
+  "loading": false,
+  "updateError": null,
+  "updating": false,
+}
+`;
+
+exports[`item detail should return the update item detail error state 1`] = `
+Object {
+  "dragging": false,
+  "error": null,
+  "item": Object {
+    "rows": Array [
+      Object {
+        "dimension": "100%",
+        "tabs": Array [],
+        "widgets": Array [],
+      },
+    ],
+  },
+  "loading": false,
+  "updateError": "update item detail error",
+  "updating": false,
+}
+`;
+
+exports[`item detail should return the update item detail request state 1`] = `
+Object {
+  "dragging": false,
+  "error": null,
+  "item": Object {
+    "rows": Array [
+      Object {
+        "dimension": "100%",
+        "tabs": Array [],
+        "widgets": Array [],
+      },
+    ],
+  },
+  "loading": false,
+  "updateError": null,
+  "updating": true,
+}
+`;
+
+exports[`item detail should return the update item detail success state 1`] = `
+Object {
+  "dragging": false,
+  "error": null,
+  "item": Object {
+    "columns": Array [],
+    "rows": Array [
+      Object {
+        "dimension": "100%",
+        "tabs": Array [],
+        "widgets": Array [
+          Object {
+            "reference": "5c0f0c9ed8c7f4453f5bb51f",
+            "tabIndex": 0,
+            "title": "Multiple choice",
+            "type": "multipleChoice",
+            "widgetType": "question",
+          },
+        ],
+      },
+    ],
+  },
+  "loading": false,
+  "updateError": null,
+  "updating": false,
+}
+`;
