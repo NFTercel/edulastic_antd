@@ -12,7 +12,7 @@ import QuestionTypes from "../QuestionType/QuestionTypes";
 import { getItemSelector } from "../../../src/selectors/items";
 import Header from "../Header/Header";
 import { setQuestionAction } from "../../../QuestionEditor/ducks";
-import { addQuestionAction } from "../../../Shared/Ducks/questions";
+import { addQuestionAction } from "../../../sharedDucks/questions";
 import {
   Content,
   LeftSide,

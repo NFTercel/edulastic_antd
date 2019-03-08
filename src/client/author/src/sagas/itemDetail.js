@@ -11,7 +11,7 @@ import {
   UPDATE_ITEM_DETAIL_SUCCESS,
   UPDATE_ITEM_DETAIL_ERROR
 } from "../constants/actions";
-import { loadQuestionsAction } from "../../Shared/Ducks/questions";
+import { loadQuestionsAction } from "../../sharedDucks/questions";
 
 function* receiveItemSaga({ payload }) {
   try {

@@ -11,7 +11,7 @@ import {
   RECEIVE_TESTACTIVITY_REQUEST,
   RECEIVE_TESTACTIVITY_SUCCESS,
   RECEIVE_TESTACTIVITY_ERROR
-} from "../../src/constants/actions";
+} from "../src/constants/actions";
 
 function* receiveGradeBookSaga({ payload }) {
   try {
@@ -75,7 +75,7 @@ export const getGradeBookSelector = createSelector(
     let questionMap = {};
     for (let entity of startedEntities) {
       const questionActivities = entity.questionActivities;
-      innerloop: for (let { _id, notStarted, skipped, correct, timeSpent, partiallyCorrect } of questionActivities) {
+      for (let { _id, notStarted, skipped, correct, timeSpent, partiallyCorrect } of questionActivities) {
         if (!questionMap[_id]) {
           questionMap[_id] = {
             _id,
@@ -90,7 +90,7 @@ export const getGradeBookSelector = createSelector(
         if (!notStarted) {
           questionMap[_id].attemptsNum += 1;
         } else {
-          continue innerloop;
+          continue;
         }
 
         if (skipped) {
@@ -132,4 +132,23 @@ export const getTestActivitySelector = createSelector(
 export const getAdditionalDataSelector = createSelector(
   stateTestActivitySelector,
   state => state.additionalData
+);
+
+export const stateClassResponseSelector = state => state.classResponse;
+export const stateStudentResponseSelector = state => state.studentResponse;
+export const stateFeedbackResponseSelector = state => state.feedbackResponse;
+
+export const getClassResponseSelector = createSelector(
+  stateClassResponseSelector,
+  state => state.data
+);
+
+export const getStudentResponseSelector = createSelector(
+  stateStudentResponseSelector,
+  state => state.data
+);
+
+export const getFeedbackResponseSelector = createSelector(
+  stateFeedbackResponseSelector,
+  state => state.data
 );

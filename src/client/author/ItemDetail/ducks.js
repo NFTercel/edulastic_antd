@@ -3,7 +3,7 @@ import { cloneDeep, keyBy as _keyBy, omit as _omit } from "lodash";
 import { testItemsApi } from "@edulastic/api";
 import { call, put, all, takeEvery } from "redux-saga/effects";
 import { message } from "antd";
-import { loadQuestionsAction } from "../Shared/Ducks/questions";
+import { loadQuestionsAction } from "../sharedDucks/questions";
 
 // constants
 

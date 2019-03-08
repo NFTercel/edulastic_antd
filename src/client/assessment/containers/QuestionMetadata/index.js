@@ -27,7 +27,7 @@ import {
   addAlignmentAction,
   getQuestionAlignmentSelector,
   removeAlignmentAction
-} from "../../../author/Shared/Ducks/questions";
+} from "../../../author/sharedDucks/questions";
 
 import { getCurriculumsListSelector, getStandardsListSelector } from "../../../author/src/selectors/dictionaries";
 

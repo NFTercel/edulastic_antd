@@ -17,7 +17,7 @@ import {
 } from "../constants/actions";
 
 import { history } from "../../../configureStore";
-import { getQuestionsSelector } from "../../Shared/Ducks/questions";
+import { getQuestionsSelector } from "../../sharedDucks/questions";
 
 function* createTestItemSaga({ payload }) {
   try {

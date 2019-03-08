@@ -13,9 +13,9 @@ import {
   getClassResponseSelector,
   getStudentResponseSelector,
   getTestActivitySelector
-} from "../../../Shared/Selectors/classBoard";
+} from "../../../sharedDucks/classBoard";
 // ducks
-import { getAdditionalDataSelector } from "../../../Shared/Ducks/classBoard";
+import { getAdditionalDataSelector } from "../../../sharedDucks/classBoard";
 // components
 import ClassSelect from "../../../Shared/Components/ClassSelect/ClassSelect";
 import StudentSelect from "../../../Shared/Components/StudentSelect/StudentSelect";

@@ -121,7 +121,7 @@ export const getCards = onSelectQuestionType => {
         type: "hotspot",
         image: {
           source: "https://assets.learnosity.com/organisations/1/bead7655-fb71-41af-aeea-9e08a47eac68.png",
-          maxWidth: 900,
+          width: 900,
           altText: "",
           height: 470
         },
@@ -135,7 +135,6 @@ export const getCards = onSelectQuestionType => {
           local: []
         },
         validation: {
-          rounding: rounding.ROUND_DOWN,
           scoring_type: EXACT_MATCH,
           valid_response: {
             score: 1,
@@ -179,11 +178,6 @@ export const getCards = onSelectQuestionType => {
         show_word_count: true,
         max_word: 5,
         show_word_limit: ON_LIMIT,
-        validation: {
-          max_score: 0,
-          min_score_if_attempted: 0,
-          submit_over_limit: false
-        },
         formatting_options: [
           { id: "test1", value: "bold", active: true },
           { id: "test2", value: "italic", active: true },
@@ -1480,37 +1474,4 @@ export const getCards = onSelectQuestionType => {
       onSelectQuestionType
     }
   ];
-
-  return (
-    <FlexContainer>
-      {cards.map(
-        ({ cardImage, data, onSelectQuestionType: onSelect, type }) =>
-          type === questionType && (
-            <Card
-              key={data.title}
-              title={data.title}
-              data={data}
-              cardImage={cardImage}
-              onSelectQuestionType={onSelect}
-            />
-          )
-      )}
-      {[1, 2, 3, 4, 5, 6, 7].map(() => (
-        <Dump />
-      ))}
-    </FlexContainer>
-  );
 };
-
-const FlexContainer = styled.div`
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-content: baseline;
-`;
-PickUpQuestionTypes.propTypes = {
-  onSelectQuestionType: PropTypes.func.isRequired
-};
-
-export default PickUpQuestionTypes;

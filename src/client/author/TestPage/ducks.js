@@ -6,7 +6,7 @@ import { keyBy as _keyBy } from "lodash";
 import { testsApi } from "@edulastic/api";
 
 import { SET_MAX_ATTEMPT, UPDATE_TEST_IMAGE } from "../src/constants/actions";
-import { loadQuestionsAction } from "../Shared/Ducks/questions";
+import { loadQuestionsAction } from "../sharedDucks/questions";
 
 // constants
 export const SET_ASSIGNMENT = "[assignments] set assignment"; // TODO remove cyclic dependency

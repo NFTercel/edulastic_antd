@@ -8,10 +8,10 @@ import { withNamespaces } from "@edulastic/localization";
 // actions
 import { receiveClassResponseAction, receiveTestActivitydAction } from "../../../src/actions/classBoard";
 // selectors
-import { getClassResponseSelector, getStudentResponseSelector } from "../../../Shared/Selectors/classBoard";
+import { getClassResponseSelector, getStudentResponseSelector } from "../../../sharedDucks/classBoard";
 // components
 import TestItemPreview from "../../../../assessment/components/TestItemPreview";
-import { getRows } from "../../../Shared/Selectors/itemDetail";
+import { getRows } from "../../../sharedDucks/itemDetail";
 // styled wrappers
 import { Content } from "./styled";
 

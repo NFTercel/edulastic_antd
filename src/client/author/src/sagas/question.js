@@ -15,7 +15,7 @@ import {
   getCurrentQuestionSelector,
   getQuestionsArraySelector,
   changeCurrentQuestionAction
-} from "../../Shared/Ducks/questions";
+} from "../../sharedDucks/questions";
 import { getItemDetailSelector } from "../selectors/itemDetail";
 
 function* receiveQuestionSaga({ payload }) {

@@ -11,7 +11,7 @@ import { withNamespaces } from "@edulastic/localization";
 import QuestionWrapper from "../../../../../../assessment/components/QuestionWrapper";
 import { Types } from "../../../../constants";
 import { setItemDetailDraggingAction } from "../../../../ducks";
-import { getQuestionByIdSelector } from "../../../../../Shared/Ducks/questions";
+import { getQuestionByIdSelector } from "../../../../../sharedDucks/questions";
 import { Container, Buttons } from "./styled";
 
 const ItemDetailWidget = ({

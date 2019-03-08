@@ -10,7 +10,7 @@ import { questionSaga } from "../../QuestionEditor";
 import { testsAddItemsSaga } from "../../TestPage/components/AddItems";
 import { testsAssignSaga } from "../../TestPage/components/Assign";
 import assignmentsSaga from "./assignments";
-import { authorGroupsWatcherSaga } from "../../Shared/Ducks/groups";
+import { authorGroupsWatcherSaga } from "../../sharedDucks/groups";
 import { assessmentPageSaga } from "../../AssessmentCreate";
 
 const authorSagas = [

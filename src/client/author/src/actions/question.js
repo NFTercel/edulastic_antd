@@ -7,7 +7,7 @@ import {
   SET_QUESTION,
   LOAD_QUESTION
 } from "../constants/actions";
-import { UPDATE_QUESTION, SET_FIRST_MOUNT } from "../../Shared/Ducks/questions";
+import { UPDATE_QUESTION, SET_FIRST_MOUNT } from "../../sharedDucks/questions";
 
 export const receiveQuestionByIdAction = id => ({
   type: RECEIVE_QUESTION_REQUEST,

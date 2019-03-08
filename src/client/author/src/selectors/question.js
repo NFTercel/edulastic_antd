@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { getCurrentQuestionSelector } from "../../Shared/Ducks/questions";
+import { getCurrentQuestionSelector } from "../../sharedDucks/questions";
 
 export const stateSelector = state => state.question;
 export const getQuestionSelector = createSelector(

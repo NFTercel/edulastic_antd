@@ -18,7 +18,7 @@ import {
   getGradeBookSelector,
   getTestActivitySelector,
   getAdditionalDataSelector
-} from "../../../Shared/Ducks/classBoard";
+} from "../../../sharedDucks/classBoard";
 // selectors
 import { getClassResponseSelector, getStudentResponseSelector } from "../../../src/selectors/classBoard";
 // components

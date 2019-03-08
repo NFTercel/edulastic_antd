@@ -16,7 +16,7 @@ import {
   setTestDataAction,
   updateTestAction
 } from "../../../TestPage/ducks";
-import { getQuestionsArraySelector } from "../../../Shared/Ducks/questions";
+import { getQuestionsArraySelector } from "../../../sharedDucks/questions";
 import { getItemDetailByIdAction, updateItemDetailByIdAction } from "../../../src/actions/itemDetail";
 import { getItemDetailSelector } from "../../../src/selectors/itemDetail";
 import Header from "../Header/Header";

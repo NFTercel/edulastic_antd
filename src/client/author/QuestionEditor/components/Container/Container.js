@@ -16,7 +16,7 @@ import QuestionMetadata from "../../../../assessment/containers/QuestionMetadata
 import ItemHeader from "../ItemHeader/ItemHeader";
 import { saveQuestionAction, setQuestionDataAction } from "../../ducks";
 import { getItemIdSelector } from "../../../ItemDetail/ducks";
-import { getCurrentQuestionSelector } from "../../../Shared/Ducks/questions";
+import { getCurrentQuestionSelector } from "../../../sharedDucks/questions";
 import { checkAnswerAction, showAnswerAction } from "../../../src/actions/testItem";
 
 class Container extends Component {

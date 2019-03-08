@@ -13,7 +13,7 @@ import PolicySelector from "./PolicySelector";
 import TestTypeSelector from "./TestTypeSelector";
 import Footer from "./Footer";
 import { selectsData } from "../../../common";
-import { fetchGroupMembersAction, getStudentsSelector } from "../../../../../Shared/Ducks/groups";
+import { fetchGroupMembersAction, getStudentsSelector } from "../../../../../sharedDucks/groups";
 import { getCurrentAssignmentSelector, saveAssignmentAction } from "../../ducks";
 import Settings from "./Settings";
 import { getListOfStudents } from "../../utils";

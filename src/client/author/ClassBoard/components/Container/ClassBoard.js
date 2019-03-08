@@ -13,7 +13,7 @@ import {
   getTestActivitySelector,
   getGradeBookSelector,
   getAdditionalDataSelector
-} from "../../../Shared/Ducks/classBoard";
+} from "../../../sharedDucks/classBoard";
 // components
 import Score from "../Score/Score";
 import DisneyCard from "../DisneyCard/DisneyCard";

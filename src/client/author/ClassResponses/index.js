@@ -1,2 +1,2 @@
-export { watcherSaga as classResponsesSaga } from "../Shared/Ducks/classResponses";
+export { watcherSaga as classResponsesSaga } from "../sharedDucks/classResponses";
 export { default } from "./components/Container/ClassResponses";

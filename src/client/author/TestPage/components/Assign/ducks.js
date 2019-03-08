@@ -7,7 +7,7 @@ import { test } from "@edulastic/constants";
 import { all, call, put, takeEvery, select } from "redux-saga/effects";
 import { SET_ASSIGNMENT, getTestSelector, getTestIdSelector } from "../../ducks";
 import { generateClassData, formatAssignment } from "./utils";
-import { getStudentsSelector } from "../../../Shared/Ducks/groups";
+import { getStudentsSelector } from "../../../sharedDucks/groups";
 import { getUserNameSelector } from "../../../src/selectors/user";
 // constants
 export const SAVE_ASSIGNMENT = "[assignments] save assignment";

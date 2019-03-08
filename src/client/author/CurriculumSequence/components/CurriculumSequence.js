@@ -37,7 +37,7 @@ import {
 } from "../ducks";
 /* eslint-enable */
 import EditModal from "../../TestPage/components/Assign/components/EditModal/EditModal";
-import { fetchGroupsAction, getGroupsSelector, fetchMultipleGroupMembersAction } from "../../Shared/Ducks/groups";
+import { fetchGroupsAction, getGroupsSelector, fetchMultipleGroupMembersAction } from "../../sharedDucks/groups";
 
 /** @typedef {object} ModuleData
  * @property {String} contentId

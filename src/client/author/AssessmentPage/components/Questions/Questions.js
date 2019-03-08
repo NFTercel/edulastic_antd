@@ -13,7 +13,7 @@ import {
   updateQuestionAction,
   getQuestionsArraySelector,
   getQuestionsSelector
-} from "../../../Shared/Ducks/questions";
+} from "../../../sharedDucks/questions";
 import AddQuestion from "../AddQuestion/AddQuestion";
 import QuestionItem from "../QuestionItem/QuestionItem";
 import QuestionEditModal from "../QuestionEditModal/QuestionEditModal";

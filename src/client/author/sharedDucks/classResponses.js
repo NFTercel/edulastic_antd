@@ -2,7 +2,7 @@ import { takeEvery, call, put, all, select } from "redux-saga/effects";
 import { classResponseApi } from "@edulastic/api";
 import { message } from "antd";
 //import { getCurrentGroup } from "../src/selectors/user";
-import { getCurrentGroup } from "../../src/selectors/user";
+import { getCurrentGroup } from "../src/selectors/user";
 
 import {
   RECEIVE_CLASS_RESPONSE_REQUEST,
@@ -14,7 +14,7 @@ import {
   RECEIVE_FEEDBACK_RESPONSE_REQUEST,
   RECEIVE_FEEDBACK_RESPONSE_SUCCESS,
   RECEIVE_FEEDBACK_RESPONSE_ERROR
-} from "../../src/constants/actions";
+} from "../src/constants/actions";
 
 function* receiveClassResponseSaga({ payload }) {
   try {
