@@ -5,7 +5,7 @@ import { cloneDeep } from "lodash";
 
 import { withNamespaces } from "@edulastic/localization";
 
-import { KEYBOARD_BUTTONS } from "../../../../constants/keyboardButtons";
+import { MathKeyboard } from "@edulastic/common";
 
 import NumberPad from "../../../NumberPad";
 
@@ -22,7 +22,7 @@ const CustomGroup = ({ onChange, onRemove, value, t }) => {
 
   const makeCharacterMap = () =>
     [{ value: "", label: t("component.options.empty") }].concat(
-      KEYBOARD_BUTTONS.map(button => ({
+      MathKeyboard.KEYBOARD_BUTTONS.map(button => ({
         value: button.handler,
         label: button.label
       }))
@@ -30,7 +30,7 @@ const CustomGroup = ({ onChange, onRemove, value, t }) => {
 
   const getNumberPad = () =>
     value.value.map(num => {
-      let res = KEYBOARD_BUTTONS.find(({ handler }) => num === handler);
+      let res = MathKeyboard.KEYBOARD_BUTTONS.find(({ handler }) => num === handler);
 
       if (res) {
         res = {

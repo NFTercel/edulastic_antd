@@ -8,7 +8,7 @@ import { withNamespaces } from "@edulastic/localization";
 import { Button, Tab, Tabs, TabContainer } from "@edulastic/common";
 
 import { Subtitle } from "../../styled/Subtitle";
-import { setQuestionDataAction, getQuestionDataSelector } from "../../../author/QuestionEditor/ducks";
+import { setQuestionDataAction, getQuestionDataSelector } from '../../../author/QuestionEditor/ducks';
 
 import CorrectAnswer from "./CorrectAnswer";
 import { IconPlus } from "./styled/IconPlus";

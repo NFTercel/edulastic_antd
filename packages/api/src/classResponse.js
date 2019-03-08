@@ -11,11 +11,14 @@ const classResponse = ({ testId }) =>
 
     .then(result => result.data.result);
 
-const studentResponse = ({ testActivityId }) =>
+const studentResponse = ({ testActivityId }, groupId) =>
   api
     .callApi({
       url: `/test-activity/${testActivityId}/report`,
-      method: "get"
+      method: "get",
+      params: {
+        groupId
+      }
     })
     .then(result => result.data.result)
     .catch(function(error) {
@@ -23,12 +26,12 @@ const studentResponse = ({ testActivityId }) =>
       console.log(error);
     });
 
-const feedbackResponse = ({ body, testActivityId, questionId }) =>
+const feedbackResponse = ({ body, testActivityId, questionId, groupId }) =>
   api
     .callApi({
       url: `/test-activity/${testActivityId}/question/${questionId}/feedbackAndScore`,
       method: "put",
-      data: body
+      data: { body, groupId }
     })
     .then(result => result.data.result);
 

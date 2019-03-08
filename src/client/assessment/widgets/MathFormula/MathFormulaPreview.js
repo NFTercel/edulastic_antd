@@ -2,14 +2,13 @@ import React, { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import { withTheme } from "styled-components";
 
+import { MathInput, StaticMath, MathFormulaDisplay } from "@edulastic/common";
+
 import { SHOW, CHECK, CLEAR } from "../../constants/constantsForQuestions";
 
-import MathInput from "../../components/MathInput";
-
-import CorrectAnswerBox from "./components/CorrectAnswerBox";
-import MathInputStatus from "./components/MathInputStatus";
+import CorrectAnswerBox from "./components/CorrectAnswerBox/index";
+import MathInputStatus from "./components/MathInputStatus/index";
 import MathInputWrapper from "./styled/MathInputWrapper";
-import StaticMath from "./StaticMath";
 
 const MathFormulaPreview = ({
   item,
@@ -24,6 +23,7 @@ const MathFormulaPreview = ({
   const isStatic = studentTemplate.search(/\\MathQuillMathField\{(.*)\}/g) !== -1;
 
   const [latex, setLatex] = useState(studentTemplate);
+  const [innerValues, setInnerValues] = useState([]);
 
   const onUserResponse = latexv => {
     setLatex(latexv);
@@ -39,7 +39,6 @@ const MathFormulaPreview = ({
   const escapeRegExp = string => string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
   const setUserResponse = () => {
-    studentRef.current.setLatex(studentTemplate);
     if (!userAnswer) {
       setLatex(studentTemplate);
       return;
@@ -49,10 +48,7 @@ const MathFormulaPreview = ({
       escapeRegExp(studentTemplate).replace(/\\\\MathQuillMathField\\\{\\\}/g, "(.*)"),
       "g"
     );
-    const innerValues = regexTemplate.exec(userAnswer);
-    for (let i = 1; i < innerValues.length; i++) {
-      studentRef.current.setInnerFieldValue(innerValues[i], i - 1);
-    }
+    setInnerValues(regexTemplate.exec(userAnswer).slice(1));
   };
 
   useEffect(() => {
@@ -61,10 +57,9 @@ const MathFormulaPreview = ({
         setLatex(userAnswer || studentTemplate);
         return;
       }
-
       setUserResponse();
     }
-  }, [studentTemplate, previewType]);
+  }, [studentTemplate, previewType, userAnswer]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -72,10 +67,9 @@ const MathFormulaPreview = ({
         setLatex(userAnswer || studentTemplate);
         return;
       }
-
       setUserResponse();
     }, 0);
-  }, [studentTemplate]);
+  }, [studentTemplate, userAnswer]);
 
   let statusColor = theme.widgets.mathFormula.inputColor;
   if (previewType === SHOW || previewType === CHECK) {
@@ -87,7 +81,7 @@ const MathFormulaPreview = ({
   }
   return (
     <div>
-      <div style={{ marginBottom: 15 }} dangerouslySetInnerHTML={{ __html: item.stimulus }} />
+      <MathFormulaDisplay style={{ marginBottom: 15 }} dangerouslySetInnerHTML={{ __html: item.stimulus }} />
 
       <MathInputWrapper>
         {isStatic && (
@@ -98,6 +92,8 @@ const MathFormulaPreview = ({
             onInput={onUserResponse}
             onBlur={onBlur}
             style={{ background: statusColor }}
+            latex={studentTemplate}
+            innerValues={innerValues}
           />
         )}
         {!isStatic && (

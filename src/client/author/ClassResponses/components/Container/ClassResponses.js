@@ -6,25 +6,22 @@ import { withWindowSizes } from "@edulastic/common";
 import { Link } from "react-router-dom";
 import { withNamespaces } from "@edulastic/localization";
 import { ComposedChart, Bar, XAxis, YAxis, ResponsiveContainer } from "recharts";
-
-import ClassQuestions from "./ClassQuestions";
-
+// actions
 import { receiveStudentResponseAction } from "../../../src/actions/classBoard";
-
+// selectors
 import {
   getClassResponseSelector,
   getStudentResponseSelector,
   getTestActivitySelector
-} from "../../../src/selectors/classBoard";
-import {
-  getAdditionalDataSelector
-} from '../../../sharedDucks/classBoard';
-
-import ListHeader from "../ListHeader/ListHeader";
-import SortClass from "../SortClass/SortClass";
-import SortStudent from "../SortStudent/SortStudent";
+} from "../../../Shared/Selectors/classBoard";
+// ducks
+import { getAdditionalDataSelector } from "../../../Shared/Ducks/classBoard";
+// components
+import ClassSelect from "../../../Shared/Components/ClassSelect/ClassSelect";
+import StudentSelect from "../../../Shared/Components/StudentSelect/StudentSelect";
 import FeedbackForm from "../FeedbackForm/FeedbackForm";
-
+import ClassQuestions from "./ClassQuestions";
+// styled wrappers
 import {
   PaginationInfo,
   TimeContainer,
@@ -41,6 +38,7 @@ import {
   StyledCard,
   FeedbackButton,
   OverallButton,
+  SelectWrapper,
   FeedbackActiveButton
 } from "./styled";
 
@@ -72,18 +70,16 @@ class ClassResponses extends Component {
   };
 
   render() {
+    let totalScore = 0;
+    let totalMaxScore = 0;
     const data = [];
     const { showFeedbackForm } = this.state;
     const studentItems = this.props.testActivity;
-    const {
-      classResponse,
-      additionalData,
-      loadStudentResponses,
-      studentResponse: { questionActivities, testActivity }
-    } = this.props;
+    const { classResponse, additionalData, studentResponse, loadStudentResponses } = this.props;
+    const testActivity = studentResponse ? studentResponse.testActivity : null;
+    const questionActivities = studentResponse ? studentResponse.questionActivities : null;
     const showClassQuestions = testActivity && !showFeedbackForm;
-    let totalScore = 0;
-    let totalMaxScore = 0;
+
     if (questionActivities) {
       questionActivities.forEach((item, i) => {
         totalScore += item.score || 0;
@@ -111,7 +107,6 @@ class ClassResponses extends Component {
 
     return (
       <div>
-        <ListHeader additionalData={additionalData || {}} onCreate={this.handleCreate} />
         <StyledFlexContainer justifyContent="space-between">
           <PaginationInfo>
             <a>
@@ -119,21 +114,21 @@ class ClassResponses extends Component {
             </a>{" "}
             /
             <a>
-              &nbsp; <Link to="/author/assignments">{classassignment}</Link>
+              <Link to="/author/assignments">{classassignment}</Link>
             </a>{" "}
             /
             <a>
-              &nbsp; <Link to={linkToClass}>{classname}</Link>
+              <Link to={linkToClass}>{classname}</Link>
             </a>{" "}
             /
             <a>
-              &nbsp; <Link to={linkToResponses}>{studentName}</Link>
+              <Link to={linkToResponses}>{studentName}</Link>
             </a>
           </PaginationInfo>
-          <StyledFlexContainer justifyContent="space-between">
-            <SortStudent students={studentItems} loadStudentResponses={loadStudentResponses} />
-            <SortClass classname={classname} />
-          </StyledFlexContainer>
+          <SelectWrapper>
+            <StudentSelect students={studentItems} loadStudentResponses={loadStudentResponses} />
+            <ClassSelect classname={classname} />
+          </SelectWrapper>
         </StyledFlexContainer>
         <StyledCard bordered={false}>
           <GraphContainer>
@@ -207,7 +202,9 @@ class ClassResponses extends Component {
             </OverallButton>
           </PaginationButtonGroup>
         </StyledFlexContainer>
-        {showClassQuestions && <ClassQuestions testActivity={testActivity} currentStudent={currentStudent || []} />}
+        {showClassQuestions && (
+          <ClassQuestions testActivity={testActivity} showOnly={null} currentStudent={currentStudent || []} />
+        )}
         {showFeedbackForm && (
           <StyledFlexContainer justifyContent="flex-end">
             <FeedbackForm />

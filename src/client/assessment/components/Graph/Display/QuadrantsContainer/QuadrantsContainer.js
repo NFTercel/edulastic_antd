@@ -423,7 +423,7 @@ class GraphContainer extends Component {
     }
   }
 
-  getHandlerByControlName = (control) => {
+  getHandlerByControlName = control => {
     switch (control) {
       case "undo":
         return this.onUndo();
@@ -611,6 +611,7 @@ class GraphContainer extends Component {
               <LabelBottom dangerouslySetInnerHTML={{ __html: annotation.labelBottom }} />
             )}
             <JSXBox
+              data-cy="jxgbox"
               id={this._graphId}
               className="jxgbox"
               margin={layout.margin ? layout.margin : hasAnnotation ? 20 : 0}

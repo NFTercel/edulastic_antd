@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { cloneDeep } from "lodash";
+import { cloneDeep, get } from "lodash";
 import { Select, Input } from "antd";
 import { compose } from "redux";
 import { withTheme } from "styled-components";
@@ -94,6 +94,10 @@ const ShadingPreview = ({ view, item, smallSize, saveAnswer, userAnswer, method,
       newUserAnswer.splice(indexOfSameShade, 1);
     }
 
+    if (item.max_selection && newUserAnswer.length > item.max_selection) {
+      return;
+    }
+
     saveAnswer(newUserAnswer);
   };
 
@@ -102,6 +106,8 @@ const ShadingPreview = ({ view, item, smallSize, saveAnswer, userAnswer, method,
   };
 
   const preview = previewTab === CHECK || previewTab === SHOW;
+
+  const hidden = get(item, "canvas.hidden", []);
 
   return (
     <Paper padding={smallSize} boxShadow={smallSize ? "none" : ""}>
@@ -137,6 +143,9 @@ const ShadingPreview = ({ view, item, smallSize, saveAnswer, userAnswer, method,
             colCount={smallSize ? 8 : column_count}
             onCellClick={handleCellClick}
             shaded={Array.isArray(userAnswer) ? userAnswer : []}
+            hidden={hidden}
+            border={item.border}
+            hover={item.hover}
             lockedCells={read_only_author_cells ? shaded : undefined}
           />
         )}
@@ -151,6 +160,9 @@ const ShadingPreview = ({ view, item, smallSize, saveAnswer, userAnswer, method,
             colCount={column_count}
             onCellClick={handleCellClick}
             shaded={Array.isArray(userAnswer) ? userAnswer : []}
+            hidden={hidden}
+            border={item.border}
+            hover={item.hover}
             lockedCells={read_only_author_cells ? shaded : undefined}
           />
         ) : (

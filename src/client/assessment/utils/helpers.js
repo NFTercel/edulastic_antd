@@ -1,19 +1,19 @@
-import { groupBy, intersection } from "lodash";
+import { groupBy } from "lodash";
 
-export const getFontSize = fontSize => {
+export const getFontSize = (fontSize, withRem = false) => {
   switch (fontSize) {
     case "small":
-      return "12px";
+      return withRem ? "0.8rem" : "12px";
     case "normal":
-      return "14px";
+      return withRem ? "1rem" : "14px";
     case "large":
-      return "16px";
+      return withRem ? "1.2rem" : "16px";
     case "xlarge":
-      return "18px";
+      return withRem ? "1.4rem" : "18px";
     case "xxlarge":
-      return "20px";
+      return withRem ? "1.6rem" : "20px";
     default:
-      return "14px";
+      return withRem ? "1rem" : "14px";
   }
 };
 
@@ -119,16 +119,21 @@ export const getInputSelection = el => {
   };
 };
 
-// group standards into domains.
-export const groupByDomains = (standardsArray, selectedGrades) => {
-  const grouped = groupBy(standardsArray, "tloId");
+/**
+ * Convert UI alignment row standards to Mongo alignment domains
+ *
+ * @param {Array} alignmentRowStandards - alignment row standards from UI
+ * @returns {Array} - alignment domains for Mongo
+ */
+export const alignmentStandardsFromUIToMongo = alignmentRowStandards => {
+  const grouped = groupBy(alignmentRowStandards, "tloId");
   const domainIds = Object.keys(grouped);
-  const domains = domainIds.map(id => {
+  return domainIds.map(id => {
     const allStandards = grouped[id];
     const standards = allStandards.map(({ _id, identifier, grades, description, level }) => ({
       id: _id,
       name: identifier,
-      grades: intersection(grades, selectedGrades),
+      grades,
       description,
       level
     }));
@@ -139,6 +144,50 @@ export const groupByDomains = (standardsArray, selectedGrades) => {
       standards
     };
   });
+};
 
-  return domains;
+/**
+ * Convert Mongo alignment domains to UI alignment row standards
+ *
+ * @param {Array} alignmentDomains - alignment domains from Mongo
+ * @returns {Array} - alignment row standards for UI
+ */
+export const alignmentStandardsFromMongoToUI = alignmentDomains => {
+  const alignmentRowStandards = [];
+  alignmentDomains.forEach(alignmentDomain => {
+    alignmentDomain.standards.forEach(standard => {
+      alignmentRowStandards.push({
+        description: standard.description,
+        grades: standard.grades,
+        identifier: standard.name,
+        level: standard.level,
+        tloDescription: alignmentDomain.name,
+        tloId: alignmentDomain.id,
+        _id: standard.id
+      });
+    });
+  });
+  return alignmentRowStandards;
+};
+
+export const getSpellCheckAttributes = (isSpellCheck = false) => ({
+  spellCheck: isSpellCheck,
+  autoComplete: isSpellCheck,
+  autoCorrect: isSpellCheck,
+  autoCapitalize: isSpellCheck
+});
+
+export const getDirection = pos => {
+  switch (pos) {
+    case "bottom":
+      return "column";
+    case "top":
+      return "column-reverse";
+    case "right":
+      return "row";
+    case "left":
+      return "row-reverse";
+    default:
+      return "column";
+  }
 };

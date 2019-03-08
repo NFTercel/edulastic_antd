@@ -4,6 +4,7 @@ import { reportsApi, testsApi } from "@edulastic/api";
 import { setTestItemsAction } from "../sharedDucks/TestItem";
 import { getReportByIdSelector } from "../sharedDucks/ReportsModule/ducks";
 import { push } from "react-router-redux";
+import { getCurrentGroup } from "../Login/ducks";
 // types
 export const LOAD_TEST_ACTIVITY_REPORT = "[studentReports] load testActivity  report";
 
@@ -17,7 +18,7 @@ export const setFeedbackReportAction = createAction(SET_FEEDBACK);
 function* loadTestActivityReport({ payload }) {
   try {
     const { testActivityId } = payload;
-
+    const groupId = yield select(getCurrentGroup);
     if (!testActivityId) {
       throw new Error("invalid data");
     }

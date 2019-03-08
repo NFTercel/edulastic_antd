@@ -4,7 +4,7 @@ import { SortableElement } from "react-sortable-hoc";
 import { compose } from "redux";
 import { withTheme } from "styled-components";
 
-import { FlexContainer } from "@edulastic/common";
+import { FlexContainer, MathFormulaDisplay } from "@edulastic/common";
 import { withNamespaces } from "@edulastic/localization";
 
 import { Container } from "../styled/Container";
@@ -22,7 +22,7 @@ const OrderListReportItem = SortableElement(({ children, correctText, correct, s
       <Text>
         <FlexContainer>
           <Index>{ind}</Index>
-          <div dangerouslySetInnerHTML={{ __html: children }} />
+          <MathFormulaDisplay dangerouslySetInnerHTML={{ __html: children }} />
         </FlexContainer>
         {correct && (
           <IconWrapper color={theme.widgets.orderList.correctIconWrapperColor}>
@@ -43,7 +43,7 @@ const OrderListReportItem = SortableElement(({ children, correctText, correct, s
             <Index color={theme.widgets.orderList.incorrectIndexColor}>{ind}</Index>
             <QuestionText>
               <span>{t("component.orderlist.correctanswer")}</span>{" "}
-              <div dangerouslySetInnerHTML={{ __html: correctText }} />
+              <MathFormulaDisplay dangerouslySetInnerHTML={{ __html: correctText }} />
             </QuestionText>
           </FlexContainer>
         </Text>

@@ -2,7 +2,7 @@ import React from "react";
 import { DragSource } from "react-dnd";
 import { withTheme } from "styled-components";
 
-import { FlexContainer } from "@edulastic/common";
+import { FlexContainer, MathFormulaDisplay } from "@edulastic/common";
 
 import { IconCheck } from "../styled/IconCheck";
 import { IconClose } from "../styled/IconClose";
@@ -38,6 +38,7 @@ const DragItem = ({ connectDragSource, item, isDragging, valid, preview, renderI
   item &&
   connectDragSource(
     <div
+      data-cy={`drag-drop-item-${renderIndex}`}
       style={{
         display: "flex",
         alignItems: "center",
@@ -81,7 +82,7 @@ const DragItem = ({ connectDragSource, item, isDragging, valid, preview, renderI
             fontWeight: theme.widgets.classification.dragItemFontWeight
           }}
         >
-          <div dangerouslySetInnerHTML={{ __html: item }} />
+          <MathFormulaDisplay dangerouslySetInnerHTML={{ __html: item }} />
           {preview && valid !== undefined && (
             <div>
               {valid && <IconCheck />}

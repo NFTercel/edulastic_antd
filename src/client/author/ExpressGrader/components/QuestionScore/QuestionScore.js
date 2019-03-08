@@ -1,54 +1,53 @@
-import React, { Fragment, Component } from "react";
-import { classResponseApi } from "../../../../../../packages/api";
-import DisplayScore from "./DisplayScore";
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/prop-types */
+/* eslint-disable jsx-a11y/alt-text */
+import React, { Component } from "react";
+import { StyledText, StyledWrapper } from "./styled";
 
-class Question extends Component {
+class QuestionScore extends Component {
   constructor() {
     super();
-    this.state = {
-      question: null,
-      response: null
-    };
-    this.fetchStudentResponse = this.fetchStudentResponse.bind(this);
   }
 
-  componentDidMount() {
-    const { record } = this.props;
-    const { testActivityId } = record;
-
-    if ((testActivityId, record)) {
-      this.fetchStudentResponse(testActivityId, record);
+  getScoreColor(value, maxScore) {
+    let color;
+    switch (value) {
+      case 0:
+        color = "red";
+        break;
+      case maxScore:
+        color = "green";
+        break;
+      default:
+        color = "yellow";
+        break;
     }
-  }
-
-  fetchStudentResponse(testActivityId, record) {
-    classResponseApi
-      .studentResponse({ testActivityId })
-      .then(response => {
-        const { testActivity, questionActivities } = response;
-        const studentResponse = questionActivities.filter(qActivity => qActivity.qid === record.id);
-
-        this.setState({
-          question: testActivity,
-          response: studentResponse[0]
-        });
-      })
-      .catch(error => {
-        // handle error
-        console.log(error);
-        // this.fetchStudentResponse(testActivityId);
-      });
+    return color;
   }
 
   render() {
-    const { viewType } = this.props;
-    const { question, response } = this.state;
-    const loading = question === null || !Object.keys(question).length;
+    let score;
+    let maxScore;
+    let studentScore;
+    const { question, tableData } = this.props;
+    const isQuestion = question && question.score !== undefined && question.maxScore !== undefined;
+
+    if (isQuestion) {
+      score = question.score;
+      maxScore = question.maxScore;
+      studentScore = question.score;
+    } else {
+      score = 0;
+      maxScore = 0;
+      studentScore = "-";
+    }
 
     return (
-      <Fragment>{!loading && <DisplayScore question={question} response={response} viewType={viewType} />}</Fragment>
+      <StyledWrapper onClick={() => showQuestionModal(record, tableData)}>
+        <StyledText color={this.getScoreColor(score, maxScore)}>{studentScore}</StyledText>
+      </StyledWrapper>
     );
   }
 }
 
-export default Question;
+export default QuestionScore;

@@ -15,8 +15,8 @@ const types = [
 
 class ScoreSettings extends Component {
   render() {
-    const { scoringTypes } = this.props;
-    return <Scoring scoringTypes={scoringTypes} isSection />;
+    const { scoringTypes, showSelect } = this.props;
+    return <Scoring showSelect={showSelect} scoringTypes={scoringTypes} isSection />;
   }
 }
 

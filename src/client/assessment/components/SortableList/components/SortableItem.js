@@ -13,7 +13,7 @@ const SortableItem = SortableElement(({ cyIndex, value, dirty, onRemove, onChang
       <DragHandle />
       <div>
         <FocusInput
-          style={{ background: "transparent" }}
+          style={{ background: "transparent", width: "100%" }}
           data-cy={`edit${cyIndex}`}
           type="text"
           dirty={dirty}

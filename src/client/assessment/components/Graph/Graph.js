@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { cloneDeep } from "lodash";
-import { Paper, Select } from "@edulastic/common";
+import { Paper, Select, WithResources } from "@edulastic/common";
 import { compose } from "redux";
 import styled from "styled-components";
 import { withNamespaces } from "@edulastic/localization";
@@ -15,7 +15,6 @@ import AxisSmallSize from "./components/AxisSmallSize";
 import { AxisSegments, GraphAxisLabels, GraphQuadrants, QuestionSection } from "./Authoring";
 import { CorrectAnswers } from "./CorrectAnswers";
 import { GraphDisplay } from "./Display";
-import { WithResources } from "../../../utils";
 
 const EmptyWrapper = styled.div``;
 
@@ -97,7 +96,7 @@ class Graph extends Component {
 
     switch (graphType) {
       case "axisSegments":
-        return this.getAxisLabelsOptionsProps();
+        return this.getAxisSegmentsOptionsProps();
       case "axisLabels":
         return this.getAxisLabelsOptionsProps();
       case "quadrants":
@@ -134,8 +133,29 @@ class Graph extends Component {
       setCanvas: this.handleCanvasChange,
       graphData: item,
       fillSections,
-      cleanSections
+      cleanSections,
+      setValidation: this.handleValidationChange
     };
+  };
+
+  getAxisSegmentsOptionsProps = () => {
+    const { item, fillSections, cleanSections } = this.props;
+
+    return {
+      setOptions: this.handleOptionsChange,
+      setNumberline: this.handleNumberlineChange,
+      setCanvas: this.handleCanvasChange,
+      setControls: this.handleToolbarChange,
+      graphData: item,
+      fillSections,
+      cleanSections,
+      setValidation: this.handleValidationChange
+    };
+  };
+
+  handleToolbarChange = options => {
+    const { setQuestionData, item } = this.props;
+    setQuestionData({ ...item, toolbar: options });
   };
 
   handleControlbarChange = options => {
@@ -288,7 +308,6 @@ class Graph extends Component {
             {previewTab === "check" && (
               <GraphDisplay
                 checkAnswer
-                smallSize
                 graphData={item}
                 onChange={this.handleAddAnswer}
                 elements={userAnswer}
@@ -299,7 +318,6 @@ class Graph extends Component {
             {previewTab === "show" && (
               <GraphDisplay
                 showAnswer
-                smallSize
                 graphData={item}
                 onChange={this.handleAddAnswer}
                 elements={userAnswer}
@@ -310,7 +328,6 @@ class Graph extends Component {
             {previewTab === "clear" && (
               <GraphDisplay
                 clearAnswer
-                smallSize
                 graphData={item}
                 onChange={this.handleAddAnswer}
                 elements={userAnswer}

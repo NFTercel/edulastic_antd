@@ -6,7 +6,7 @@ import { cloneDeep } from "lodash";
 
 import { withNamespaces } from "@edulastic/localization";
 import { Button, Tab, Tabs, TabContainer } from "@edulastic/common";
-import { setQuestionDataAction, getQuestionDataSelector } from "../../../author/QuestionEditor/ducks";
+import { setQuestionDataAction, getQuestionDataSelector } from '../../../author/QuestionEditor/ducks';
 
 import { Subtitle } from "../../styled/Subtitle";
 

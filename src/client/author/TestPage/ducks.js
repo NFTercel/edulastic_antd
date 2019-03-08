@@ -6,10 +6,10 @@ import { keyBy as _keyBy } from "lodash";
 import { testsApi } from "@edulastic/api";
 
 import { SET_MAX_ATTEMPT, UPDATE_TEST_IMAGE } from "../src/constants/actions";
-import { SET_ASSIGNMENT } from "./components/Assign/ducks";
-import { loadQuestionsAction } from "../sharedDucks/questions";
+import { loadQuestionsAction } from "../Shared/Ducks/questions";
 
 // constants
+export const SET_ASSIGNMENT = "[assignments] set assignment"; // TODO remove cyclic dependency
 export const CREATE_TEST_REQUEST = "[tests] create test request";
 export const CREATE_TEST_SUCCESS = "[tests] create test success";
 export const CREATE_TEST_ERROR = "[tests] create test error";
@@ -38,7 +38,7 @@ export const receiveTestByIdSuccess = entity => ({
 });
 
 export const receiveTestByIdError = error => ({
-  type: RECEIVE_TEST_BY_ID_SUCCESS,
+  type: RECEIVE_TEST_BY_ID_ERROR,
   payload: { error }
 });
 
@@ -57,9 +57,9 @@ export const createTestErrorAction = error => ({
   payload: { error }
 });
 
-export const updateTestAction = (id, data) => ({
+export const updateTestAction = (id, data, updateLocal) => ({
   type: UPDATE_TEST_REQUEST,
-  payload: { id, data }
+  payload: { id, data, updateLocal }
 });
 
 export const updateTestSuccessAction = entity => ({
@@ -83,10 +83,10 @@ export const setDefaultTestDataAction = () => ({
 
 // reducer
 
-const initialTestState = {
+export const initialTestState = {
   title: "New Test",
   description: "",
-  releaseScore: test.releaseGradeKeys[0],
+  releaseScore: test.releaseGradeLabels.DONT_RELEASE,
   maxAttempts: 1,
   testType: test.type.ASSESSMENT,
   activityReview: true,
@@ -252,6 +252,10 @@ function* updateTestSaga({ payload }) {
 
     yield put(updateTestSuccessAction(entity));
     yield call(message.success, "Success update");
+
+    if (payload.updateLocal) {
+      yield put(setTestDataAction(payload.data));
+    }
   } catch (err) {
     const errorMessage = "Update test is failing";
     yield call(message.error, errorMessage);
@@ -289,6 +293,11 @@ export const getTestIdSelector = createSelector(
 export const getTestsCreatingSelector = createSelector(
   stateSelector,
   state => state.creating
+);
+
+export const getTestsLoadingSelector = createSelector(
+  stateSelector,
+  state => state.loading
 );
 
 export const getTestItemsRowsSelector = createSelector(

@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { Button } from "antd";
+import { greenDark } from "@edulastic/colors";
+import { white } from "@edulastic/colors";
 
 export const NavigationWrapper = styled.div`
   display: flex;
@@ -27,8 +29,24 @@ export const Link = styled.div`
 export const CloseModal = styled(Button)`
   display: flex;
   align-items: center;
-  background: #41aff8;
-  color: #fff;
+  background: ${greenDark};
+  color: ${white};
   width: 100px;
   margin-left: 5px;
+`;
+
+export const StyledText = styled.span`
+  margin: 0 5px;
+`;
+
+export const CloseModalText = styled.span`
+  font-size: 11px;
+  margin-left: 15px;
+`;
+
+export const StyledTextInfo = styled.span`
+  display: flex;
+  justify-content: row;
+  align-items: center;
+  font-weight: 500;
 `;

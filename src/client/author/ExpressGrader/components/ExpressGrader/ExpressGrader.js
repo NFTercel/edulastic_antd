@@ -6,28 +6,26 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { compose } from "redux";
 
-import Score from "../Score/Score";
-import SortBar from "../SortBar/SortBar";
-import SortClass from "../SortClass/SortClass";
-import ListHeader from "../ListHeader/ListHeader";
-import QuestionModal from "../QuestionModal/QuestionModal";
-
+// actions
+import {
+  receiveGradeBookdAction,
+  receiveClassResponseAction,
+  receiveTestActivitydAction,
+  receiveStudentResponseAction
+} from "../../../src/actions/classBoard";
+// ducks
 import {
   getGradeBookSelector,
   getTestActivitySelector,
   getAdditionalDataSelector
-} from "../../../sharedDucks/classBoard";
-
-import {
-  receiveGradeBookdAction,
-  receiveClassResponseAction,
-  receiveTestActivitydAction
-} from "../../../src/actions/classBoard";
-
+} from "../../../Shared/Ducks/classBoard";
+// selectors
 import { getClassResponseSelector, getStudentResponseSelector } from "../../../src/selectors/classBoard";
-
-import { receiveStudentResponseAction } from "../../../src/actions/classBoard";
-
+// components
+import ScoreTable from "../ScoreTable/ScoreTable";
+import QuestionModal from "../QuestionModal/QuestionModal";
+import ClassHeader from "../../../Shared/Components/ClassHeader/ClassHeader";
+// styled wrappers
 import { PaginationInfo, StyledFlexContainer } from "./styled";
 
 class ExpressGrader extends Component {
@@ -36,19 +34,18 @@ class ExpressGrader extends Component {
     this.state = {
       record: null,
       tableData: null,
-      viewType: "view",
       isVisibleModal: false
     };
-    this.changeViewType = this.changeViewType.bind(this);
     this.showQuestionModal = this.showQuestionModal.bind(this);
     this.hideQuestionModal = this.hideQuestionModal.bind(this);
   }
 
   componentDidMount() {
-    const { loadGradebook, loadTestActivity, match } = this.props;
-    const { assignmentId, classId } = match.params;
+    const { loadGradebook, loadTestActivity, loadStudentResponses, match } = this.props;
+    const { assignmentId, classId, testActivityId } = match.params;
     loadGradebook(assignmentId, classId);
     loadTestActivity(assignmentId, classId);
+    loadStudentResponses({ testActivityId });
   }
 
   handleCreate = () => {
@@ -72,26 +69,27 @@ class ExpressGrader extends Component {
     });
   }
 
-  changeViewType(e) {
-    this.setState({ viewType: e.target.value });
-  }
-
   render() {
     const {
       // eslint-disable-next-line react/prop-types
       creating,
       testActivity,
-      additionalData = {
-        classes: []
-      }
+      studentResponse,
+      additionalData
     } = this.props;
-    const { viewType, isVisibleModal, record, tableData } = this.state;
+    const { isVisibleModal, record, tableData } = this.state;
     const { assignmentId, classId } = this.props.match.params;
-    const classname = additionalData ? additionalData.className : "";
+    const questionActivities = studentResponse !== undefined ? studentResponse.questionActivities : [];
 
     return (
       <div>
-        <ListHeader onCreate={this.handleCreate} creating={creating} assignmentId={assignmentId} classId={classId} />
+        <ClassHeader
+          classId={classId}
+          creating={creating}
+          active="expressgrader"
+          assignmentId={assignmentId}
+          onCreate={this.handleCreate}
+        />
         <StyledFlexContainer justifyContent="space-between">
           <PaginationInfo>
             <a>
@@ -99,10 +97,12 @@ class ExpressGrader extends Component {
             </a>{" "}
             / <a>CALIFORNIA VERSION 4</a> / <a>CLASS 1</a>
           </PaginationInfo>
-          <SortBar viewType={viewType} changeViewType={this.changeViewType} />
-          <SortClass classname={classname} />
         </StyledFlexContainer>
-        <Score viewType={viewType} testActivity={testActivity} showQuestionModal={this.showQuestionModal} />
+        <ScoreTable
+          testActivity={testActivity}
+          questionActivities={questionActivities}
+          showQuestionModal={this.showQuestionModal}
+        />
         {isVisibleModal && (
           <QuestionModal
             record={record}

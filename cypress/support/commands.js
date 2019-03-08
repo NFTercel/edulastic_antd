@@ -2,7 +2,7 @@ import { userBuilder } from "./generate";
 import LoginPage from "../e2e/framework/student/loginPage.js";
 
 Cypress.LocalStorage.clear = () => {};
-const BASE_URL = "https://pnufcx7h1l.execute-api.us-east-1.amazonaws.com/development/api";
+const BASE_URL = Cypress.config("API_URL");
 
 Cypress.Commands.add("createUser", overrides => {
   const user = userBuilder(overrides);
@@ -230,3 +230,83 @@ Cypress.Commands.add("uploadImage", base64Image => {
       .wait("@formRequest");
   });
 });
+
+class DndSimulatorDataTransfer {
+  data = {};
+
+  dropEffect = "move";
+
+  effectAllowed = "all";
+
+  files = [];
+
+  items = [];
+
+  types = [];
+
+  clearData(format) {
+    if (format) {
+      delete this.data[format];
+
+      const index = this.types.indexOf(format);
+      delete this.types[index];
+      delete this.data[index];
+    } else {
+      this.data = {};
+    }
+  }
+
+  setData(format, data) {
+    this.data[format] = data;
+    this.items.push(data);
+    this.types.push(format);
+  }
+
+  getData(format) {
+    if (format in this.data) {
+      return this.data[format];
+    }
+
+    return "";
+  }
+
+  setDragImage(img, xOffset, yOffset) {}
+}
+
+Cypress.Commands.add(
+  "customDragDrop",
+  {
+    prevSubject: "element"
+  },
+  (sourceSelector, targetSelector, options) => {
+    const dataTransfer = new DndSimulatorDataTransfer();
+    const opts = {
+      offsetX: 100,
+      offsetY: 100,
+      ...(options || {})
+    };
+
+    cy.wrap(sourceSelector.get(0))
+      .trigger("dragstart", {
+        dataTransfer
+      })
+      .trigger("drag", {});
+
+    cy.get(targetSelector).then($el => {
+      const { x, y } = $el.get(0).getBoundingClientRect();
+
+      cy.wrap($el.get(0))
+        .trigger("dragover", {
+          dataTransfer
+        })
+        .trigger("drop", {
+          dataTransfer,
+          clientX: x + opts.offsetX,
+          clientY: y + opts.offsetY
+        })
+        .trigger("dragend", {
+          dataTransfer
+        });
+    });
+  }
+);

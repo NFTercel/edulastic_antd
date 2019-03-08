@@ -7,10 +7,10 @@ import OrderListPreviewItem from "./components/OrderListPreviewItem";
 
 class OrderListPreview extends Component {
   render() {
-    const { questions, smallSize } = this.props;
+    const { questions, smallSize, listStyle } = this.props;
 
     return (
-      <div>
+      <div data-cy="order-preview-container" style={listStyle}>
         {questions &&
           !!questions.length &&
           questions.map((q, i) => (
@@ -24,6 +24,7 @@ class OrderListPreview extends Component {
 }
 
 OrderListPreview.propTypes = {
+  listStyle: PropTypes.object.isRequired,
   questions: PropTypes.array,
   smallSize: PropTypes.bool
 };

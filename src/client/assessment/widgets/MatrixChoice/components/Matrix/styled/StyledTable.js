@@ -26,13 +26,13 @@ export const StyledTable = styled(Table)`
       }
     }
   }
-  @media (max-width: ${mobileWidth}) {
+   @media (max-width: ${mobileWidth}) {
     .ant-table-body {
-      overflow-x: scroll;
-
-      td {
-        min-width: 100px;
-      }
-    }
-  }
+        overflow-x: scroll; 
+         
+        td {
+            min-width: 100px;
+        }
+     }
+   }
 `;

@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 
 import { formatTime } from "../utils";
 
-const Attempt = ({ data, type, activityReview }) => {
+const Attempt = ({ data, type, activityReview, releaseScore, showReviewButton, releaseGradeLabels }) => {
   const { correct = 0, wrong = 0 } = data;
   const total = correct + wrong;
   const percentage = (correct / total) * 100 || 0;
@@ -15,23 +15,28 @@ const Attempt = ({ data, type, activityReview }) => {
         <AnswerAndScore>
           <span data-cy="date">{formatTime(data.createdAt)}</span>
         </AnswerAndScore>
-        <AnswerAndScore>
-          <span data-cy="score">
-            {correct}/{total}
-          </span>
-        </AnswerAndScore>
-        <AnswerAndScore>
-          <span data-cy="percentage">{Math.floor(percentage * 100) / 100}%</span>
-        </AnswerAndScore>
+        {releaseScore !== releaseGradeLabels.DONT_RELEASE && (
+          <React.Fragment>
+            <AnswerAndScore>
+              <span data-cy="score">
+                {correct}/{total}
+              </span>
+            </AnswerAndScore>
+            <AnswerAndScore>
+              <span data-cy="percentage">{Math.floor(percentage * 100) / 100}%</span>
+            </AnswerAndScore>
+          </React.Fragment>
+        )}
+
         <SpaceBetween pagetype={type === "reports"} />
-        {type === "reports" && activityReview ? (
+        {type === "reports" && activityReview && showReviewButton ? (
           <AnswerAndScoreReview>
             <Link to={`/home/testActivityReport/${data._id}`}>
               <span data-cy="review">REVIEW</span>
             </Link>
           </AnswerAndScoreReview>
         ) : (
-          <EmptyScoreBox />
+          (showReviewButton || type !== "reports") && <EmptyScoreBox />
         )}
       </RowData>
     </AttemptsData>

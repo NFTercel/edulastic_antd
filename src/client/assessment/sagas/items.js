@@ -1,6 +1,6 @@
 import { takeLatest, call, put, all, select } from "redux-saga/effects";
 import { itemsApi, testItemActivityApi } from "@edulastic/api";
-
+import { getCurrentGroup } from "../../student/Login/ducks";
 import {
   RECEIVE_ITEM_REQUEST,
   RECEIVE_ITEM_SUCCESS,
@@ -73,12 +73,14 @@ function* saveUserResponse({ payload }) {
     const testItemId = currentItem._id;
     const assignmentId = yield select(state => state.studentAssignment && state.studentAssignment.current);
     const userWork = yield select(({ userWork }) => userWork[testItemId]);
+    const groupId = yield select(getCurrentGroup);
 
     const activity = {
       answers: itemAnswers,
       testItemId,
       assignmentId,
-      testActivityId: userTestActivityId
+      testActivityId: userTestActivityId,
+      groupId
     };
     if (userWork) activity.userWork = userWork;
 

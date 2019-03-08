@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { greenDark, secondaryTextColor, white, green } from "@edulastic/colors";
+import { WithMathFormula } from "@edulastic/common";
 
 export const GraphToolbar = styled.div`
   box-sizing: border-box;
@@ -239,7 +240,7 @@ export const Icon = styled.div`
   font-size: 16px;
 `;
 
-export const LabelTop = styled.div`
+export const LabelTop = WithMathFormula(styled.div`
   height: 20px;
   line-height: 20px;
   top: 0;
@@ -247,8 +248,8 @@ export const LabelTop = styled.div`
   text-align: center;
   position: absolute;
   width: 100%;
-`;
-export const LabelBottom = styled.div`
+`);
+export const LabelBottom = WithMathFormula(styled.div`
   height: 20px;
   line-height: 20px;
   bottom: 0;
@@ -256,8 +257,8 @@ export const LabelBottom = styled.div`
   text-align: center;
   position: absolute;
   width: 100%;
-`;
-export const LabelRight = styled.div`
+`);
+export const LabelRight = WithMathFormula(styled.div`
   height: 20px;
   line-height: 20px;
   transform: rotate(90deg);
@@ -268,8 +269,8 @@ export const LabelRight = styled.div`
   position: absolute;
   width: 100%;
   padding-left: 40px;
-`;
-export const LabelLeft = styled.div`
+`);
+export const LabelLeft = WithMathFormula(styled.div`
   height: 20px;
   line-height: 20px;
   transform: rotate(-90deg);
@@ -280,12 +281,12 @@ export const LabelLeft = styled.div`
   position: absolute;
   width: 100%;
   padding-right: 40px;
-`;
+`);
 
-export const Title = styled.div`
+export const Title = WithMathFormula(styled.div`
   text-align: center;
   font-weight: 600;
   font-size: 1.5em;
   display: block;
   padding: 1em 0;
-`;
+`);

@@ -155,7 +155,7 @@ class GraphDisplay extends Component {
   getAxisSegmentsProps = () => {
     const { graphData, evaluation, onChange, showAnswer, checkAnswer, changePreviewTab, elements } = this.props;
 
-    const { ui_style, canvas, toolbar, numberlineAxis, validation, list, graphType } = graphData;
+    const { ui_style, canvas, toolbar, numberlineAxis, validation, graphType } = graphData;
 
     return {
       canvas: {
@@ -231,7 +231,6 @@ class GraphDisplay extends Component {
         gridX: safeParseFloat(ui_style.xDistance),
         visible: ui_style.gridVisible === undefined ? true : ui_style.yVisible
       },
-      list,
       evaluation,
       tools: toolbar ? toolbar.tools : [],
       setValue: onChange,
@@ -344,7 +343,12 @@ class GraphDisplay extends Component {
 
     return (
       <Fragment>
-        <QuestionHeader qIndex={qIndex} smallSize={smallSize} dangerouslySetInnerHTML={{ __html: stimulus }} />
+        <QuestionHeader
+          qIndex={qIndex}
+          smallSize={smallSize}
+          dangerouslySetInnerHTML={{ __html: stimulus }}
+          data-cy="questionHeader"
+        />
         {showAnswer ? "showAnswer" : null}
         {checkAnswer ? "checkAnswer" : null}
         {clearAnswer ? "clearAnswer" : null}

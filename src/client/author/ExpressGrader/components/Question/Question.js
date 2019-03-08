@@ -24,14 +24,21 @@ class Question extends Component {
   }
 
   render() {
+    let isEmpty = true;
     const { studentResponse, record } = this.props;
     const questionId = record ? record.id : null;
-    let isEmpty = true;
+    const currentStudent = {
+      studentName: ""
+    };
     if (studentResponse) {
       isEmpty = !Object.keys(studentResponse).length;
     }
     return (
-      <Fragment>{!isEmpty && <ClassQuestions studentResponse={studentResponse} showOnly={questionId} />}</Fragment>
+      <Fragment>
+        {!isEmpty && (
+          <ClassQuestions showOnly={questionId} currentStudent={currentStudent} studentResponse={studentResponse} />
+        )}
+      </Fragment>
     );
   }
 }

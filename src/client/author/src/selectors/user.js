@@ -11,3 +11,13 @@ export const getUserSelector = createSelector(
   stateSelector,
   state => state
 );
+
+export const getUserNameSelector = createSelector(
+  stateSelector,
+  state => (state.user && state.user.firstName) || "Anonymous"
+);
+
+export const getCurrentGroup = createSelector(
+  stateSelector,
+  state => state.user && state.user.orgData && state.orgData.defaultClass
+);

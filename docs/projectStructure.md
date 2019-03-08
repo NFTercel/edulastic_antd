@@ -1,7 +1,7 @@
-# Project Structure
+# Project Structure 
 
 ```
-        ├── App.js
+        ├── App.js 
         ├── assessment 📁 ⭐️
         ├── author 📁 ⭐️
         ├── configureStore.js
@@ -14,7 +14,6 @@
         └── __test__ 📁
 
 ```
-
 📁 - folders
 ⭐️ - application folders
 

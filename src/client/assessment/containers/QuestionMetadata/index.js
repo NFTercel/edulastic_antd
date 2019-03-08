@@ -4,7 +4,7 @@ import { Select, Button } from "antd";
 import { compose } from "redux";
 import { withNamespaces } from "react-i18next";
 import connect from "react-redux/es/connect/connect";
-import { intersection as _intersection, flatten as _flatten, pick as _pick } from "lodash";
+import { union as _union, pick as _pick } from "lodash";
 import { ThemeProvider } from "styled-components";
 
 import { themes } from "../../themes";
@@ -27,7 +27,7 @@ import {
   addAlignmentAction,
   getQuestionAlignmentSelector,
   removeAlignmentAction
-} from "../../../author/sharedDucks/questions";
+} from "../../../author/Shared/Ducks/questions";
 
 import { getCurriculumsListSelector, getStandardsListSelector } from "../../../author/src/selectors/dictionaries";
 
@@ -43,9 +43,17 @@ import { AddButtonContainer } from "./styled/AddButtonContainer";
 import { IconTrash } from "./styled/IconTrash";
 import { IconPencilEdit } from "./styled/IconPencilEdit";
 import { SelectSuffixIcon } from "./styled/SelectSuffixIcon";
-import { groupByDomains } from "../../utils/helpers";
+import { alignmentStandardsFromMongoToUI, alignmentStandardsFromUIToMongo } from "../../utils/helpers";
 
 const handleFilter = (input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+const getNewState = () => ({
+  isEditRow: false,
+  grades: [],
+  curriculum: undefined,
+  curriculumId: undefined,
+  subject: undefined,
+  standards: []
+});
 
 // todo: move to author folder
 class QuestionMetadata extends Component {
@@ -93,27 +101,14 @@ class QuestionMetadata extends Component {
     alignment: []
   };
 
-  state = {
-    isEditRow: false,
-    grades: [],
-    curriculum: undefined,
-    curriculumId: undefined,
-    subject: undefined,
-    standards: []
-  };
+  state = getNewState();
 
   handleEditRow = (index, rowData) => () => {
-    const domains = rowData.domain;
-    const standards = [];
-    domains.forEach(domain => {
-      if (domain.standards) {
-        standards.push(...domain.standards);
-      }
-    });
-    const grades = _intersection(standards.map(standard => standard.grades));
+    const standards = alignmentStandardsFromMongoToUI(rowData.domains);
+    const grades = _union(...standards.map(standard => standard.grades));
     this.setState({
       isEditRow: true,
-      grades: _flatten(grades),
+      grades,
       curriculum: rowData.curriculum,
       curriculumId: rowData.curriculumId,
       subject: rowData.subject,
@@ -177,24 +172,15 @@ class QuestionMetadata extends Component {
   handleSaveRow = () => {
     const { addAlignment } = this.props;
     const { curriculum, curriculumId, standards, subject, grades } = this.state;
-    const domains = groupByDomains(standards, grades);
-
+    const domains = alignmentStandardsFromUIToMongo(standards);
     const alignment = {
       curriculum,
       curriculumId,
       subject,
       domains
     };
-
     addAlignment(alignment);
-    this.setState({
-      isEditRow: false,
-      grades: [],
-      curriculum: undefined,
-      curriculumId: undefined,
-      subject: undefined,
-      standards: []
-    });
+    this.setState(getNewState());
   };
 
   handleAdd = () => {
@@ -220,10 +206,7 @@ class QuestionMetadata extends Component {
   renderShowAlignmentRow(row, index) {
     const { curriculum, domains } = row;
     const { t } = this.props;
-    let standardsArr = [];
-    domains.forEach(item => {
-      standardsArr = [...standardsArr, ...item.standards];
-    });
+    const standardsArr = alignmentStandardsFromMongoToUI(domains).map(el => el.identifier);
 
     return (
       <RowContainer key={index}>
@@ -240,8 +223,8 @@ class QuestionMetadata extends Component {
             disabled
           >
             {standardsArr.map(el => (
-              <Select.Option key={el} value={el}>
-                {el.name}
+              <Select.Option key={el.identifier} value={el.identifier}>
+                {el.identifier}
               </Select.Option>
             ))}
           </Select>

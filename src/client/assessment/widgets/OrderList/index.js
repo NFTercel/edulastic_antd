@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { arrayMove } from "react-sortable-hoc";
-import { cloneDeep } from "lodash";
+import { cloneDeep, get } from "lodash";
 import styled from "styled-components";
 
 import { withNamespaces } from "@edulastic/localization";
@@ -21,7 +21,8 @@ import withAddButton from "../../components/HOC/withAddButton";
 import withPoints from "../../components/HOC/withPoints";
 import OrderListPreview from "./components/OrderListPreview";
 import OrderListReport from "./components/OrderListReport";
-import AdvancedOptions from "../SortList/components/AdvancedOptions";
+import Options from "./components/Options";
+import { getFontSize } from "../../utils/helpers";
 
 const EmptyWrapper = styled.div``;
 
@@ -180,20 +181,13 @@ class OrderList extends Component {
       setQuestionData(newItem);
     };
 
-    const handleUiStyleChange = (prop, uiStyle) => {
-      const { setQuestionData, item } = this.props;
-      const newItem = cloneDeep(item);
-
-      newItem.ui_style[prop] = uiStyle;
-      setQuestionData(newItem);
-    };
-
     const renderOptions = () => {
       const { item } = this.props;
       const { correctTab } = this.state;
 
       return (
         <OptionsList
+          data-cy="match-option-list"
           prefix="options2"
           readOnly
           items={
@@ -223,6 +217,13 @@ class OrderList extends Component {
     const { qIndex, view, previewTab, smallSize, item, userAnswer, testItem, evaluation, t } = this.props;
     const { correctTab } = this.state;
 
+    const fontSize = getFontSize(get(item, "ui_style.fontsize", "normal"));
+
+    const listStyle = {
+      fontSize,
+      display: get(item, "ui_style.type", "list") === "inline" ? "flex" : "block"
+    };
+
     if (!item) return null;
 
     const Wrapper = testItem ? EmptyWrapper : Paper;
@@ -234,7 +235,7 @@ class OrderList extends Component {
               <Subtitle>{t("component.orderlist.composeQuestion")}</Subtitle>
 
               <QuestionTextArea onChange={handleQuestionChange} value={item.stimulus} style={{ marginBottom: 30 }} />
-              <Subtitle>{t("component.orderlist.list")}</Subtitle>
+              <Subtitle data-cy="list-container">{t("component.orderlist.list")}</Subtitle>
               <List
                 onAdd={handleAddQuestion}
                 items={item.list}
@@ -253,7 +254,7 @@ class OrderList extends Component {
                 onCloseTab={handleDeleteAltAnswers}
               />
             </Paper>
-            <AdvancedOptions onUiChange={handleUiStyleChange} />
+            <Options />
           </Fragment>
         )}
         {view === PREVIEW && (
@@ -267,6 +268,7 @@ class OrderList extends Component {
                 questionsList={item.list}
                 previewIndexesList={userAnswer}
                 evaluation={evaluation}
+                listStyle={listStyle}
               />
             )}
 
@@ -279,6 +281,7 @@ class OrderList extends Component {
                 evaluation={evaluation}
                 validation={item.validation}
                 list={item.list}
+                listStyle={listStyle}
               />
             )}
 
@@ -287,6 +290,7 @@ class OrderList extends Component {
                 onSortEnd={onSortPreviewEnd}
                 questions={userAnswer.map(index => item.list[index])}
                 smallSize={smallSize}
+                listStyle={listStyle}
               />
             )}
           </Wrapper>

@@ -1,40 +1,33 @@
 import React from "react";
 import { Icon } from "antd";
-import { Link, CloseModal, LinksWrapper, NavigationWrapper } from "./styled";
+import { Link, CloseModal, LinksWrapper, NavigationWrapper, StyledText } from "./styled";
 
 const BottomNavigation = ({ prevStudent, nextStudent, prevQuestion, nextQuestion, hideModal }) => (
   <NavigationWrapper>
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "row",
-        alignItems: "center",
-        fontWeight: 500
-      }}
-    >
+    <StyledTextInfo>
       <Icon type="info-circle" />
-      &nbsp; USE THE KEYBOARDS ARROW TO NAVIGATE BETWEEN THE SCREENS
-    </div>
+      <StyledText>USE THE KEYBOARDS ARROW TO NAVIGATE BETWEEN THE SCREENS</StyledText>
+    </StyledTextInfo>
     <LinksWrapper>
       <Link onClick={() => prevStudent()}>
         <Icon type="up" />
-        &nbsp; PREV STUDENT &nbsp;
+        <StyledText>PREV STUDENT</StyledText>
       </Link>
       <Link onClick={() => nextStudent()}>
         <Icon type="down" />
-        &nbsp; NEXT STUDENT &nbsp;
+        <StyledText>NEXT STUDENT</StyledText>
       </Link>
       <Link onClick={() => prevQuestion()}>
         <Icon type="left" />
-        &nbsp; PREV QUESTION &nbsp;
+        <StyledText>PREV QUESTION</StyledText>
       </Link>
       <Link onClick={() => nextQuestion()}>
-        &nbsp; NEXT QUESTION &nbsp;
+        <StyledText>NEXT QUESTION</StyledText>
         <Icon type="right" />
       </Link>
       <CloseModal onClick={() => hideModal()}>
         <Icon type="close" width={5} height={5} />
-        <span style={{ fontSize: 11, marginLeft: 15 }}>EXIT</span>
+        <CloseModalText>EXIT</CloseModalText>
       </CloseModal>
     </LinksWrapper>
   </NavigationWrapper>

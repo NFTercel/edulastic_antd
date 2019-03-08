@@ -48,10 +48,11 @@ const getIcon = ({ showAnswers, correct, locked, checkAnswers, active }) => {
 
 export const Li = styled.li`
   width: ${({ width }) => width * 40}px;
+  visibility: ${props => props.visibility};
   height: ${({ height }) => height * 40}px;
   background: ${getItemBackground(0.8)};
   cursor: ${({ locked }) => (locked ? "not-allowed" : "pointer")};
-  border: 2px solid ${props => props.theme.widgets.shading.liBorderColor};
+  border: ${props => (props.border === "full" ? `2px solid ${props.theme.widgets.shading.liBorderColor}` : "none")};
   display: inline-block;
   margin-left: -2px;
   position: relative;
@@ -61,9 +62,13 @@ export const Li = styled.li`
     margin-left: 0;
   }
   &:hover {
-    background: ${getItemBackground(0.6, true)};
-    z-index: 11;
-    border: 3px solid ${props => props.theme.widgets.shading.liBorderHoverColor};
+    ${props =>
+      props.hover &&
+      `
+      background: ${getItemBackground(0.6, true)};
+      z-index: 11;
+      border: 3px solid ${props.theme.widgets.shading.liBorderHoverColor};
+    `}
   }
   &::before {
     font-family: ${props => props.theme.widgets.shading.liIconFontFamily};

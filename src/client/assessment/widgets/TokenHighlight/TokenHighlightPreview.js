@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { cloneDeep } from "lodash";
+import { cloneDeep, get } from "lodash";
 import { compose } from "redux";
 import { withTheme } from "styled-components";
 
@@ -8,6 +8,7 @@ import { Paper, Stimulus, InstructorStimulus } from "@edulastic/common";
 import { withNamespaces } from "@edulastic/localization";
 
 import { PREVIEW, EDIT, CLEAR, CHECK, SHOW } from "../../constants/constantsForQuestions";
+import { getFontSize } from "../../utils/helpers";
 
 const TokenHighlightPreview = ({
   view,
@@ -24,6 +25,8 @@ const TokenHighlightPreview = ({
     index: i,
     selected: !!smallSize
   }));
+
+  const fontSize = getFontSize(get(item, "ui_style.fontsize", "normal"), true);
 
   const validArray =
     (item && item.validation && item.validation.valid_response && item.validation.valid_response.value) || [];
@@ -81,6 +84,12 @@ const TokenHighlightPreview = ({
 
     const foundedItem = newAnswers.find(elem => elem.index === i);
     foundedItem.selected = !foundedItem.selected;
+
+    const selectedItems = newAnswers.filter(answer => answer.selected);
+
+    if (item.max_selection && selectedItems.length > item.max_selection) {
+      return;
+    }
 
     setAnswers(newAnswers);
     saveAnswer(newAnswers);
@@ -146,7 +155,7 @@ const TokenHighlightPreview = ({
   };
 
   return (
-    <Paper style={{ wordBreak: "break-word" }} padding={smallSize} boxShadow={smallSize ? "none" : ""}>
+    <Paper style={{ fontSize, wordBreak: "break-word" }} padding={smallSize} boxShadow={smallSize ? "none" : ""}>
       <InstructorStimulus>{item.instructor_stimulus}</InstructorStimulus>
       {view === PREVIEW && !smallSize && <Stimulus dangerouslySetInnerHTML={{ __html: item.stimulus }} />}
       {item.templeWithTokens.map((el, i) =>

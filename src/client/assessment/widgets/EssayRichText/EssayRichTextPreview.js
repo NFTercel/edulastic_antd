@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import ReactQuill from "react-quill";
 import { compose } from "redux";
 import { withTheme } from "styled-components";
+import { get } from "lodash";
 
 import { Paper, Stimulus, FlexContainer, InstructorStimulus } from "@edulastic/common";
 import { withNamespaces } from "@edulastic/localization";
@@ -12,8 +12,22 @@ import { Item } from "../../styled/Item";
 import { PREVIEW, ON_LIMIT, ALWAYS } from "../../constants/constantsForQuestions";
 
 import { ValidList } from "./constants/validList";
+import { ReactQuillWrapper } from "./styled/ReactQuillWrapper";
+import { getSpellCheckAttributes, getFontSize } from "../../utils/helpers";
+import { Addon } from "../ShortText/styled/Addon";
+import CharacterMap from "../../components/CharacterMap";
 
 const EssayRichTextPreview = ({ view, saveAnswer, t, item, smallSize, userAnswer, theme }) => {
+  const [showCharacters, setShowCharacters] = useState(false);
+  const [text, setText] = useState("");
+  const [selection, setSelection] = useState({ start: 0, end: 0 });
+
+  const minHeight = get(item, "ui_style.min_height", 200);
+  const maxHeight = get(item, "ui_style.max_height", 300);
+  const placeholder = get(item, "placeholder", "");
+  const fontSize = getFontSize(get(item, "ui_style.fontsize"));
+  const characterMap = get(item, "character_map", []);
+
   const [wordCount, setWordCount] = useState(
     Array.isArray(userAnswer) ? 0 : userAnswer.split(" ").filter(i => !!i.trim()).length
   );
@@ -25,7 +39,29 @@ const EssayRichTextPreview = ({ view, saveAnswer, t, item, smallSize, userAnswer
         .split(" ")
         .filter(i => !!i.trim()).length
     );
+    setText(val);
     saveAnswer(val);
+  };
+
+  const handleSelect = range => {
+    if (range) {
+      setSelection({
+        start: range.index,
+        end: range.length
+      });
+    }
+  };
+
+  const handleCharacterSelect = char => {
+    const newText = text.slice(0, selection.start) + char + text.slice(selection.end);
+
+    setText(newText);
+    saveAnswer(newText);
+
+    setSelection({
+      start: selection.start + char.length,
+      end: selection.start + char.length
+    });
   };
 
   const showLimitAlways = item.show_word_limit === ALWAYS;
@@ -47,27 +83,45 @@ const EssayRichTextPreview = ({ view, saveAnswer, t, item, smallSize, userAnswer
       <InstructorStimulus>{item.instructor_stimulus}</InstructorStimulus>
       {view === PREVIEW && !smallSize && <Stimulus dangerouslySetInnerHTML={{ __html: item.stimulus }} />}
 
-      <ReactQuill
-        id="mainQuill"
-        style={{
-          background:
-            item.max_word < wordCount
-              ? theme.widgets.essayRichText.quillLimitedBgColor
-              : theme.widgets.essayRichText.quillBgColor
-        }}
-        defaultValue={
-          smallSize ? t("component.essayText.rich.templateText") : Array.isArray(userAnswer) ? "" : userAnswer
-        }
-        onChange={handleTextChange}
-        modules={EssayRichTextPreview.modules(item.formatting_options)}
-      />
+      <div style={{ position: "relative" }}>
+        <div style={{ position: "relative" }}>
+          {!!characterMap.length && <Addon onClick={() => setShowCharacters(!showCharacters)}>a</Addon>}
+          {showCharacters && (
+            <CharacterMap
+              style={{ position: "absolute", right: 0, top: 38, zIndex: 1000 }}
+              characters={characterMap}
+              onSelect={handleCharacterSelect}
+            />
+          )}
+        </div>
+        <ReactQuillWrapper
+          id="mainQuill"
+          minHeight={minHeight}
+          maxHeight={maxHeight}
+          fontSize={fontSize}
+          placeholder={placeholder}
+          onChangeSelection={handleSelect}
+          style={{
+            background:
+              item.max_word < wordCount
+                ? theme.widgets.essayRichText.quillLimitedBgColor
+                : theme.widgets.essayRichText.quillBgColor
+          }}
+          defaultValue={
+            smallSize ? t("component.essayText.rich.templateText") : Array.isArray(userAnswer) ? "" : userAnswer
+          }
+          onChange={handleTextChange}
+          modules={EssayRichTextPreview.modules(item.formatting_options)}
+          {...getSpellCheckAttributes(item.spellcheck)}
+        />
 
-      {item.show_word_count && (
-        <Toolbar borderRadiusOnlyBottom>
-          <FlexContainer />
-          <Item style={wordCountStyle}>{displayWordCount}</Item>
-        </Toolbar>
-      )}
+        {item.show_word_count && (
+          <Toolbar borderRadiusOnlyBottom>
+            <FlexContainer />
+            <Item style={wordCountStyle}>{displayWordCount}</Item>
+          </Toolbar>
+        )}
+      </div>
     </Paper>
   );
 };

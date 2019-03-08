@@ -28,7 +28,7 @@ import HotspotPreview from "./HotspotPreview";
 import { StyledCheckbox } from "./styled/StyledCheckbox";
 import { IconPlus } from "./styled/IconPlus";
 import { IconClose } from "./styled/IconClose";
-import AdvancedOptions from "../SortList/components/AdvancedOptions";
+import Options from "./components/Options";
 
 const OptionsList = withPoints(HotspotPreview);
 
@@ -235,13 +235,6 @@ const HotspotEdit = ({ item, setQuestionData, t, theme }) => {
     setQuestionData(newItem);
   };
 
-  const handleUiStyleChange = (prop, uiStyle) => {
-    const newItem = cloneDeep(item);
-
-    newItem.ui_style[prop] = uiStyle;
-    setQuestionData(newItem);
-  };
-
   const renderOptions = () => (
     <OptionsList
       item={item}
@@ -353,7 +346,7 @@ const HotspotEdit = ({ item, setQuestionData, t, theme }) => {
         </StyledCheckbox>
       </Paper>
 
-      <AdvancedOptions onUiChange={handleUiStyleChange} />
+      <Options />
     </Fragment>
   );
 };

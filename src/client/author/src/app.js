@@ -9,6 +9,8 @@ import { tabletWidth } from "@edulastic/colors";
 import Sidebar from "./Sidebar/SideMenu";
 /* lazy load routes */
 const Assignments = lazy(() => import("../Assignments"));
+const AssessmentCreate = lazy(() => import("../AssessmentCreate"));
+const AssessmentPage = lazy(() => import("../AssessmentPage"));
 const ClassBoard = lazy(() => import("../ClassBoard"));
 const ClassResponses = lazy(() => import("../ClassResponses"));
 const ExpressGrader = lazy(() => import("../ExpressGrader"));
@@ -33,6 +35,11 @@ const Author = ({ match, history, isSidebarCollapsed }) => {
           <Suspense fallback={<Progress />}>
             <Switch>
               <Route exact path={`${match.url}/assignments`} component={Assignments} />
+              <Route exact path={`${match.url}/classboard/:assignmentId/:classId`} component={ClassBoard} />
+              <Route exact path={`${match.url}/classresponses/:testActivityId`} component={ClassResponses} />
+              <Route exact path={`${match.url}/assignments`} component={Assignments} />
+              <Route exact path={`${match.url}/assessments/create`} component={AssessmentCreate} />
+              <Route exact path={`${match.url}/assessments/:assessmentId`} component={AssessmentPage} />
               <Route exact path={`${match.url}/classboard/:assignmentId/:classId`} component={ClassBoard} />
               <Route exact path={`${match.url}/classresponses/:testActivityId`} component={ClassResponses} />
               <Route exact path={`${match.url}/expressgrader/:assignmentId/:classId`} component={ExpressGrader} />

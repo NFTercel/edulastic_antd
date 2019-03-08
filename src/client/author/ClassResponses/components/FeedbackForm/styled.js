@@ -7,7 +7,7 @@ export const StyledCardTwo = styled(Card)`
   box-shadow: 3px 2px 7px lightgray;
   display: inline-block;
   margin: 0px 0 auto 32px
-  width: 27%;
+  min-width: 250px;
 `;
 
 export const StyledDivSec = styled.div`

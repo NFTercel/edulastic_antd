@@ -32,7 +32,11 @@ class CorrectAnswers extends Component {
       return validation.alt_responses.map((res, i) => (
         <Tab
           key={i}
-          onClose={() => onRemoveAltResponses(i)}
+          close
+          onClose={() => {
+            onRemoveAltResponses(i);
+            this.handleTabChange(0);
+          }}
           label={`${t("component.correctanswers.alternate")} ${i + 1}`}
         />
       ));
@@ -177,6 +181,7 @@ CorrectAnswers.propTypes = {
   options: PropTypes.array,
   question: PropTypes.object.isRequired,
   multipleResponses: PropTypes.bool.isRequired,
+  onRemoveAltResponses: PropTypes.func.isRequired,
   uiStyle: PropTypes.object.isRequired
 };
 

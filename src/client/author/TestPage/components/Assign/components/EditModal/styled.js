@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import { Row, Switch, Radio, Col, Modal } from "antd";
+import { Row, Switch, Radio, Col, Modal, Select, Input } from "antd";
 import { EduButton, FlexContainer } from "@edulastic/common";
 import { white, blue, lightGrey, mainTextColor } from "@edulastic/colors";
 const RadioGroup = Radio.Group;
@@ -90,6 +90,12 @@ export const InitOptions = styled.div`
   padding: 20px 40px;
 `;
 
+export const TestTypeDropDown = styled(Select)`
+  width: 100%;
+  height: 40px;
+  margin-right: 30px;
+`;
+
 // Settings styled
 
 export const AlignRight = styled(RadioGroup)`
@@ -99,7 +105,10 @@ export const AlignRight = styled(RadioGroup)`
 export const AlignSwitchRight = styled(Switch)`
   float: right;
 `;
-
+export const MaxAttemptIInput = styled(Input)`
+  width: 20%;
+  float: right;
+`;
 export const StyledRowSettings = styled.div`
   ${props => !props.islast && "border-bottom: 1px solid rgba(128, 128, 128, 0.25);"}
   padding: 15px 0px;

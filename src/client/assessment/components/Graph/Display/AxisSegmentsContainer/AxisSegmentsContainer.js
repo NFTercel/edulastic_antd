@@ -183,7 +183,7 @@ class AxisSegmentsContainer extends Component {
     const { tools } = this.props;
 
     return {
-      name: tools[0],
+      name: tools[0] || undefined,
       index: 0,
       groupIndex: -1
     };
@@ -205,7 +205,8 @@ class AxisSegmentsContainer extends Component {
       graphType,
       showAnswer,
       checkAnswer,
-      validation
+      validation,
+      elements
     } = this.props;
 
     this._graph = makeBorder(this._graphId, {}, this.getConfig);
@@ -279,6 +280,8 @@ class AxisSegmentsContainer extends Component {
       yMin: canvas.yMin
     });
 
+    this._graph.loadSegments(elements);
+
     this.setGraphUpdateEventHandler();
   }
 
@@ -292,13 +295,14 @@ class AxisSegmentsContainer extends Component {
       layout,
       gridParams,
       graphType,
-      tools
+      tools,
+      elements
     } = this.props;
 
     const { selectedTool } = this.state;
     if (JSON.stringify(tools) !== JSON.stringify(prevProps.tools)) {
       this.setDefaultToolState();
-      this._graph.setTool(tools[0], graphType, canvas.responsesAllowed);
+      this._graph.setTool(tools[0] || CONSTANT.TOOLS.SEGMENTS_POINT, graphType, canvas.responsesAllowed);
     }
     if (this._graph) {
       if (
@@ -473,6 +477,11 @@ class AxisSegmentsContainer extends Component {
           }
         );
       }
+
+      if (elements.length === 0) {
+        this._graph.segmentsReset();
+        this.mapElementsToGraph();
+      }
     }
   }
 
@@ -625,9 +634,9 @@ class AxisSegmentsContainer extends Component {
   };
 
   render() {
-    const { layout, graphType, canvas, elements } = this.props;
+    const { layout, graphType, canvas, elements, tools } = this.props;
     const { selectedTool } = this.state;
-    console.log("Elements: ", elements);
+
     return (
       <div data-cy="axis-labels-container" style={{ overflow: "auto" }}>
         <GraphWrapper>
@@ -636,6 +645,7 @@ class AxisSegmentsContainer extends Component {
           </div>
           <SegmentsTools
             tool={selectedTool}
+            toolbar={tools}
             elementsNumber={elements.length}
             getIconByToolName={this.getIconByToolName}
             onSelect={this.onSelectTool}
@@ -657,7 +667,6 @@ AxisSegmentsContainer.propTypes = {
   xAxesParameters: PropTypes.object.isRequired,
   yAxesParameters: PropTypes.object.isRequired,
   gridParams: PropTypes.object.isRequired,
-  list: PropTypes.array,
   evaluation: PropTypes.any,
   setValue: PropTypes.func.isRequired,
   validation: PropTypes.object.isRequired,
@@ -668,7 +677,6 @@ AxisSegmentsContainer.propTypes = {
 };
 
 AxisSegmentsContainer.defaultProps = {
-  list: [],
   evaluation: null,
   showAnswer: false,
   checkAnswer: false,

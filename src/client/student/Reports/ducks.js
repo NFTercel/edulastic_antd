@@ -1,5 +1,5 @@
 import { createAction } from "redux-starter-kit";
-import { takeEvery, put, call, all } from "redux-saga/effects";
+import { takeEvery, put, call, all, select } from "redux-saga/effects";
 import { values, groupBy, last } from "lodash";
 import { createSelector } from "reselect";
 import { normalize } from "normalizr";
@@ -12,7 +12,7 @@ import {
   setAssignmentsLoadingAction
 } from "../sharedDucks/AssignmentModule/ducks";
 import { setReportsAction, reportSchema } from "../sharedDucks/ReportsModule/ducks";
-
+import { getCurrentGroup } from "../Login/ducks";
 // constants
 export const FILTERS = {
   ALL: "all",
@@ -31,10 +31,12 @@ export const fetchAssignmentsAction = createAction(FETCH_ASSIGNMENTS_DATA);
 // fetch and load assignments and reports for the student
 function* fetchAssignments({ payload }) {
   try {
+    const groupId = yield select(getCurrentGroup);
+    console.log("groupIdaksdfjadf a", groupId);
     yield put(setAssignmentsLoadingAction());
     const [assignments, reports] = yield all([
       call(assignmentApi.fetchAssigned, payload),
-      call(reportsApi.fetchReports)
+      call(reportsApi.fetchReports, groupId)
     ]);
 
     // normalize assignments
@@ -45,7 +47,7 @@ function* fetchAssignments({ payload }) {
 
     yield put(setAssignmentsAction({ allAssignments, assignmentObj }));
 
-    // normalize reports
+    // normalize reportsx``
     const {
       result: allReports,
       entities: { reports: reportsObj }

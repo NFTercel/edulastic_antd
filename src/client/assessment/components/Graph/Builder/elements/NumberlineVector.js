@@ -162,6 +162,49 @@ const drawVectorLine = (board, visiblePoint, invisiblePoint, vectorDirection, co
   });
 };
 
+const loadVector = (board, coords, pointIncluded, vectorDirection, segmentType, stackResponses) => {
+  const numberlineAxis = board.elements.filter(element => element.elType === "axis" || element.elType === "arrow");
+  const xMin = numberlineAxis[0].point1.X();
+  const xMax = numberlineAxis[0].point2.X();
+
+  let ticks = getSpecialTicks(numberlineAxis[0]);
+  ticks = ticks.sort((a, b) => a - b);
+
+  if (!stackResponses) {
+    const visiblePoint = drawPoint(board, coords[0], null, pointIncluded, false);
+    const invisiblePoint = drawVectorPoint(board, xMin, xMax, vectorDirection);
+    const vector = drawVectorLine(board, visiblePoint, invisiblePoint, vectorDirection);
+
+    vector.segmentType = segmentType;
+
+    previousPointsPositions.push(
+      { id: visiblePoint.id, position: visiblePoint.X() },
+      { id: invisiblePoint.id, position: invisiblePoint.X() }
+    );
+
+    handleSegmentPointDrag(visiblePoint, board, vector, numberlineAxis[0], ticks);
+
+    return vector;
+  } else {
+    const visiblePoint = drawPoint(board, coords[0], null, pointIncluded, false, coords[1]);
+    const invisiblePoint = drawVectorPoint(board, xMin, xMax, vectorDirection, coords[1]);
+    const vector = drawVectorLine(board, visiblePoint, invisiblePoint, vectorDirection);
+
+    vector.segmentType = segmentType;
+
+    visiblePoint.setAttribute({ snapSizeY: 0.05 });
+    visiblePoint.setPosition(window.JXG.COORDS_BY_USER, [visiblePoint.X(), coords[1]]);
+    board.$board.on("move", () => visiblePoint.moveTo([visiblePoint.X(), coords[1]]));
+
+    invisiblePoint.setAttribute({ snapSizeY: 0.05 });
+    invisiblePoint.setPosition(window.JXG.COORDS_BY_USER, [invisiblePoint.X(), coords[1]]);
+
+    handleStackedSegmentPointDrag(visiblePoint, numberlineAxis[0], coords[1]);
+
+    return vector;
+  }
+};
+
 const drawVector = (
   board,
   coord,
@@ -330,5 +373,6 @@ const getConfig = segment => ({
 export default {
   onHandler,
   getConfig,
+  loadVector,
   determineAnswerType
 };

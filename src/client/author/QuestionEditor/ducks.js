@@ -10,7 +10,7 @@ import {
   getCurrentQuestionSelector,
   getQuestionsArraySelector,
   changeCurrentQuestionAction
-} from "../sharedDucks/questions";
+} from "../Shared/Ducks/questions";
 
 // constants
 

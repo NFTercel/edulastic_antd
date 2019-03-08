@@ -14,7 +14,7 @@ import { Container } from "../../../../src/components/common";
 import Breadcrumb from "../../../../src/components/Breadcrumb";
 import EditModal from "./EditModal/EditModal";
 import { StyledTable } from "./styled";
-import { fetchGroupsAction, getGroupsSelector, fetchMultipleGroupMembersAction } from "../../../../sharedDucks/groups";
+import { fetchGroupsAction, getGroupsSelector, fetchMultipleGroupMembersAction } from "../../../../Shared/Ducks/groups";
 
 // Todo from  where we got localeCompare ?
 

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import { withTheme } from "styled-components";
-import { setQuestionDataAction } from "../../../author/QuestionEditor/ducks";
+import { setQuestionDataAction } from '../../../author/QuestionEditor/ducks';
 import { Svg } from "./styled/Svg";
 import { Polygon } from "./styled/Polygon";
 import { G } from "./styled/G";

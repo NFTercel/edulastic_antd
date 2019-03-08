@@ -4,18 +4,17 @@ import PropTypes from "prop-types";
 import { OptionsList } from "../styled/OptionsList";
 import Option from "./Option";
 
-const Options = ({ view, options, evaluation, uiStyle, onChange, validation, ...restProps }) => (
+const Options = ({ options, evaluation, uiStyle, onChange, validation, ...restProps }) => (
   <OptionsList>
     {options.map((option, index) => (
       <Option
         key={index}
-        view={view}
         index={index}
         uiStyle={uiStyle}
         item={option}
         validation={validation}
         onChange={() => onChange(option.value)}
-        correct={evaluation && evaluation[option.value]}
+        correct={evaluation}
         {...restProps}
       />
     ))}

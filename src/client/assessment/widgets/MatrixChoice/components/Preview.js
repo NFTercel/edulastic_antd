@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { cloneDeep } from "lodash";
-import { InstructorStimulus } from "@edulastic/common";
+import { InstructorStimulus, MathFormulaDisplay } from "@edulastic/common";
 
 import Matrix from "./Matrix";
 import CheckAnswerButton from "../../../themes/common/CheckAnswerButton";
@@ -35,7 +35,7 @@ const Preview = ({ type, saveAnswer, userAnswer, item, smallSize, onCheckAnswer,
     <div>
       <InstructorStimulus>{item.instructor_stimulus}</InstructorStimulus>
 
-      <div style={{ marginBottom: 20 }} dangerouslySetInnerHTML={{ __html: item.stimulus }} />
+      <MathFormulaDisplay style={{ marginBottom: 20 }} dangerouslySetInnerHTML={{ __html: item.stimulus }} />
       <Matrix
         stems={item.stems}
         options={item.options}

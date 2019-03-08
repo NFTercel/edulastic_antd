@@ -1,8 +1,7 @@
 import React from "react";
-import { Modal, Icon } from "antd";
 import Question from "../Question/Question";
-import { ModalWrapper } from "./styled";
 import BottomNavigation from "../BottomNavigation/BottomNavigation";
+import { ModalWrapper } from "./styled";
 
 class QuestionModal extends React.Component {
   constructor() {
@@ -51,12 +50,13 @@ class QuestionModal extends React.Component {
     if (rowIndex === null && colIndex === null) {
       const maxQuestions = tableData.length;
       const maxStudents = tableData[rowIndex].length;
+
       this.setState({
         loaded,
-        rowIndex: newrowIndex,
-        colIndex: newcolIndex,
+        maxStudents,
         maxQuestions,
-        maxStudents
+        rowIndex: newrowIndex,
+        colIndex: newcolIndex
       });
     }
   }
@@ -150,9 +150,9 @@ class QuestionModal extends React.Component {
         onOk={this.hideModal}
         onCancel={this.hideModal}
         visible={isVisibleModal}
-        bodyStyle={{ background: "#f0f2f5", height: "100%" }}
+        bodyStyle={{ background: "#f0f2f5", height: "100%", overflowY: "auto" }}
       >
-        {isVisibleModal && question && loaded ? (
+        {isVisibleModal && question && loaded && (
           <React.Fragment>
             <Question record={question} />
             <BottomNavigation
@@ -163,23 +163,10 @@ class QuestionModal extends React.Component {
               nextQuestion={this.nextQuestion}
             />
           </React.Fragment>
-        ) : (
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-            <Icon type="loading" style={{ fontSize: 24 }} spin />
-          </div>
         )}
       </ModalWrapper>
     );
   }
-}
-
-function confirm() {
-  Modal.confirm({
-    title: "Confirm",
-    content: "Bla bla ...",
-    okText: "确认",
-    cancelText: "取消"
-  });
 }
 
 export default QuestionModal;

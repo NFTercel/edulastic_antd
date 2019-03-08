@@ -8,7 +8,7 @@ const appModeDev = process.env.APP_MODE_DEV;
 // apiUri used while build with Webpack
 const apiUri =
   process.env.API_URI ||
-  "https://pnufcx7h1l.execute-api.us-east-1.amazonaws.com/development/api/" ||
+  "https://4uwpei20if.execute-api.us-east-1.amazonaws.com/development/api/" ||
   "http://localhost:3000/api/";
 
 module.exports = {

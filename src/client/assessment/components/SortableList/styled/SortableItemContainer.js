@@ -9,7 +9,7 @@ export const SortableItemContainer = styled.div`
 
   & div.main {
     border-radius: 10px;
-    border: solid 1px ${props => props.theme.sortableList.itemContainerBorderColor};
+    border: solid 1px #dfdfdf;
     margin-right: 10px;
     flex: 1;
     height: 100%;
@@ -17,12 +17,12 @@ export const SortableItemContainer = styled.div`
     align-items: center;
   }
   & div.main i.fa-align-justify {
-    color: ${props => props.theme.sortableList.dragIconColor};
-    font-size: ${props => props.theme.sortableList.dragIconFontSize};
+    color: #1fe3a1;
+    font-size: 16px;
     padding: 15px;
   }
   & div.main div {
-    border-left: solid 1px ${props => props.theme.sortableList.itemContainerBorderColor};
+    border-left: solid 1px #dfdfdf;
     padding: 10px 30px;
     flex: 1;
     height: 100%;
@@ -31,11 +31,11 @@ export const SortableItemContainer = styled.div`
   }
 
   & div.main input {
-    font-size: ${props => props.theme.sortableList.inputFontSize};
+    font-size: 13px;
     line-height: 1.38;
     letter-spacing: 1px;
     text-align: left;
-    color: ${props => props.theme.sortableList.inputColor};
+    color: #7a7a7a;
     border: none;
     padding: 0 10px;
   }

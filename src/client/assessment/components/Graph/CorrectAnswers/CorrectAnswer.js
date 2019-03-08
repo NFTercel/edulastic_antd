@@ -25,19 +25,6 @@ class CorrectAnswer extends Component {
     onUpdateValidationValue(val);
   };
 
-  renderGraphDisplay = graphType => {
-    switch (graphType) {
-      case "firstQuadrant":
-      case "quadrants":
-        return GraphQuadrantsDisplay;
-      case "axisLabels":
-      case "axisSegments":
-        return AxisLabelsDisplay;
-      default:
-        return null;
-    }
-  };
-
   render() {
     const { t, response, graphData } = this.props;
     const { responseScore } = this.state;

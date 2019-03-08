@@ -294,8 +294,6 @@ class Board {
 
   // Update bounding box, marks container, rerender numberline axis, update mark's snap handler
   updateGraphParameters(graphParameters, settings, layout, graphType, setValue, lineSettings, containerSettings) {
-    console.log("updateGraphParameters this.elements ", this.elements);
-    console.log("graphType", graphType);
     const xMargin = graphParameters.margin / calcUnitX(graphParameters.xMin, graphParameters.xMax, layout.width);
     this.$board.setBoundingBox(numberlineGraphParametersToBoundingbox(graphParameters, xMargin));
 
@@ -319,7 +317,6 @@ class Board {
 
     if (graphType === "axisSegments") {
       const points = this.elements.filter(element => element.elType === "point");
-      console.log("graphType === axisSegments points", points);
       this.elements = this.elements.filter(element => element.elType !== "point");
 
       points.forEach(p => this.removeObject(p));
@@ -329,12 +326,10 @@ class Board {
         console.log("newPoint", newPoint);
         this.elements.push(newPoint);
       });
-      console.log("graphType === axisSegments this.elements", this.elements);
     }
 
     if (graphType === "axisSegments") {
       const points = this.elements.filter(element => element.elType === "point");
-      console.log("graphType === axisSegments points", points);
       this.elements = this.elements.filter(element => element.elType !== "point");
 
       points.forEach(p => this.removeObject(p));
@@ -344,7 +339,6 @@ class Board {
         console.log("newPoint", newPoint);
         this.elements.push(newPoint);
       });
-      console.log("graphType === axisSegments this.elements", this.elements);
     }
 
     this.$board.fullUpdate();
@@ -463,12 +457,7 @@ class Board {
    * @see https://jsxgraph.org/docs/symbols/JXG.Board.html#removeObject
    */
   segmentsReset() {
-    const elementsToDelete = this.elements.filter(element => element.elType !== "axis" && "arrow");
-    const numberlineAxis = this.elements.filter(element => element.elType === "axis" || element.elType === "arrow");
-
-    elementsToDelete.map(this.removeObject.bind(this));
-    this.elements = [];
-    this.elements.push(numberlineAxis[0]);
+    NumberlineTrash.cleanBoard(this, this.setAnswers);
   }
 
   reset() {
@@ -740,6 +729,95 @@ class Board {
           fixed: true
         })
       )
+    );
+  }
+
+  loadSegments(elements) {
+    this.elements.push(
+      ...elements.map(element => {
+        switch (element.type) {
+          case CONSTANT.TOOLS.SEGMENTS_POINT:
+            return NumberlinePoint.loadPoint(this, [element.point1, element.y], this.stackResponses);
+          case CONSTANT.TOOLS.BOTH_INCLUDED_SEGMENT:
+            return NumberlineSegment.loadSegment(
+              this,
+              [element.point1, element.point2, element.y],
+              true,
+              true,
+              element.type,
+              this.stackResponses,
+              this.setAnswers
+            );
+          case CONSTANT.TOOLS.BOTH_NOT_INCLUDED_SEGMENT:
+            return NumberlineSegment.loadSegment(
+              this,
+              [element.point1, element.point2, element.y],
+              false,
+              false,
+              element.type,
+              this.stackResponses,
+              this.setAnswers
+            );
+          case CONSTANT.TOOLS.ONLY_RIGHT_INCLUDED_SEGMENT:
+            return NumberlineSegment.loadSegment(
+              this,
+              [element.point1, element.point2, element.y],
+              false,
+              true,
+              element.type,
+              this.stackResponses,
+              this.setAnswers
+            );
+          case CONSTANT.TOOLS.ONLY_LEFT_INCLUDED_SEGMENT:
+            return NumberlineSegment.loadSegment(
+              this,
+              [element.point1, element.point2, element.y],
+              true,
+              false,
+              element.type,
+              this.stackResponses,
+              this.setAnswers
+            );
+          case CONSTANT.TOOLS.INFINITY_TO_INCLUDED_SEGMENT:
+            return NumberlineVector.loadVector(
+              this,
+              [element.point2, element.y],
+              true,
+              false,
+              CONSTANT.TOOLS.INFINITY_TO_INCLUDED_SEGMENT,
+              this.stackResponses
+            );
+          case CONSTANT.TOOLS.INFINITY_TO_NOT_INCLUDED_SEGMENT:
+            return NumberlineVector.loadVector(
+              this,
+              [element.point2, element.y],
+              false,
+              false,
+              CONSTANT.TOOLS.INFINITY_TO_NOT_INCLUDED_SEGMENT,
+              this.stackResponses
+            );
+          case CONSTANT.TOOLS.INCLUDED_TO_INFINITY_SEGMENT:
+            return NumberlineVector.loadVector(
+              this,
+              [element.point1, element.y],
+              true,
+              true,
+              CONSTANT.TOOLS.INCLUDED_TO_INFINITY_SEGMENT,
+              this.stackResponses
+            );
+          case CONSTANT.TOOLS.NOT_INCLUDED_TO_INFINITY_SEGMENT:
+            return NumberlineVector.loadVector(
+              this,
+              [element.point1, element.y],
+              false,
+              true,
+              CONSTANT.TOOLS.NOT_INCLUDED_TO_INFINITY_SEGMENT,
+              this.stackResponses
+            );
+          default:
+            throw new Error("Unknown element:", element);
+        }
+      })
     );
   }
 

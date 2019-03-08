@@ -4,6 +4,7 @@ import { DragSource } from "react-dnd";
 import { Index } from "../styled/Index";
 import { IconClose } from "../styled/IconClose";
 import { IconCheck } from "../styled/IconCheck";
+import { MathFormulaDisplay } from "@edulastic/common";
 
 function collectSource(connector, monitor) {
   return {
@@ -33,9 +34,9 @@ const specSource = {
 const DragItem = ({ connectDragSource, item, isDragging, flag, correct, preview, renderIndex, getStyles }) =>
   item &&
   connectDragSource(
-    <div style={getStyles({ isDragging, flag, preview, correct })}>
+    <div data-cy={`drag-drop-item-${renderIndex}`} style={getStyles({ isDragging, flag, preview, correct })}>
       {preview && <Index correct={correct}>{renderIndex + 1}</Index>}
-      <div dangerouslySetInnerHTML={{ __html: item }} />
+      <MathFormulaDisplay dangerouslySetInnerHTML={{ __html: item }} />
       {preview && (
         <div style={{ marginRight: 15 }}>
           {correct && <IconCheck />}

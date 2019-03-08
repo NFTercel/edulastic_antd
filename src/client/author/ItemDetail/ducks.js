@@ -3,7 +3,7 @@ import { cloneDeep, keyBy as _keyBy, omit as _omit } from "lodash";
 import { testItemsApi } from "@edulastic/api";
 import { call, put, all, takeEvery } from "redux-saga/effects";
 import { message } from "antd";
-import { loadQuestionsAction } from "../sharedDucks/questions";
+import { loadQuestionsAction } from "../Shared/Ducks/questions";
 
 // constants
 
@@ -222,8 +222,11 @@ function* receiveItemSaga({ payload }) {
 
 export function* updateItemSaga({ payload }) {
   try {
-    // avoid data part being put into db
-    delete payload.data.data;
+    if (!payload.keepData) {
+      // avoid data part being put into db
+      delete payload.data.data;
+    }
+
     const item = yield call(testItemsApi.updateById, payload.id, payload.data);
 
     yield put({

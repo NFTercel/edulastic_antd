@@ -2,7 +2,7 @@ import { testActivityApi, testsApi } from "@edulastic/api";
 import { takeEvery, call, all, put, select } from "redux-saga/effects";
 import { push } from "react-router-redux";
 import { keyBy as _keyBy } from "lodash";
-
+import { getCurrentGroup } from "../../student/Login/ducks";
 import {
   LOAD_TEST,
   LOAD_TEST_ITEMS,
@@ -135,11 +135,12 @@ function* loadPreviousResponses() {
 function* submitTest() {
   try {
     const testActivityId = yield select(state => state.test && state.test.testActivityId);
+    const groupId = yield select(getCurrentGroup);
     if (testActivityId === "test") {
       console.log("practice test");
       return;
     }
-    yield testActivityApi.submit(testActivityId);
+    yield testActivityApi.submit(testActivityId, groupId);
     yield put(push("/home/reports"));
   } catch (err) {
     console.log(err);

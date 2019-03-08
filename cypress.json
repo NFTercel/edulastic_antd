@@ -6,5 +6,6 @@
   "baseUrl": "http://edulastic-poc.snapwiz.net",
   "integrationFolder": "cypress/e2e/suites",
   "modifyObstructiveCode": false,
-  "requestTimeout": 10000
+  "requestTimeout": 10000,
+  "API_URL": "https://4uwpei20if.execute-api.us-east-1.amazonaws.com/development/api"
 }

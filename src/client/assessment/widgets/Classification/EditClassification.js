@@ -22,7 +22,7 @@ import { setQuestionDataAction, setFirstMountAction } from "../../../author/Ques
 
 import GroupPossibleResponses from "./components/GroupPossibleResponses";
 import ClassificationPreview from "./ClassificationPreview";
-import AdvancedOptions from "../SortList/components/AdvancedOptions";
+import Options from "./components/Options";
 
 const List = withAddButton(QuillSortableList);
 
@@ -246,13 +246,6 @@ const EditClassification = ({ item, setQuestionData, setFirstMount, theme, t }) 
     setQuestionData(newItem);
   };
 
-  const handleUiStyleChange = (prop, uiStyle) => {
-    const newItem = cloneDeep(item);
-
-    newItem.ui_style[prop] = uiStyle;
-    setQuestionData(newItem);
-  };
-
   const handleAddAnswer = () => {
     const newItem = cloneDeep(item);
 
@@ -339,7 +332,7 @@ const EditClassification = ({ item, setQuestionData, setFirstMount, theme, t }) 
         />
 
         <Row gutter={70}>
-          <Col span={12}>
+          <Col data-cy="column-container" span={12}>
             <Subtitle>{t("component.classification.columnsSubtitle")}</Subtitle>
 
             <Subtitle
@@ -351,13 +344,14 @@ const EditClassification = ({ item, setQuestionData, setFirstMount, theme, t }) 
             </Subtitle>
 
             <Select
+              data-cy="classification-column-dropdown"
               size="large"
               style={{ width: "calc(100% - 30px)" }}
               value={ui_style.column_count}
               onChange={value => onUiChange("column_count")(+value)}
             >
               {Array.from({ length: 10 }).map((v, index) => (
-                <Option key={index} value={index + 1}>
+                <Option data-cy={`coloumn-dropdown-list-${index}`} key={index} value={index + 1}>
                   {index + 1}
                 </Option>
               ))}
@@ -383,7 +377,7 @@ const EditClassification = ({ item, setQuestionData, setFirstMount, theme, t }) 
               columns={1}
             />
           </Col>
-          <Col span={12}>
+          <Col data-cy="row-container" span={12}>
             <Subtitle>{t("component.classification.rowsSubtitle")}</Subtitle>
 
             <Subtitle
@@ -395,13 +389,14 @@ const EditClassification = ({ item, setQuestionData, setFirstMount, theme, t }) 
             </Subtitle>
 
             <Select
+              data-cy="classification-row-dropdown"
               size="large"
               style={{ width: "calc(100% - 30px)" }}
               value={ui_style.row_count}
               onChange={value => onUiChange("row_count")(+value)}
             >
               {Array.from({ length: 10 }).map((v, index) => (
-                <Option key={index} value={index + 1}>
+                <Option data-cy={`row-dropdown-list-${index}`} key={index} value={index + 1}>
                   {index + 1}
                 </Option>
               ))}
@@ -454,7 +449,7 @@ const EditClassification = ({ item, setQuestionData, setFirstMount, theme, t }) 
           onCloseTab={handleCloseTab}
         />
       </Paper>
-      <AdvancedOptions onUiChange={handleUiStyleChange} />
+      <Options />
     </Fragment>
   );
 };

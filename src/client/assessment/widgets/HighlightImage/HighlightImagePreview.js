@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Select } from "antd";
+import { get } from "lodash";
 
 import { Paper, Stimulus, InstructorStimulus } from "@edulastic/common";
 import { withNamespaces } from "@edulastic/localization";
@@ -14,6 +15,7 @@ import { Button } from "./styled/Button";
 import { Text } from "./styled/Text";
 import { CanvasContainer } from "./styled/CanvasContainer";
 import { AdaptiveButtonList } from "./styled/AdaptiveButtonList";
+import { getFontSize } from "../../utils/helpers";
 
 const { Option } = Select;
 
@@ -69,7 +71,7 @@ const HighlightImagePreview = ({ view, item, smallSize, saveAnswer, userAnswer, 
       canvas.current.width = width;
       canvas.current.height = height;
       const context = canvas.current.getContext("2d");
-      context.lineWidth = 10;
+      context.lineWidth = item.line_width || 5;
       context.lineJoin = "round";
       context.lineCap = "round";
 
@@ -146,6 +148,8 @@ const HighlightImagePreview = ({ view, item, smallSize, saveAnswer, userAnswer, 
     saveAnswer(history[historyTab + 1]);
   };
 
+  const fontSize = getFontSize(get(item, "ui_style.fontsize"));
+
   return (
     <Paper padding={smallSize} boxShadow={smallSize ? "none" : ""}>
       <InstructorStimulus>{item.instructor_stimulus}</InstructorStimulus>
@@ -166,15 +170,15 @@ const HighlightImagePreview = ({ view, item, smallSize, saveAnswer, userAnswer, 
         <AdaptiveButtonList>
           <Button disabled={historyTab === 0} onClick={onUndoClick}>
             <IconUndo style={{ marginRight: 25 }} width={18} height={18} />
-            <Text>{t("component.highlightImage.undo")}</Text>
+            <Text fontSize={fontSize}>{t("component.highlightImage.undo")}</Text>
           </Button>
           <Button disabled={historyTab === history.length - 1 || history.length === 0} onClick={onRedoClick}>
             <IconRedo style={{ marginRight: 25 }} width={18} height={18} />
-            <Text>{t("component.highlightImage.redo")}</Text>
+            <Text fontSize={fontSize}>{t("component.highlightImage.redo")}</Text>
           </Button>
           <Button onClick={onClearClick}>
             <IconEraseText style={{ marginRight: 25 }} width={18} height={18} />
-            <Text>{t("component.highlightImage.clear")}</Text>
+            <Text fontSize={fontSize}>{t("component.highlightImage.clear")}</Text>
           </Button>
         </AdaptiveButtonList>
       </Container>

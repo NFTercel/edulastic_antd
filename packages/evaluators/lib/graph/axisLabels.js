@@ -15,32 +15,36 @@ var checkAnswer = function checkAnswer(answer, userResponse) {
     details: []
   };
   var trueAnswerValue = answer.value;
-  userResponse.forEach(function (testItem) {
+  userResponse.forEach(function(testItem) {
     var resultForItem = {
       point: testItem.point,
-      result: false
+      result: false,
+      id: testItem.id
     };
 
-    if (trueAnswerValue.findIndex(function (item) {
-      return item.point === testItem.point && item.position === testItem.position;
-    }) > -1) {
+    if (
+      trueAnswerValue.findIndex(function(item) {
+        return item.point === testItem.point && item.position === testItem.position;
+      }) > -1
+    ) {
       resultForItem.result = true;
     }
 
     result.details.push(resultForItem);
   });
-  var allIsTrue = result.details.filter(function (item) {
-    return item.result;
-  }).length === result.details.length;
+  var allIsTrue =
+    result.details.filter(function(item) {
+      return item.result;
+    }).length === result.details.length;
   result.commonResult = trueAnswerValue.length === userResponse.length && allIsTrue;
   return result;
 };
 
 var evaluator = function evaluator(_ref) {
   var userResponse = _ref.userResponse,
-      validation = _ref.validation;
+    validation = _ref.validation;
   var valid_response = validation.valid_response,
-      alt_responses = validation.alt_responses;
+    alt_responses = validation.alt_responses;
   var score = 0;
   var maxScore = 0;
   var evaluation = {};
@@ -51,7 +55,7 @@ var evaluator = function evaluator(_ref) {
   }
 
   var result = {};
-  answers.forEach(function (answer, index) {
+  answers.forEach(function(answer, index) {
     result = checkAnswer(answer, userResponse);
 
     if (result.commonResult) {

@@ -1,7 +1,9 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
+import styled from "styled-components";
 
-import { InstructorStimulus } from "@edulastic/common";
+import { InstructorStimulus, WithMathFormula } from "@edulastic/common";
+
 import { QuestionHeader } from "../../styled/QuestionHeader";
 import CheckboxTemplateBoxLayout from "./components/CheckboxTemplateBoxLayout";
 import CorrectAnswerBoxLayout from "./components/CorrectAnswerBoxLayout";
@@ -9,6 +11,11 @@ import ClozeTextInput from "../../components/ClozeTextInput";
 
 const defaultTemplateMarkup =
   '<p>"It\'s all clear" he</p><p class="response-btn" contenteditable="false"><span class="index">1</span><span class="text">Response</span></p><p><br/> Have you the </p><p class="response-btn" contenteditable="false"><span class="index">1</span><span class="text">Response</span></p><p> and the bags ? <br/>  Great Scott!!! Jump, archie, jump, and I\'ll swing for it</p>';
+
+const MathSpan = WithMathFormula(styled.span`
+  user-select: none;
+  line-height: ${props => props.lineHeight};
+`);
 
 class ClozeTextDisplay extends Component {
   constructor(props) {
@@ -172,8 +179,8 @@ class ClozeTextDisplay extends Component {
               );
             }
             return (
-              <span
-                style={{ userSelect: "none", lineHeight: `${maxLineHeight}px` }}
+              <MathSpan
+                lineHeight={`${maxLineHeight}px`}
                 key={index}
                 dangerouslySetInnerHTML={{ __html: templatePart }}
               />

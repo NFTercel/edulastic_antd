@@ -1,6 +1,6 @@
 import React, { useState, Fragment, useEffect } from "react";
 import PropTypes from "prop-types";
-import { cloneDeep, isEqual } from "lodash";
+import { cloneDeep, isEqual, get } from "lodash";
 import { withTheme } from "styled-components";
 import { compose } from "redux";
 import {
@@ -10,7 +10,8 @@ import {
   Stimulus,
   Subtitle,
   CorItem,
-  InstructorStimulus
+  InstructorStimulus,
+  MathFormulaDisplay
 } from "@edulastic/common";
 import { withNamespaces } from "@edulastic/localization";
 
@@ -20,6 +21,7 @@ import DragItem from "./components/DragItem";
 import { ListItem } from "./styled/ListItem";
 import { Separator } from "./styled/Separator";
 import { CorTitle } from "./styled/CorTitle";
+import { getFontSize, getDirection } from "../../utils/helpers";
 
 const styles = {
   dropContainerStyle: smallSize => ({
@@ -166,121 +168,134 @@ const MatchListPreview = ({
     }
   });
 
-  return (
-    <Paper padding={smallSize} boxShadow={smallSize ? "none" : ""}>
-      <InstructorStimulus>{item.instructor_stimulus}</InstructorStimulus>
-      {!smallSize && view === PREVIEW && (
-        <Stimulus>
-          <div dangerouslySetInnerHTML={{ __html: stimulus }} />
-        </Stimulus>
-      )}
+  const fontSize = getFontSize(get(item, "ui_style.fontsize", "normal"));
+  const listPosition = get(item, "ui_style.possibility_list_position", "bottom");
 
-      <FlexContainer flexDirection="column" alignItems="flex-start">
-        {list.map((ite, i) => (
-          <FlexContainer
-            key={i}
-            style={styles.listItemContainerStyle}
-            alignItems="center"
-            childMarginRight={smallSize ? 13 : 45}
-          >
-            <ListItem smallSize={smallSize}>
-              <div dangerouslySetInnerHTML={{ __html: ite }} />
-            </ListItem>
-            <Separator smallSize={smallSize} />
-            <DropContainer
-              noBorder={!!ans[i]}
-              index={i}
-              drop={drop}
-              flag="ans"
-              style={styles.dropContainerStyle(smallSize)}
+  const wrapperStyle = {
+    display: "flex",
+    flexDirection: getDirection(listPosition)
+  };
+
+  return (
+    <Paper style={{ fontSize }} padding={smallSize} boxShadow={smallSize ? "none" : ""}>
+      <InstructorStimulus>{item.instructor_stimulus}</InstructorStimulus>
+      {!smallSize && view === PREVIEW && <Stimulus dangerouslySetInnerHTML={{ __html: stimulus }} />}
+
+      <div style={wrapperStyle}>
+        <FlexContainer style={{ flexGrow: 10 }} flexDirection="column" alignItems="flex-start">
+          {list.map((ite, i) => (
+            <FlexContainer
+              key={i}
+              style={styles.listItemContainerStyle}
+              alignItems="center"
+              childMarginRight={smallSize ? 13 : 45}
             >
-              <DragItem
-                preview={preview}
-                correct={altAnswers.includes(ans[i])}
+              <ListItem smallSize={smallSize}>
+                <MathFormulaDisplay dangerouslySetInnerHTML={{ __html: ite }} />
+              </ListItem>
+              <Separator smallSize={smallSize} />
+              <DropContainer
+                noBorder={!!ans[i]}
+                index={i}
+                drop={drop}
                 flag="ans"
-                renderIndex={i}
-                onDrop={onDrop}
-                item={ans[i]}
-                getStyles={getStyles}
-              />
-            </DropContainer>
-          </FlexContainer>
-        ))}
-      </FlexContainer>
-      {dragItems.length > 0 && (
-        <CorrectAnswersContainer title={t("component.matchList.dragItemsTitle")}>
-          <DropContainer drop={drop} flag="dragItems" style={styles.dragItemsContainerStyle} noBorder>
-            <FlexContainer style={{ width: "100%" }} alignItems="stretch" justifyContent="center">
-              {group_possible_responses ? (
-                possible_response_groups.map((i, index) => (
-                  <Fragment key={index}>
+                style={styles.dropContainerStyle(smallSize)}
+              >
+                <DragItem
+                  preview={preview}
+                  correct={altAnswers.includes(ans[i])}
+                  flag="ans"
+                  renderIndex={i}
+                  onDrop={onDrop}
+                  item={ans[i]}
+                  getStyles={getStyles}
+                />
+              </DropContainer>
+            </FlexContainer>
+          ))}
+        </FlexContainer>
+        {dragItems.length > 0 && (
+          <CorrectAnswersContainer title={t("component.matchList.dragItemsTitle")}>
+            <DropContainer drop={drop} flag="dragItems" style={styles.dragItemsContainerStyle} noBorder>
+              <FlexContainer style={{ width: "100%" }} alignItems="stretch" justifyContent="center">
+                {group_possible_responses ? (
+                  possible_response_groups.map((i, index) => (
+                    <Fragment key={index}>
+                      <FlexContainer
+                        style={{ flex: 1 }}
+                        flexDirection="column"
+                        alignItems="center"
+                        justifyContent="flex-start"
+                      >
+                        <Subtitle
+                          style={{
+                            color: theme.widgets.matchList.previewSubtitleColor
+                          }}
+                        >
+                          {i.title}
+                        </Subtitle>
+                        <FlexContainer justifyContent="center" style={{ width: "100%", flexWrap: "wrap" }}>
+                          {i.responses.map(
+                            (ite, ind) =>
+                              dragItems.includes(ite) && (
+                                <DragItem flag="dragItems" onDrop={onDrop} key={ind} item={ite} getStyles={getStyles} />
+                              )
+                          )}
+                        </FlexContainer>
+                      </FlexContainer>
+                      {index !== possible_response_groups.length - 1 && (
+                        <div
+                          style={{
+                            width: 0,
+                            marginLeft: 35,
+                            marginRight: 35,
+                            borderLeft: `1px solid ${theme.widgets.matchList.groupSeparatorBorderColor}`
+                          }}
+                        />
+                      )}
+                    </Fragment>
+                  ))
+                ) : (
+                  <Fragment>
                     <FlexContainer
                       style={{ flex: 1 }}
                       flexDirection="column"
                       alignItems="center"
                       justifyContent="flex-start"
                     >
-                      <Subtitle
-                        style={{
-                          color: theme.widgets.matchList.previewSubtitleColor
-                        }}
-                      >
-                        {i.title}
-                      </Subtitle>
                       <FlexContainer justifyContent="center" style={{ width: "100%", flexWrap: "wrap" }}>
-                        {i.responses.map(
+                        {dragItems.map(
                           (ite, ind) =>
                             dragItems.includes(ite) && (
-                              <DragItem flag="dragItems" onDrop={onDrop} key={ind} item={ite} getStyles={getStyles} />
+                              <DragItem
+                                flag="dragItems"
+                                onDrop={onDrop}
+                                key={ind}
+                                renderIndex={ind}
+                                item={ite}
+                                getStyles={getStyles}
+                              />
                             )
                         )}
                       </FlexContainer>
                     </FlexContainer>
-                    {index !== possible_response_groups.length - 1 && (
-                      <div
-                        style={{
-                          width: 0,
-                          marginLeft: 35,
-                          marginRight: 35,
-                          borderLeft: `1px solid ${theme.widgets.matchList.groupSeparatorBorderColor}`
-                        }}
-                      />
-                    )}
                   </Fragment>
-                ))
-              ) : (
-                <Fragment>
-                  <FlexContainer
-                    style={{ flex: 1 }}
-                    flexDirection="column"
-                    alignItems="center"
-                    justifyContent="flex-start"
-                  >
-                    <FlexContainer justifyContent="center" style={{ width: "100%", flexWrap: "wrap" }}>
-                      {dragItems.map(
-                        (ite, ind) =>
-                          dragItems.includes(ite) && (
-                            <DragItem flag="dragItems" onDrop={onDrop} key={ind} item={ite} getStyles={getStyles} />
-                          )
-                      )}
-                    </FlexContainer>
-                  </FlexContainer>
-                </Fragment>
-              )}
-            </FlexContainer>
-          </DropContainer>
-        </CorrectAnswersContainer>
-      )}
+                )}
+              </FlexContainer>
+            </DropContainer>
+          </CorrectAnswersContainer>
+        )}
+      </div>
 
       {previewTab === SHOW && (
         <CorrectAnswersContainer title={t("component.matchList.correctAnswers")}>
           {list.map((ite, i) => (
             <FlexContainer key={i} alignItems="center">
               <CorTitle>
-                <div dangerouslySetInnerHTML={{ __html: ite }} />
+                <MathFormulaDisplay dangerouslySetInnerHTML={{ __html: ite }} />
               </CorTitle>
               <CorItem index={i}>
-                <div dangerouslySetInnerHTML={{ __html: validArray[i] }} />
+                <MathFormulaDisplay dangerouslySetInnerHTML={{ __html: validArray[i] }} />
               </CorItem>
             </FlexContainer>
           ))}

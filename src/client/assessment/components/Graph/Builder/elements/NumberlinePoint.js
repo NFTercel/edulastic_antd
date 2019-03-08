@@ -1,9 +1,4 @@
-import {
-  orderPoints,
-  findAvailableStackedSegmentPosition,
-  getClosestTick,
-  getSpecialTicks
-} from "../utils";
+import { orderPoints, findAvailableStackedSegmentPosition, getClosestTick, getSpecialTicks } from "../utils";
 import { CONSTANT, Colors } from "../config";
 import { defaultPointParameters } from "../settings";
 
@@ -110,6 +105,31 @@ const drawPoint = (board, coord, fixed, colors, yPosition) =>
     snapToGrid: false
   });
 
+const loadPoint = (board, coords, stackResponses) => {
+  const numberlineAxis = board.elements.filter(element => element.elType === "axis" || element.elType === "arrow");
+  const ticksDistance = numberlineAxis[0].ticks[0].getAttribute("ticksDistance");
+
+  if (!stackResponses) {
+    const point = drawPoint(board, coords[0], false, null);
+    point.segmentType = "segmentsPoint";
+    previousPointsPositions.push({ id: point.id, position: point.X() });
+    handlePointDrag(point, board, ticksDistance, numberlineAxis[0]);
+
+    return point;
+  } else {
+    const point = drawPoint(board, coords[0], false, null, coords[1]);
+    point.segmentType = "segmentsPoint";
+
+    point.setAttribute({ snapSizeY: 0.05 });
+    point.setPosition(window.JXG.COORDS_BY_USER, [point.X(), coords[1]]);
+    board.$board.on("move", () => point.moveTo([point.X(), coords[1]]));
+
+    handleStackedPointDrag(point, numberlineAxis[0], coords[1]);
+
+    return point;
+  }
+};
+
 const onHandler = (stackResponses, stackResponsesSpacing) => (board, coord) => {
   const numberlineAxis = board.elements.filter(element => element.elType === "axis" || element.elType === "arrow");
   const ticksDistance = numberlineAxis[0].ticks[0].getAttribute("ticksDistance");
@@ -173,5 +193,6 @@ export default {
   onHandler,
   getConfig,
   renderAnswer,
+  loadPoint,
   handlePointDrag
 };

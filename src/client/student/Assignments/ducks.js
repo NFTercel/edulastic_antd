@@ -44,9 +44,10 @@ export const resumeAssignmentAction = createAction(RESUME_ASSIGNMENT);
 function* fetchAssignments({ payload }) {
   try {
     yield put(setAssignmentsLoadingAction());
+    const groupId = yield select(getCurrentGroup);
     const [assignments, reports] = yield all([
       call(assignmentApi.fetchAssigned, payload),
-      call(reportsApi.fetchReports)
+      call(reportsApi.fetchReports, groupId)
     ]);
     // normalize reports
     const {

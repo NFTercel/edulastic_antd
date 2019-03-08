@@ -5,7 +5,7 @@ import { withNamespaces } from "@edulastic/localization";
 
 import { Wrapper } from "./styled/Wrapper";
 import { Answer } from "./styled/Answer";
-import { WithResources } from "../../../../../utils";
+import { WithResources } from "@edulastic/common";
 
 const CorrectAnswerBox = ({ children, t }) => {
   const answerRef = useRef();

@@ -18,7 +18,7 @@ import { Subtitle } from "../../styled/Subtitle";
 import ShadesView from "./components/ShadesView";
 import ShadingPreview from "./ShadingPreview";
 import { StyledCheckbox } from "./styled/StyledCheckbox";
-import AdvancedOptions from "../SortList/components/AdvancedOptions";
+import Options from "./components/Options";
 
 const OptionsList = withPoints(ShadingPreview);
 
@@ -122,13 +122,6 @@ const ShadingEdit = ({ item, setQuestionData, t, theme }) => {
     setQuestionData(newItem);
   };
 
-  const handleUiStyleChange = (prop, uiStyle) => {
-    const newItem = cloneDeep(item);
-
-    newItem.ui_style[prop] = uiStyle;
-    setQuestionData(newItem);
-  };
-
   const renderOptions = () => (
     <OptionsList
       item={item}
@@ -222,14 +215,18 @@ const ShadingEdit = ({ item, setQuestionData, t, theme }) => {
 
         <Subtitle>{t("component.shading.shadesSubtitle")}</Subtitle>
 
-        <ShadesView
-          colCount={column_count || 1}
-          rowCount={row_count || 1}
-          cellHeight={cell_height || 1}
-          cellWidth={cell_width || 1}
-          onCellClick={handleOnCellClick}
-          shaded={shaded}
-        />
+        <div>
+          <ShadesView
+            colCount={column_count || 1}
+            rowCount={row_count || 1}
+            cellHeight={cell_height || 1}
+            cellWidth={cell_width || 1}
+            onCellClick={handleOnCellClick}
+            border={item.border}
+            hover={item.hover}
+            shaded={shaded}
+          />
+        </div>
 
         <StyledCheckbox
           onChange={() => handleCanvasOptionsChange("read_only_author_cells", !read_only_author_cells)}
@@ -248,7 +245,7 @@ const ShadingEdit = ({ item, setQuestionData, t, theme }) => {
         />
       </Paper>
 
-      <AdvancedOptions onUiChange={handleUiStyleChange} />
+      <Options />
     </Fragment>
   );
 };

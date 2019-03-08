@@ -1,11 +1,18 @@
 import React from "react";
 import PropTypes from "prop-types";
+import styled from "styled-components";
+
+import { WithMathFormula } from "@edulastic/common";
 
 import { IconWrapper } from "./styled/IconWrapper";
 import { RightIcon } from "./styled/RightIcon";
 import { WrongIcon } from "./styled/WrongIcon";
 
 const ALPHABET = "abcdefghijklmnopqrstuvwxyz";
+
+const MathSpan = WithMathFormula(styled.span`
+  user-select: none;
+`);
 
 const CheckboxTemplateBoxLayout = ({
   showAnswer,
@@ -126,7 +133,7 @@ const CheckboxTemplateBoxLayout = ({
             </div>
           );
         }
-        return <span style={{ userSelect: "none" }} key={index} dangerouslySetInnerHTML={{ __html: templatePart }} />;
+        return <MathSpan key={index} dangerouslySetInnerHTML={{ __html: templatePart }} />;
       })}
     </div>
   );

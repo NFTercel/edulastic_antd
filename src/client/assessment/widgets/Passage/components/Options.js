@@ -73,10 +73,37 @@ const Opt = ({ setQuestionData, item, t, theme }) => {
       <StyledRow gutter={32}>
         <Col span={24}>
           <Label>{t("component.passage.heading")}</Label>
-          <StyledInput size="large" value={item.heading} onChange={e => handleChange("heading", e.target.value)} />
+          <CustomQuillComponent
+            toolbarId="heading"
+            onChange={value => handleChange("heading", value)}
+            showResponseBtn={false}
+            value={item.heading || ""}
+            style={{
+              border: `1px solid ${theme.widgets.passage.quillBorderColor}`,
+              height: "auto",
+              padding: "6px 11px",
+              borderRadius: 5
+            }}
+          />
         </Col>
       </StyledRow>
-
+      <StyledRow gutter={32}>
+        <Col span={24}>
+          <Label>{t("component.passage.contentsTitle")}</Label>
+          <CustomQuillComponent
+            toolbarId="contentsTitle"
+            onChange={value => handleChange("contentsTitle", value)}
+            showResponseBtn={false}
+            value={item.contentsTitle || ""}
+            style={{
+              border: `1px solid ${theme.widgets.passage.quillBorderColor}`,
+              height: "auto",
+              padding: "6px 11px",
+              borderRadius: 5
+            }}
+          />
+        </Col>
+      </StyledRow>
       <StyledRow gutter={32}>
         {!item.paginated_content && (
           <Col span={24}>

@@ -76,23 +76,41 @@ class ClozeDropDown extends Component {
     setQuestionData(newItem);
   };
 
-  handleAddAnswer = userAnswer => {
+  handleAddAnswer = (userAnswer) => {
     const { saveAnswer } = this.props;
     const newAnswer = cloneDeep(userAnswer);
     saveAnswer(newAnswer);
   };
 
   render() {
-    const { view, previewTab, smallSize, item, userAnswer, t, testItem, evaluation, theme } = this.props;
-    const { previewStimulus, previewDisplayOptions, itemForEdit, uiStyle, instructorStimulus } = this.getRenderData();
+    const {
+      view,
+      previewTab,
+      smallSize,
+      item,
+      userAnswer,
+      t,
+      testItem,
+      evaluation,
+      theme
+    } = this.props;
+    const {
+      previewStimulus,
+      previewDisplayOptions,
+      itemForEdit,
+      uiStyle,
+      instructorStimulus
+    } = this.getRenderData();
     const { shuffleOptions } = item;
 
     const Wrapper = testItem ? EmptyWrapper : Paper;
     return (
       <div>
-        {view === "edit" && (
+        {view === 'edit' && (
           <React.Fragment>
-            <AdaptiveCloze background={theme.widgets.clozeDropDown.editViewBgColor}>
+            <AdaptiveCloze
+              background={theme.widgets.clozeDropDown.editViewBgColor}
+            >
               <div className="authoring">
                 <Authoring item={itemForEdit} />
                 <CorrectAnswers
@@ -111,8 +129,8 @@ class ClozeDropDown extends Component {
                   <Checkbox
                     className="additional-options"
                     key={`shuffleOptions_${shuffleOptions}`}
-                    onChange={() => this.handleOptionsChange("shuffleOptions", !shuffleOptions)}
-                    label={t("component.cloze.dropDown.shuffleoptions")}
+                    onChange={() => this.handleOptionsChange('shuffleOptions', !shuffleOptions)}
+                    label={t('component.cloze.dropDown.shuffleoptions')}
                     checked={shuffleOptions}
                   />
                 </CorrectAnswerOptions>
@@ -123,18 +141,18 @@ class ClozeDropDown extends Component {
                 onChange={this.handleOptionsChange}
                 uiStyle={uiStyle}
                 outerStyle={{
-                  padding: "30px 120px"
+                  padding: '30px 120px'
                 }}
               />
             </div>
           </React.Fragment>
         )}
-        {view === "preview" && (
+        {view === 'preview' && (
           <Wrapper>
             <Display
-              showAnswer={previewTab === "show"}
-              preview={previewTab === "clear"}
-              checkAnswer={previewTab === "check"}
+              showAnswer={previewTab === 'show'}
+              preview={previewTab === 'clear'}
+              checkAnswer={previewTab === 'check'}
               configureOptions={{
                 shuffleOptions
               }}
@@ -173,7 +191,7 @@ ClozeDropDown.propTypes = {
 };
 
 ClozeDropDown.defaultProps = {
-  previewTab: "clear",
+  previewTab: 'clear',
   item: {
     options: []
   },
@@ -185,7 +203,7 @@ ClozeDropDown.defaultProps = {
 
 const enhance = compose(
   withRouter,
-  withNamespaces("assessment"),
+  withNamespaces('assessment'),
   withTheme,
   connect(
     null,

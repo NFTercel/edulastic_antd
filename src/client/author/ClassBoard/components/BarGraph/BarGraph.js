@@ -7,24 +7,21 @@ import { MainDiv } from "./styled";
 export default class BarGraph extends Component {
   render() {
     const itemsSum = this.props.gradebook.itemsSummary;
-    console.log(this.props);
 
     let data = [];
     if (itemsSum) {
       itemsSum.map((item, index) => {
         data.push({
           name: `Q${index + 1}`,
-          green: item.correctNum || 0,
-          yellow: item.partialNum || 0,
-          darkGrey: item.skippedNum || 0,
-          lightGrey: !item.wrongNum && !item.correctNum && !item.partialNum,
-          red: (item.wrongNum && !item.skippedNum) || 0,
-          all: (item.wrongNum || 0) + (item.correctNum || 0) + (item.partialNum || 0)
+          green: item.correctNum !== 0 ? item.correctNum : 0,
+          yellow: item.partialNum !== 0 ? item.partialNum : 0,
+          red: item.wrongNum !== 0 && !item.skippedNum ? item.wrongNum : 0,
+          all: (item.wrongNum || 0) + (item.correctNum || 0) + (item.partialNum || 0),
+          darkGrey: item.wrongNum === item.attemptsNum && item.skippedNum !== 0 ? item.attemptsNum : 0,
+          lightGrey: item.wrongNum !== item.attemptsNum && item.skippedNum !== 0 ? item.skippedNum : 0
         });
       });
     }
-    // darkGrey: item.
-    // console.log(itemsSum, data)
     return (
       <MainDiv className="studentBarChart">
         <ResponsiveContainer width="100%" height={240}>

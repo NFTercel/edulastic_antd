@@ -277,6 +277,53 @@ const drawLine = (board, firstPoint, secondPoint, colors) =>
     ...colors
   });
 
+const loadSegment = (board, coords, leftIncluded, rightIncluded, segmentType, stackResponses, setAnswers) => {
+  const numberlineAxis = board.elements.filter(element => element.elType === "axis" || element.elType === "arrow");
+  const ticksDistance = numberlineAxis[0].ticks[0].getAttribute("ticksDistance");
+
+  let ticks = getSpecialTicks(numberlineAxis[0]);
+  ticks = ticks.sort((a, b) => a - b);
+
+  if (!stackResponses) {
+    const firstPoint = drawPoint(board, coords[0], null, leftIncluded, false);
+    const secondPoint = drawPoint(board, coords[1], null, rightIncluded, false);
+    const segment = drawLine(board, firstPoint, secondPoint);
+    segment.segmentType = segmentType;
+
+    previousPointsPositions.push(
+      { id: firstPoint.id, position: firstPoint.X() },
+      { id: secondPoint.id, position: secondPoint.X() }
+    );
+
+    handleSegmentPointDrag(firstPoint, board, ticksDistance, segment, numberlineAxis[0], ticks);
+    handleSegmentPointDrag(secondPoint, board, ticksDistance, segment, numberlineAxis[0], ticks);
+    handleSegmentDrag(board, segment, ticksDistance, numberlineAxis[0], setAnswers);
+
+    return segment;
+  } else {
+    const firstPoint = drawPoint(board, coords[0], null, leftIncluded, false, coords[2]);
+    const secondPoint = drawPoint(board, coords[1], ticksDistance, rightIncluded, false, coords[2]);
+
+    firstPoint.setAttribute({ snapSizeY: 0.05 });
+    firstPoint.setPosition(window.JXG.COORDS_BY_USER, [firstPoint.X(), coords[2]]);
+    board.$board.on("move", () => firstPoint.moveTo([firstPoint.X(), coords[2]]));
+
+    secondPoint.setAttribute({ snapSizeY: 0.05 });
+    secondPoint.setPosition(window.JXG.COORDS_BY_USER, [secondPoint.X(), coords[2]]);
+    board.$board.on("move", () => secondPoint.moveTo([secondPoint.X(), coords[2]]));
+
+    const segment = drawLine(board, firstPoint, secondPoint);
+    segment.segmentType = segmentType;
+
+    board.$board.on("drag", () => handleStackedSegmentDrag(segment, ticksDistance, numberlineAxis[0], coords[2]));
+
+    handleStackedSegmentPointDrag(firstPoint, numberlineAxis[0], coords[2]);
+    handleStackedSegmentPointDrag(secondPoint, numberlineAxis[0], coords[2]);
+
+    return segment;
+  }
+};
+
 // Pass board, coordinate (closest to ticksDistance click coordinate), left point type (true = filled point, false = unfilled point), right point type
 // Check if space is available for new segment, then draw new segment
 const drawSegment = (
@@ -448,5 +495,6 @@ const getConfig = segment => ({
 export default {
   onHandler,
   getConfig,
+  loadSegment,
   determineAnswerType
 };

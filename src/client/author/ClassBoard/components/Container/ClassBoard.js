@@ -1,31 +1,33 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable jsx-a11y/alt-text */
 import React, { Component } from "react";
+import { compose } from "redux";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { compose } from "redux";
 import { withWindowSizes } from "@edulastic/common";
 import { withNamespaces } from "@edulastic/localization";
-import HooksContainer from "../HooksContainer/HooksContainer";
+// actions
 import { receiveTestActivitydAction, receiveGradeBookdAction } from "../../../src/actions/classBoard";
+// ducks
 import {
   getTestActivitySelector,
   getGradeBookSelector,
   getAdditionalDataSelector
-} from "../../../sharedDucks/classBoard";
-
-import ListHeader from "../ListHeader/ListHeader";
-import SortClass from "../SortClass/SortClass";
+} from "../../../Shared/Ducks/classBoard";
+// components
+import Score from "../Score/Score";
 import DisneyCard from "../DisneyCard/DisneyCard";
 import Graph from "../ProgressGraph/ProgressGraph";
-import Score from "../Score/Score";
-
-import Ghat from "../../assets/graduation-hat.svg";
-import Stats from "../../assets/stats.svg";
-import Ptools from "../../assets/printing-tool.svg";
+import ClassSelect from "../../../Shared/Components/ClassSelect/ClassSelect";
+import ClassHeader from "../../../Shared/Components/ClassHeader/ClassHeader";
+import HooksContainer from "../HooksContainer/HooksContainer";
+// icon images
 import More from "../../assets/more.svg";
+import Stats from "../../assets/stats.svg";
+import Ghat from "../../assets/graduation-hat.svg";
+import Ptools from "../../assets/printing-tool.svg";
 import Elinks from "../../assets/external-link.svg";
-
+// styled wrappers
 import {
   Anchor,
   BarDiv,
@@ -82,6 +84,16 @@ class ClassBoard extends Component {
     history.push(`${match.url}/create`);
   };
 
+  getTestActivity = data => {
+    let testActivityId = null;
+    data.map(item => {
+      if (item.testActivityId) {
+        testActivityId = item.testActivityId;
+      }
+    });
+    return testActivityId;
+  };
+
   render() {
     const {
       gradebook,
@@ -94,24 +106,27 @@ class ClassBoard extends Component {
     } = this.props;
 
     const { assignmentId, classId } = match.params;
+    const testActivityId = this.getTestActivity(testActivity);
     const classname = additionalData ? additionalData.className : "";
 
     return (
       <div>
         <HooksContainer classId={classId} assignmentId={assignmentId} />
-        <ListHeader
-          onCreate={this.handleCreate}
+        <ClassHeader
+          classId={classId}
+          active="classboard"
           creating={creating}
+          onCreate={this.handleCreate}
           assignmentId={assignmentId}
           additionalData={additionalData}
-          classId={classId}
+          testActivityId={testActivityId}
         />
         <StyledFlexContainer justifyContent="space-between">
           <PaginationInfo>
             &lt; <AnchorLink to="/author/assignments">RECENTS ASSIGNMENTS</AnchorLink> /{" "}
             <Anchor>{additionalData.testName}</Anchor> / <Anchor>{additionalData.className}</Anchor>
           </PaginationInfo>
-          <SortClass classname={classname} />
+          <ClassSelect classname={classname} />
         </StyledFlexContainer>
         <StyledCard bordered={false}>
           <Graph gradebook={gradebook} />

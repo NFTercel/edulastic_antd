@@ -1,16 +1,16 @@
 import * as moment from "moment";
 import { omit } from "lodash";
 import { createReducer, createAction } from "redux-starter-kit";
-import { assignmentApi } from "@edulastic/api";
-import { all, call, put, takeEvery, select } from "redux-saga/effects";
-import { getTestSelector, getTestIdSelector } from "../../ducks";
 import { createSelector } from "reselect";
+import { assignmentApi } from "@edulastic/api";
+import { test } from "@edulastic/constants";
+import { all, call, put, takeEvery, select } from "redux-saga/effects";
+import { SET_ASSIGNMENT, getTestSelector, getTestIdSelector } from "../../ducks";
 import { generateClassData, formatAssignment } from "./utils";
-import { getStudentsSelector } from "../../../sharedDucks/groups";
+import { getStudentsSelector } from "../../../Shared/Ducks/groups";
+import { getUserNameSelector } from "../../../src/selectors/user";
 // constants
-
 export const SAVE_ASSIGNMENT = "[assignments] save assignment";
-export const SET_ASSIGNMENT = "[assignments] set assignment";
 export const UPDATE_ASSIGNMENT = "[assignments] update assignment";
 export const UPDATE_SET_ASSIGNMENT = "[assignments] update set assingment";
 export const FETCH_ASSIGNMENTS = "[assignments] fetch assignments";
@@ -42,7 +42,7 @@ const setAssignment = (state, { payload }) => {
 const addAssignment = (state, { payload }) => {
   let isExisting = false;
   state.assignments = state.assignments.map(item => {
-    if (item._id == payload._id) {
+    if (item._id === payload._id) {
       isExisting = true;
       return payload;
     }
@@ -81,8 +81,8 @@ export const getAssignmentsSelector = state => (state[module].isLoading ? [] : s
 export const getCurrentAssignmentSelector = createSelector(
   currentSelector,
   getAssignmentsSelector,
-
-  (current, assignments) => {
+  getTestSelector,
+  (current, assignments, testSettings) => {
     if (current && current !== "new") {
       let assignment = assignments.filter(item => item._id == current)[0];
       return assignment;
@@ -93,7 +93,11 @@ export const getCurrentAssignmentSelector = createSelector(
       openPolicy: "Automatically on Start Date",
       closePolicy: "Automatically on Due Date",
       class: [],
-      specificStudents: false
+      specificStudents: false,
+      releaseScore: testSettings.releaseScore
+      //TODO testType: testSettings.testType,
+      //TODO maxAttempts: testSettings.maxAttempts,
+      //TODO isGenerateReport: testSettings.testType === test.type.PRACTICE ? false : true
     };
   }
 );
@@ -101,20 +105,19 @@ export const getCurrentAssignmentSelector = createSelector(
 
 function* saveAssignment({ payload }) {
   try {
-    let classData;
     const studentsList = yield select(getStudentsSelector);
     const testId = yield select(getTestIdSelector);
-    classData = generateClassData(payload.class, payload.students, studentsList, payload.specificStudents);
-
+    const classData = generateClassData(payload.class, payload.students, studentsList, payload.specificStudents);
+    const assignedBy = yield select(getUserNameSelector);
     // if no class is selected dont bother sending a request.
     if (!classData.length) {
       return;
     }
 
-    let startDate = payload.startDate && moment(payload.startDate).valueOf();
-    let endDate = payload.endDate && moment(payload.endDate).valueOf();
+    const startDate = payload.startDate && moment(payload.startDate).valueOf();
+    const endDate = payload.endDate && moment(payload.endDate).valueOf();
 
-    let data = omit(
+    const data = omit(
       {
         ...payload,
         class: classData,
@@ -124,11 +127,11 @@ function* saveAssignment({ payload }) {
       },
       ["_id", "__v", "createdAt", "updatedAt", "students"]
     );
-    let isUpdate = !!payload._id;
+    const isUpdate = !!payload._id;
 
     const result = isUpdate
       ? yield call(assignmentApi.update, payload._id, data)
-      : yield call(assignmentApi.create, [data]);
+      : yield call(assignmentApi.create, { assignments: [data], assignedBy });
     const assignment = isUpdate ? formatAssignment(result) : formatAssignment(result[0]);
 
     yield put(setAssignmentAction(assignment));

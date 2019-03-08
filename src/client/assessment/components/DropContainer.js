@@ -23,7 +23,7 @@ function collectTarget(connector, monitor) {
   };
 }
 
-const DropContainer = ({ connectDropTarget, isOver, style, children, noBorder, noTopBorder, theme }) => {
+const DropContainer = ({ connectDropTarget, index, isOver, style, children, noBorder, noTopBorder, theme }) => {
   const border = `${
     !noBorder
       ? isOver
@@ -36,6 +36,8 @@ const DropContainer = ({ connectDropTarget, isOver, style, children, noBorder, n
 
   return connectDropTarget(
     <div
+      data-cy={`drag-drop-board-${index}`}
+      id={`drag-drop-board-${index}`}
       style={{
         zIndex: 1,
         ...style,
@@ -55,7 +57,8 @@ DropContainer.propTypes = {
   children: PropTypes.node,
   noBorder: PropTypes.bool,
   drop: PropTypes.func.isRequired,
-  theme: PropTypes.object.isRequired
+  theme: PropTypes.object.isRequired,
+  index: PropTypes.number
 };
 
 DropContainer.defaultProps = {

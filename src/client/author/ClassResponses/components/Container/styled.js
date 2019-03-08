@@ -121,3 +121,9 @@ export const Content = styled.div`
     margin: 50px 25px;
   }
 `;
+
+export const SelectWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 13px;
+`;

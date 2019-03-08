@@ -15,7 +15,7 @@ import {
 import FontSizeDropdown from "./FontSizeDropdown";
 import FractionsFormatDropdown from "./FractionsFormatDropdown";
 import RenderingBaseDropdown from "./RenderingBaseDropdown";
-import { QuestionSection } from "..";
+import { QuestionSection, ScoreSettings } from "..";
 
 class AxisLabelsMoreOptions extends Component {
   state = {
@@ -122,14 +122,25 @@ class AxisLabelsMoreOptions extends Component {
   render() {
     const { currentFractionItem, currentRenderingBaseItem } = this.state;
 
-    const { t, fontSizeList, fractionsFormatList, renderingBaseList, fillSections, cleanSections } = this.props;
-
     const {
-      graphData: { canvas, ui_style, numberlineAxis }
+      t,
+      fontSizeList,
+      fractionsFormatList,
+      renderingBaseList,
+      fillSections,
+      cleanSections,
+      graphData,
+      setValidation
     } = this.props;
+
+    const { canvas, ui_style, numberlineAxis } = graphData;
 
     return (
       <Fragment>
+        <QuestionSection section="advanced" label="SCORING" cleanSections={cleanSections} fillSections={fillSections}>
+          <ScoreSettings showSelect={false} setValidation={setValidation} graphData={graphData} />
+        </QuestionSection>
+
         <QuestionSection section="advanced" label="LAYOUT" cleanSections={cleanSections} fillSections={fillSections}>
           <MoreOptionsContainer>
             <MoreOptionsSubHeading>{t("component.graphing.layoutoptionstitle")}</MoreOptionsSubHeading>
@@ -374,7 +385,8 @@ AxisLabelsMoreOptions.propTypes = {
   renderingBaseList: PropTypes.array.isRequired,
   setOptions: PropTypes.func.isRequired,
   setNumberline: PropTypes.func.isRequired,
-  setCanvas: PropTypes.func.isRequired
+  setCanvas: PropTypes.func.isRequired,
+  setValidation: PropTypes.func.isRequired
 };
 
 const enhance = compose(withNamespaces("assessment"));

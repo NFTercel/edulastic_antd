@@ -8,7 +8,7 @@ import { math } from "@edulastic/constants";
 import { withNamespaces } from "@edulastic/localization";
 
 import { Label } from "../../../../styled/WidgetOptions/Label";
-import MathInput from "../../../../components/MathInput";
+import { MathInput } from "@edulastic/common";
 
 import { IconTrash } from "../../styled/IconTrash";
 import ThousandsSeparators from "../ThousandsSeparators";
@@ -205,7 +205,7 @@ const MathFormulaAnswerMethod = ({ onChange, onDelete, method, value, aria_label
           </Select>
         </Col>
         <Col span={2} push={10}>
-          <IconTrash onClick={onDelete} width={22} height={22} />
+          {onDelete && <IconTrash onClick={onDelete} width={22} height={22} />}
         </Col>
       </StyledRow>
 
@@ -520,7 +520,7 @@ const MathFormulaAnswerMethod = ({ onChange, onDelete, method, value, aria_label
 
 MathFormulaAnswerMethod.propTypes = {
   onChange: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
+  onDelete: PropTypes.func,
   item: PropTypes.object.isRequired,
   options: PropTypes.object,
   value: PropTypes.string,
@@ -533,7 +533,8 @@ MathFormulaAnswerMethod.defaultProps = {
   aria_label: "",
   value: "",
   method: "",
-  options: {}
+  options: {},
+  onDelete: undefined
 };
 
 export default withNamespaces("assessment")(MathFormulaAnswerMethod);

@@ -1,10 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { PaddingDiv, FlexContainer } from "@edulastic/common";
+import { PaddingDiv, FlexContainer, MathFormulaDisplay } from "@edulastic/common";
 
 import { ALPHABET } from "../../../constants/alphabet";
-
 import { CheckboxContainer } from "../styled/CheckboxContainer";
 import { MultiChoiceContent } from "../styled/MultiChoiceContent";
 import { Label } from "../styled/Label";
@@ -30,21 +29,26 @@ const getFontSize = size => {
 };
 
 const Option = props => {
-  const { index, item, showAnswer, userSelections, onChange, smallSize, uiStyle, correct, view } = props;
+  const { index, item, showAnswer, userSelections, onChange, smallSize, uiStyle, correct } = props;
   const isSelected = userSelections.includes(item.value);
+  const indexOfAnswer = userSelections.indexOf(item.value);
+  const isCorrect = indexOfAnswer !== -1 && correct ? correct[indexOfAnswer] : undefined;
 
   let className = "";
+  if (correct) {
+    if (isCorrect && isSelected) {
+      className = "right";
+    } else if (!isCorrect && isSelected) {
+      className = "wrong";
+    }
+  }
 
   if (showAnswer) {
-    className = "right";
-  }
-
-  if (correct) {
-    className = "right";
-  }
-
-  if (correct === false) {
-    className = "wrong";
+    if (correct[index]) {
+      className = "right";
+    } else if (!isCorrect && isSelected) {
+      className = "wrong";
+    }
   }
 
   const fontSize = getFontSize(uiStyle.fontsize);
@@ -88,7 +92,7 @@ const Option = props => {
         return (
           <FlexContainer flexDirection="column" justifyContent="center">
             <MultiChoiceContent fontSize={fontSize} smallSize={smallSize} style={{ marginBottom: 10 }}>
-              <div dangerouslySetInnerHTML={{ __html: item.label }} />
+              <MathFormulaDisplay dangerouslySetInnerHTML={{ __html: item.label }} />
             </MultiChoiceContent>
             {container}
           </FlexContainer>
@@ -98,7 +102,7 @@ const Option = props => {
           <FlexContainer alignItems="center">
             {container}
             <MultiChoiceContent fontSize={fontSize} smallSize={smallSize}>
-              <div dangerouslySetInnerHTML={{ __html: item.label }} />
+              <MathFormulaDisplay dangerouslySetInnerHTML={{ __html: item.label }} />
             </MultiChoiceContent>
           </FlexContainer>
         );
@@ -108,24 +112,17 @@ const Option = props => {
           <React.Fragment>
             {container}
             <MultiChoiceContent fontSize={fontSize} smallSize={smallSize}>
-              <div dangerouslySetInnerHTML={{ __html: item.label }} />
+              <MathFormulaDisplay dangerouslySetInnerHTML={{ __html: item.label }} />
             </MultiChoiceContent>
           </React.Fragment>
         );
     }
   };
 
-  const isChecked = isSelected && !className && uiStyle.type === "block" && !showAnswer;
   const width = uiStyle.columns ? `${100 / uiStyle.columns - 1}%` : "100%";
-  let labelClassName = isChecked ? "checked" : className;
-  const isPreview = view === "preview" && !isSelected;
-
-  if (isPreview) {
-    labelClassName = "preview";
-  }
 
   return (
-    <Label width={width} smallSize={smallSize} className={labelClassName} showAnswer>
+    <Label width={width} smallSize={smallSize} className={className} showAnswer>
       <PaddingDiv top={smallSize ? 0 : 10} bottom={smallSize ? 0 : 10}>
         <FlexContainer justifyContent={uiStyle.type === "radioBelow" ? "center" : "space-between"}>
           {renderCheckbox()}

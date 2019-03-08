@@ -1,6 +1,6 @@
 const removeObject = (board, elementsUnderMouse, setAnswers) => {
   const elementToDelete = elementsUnderMouse.find(
-    element => element.elType === "segment" || element.elType === "point"
+    element => (element.elType === "segment" || element.elType === "point") && !element.answer
   );
 
   if (elementToDelete && elementToDelete.answer) {

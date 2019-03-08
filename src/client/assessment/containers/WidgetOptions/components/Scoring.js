@@ -21,7 +21,7 @@ import { QuestionContext } from "../../../components/QuestionWrapper";
 
 const roundingTypes = [rounding.roundDown, rounding.none];
 
-const Scoring = ({ setQuestionData, t, scoringTypes, isSection }) => {
+const Scoring = ({ setQuestionData, t, scoringTypes, isSection, showSelect }) => {
   const { item: questionData } = useContext(QuestionContext);
   const handleChangeValidation = (param, value) => {
     const newData = cloneDeep(questionData);
@@ -36,7 +36,8 @@ const Scoring = ({ setQuestionData, t, scoringTypes, isSection }) => {
 
   const handleChangeData = (param, value) => {
     const newData = cloneDeep(questionData);
-    newData[param] = value;
+    newData.validation[param] = value;
+
     setQuestionData(newData);
   };
 
@@ -79,9 +80,9 @@ const Scoring = ({ setQuestionData, t, scoringTypes, isSection }) => {
         <Row gutter={36}>
           <Col md={12}>
             <Checkbox
-              data-cy="feedbackChk"
-              checked={questionData.instant_feedback}
-              onChange={e => handleChangeData("instant_feedback", e.target.checked)}
+              data-cy="checkAnswerButton"
+              checked={questionData.validation.checkAnswerButton}
+              onChange={e => handleChangeData("checkAnswerButton", e.target.checked)}
               size="large"
             >
               {t("component.options.checkAnswerButton")}
@@ -90,10 +91,10 @@ const Scoring = ({ setQuestionData, t, scoringTypes, isSection }) => {
           <Col md={12}>
             <FormGroup>
               <Input
-                data-cy="feedback"
+                data-cy="checkAttempts"
                 type="number"
-                value={questionData.feedback_attempts}
-                onChange={e => handleChangeData("feedback_attempts", +e.target.value)}
+                value={questionData.validation.checkAttempts}
+                onChange={e => handleChangeData("checkAttempts", +e.target.value)}
                 size="large"
                 style={{ width: "20%", marginRight: 30 }}
               />
@@ -114,9 +115,26 @@ const Scoring = ({ setQuestionData, t, scoringTypes, isSection }) => {
             {t("component.options.automarkable")}
           </Checkbox>
         </Col>
+
+        {automarkable && !showSelect && (
+          <Col md={12}>
+            <FormGroup>
+              <Input
+                data-cy="minscore"
+                type="number"
+                disabled={questionData.validation.unscored}
+                value={questionData.validation.min_score_if_attempted}
+                onChange={e => handleChangeValidation("min_score_if_attempted", +e.target.value)}
+                size="large"
+                style={{ width: "20%", marginRight: 30 }}
+              />
+              <Label>{t("component.options.minScore")}</Label>
+            </FormGroup>
+          </Col>
+        )}
       </Row>
 
-      {automarkable && (
+      {automarkable && showSelect && (
         <Row gutter={36}>
           <Col md={12}>
             <Label>{t("component.options.scoringType")}</Label>
@@ -197,7 +215,8 @@ Scoring.propTypes = {
 };
 
 Scoring.defaultProps = {
-  isSection: false
+  isSection: false,
+  showSelect: true
 };
 
 const enhance = compose(

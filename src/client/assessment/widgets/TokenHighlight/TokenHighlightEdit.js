@@ -1,7 +1,6 @@
 import React, { Fragment, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { cloneDeep } from "lodash";
-
 import { withNamespaces } from "@edulastic/localization";
 import { Paper, Tabs, Tab, CustomQuillComponent } from "@edulastic/common";
 
@@ -15,7 +14,7 @@ import { Subtitle } from "../../styled/Subtitle";
 import TokenHighlightPreview from "./TokenHighlightPreview";
 import { Container } from "./styled/Container";
 import { ModeButton } from "./styled/ModeButton";
-import AdvancedOptions from "../SortList/components/AdvancedOptions";
+import Options from "./components/Options";
 
 const OptionsList = withPoints(TokenHighlightPreview);
 
@@ -63,7 +62,7 @@ const TokenHighlightEdit = ({ item, setQuestionData, t }) => {
       setTemplate(resultArray);
     } else {
       newItem.templeWithTokens = item.templeWithTokens;
-      setTemplate(item.templeWithTokens);
+      setTemplate(cloneDeep(item.templeWithTokens));
     }
     setQuestionData(newItem);
   }, [mode]);
@@ -74,11 +73,11 @@ const TokenHighlightEdit = ({ item, setQuestionData, t }) => {
     if (prop === "template") {
       let resultArray = "";
       if (mode === WORD_MODE) {
-        resultArray = wordsArray;
+        resultArray = cloneDeep(wordsArray);
       } else if (mode === PARAGRAPH_MODE) {
-        resultArray = paragraphsArray;
+        resultArray = cloneDeep(paragraphsArray);
       } else {
-        resultArray = sentencesArray;
+        resultArray = cloneDeep(sentencesArray);
       }
       setTemplate(resultArray);
     }
@@ -96,13 +95,6 @@ const TokenHighlightEdit = ({ item, setQuestionData, t }) => {
     newItem.templeWithTokens = newTemplate;
 
     setTemplate(newTemplate);
-    setQuestionData(newItem);
-  };
-
-  const handleUiStyleChange = (prop, uiStyle) => {
-    const newItem = cloneDeep(item);
-
-    newItem.ui_style[prop] = uiStyle;
     setQuestionData(newItem);
   };
 
@@ -186,6 +178,7 @@ const TokenHighlightEdit = ({ item, setQuestionData, t }) => {
 
         {templateTab === 0 && (
           <CustomQuillComponent
+            firstFocus={item.firstMount === undefined}
             toolbarId="template"
             onChange={val => handleItemChangeChange("template", val)}
             showResponseBtn={false}
@@ -239,7 +232,7 @@ const TokenHighlightEdit = ({ item, setQuestionData, t }) => {
         />
       </Paper>
 
-      <AdvancedOptions onUiChange={handleUiStyleChange} />
+      <Options />
     </Fragment>
   );
 };

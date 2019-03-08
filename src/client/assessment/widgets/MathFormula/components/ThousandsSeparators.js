@@ -37,7 +37,7 @@ const ThousandsSeparators = ({ separators, onChange, onAdd, onDelete, t }) => {
                     </Select.Option>
                   ))}
                 </Select>
-                <IconTrash onClick={() => onDelete(i)} width={22} height={22} />
+                {onDelete && <IconTrash onClick={() => onDelete(i)} width={22} height={22} />}
               </FlexContainer>
             </Col>
           </Row>

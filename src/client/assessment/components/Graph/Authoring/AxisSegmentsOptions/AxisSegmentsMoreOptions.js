@@ -16,7 +16,7 @@ import {
 } from "../../common/styled_components";
 import FontSizeDropdown from "../AxisLabelsLayoutSettings/FontSizeDropdown";
 import RenderingBaseDropdown from "../AxisLabelsLayoutSettings/RenderingBaseDropdown";
-import { QuestionSection } from "../";
+import { QuestionSection, ScoreSettings, SegmentsToolsSettings } from "../";
 
 class AxisSegmentsMoreOptions extends Component {
   state = {
@@ -26,6 +26,12 @@ class AxisSegmentsMoreOptions extends Component {
     labelDisplaySpecPoints: "",
     currentRenderingBaseItem: {}
   };
+
+  scoringTypes = [
+    { label: "Exact match", value: "exactMatch" },
+    { label: "Partial match", value: "partialMatch" },
+    { label: "Partial match v2", value: "partialMatchV2" }
+  ];
 
   handleNumberlineCheckboxChange = (name, checked) => {
     const { numberlineAxis, setNumberline } = this.props;
@@ -132,11 +138,19 @@ class AxisSegmentsMoreOptions extends Component {
       options,
       numberlineAxis,
       fillSections,
-      cleanSections
+      cleanSections,
+      setValidation,
+      graphData,
+      toolbar,
+      setControls
     } = this.props;
     const { layout, minWidth, currentRenderingBaseItem } = this.state;
     return (
       <Fragment>
+        <QuestionSection section="advanced" label="SCORING" cleanSections={cleanSections} fillSections={fillSections}>
+          <ScoreSettings scoringTypes={this.scoringTypes} setValidation={setValidation} graphData={graphData} />
+        </QuestionSection>
+
         <QuestionSection section="advanced" label="LAYOUT" cleanSections={cleanSections} fillSections={fillSections}>
           <MoreOptionsContainer>
             <MoreOptionsSubHeading>{t("component.graphing.layoutoptionstitle")}</MoreOptionsSubHeading>
@@ -268,6 +282,10 @@ class AxisSegmentsMoreOptions extends Component {
               </Col>
             </Row>
           </MoreOptionsContainer>
+        </QuestionSection>
+
+        <QuestionSection section="advanced" label="TOOLBAR" cleanSections={cleanSections} fillSections={fillSections}>
+          <SegmentsToolsSettings onChange={setControls} toolbar={toolbar} />
         </QuestionSection>
 
         <QuestionSection section="advanced" label="TICKS" cleanSections={cleanSections} fillSections={fillSections}>
@@ -407,7 +425,9 @@ AxisSegmentsMoreOptions.propTypes = {
   setOptions: PropTypes.func.isRequired,
   orientationList: PropTypes.array,
   fontSizeList: PropTypes.array,
-  renderingBaseList: PropTypes.array
+  renderingBaseList: PropTypes.array,
+  setValidation: PropTypes.func.isRequired,
+  graphData: PropTypes.object.isRequired
 };
 
 AxisSegmentsMoreOptions.defaultProps = {

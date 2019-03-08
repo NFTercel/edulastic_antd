@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Button } from "antd";
 import { IconEye, IconCheck, IconSource, IconSettings, IconEraseText } from "@edulastic/icons";
-import { blue, darkBlue, white, mobileWidth } from "@edulastic/colors";
+import { blue, darkBlue, white, mobileWidth, darkGrey } from "@edulastic/colors";
 import { withNamespaces } from "@edulastic/localization";
 import { withWindowSizes } from "@edulastic/common";
 import { connect } from "react-redux";
@@ -19,6 +19,7 @@ class SecondHeadBar extends Component {
     super(props);
 
     this.state = {
+      attempts: 0,
       option: false,
       breadcrumbData: [
         {
@@ -48,12 +49,32 @@ class SecondHeadBar extends Component {
     }
   };
 
+  handleCheckClick = () => {
+    const { changePreviewTab, allowedAttempts } = this.props;
+
+    if (this.state.attempts < allowedAttempts) {
+      this.setState({ attempts: ++this.state.attempts }, () => changePreviewTab("check"));
+    } else {
+      return;
+    }
+  };
+
   render() {
-    const { option, breadcrumbData } = this.state;
-    const { t, view, previewTab, onShowSource, onShowSettings, changePreviewTab, clearAnswers } = this.props;
+    const { option, breadcrumbData, attempts } = this.state;
+    const {
+      t,
+      view,
+      previewTab,
+      onShowSource,
+      onShowSettings,
+      changePreviewTab,
+      clearAnswers,
+      showCheckButton,
+      allowedAttempts
+    } = this.props;
 
     return (
-      <Container zIndex={option ? 10 : 1} position={option ? "fixed" : "unset"}>
+      <Container zIndex={option ? 1000 : 1} position={option ? "fixed" : "unset"}>
         {!option && <Breadcrumb data={breadcrumbData} style={{ position: "unset", width: "100%" }} />}
 
         <DisplayBlock>
@@ -91,15 +112,23 @@ class SecondHeadBar extends Component {
                 justifyContent: "flex-end"
               }}
             >
-              <Button onClick={() => changePreviewTab("check")}>
-                <ButtonLink
-                  color="primary"
-                  icon={<IconCheck color={option ? white : blue} width={16} height={16} />}
-                  style={{ color: option ? white : blue }}
-                >
-                  {t("component.questioneditor.buttonbar.checkanswer")}
-                </ButtonLink>
-              </Button>
+              {showCheckButton && (
+                <Button onClick={this.handleCheckClick}>
+                  <ButtonLink
+                    color="primary"
+                    icon={
+                      <IconCheck
+                        color={attempts >= allowedAttempts ? darkGrey : option ? white : blue}
+                        width={16}
+                        height={16}
+                      />
+                    }
+                    style={{ color: attempts >= allowedAttempts ? darkGrey : option ? white : blue }}
+                  >
+                    {t("component.questioneditor.buttonbar.checkanswer")}
+                  </ButtonLink>
+                </Button>
+              )}
               <Button onClick={() => changePreviewTab("show")}>
                 <ButtonLink
                   color="primary"
@@ -140,7 +169,9 @@ SecondHeadBar.propTypes = {
   onShowSettings: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
   breadcrumb: PropTypes.array,
-  clearAnswers: PropTypes.func.isRequired
+  clearAnswers: PropTypes.func.isRequired,
+  showCheckButton: PropTypes.bool.isRequired,
+  allowedAttempts: PropTypes.number.isRequired
 };
 
 SecondHeadBar.defaultProps = {

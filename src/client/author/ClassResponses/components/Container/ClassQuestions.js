@@ -1,18 +1,19 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import { compose } from "redux";
-
+import { keyBy as _keyBy } from "lodash";
 import { withWindowSizes } from "@edulastic/common";
 import { withNamespaces } from "@edulastic/localization";
-import TestItemPreview from "../../../../assessment/components/TestItemPreview";
-
-import { getRows } from "../../../sharedSelectors/itemDetail";
-import { getClassResponseSelector, getStudentResponseSelector } from "../../../sharedSelectors/classBoard";
+// actions
 import { receiveClassResponseAction, receiveTestActivitydAction } from "../../../src/actions/classBoard";
-
+// selectors
+import { getClassResponseSelector, getStudentResponseSelector } from "../../../Shared/Selectors/classBoard";
+// components
+import TestItemPreview from "../../../../assessment/components/TestItemPreview";
+import { getRows } from "../../../Shared/Selectors/itemDetail";
+// styled wrappers
 import { Content } from "./styled";
-import { keyBy as _keyBy } from "lodash";
 
 class ClassQuestions extends Component {
   componentDidMount() {
@@ -64,6 +65,7 @@ class ClassQuestions extends Component {
           if (userQuestion) {
             q.qIndex = ++qIndex;
             q.timespent = userQuestion.timespent;
+            q.studentName = currentStudent !== undefined ? currentStudent.studentName : null;
           }
         });
         if (qActivities.length > 0) {
@@ -83,9 +85,9 @@ class ClassQuestions extends Component {
         <TestItemPreview
           showFeedback
           cols={rows}
-          questions={questionsKeyed}
           preview="show"
           previewTab="show"
+          questions={questionsKeyed}
           verticalDivider={item.verticalDivider}
           scrolling={item.scrolling}
           style={{ width: "100%" }}

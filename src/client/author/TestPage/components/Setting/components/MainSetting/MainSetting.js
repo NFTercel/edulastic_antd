@@ -39,7 +39,7 @@ const {
   evalTypes,
   accessibilities,
   releaseGradeTypes,
-  releaseGradeKeys
+  releaseGradeLabels
 } = test;
 
 const { Option } = Select;
@@ -50,6 +50,8 @@ const testTypes = {
   [ASSESSMENT]: "Asessment",
   [PRACTICE]: "Practice"
 };
+
+const releaseGradeKeys = ["DONT_RELEASE", "SCORE_ONLY", "WITH_RESPONSE", "WITH_ANSWERS"];
 
 class MainSetting extends Component {
   constructor(props) {
@@ -84,12 +86,12 @@ class MainSetting extends Component {
       if (value === ASSESSMENT) {
         setMaxAttempts(1);
         setTestData({
-          releaseScore: test.releaseGradeKeys[0]
+          releaseScore: releaseGradeLabels.DONT_RELEASE
         });
       } else {
         setMaxAttempts(3);
         setTestData({
-          releaseScore: test.releaseGradeKeys[3]
+          releaseScore: releaseGradeLabels.WITH_ANSWERS
         });
       }
     }

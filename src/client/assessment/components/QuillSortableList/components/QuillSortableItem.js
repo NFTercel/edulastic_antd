@@ -14,7 +14,7 @@ const QuillSortableItem = SortableElement(({ value, onRemove, rOnly, onChange, f
     {label && <Label>{label}</Label>}
     <FlexContainer style={{ flex: 1 }}>
       <div className="main">
-        <DragHandle />
+        <DragHandle index={indx} />
         <CustomQuillComponent
           readOnly={rOnly}
           firstFocus={firstFocus}

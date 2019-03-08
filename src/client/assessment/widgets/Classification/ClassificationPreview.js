@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
-import { cloneDeep, isEqual, difference } from "lodash";
+import { cloneDeep, isEqual, difference, get } from "lodash";
 import { compose } from "redux";
 import { withTheme } from "styled-components";
 
@@ -11,7 +11,8 @@ import {
   Stimulus,
   Subtitle,
   CenteredText,
-  InstructorStimulus
+  InstructorStimulus,
+  MathFormulaDisplay
 } from "@edulastic/common";
 import { withNamespaces } from "@edulastic/localization";
 
@@ -22,6 +23,7 @@ import DragItem from "./components/DragItem";
 import { IndexBox } from "./styled/IndexBox";
 import TableRow from "./components/TableRow";
 import { getStyles } from "./utils";
+import { getFontSize, getDirection } from "../../utils/helpers";
 
 const ClassificationPreview = ({
   view,
@@ -121,8 +123,14 @@ const ClassificationPreview = ({
   const boxes = createEmptyArrayOfArrays();
 
   const onDrop = (itemCurrent, itemTo) => {
+    const columnCount = get(item, "ui_style.column_count", 0);
+
     const dItems = cloneDeep(dragItems);
     const ansArrays = cloneDeep(answers);
+
+    if (ansArrays[itemTo.index].length >= columnCount) {
+      return;
+    }
 
     if (itemTo.flag === "dragItems") {
       ansArrays.forEach(arr => {
@@ -204,70 +212,118 @@ const ClassificationPreview = ({
 
   const arrayOfCols = transformArray(validArray);
 
+  const listPosition = get(item, "ui_style.possibility_list_position", "bottom");
+  const rowHeader = get(item, "ui_style.row_header", null);
+  const fontSize = getFontSize(get(item, "ui_style.fontsize", "normal"));
+
+  const wrapperStyle = {
+    display: "flex",
+    flexDirection: getDirection(listPosition)
+  };
+
   return (
-    <Paper padding={smallSize} boxShadow={smallSize ? "none" : ""}>
+    <Paper style={{ fontSize }} padding={smallSize} boxShadow={smallSize ? "none" : ""}>
       <InstructorStimulus>{item.instructor_stimulus}</InstructorStimulus>
-      {!smallSize && view === PREVIEW && (
-        <Stimulus>
-          <div dangerouslySetInnerHTML={{ __html: stimulus }} />
-        </Stimulus>
-      )}
+      {!smallSize && view === PREVIEW && <Stimulus dangerouslySetInnerHTML={{ __html: stimulus }} />}
 
-      <table style={{ width: "100%" }}>
-        <thead>
-          <tr>
-            {rowTitles.length > 0 && <th />}
-            {colTitles.slice(0, colCount).map((ite, ind) => (
-              <th key={ind}>
-                <CenteredText dangerouslySetInnerHTML={{ __html: ite }} />
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {boxes.map(
-            (n, ind) =>
-              arrayOfRows.has(ind) && (
-                <TableRow
-                  key={ind}
-                  startIndex={ind}
-                  colCount={colCount}
-                  arrayOfRows={arrayOfRows}
-                  rowTitles={rowTitles}
-                  drop={drop}
-                  answers={answers}
-                  validArray={valRespArr}
-                  preview={preview}
-                  possible_responses={possible_responses}
-                  onDrop={onDrop}
-                />
-              )
-          )}
-        </tbody>
-      </table>
+      <div style={wrapperStyle}>
+        <table style={{ width: "100%", flexGrow: 2 }}>
+          <thead>
+            {rowHeader && (
+              <tr>
+                <th colSpan={2} dangerouslySetInnerHTML={{ __html: rowHeader }} />
+              </tr>
+            )}
+            <tr>
+              {rowTitles.length > 0 && <th />}
+              {colTitles.slice(0, colCount).map((ite, ind) => (
+                <th key={ind}>
+                  <CenteredText dangerouslySetInnerHTML={{ __html: ite }} />
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {boxes.map(
+              (n, ind) =>
+                arrayOfRows.has(ind) && (
+                  <TableRow
+                    key={ind}
+                    startIndex={ind}
+                    width={get(item, "ui_style.row_titles_width", "100%")}
+                    height={get(item, "ui_style.row_min_height", "150px")}
+                    colCount={colCount}
+                    arrayOfRows={arrayOfRows}
+                    rowTitles={rowTitles}
+                    drop={drop}
+                    answers={answers}
+                    validArray={valRespArr}
+                    preview={preview}
+                    possible_responses={possible_responses}
+                    onDrop={onDrop}
+                  />
+                )
+            )}
+          </tbody>
+        </table>
 
-      {dragItems.length > 0 && (
-        <CorrectAnswersContainer title={t("component.classification.dragItemsTitle")}>
-          <DropContainer flag="dragItems" drop={drop} style={styles.dragItemsContainerStyle} noBorder>
-            <FlexContainer style={{ width: "100%" }} alignItems="stretch" justifyContent="center">
-              {group_possible_responses ? (
-                possible_response_groups.map((i, index) => (
-                  <Fragment key={index}>
+        {dragItems.length > 0 && (
+          <CorrectAnswersContainer title={t("component.classification.dragItemsTitle")}>
+            <DropContainer flag="dragItems" drop={drop} style={styles.dragItemsContainerStyle} noBorder>
+              <FlexContainer style={{ width: "100%" }} alignItems="stretch" justifyContent="center">
+                {group_possible_responses ? (
+                  possible_response_groups.map((i, index) => (
+                    <Fragment key={index}>
+                      <FlexContainer
+                        style={{ flex: 1 }}
+                        flexDirection="column"
+                        alignItems="center"
+                        justifyContent="flex-start"
+                      >
+                        <Subtitle
+                          style={{
+                            color: theme.widgets.classification.previewSubtitleColor
+                          }}
+                        >
+                          {i.title}
+                        </Subtitle>
+                        <FlexContainer justifyContent="center" style={{ width: "100%", flexWrap: "wrap" }}>
+                          {i.responses.map(
+                            (ite, ind) =>
+                              dragItems.includes(ite) && (
+                                <DragItem
+                                  key={ind}
+                                  preview={preview}
+                                  renderIndex={possible_responses.indexOf(ite)}
+                                  onDrop={onDrop}
+                                  item={ite}
+                                />
+                              )
+                          )}
+                        </FlexContainer>
+                      </FlexContainer>
+                      {index !== possible_response_groups.length - 1 && (
+                        <div
+                          style={{
+                            width: 0,
+                            marginLeft: 35,
+                            marginRight: 35,
+                            borderLeft: `1px solid ${theme.widgets.classification.separatorBorderColor}`
+                          }}
+                        />
+                      )}
+                    </Fragment>
+                  ))
+                ) : (
+                  <Fragment>
                     <FlexContainer
                       style={{ flex: 1 }}
                       flexDirection="column"
                       alignItems="center"
                       justifyContent="flex-start"
                     >
-                      <Subtitle
-                        style={{
-                          color: theme.widgets.classification.previewSubtitleColor
-                        }}
-                      >
-                        {i.title}
-                      </Subtitle>
                       <FlexContainer justifyContent="center" style={{ width: "100%", flexWrap: "wrap" }}>
-                        {i.responses.map(
+                        {dragItems.map(
                           (ite, ind) =>
                             dragItems.includes(ite) && (
                               <DragItem
@@ -281,73 +337,39 @@ const ClassificationPreview = ({
                         )}
                       </FlexContainer>
                     </FlexContainer>
-                    {index !== possible_response_groups.length - 1 && (
-                      <div
-                        style={{
-                          width: 0,
-                          marginLeft: 35,
-                          marginRight: 35,
-                          borderLeft: `1px solid ${theme.widgets.classification.separatorBorderColor}`
-                        }}
-                      />
-                    )}
                   </Fragment>
-                ))
-              ) : (
-                <Fragment>
-                  <FlexContainer
-                    style={{ flex: 1 }}
-                    flexDirection="column"
-                    alignItems="center"
-                    justifyContent="flex-start"
-                  >
-                    <FlexContainer justifyContent="center" style={{ width: "100%", flexWrap: "wrap" }}>
-                      {dragItems.map(
-                        (ite, ind) =>
-                          dragItems.includes(ite) && (
-                            <DragItem
-                              key={ind}
-                              preview={preview}
-                              renderIndex={possible_responses.indexOf(ite)}
-                              onDrop={onDrop}
-                              item={ite}
-                            />
-                          )
-                      )}
-                    </FlexContainer>
-                  </FlexContainer>
-                </Fragment>
-              )}
-            </FlexContainer>
-          </DropContainer>
-        </CorrectAnswersContainer>
-      )}
+                )}
+              </FlexContainer>
+            </DropContainer>
+          </CorrectAnswersContainer>
+        )}
 
-      {previewTab === SHOW && (
-        <CorrectAnswersContainer title={t("component.classification.correctAnswers")}>
-          {arrayOfCols.map((arr, i) => (
-            <FlexContainer>
-              <Subtitle style={styles.correctAnswersMargins}>
-                <div dangerouslySetInnerHTML={{ __html: colTitles[i] }} />
-              </Subtitle>
-              {arr.map(index => (
-                <div style={styles.itemContainerStyle} key={index}>
-                  <IndexBox preview={preview}>{index + 1}</IndexBox>
-                  <div
-                    style={getStyles(
-                      false,
-                      theme.widgets.classification.boxBgColor,
-                      theme.widgets.classification.boxBorderColor,
-                      styles.previewItemStyle
-                    )}
-                    dangerouslySetInnerHTML={{ __html: posResp[index] }}
-                  />
-                </div>
-              ))}
-            </FlexContainer>
-          ))}
-        </CorrectAnswersContainer>
-      )}
+        {previewTab === SHOW && (
+          <CorrectAnswersContainer title={t("component.classification.correctAnswers")}>
+            {arrayOfCols.map((arr, i) => (
+              <FlexContainer>
+                <Subtitle style={styles.correctAnswersMargins}>
+                  <MathFormulaDisplay dangerouslySetInnerHTML={{ __html: colTitles[i] }} />
+                </Subtitle>
+                {arr.map(index => (
+                  <div style={styles.itemContainerStyle} key={index}>
+                    <IndexBox preview={preview}>{index + 1}</IndexBox>
+                    <MathFormulaDisplay
+                      style={getStyles(
+                        false,
+                        theme.widgets.classification.boxBgColor,
+                        theme.widgets.classification.boxBorderColor,
+                        styles.previewItemStyle
+                      )}
+                      dangerouslySetInnerHTML={{ __html: posResp[index] }}
+                    />
+                  </div>
+                ))}
+              </FlexContainer>
+            ))}
+          </CorrectAnswersContainer>
+        )}
+      </div>
     </Paper>
   );
 };

@@ -3,11 +3,9 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import { get } from "lodash";
-import { Checkbox, Select } from "antd";
 import { withTheme } from "styled-components";
 
 import { withNamespaces } from "@edulastic/localization";
-import { math } from "@edulastic/constants";
 import { CustomQuillComponent } from "@edulastic/common";
 import { setQuestionDataAction, getQuestionDataSelector } from "../../../author/QuestionEditor/ducks";
 
@@ -109,33 +107,6 @@ const Extras = ({ t, children, theme }) => {
       </Row>
 
       {children}
-
-      <Row gutter={36}>
-        <Col md={12}>
-          <Checkbox checked={item.is_math} onChange={e => _change("is_math", e.target.checked)}>
-            {t("component.options.containsMath")}
-          </Checkbox>
-        </Col>
-
-        {item.is_math && (
-          <Col md={12}>
-            <Label>{t("component.options.mathRenderer")}</Label>
-            <Select
-              size="large"
-              value={item.math_renderer || ""}
-              style={{ width: "100%" }}
-              onChange={val => _change("math_renderer", val)}
-            >
-              {Array.isArray(math.mathRenderOptions) &&
-                math.mathRenderOptions.map(({ value: val, label }) => (
-                  <Select.Option key={val} value={val}>
-                    {label}
-                  </Select.Option>
-                ))}
-            </Select>
-          </Col>
-        )}
-      </Row>
     </Block>
   );
 };

@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { cloneDeep } from "lodash";
-import { withTheme } from "styled-components";
+import styled, { withTheme } from "styled-components";
 
-import { helpers } from "@edulastic/common";
+import { helpers, WithMathFormula } from "@edulastic/common";
 
 import MatrixCell from "../MatrixCell";
 import { StyledTable } from "./styled/StyledTable";
@@ -142,13 +142,14 @@ const Matrix = ({ stems, options, response, isMultiple, onCheck, uiStyle, valida
       ""
     );
 
+    const MathSpan = WithMathFormula(styled.span``);
     let columns = [
       {
         title: stemTitle,
         dataIndex: "stem",
         key: "stem",
         width: uiStyle.stem_width || null,
-        render: stem => <span dangerouslySetInnerHTML={{ __html: stem }} />
+        render: stem => <MathSpan dangerouslySetInnerHTML={{ __html: stem }} />
       },
       {
         title: optionRowTitle,
@@ -163,7 +164,7 @@ const Matrix = ({ stems, options, response, isMultiple, onCheck, uiStyle, valida
           title: "",
           dataIndex: "numeration",
           key: "numeration",
-          render: stem => <span dangerouslySetInnerHTML={{ __html: stem }} />
+          render: stem => <MathSpan dangerouslySetInnerHTML={{ __html: stem }} />
         },
         ...columns
       ];

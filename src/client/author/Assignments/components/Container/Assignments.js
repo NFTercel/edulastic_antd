@@ -34,8 +34,8 @@ class Assignments extends Component {
   }
 
   handleCreate = () => {
-    const { history, match } = this.props;
-    history.push(`${match.url}/create`);
+    const { history } = this.props;
+    history.push("/author/assessments/create");
   };
 
   render() {

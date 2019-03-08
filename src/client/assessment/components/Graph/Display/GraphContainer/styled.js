@@ -124,6 +124,32 @@ export const SegmentsToolBtn = styled.li`
     }
   }
 
+  &.disabled {
+    background-color: rgba(0, 0, 0, 0.15);
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.15);
+    }
+
+    .dd-header-title svg {
+      color: ${svgDisabledColor};
+      stroke: ${svgDisabledColor};
+      fill: ${svgDisabledColor};
+    }
+
+    .tool-btn-icon svg {
+      color: ${svgDisabledColor};
+      stroke: ${svgDisabledColor};
+      fill: ${svgDisabledColor};
+    }
+
+    svg {
+      color: ${svgDisabledColor};
+      stroke: ${svgDisabledColor};
+      fill: ${svgDisabledColor};
+    }
+  }
+
   svg {
     color: ${secondaryTextColor};
     stroke: ${secondaryTextColor};

@@ -9,7 +9,8 @@ const SegmentsTools = ({
   getIconByToolName,
   graphType,
   responsesAllowed,
-  elementsNumber
+  elementsNumber,
+  toolbar
 }) => {
   const segmentsTools = [
     "segmentsPoint",
@@ -20,15 +21,21 @@ const SegmentsTools = ({
     "infinityToIncludedSegment",
     "includedToInfinitySegment",
     "infinityToNotIncludedSegment",
-    "notIncludedToInfinitySegment",
-    "trash"
+    "notIncludedToInfinitySegment"
   ];
 
-  const uiTools = segmentsTools.map((tool, index) => ({
-    name: tool,
-    index,
-    groupIndex: -1
-  }));
+  const uiTools =
+    toolbar.length > 0
+      ? toolbar.map((tool, index) => ({
+          name: tool,
+          index,
+          groupIndex: -1
+        }))
+      : segmentsTools.map((tool, index) => ({
+          name: tool,
+          index,
+          groupIndex: -1
+        }));
 
   const isActive = uiTool => uiTool.index === tool.index && uiTool.groupIndex === tool.groupIndex;
 
@@ -65,7 +72,7 @@ const SegmentsTools = ({
   };
 
   const getIconTemplate = (toolName = "point", options) => getIconByToolName(toolName, options);
-  console.log("Elements number: ", elementsNumber);
+
   return (
     <GraphToolbar fontSize={fontSize}>
       {uiTools.map(
@@ -89,6 +96,21 @@ const SegmentsTools = ({
             </SegmentsToolBtn>
           )
       )}
+      <SegmentsToolBtn
+        style={{ width: fontSize > 20 ? 105 : 93, marginLeft: "auto" }}
+        className={getToolClassName({ name: "trash", groupIndex: -1, index: uiTools.length })}
+        onClick={getToolClickHandler({ name: "trash", groupIndex: -1, index: uiTools.length })}
+      >
+        <SegmentsToolbarItem>
+          <ToolbarItemIcon className="tool-btn-icon" style={{ marginBottom: fontSize / 2 }}>
+            {getIconTemplate("trash", {
+              width: fontSize + 2,
+              height: fontSize + 2,
+              color: ""
+            })}
+          </ToolbarItemIcon>
+        </SegmentsToolbarItem>
+      </SegmentsToolBtn>
     </GraphToolbar>
   );
 };

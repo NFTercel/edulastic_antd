@@ -24,7 +24,7 @@ import {
   getItemDetailDimensionTypeSelector
 } from "../../ducks";
 
-import { getQuestionsSelector } from "../../../sharedDucks/questions";
+import { getQuestionsSelector } from "../../../Shared/Ducks/questions";
 import { Content, ItemDetailWrapper, PreviewContent } from "./styled";
 import { loadQuestionAction } from "../../../QuestionEditor/ducks";
 import ItemDetailRow from "../ItemDetailRow";

@@ -3,13 +3,12 @@ import PropTypes from "prop-types";
 import { Col, Select, Input, Checkbox } from "antd";
 
 import { typedList as types, math } from "@edulastic/constants";
+import { MathKeyboard } from "@edulastic/common";
 import { withNamespaces } from "@edulastic/localization";
 
 import { Block } from "../../styled/WidgetOptions/Block";
 import { Heading } from "../../styled/WidgetOptions/Heading";
 import { Label } from "../../styled/WidgetOptions/Label";
-
-import { NUMBER_PAD_ITEMS } from "../../constants/numberPadItems";
 
 import TypedList from "../TypedList";
 import NumberPad from "../NumberPad";
@@ -64,11 +63,11 @@ const KeyPadOptions = ({ t, onChange, item }) => {
 
   const getNumberPad = () => {
     if (!item.numberPad || !item.numberPad.length) {
-      onChange("numberPad", NUMBER_PAD_ITEMS.map(({ value }) => value));
-      return NUMBER_PAD_ITEMS;
+      onChange("numberPad", MathKeyboard.NUMBER_PAD_ITEMS.map(({ value }) => value));
+      return MathKeyboard.NUMBER_PAD_ITEMS;
     }
     return item.numberPad.map(num => {
-      const res = NUMBER_PAD_ITEMS.find(({ value }) => num === value);
+      const res = MathKeyboard.NUMBER_PAD_ITEMS.find(({ value }) => num === value);
 
       return res || { value: "", label: t("component.options.empty") };
     });

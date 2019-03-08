@@ -15,6 +15,7 @@ import { WithIndex } from "./styled/WithIndex";
 import { TextEmpty } from "./styled/TextEmpty";
 import { IconCheck } from "./styled/IconCheck";
 import { IconClose } from "./styled/IconClose";
+import { MathFormulaDisplay } from "@edulastic/common";
 
 function collectSource(connector, monitor) {
   return {
@@ -77,7 +78,7 @@ const DragItem = ({
           <Text checkStyle={!active && showPreview} correct={correct} smallSize={smallSize}>
             <FlexCenter>
               {showPreview ? <WithIndex>{index + 1}</WithIndex> : ""}
-              <div dangerouslySetInnerHTML={{ __html: obj }} />
+              <MathFormulaDisplay dangerouslySetInnerHTML={{ __html: obj }} />
             </FlexCenter>
             {showPreview && (
               <div>

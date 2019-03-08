@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import PropTypes from "prop-types";
-import { cloneDeep } from "lodash";
-import { Checkbox, Col, Input, Row } from "antd";
+import { cloneDeep, get } from "lodash";
+import { Checkbox, Input } from "antd";
 
 import { withNamespaces } from "@edulastic/localization";
 import { Paper, FlexContainer } from "@edulastic/common";
@@ -15,6 +15,18 @@ import QuestionTextArea from "../../../components/QuestionTextArea";
 import WordLimitAndCount from "../../../components/WordLimitAndCount";
 import { Subtitle } from "../../../styled/Subtitle";
 import Extras from "../../../containers/Extras";
+import {
+  Layout,
+  PlaceholderOption,
+  FontSizeOption,
+  MinHeightOption,
+  MaxHeightOption,
+  SpecialCharactersOption,
+  BrowserSpellcheckOption,
+  CharactersToDisplayOption
+} from "../../../containers/WidgetOptions/components";
+import { Row } from "../../../styled/WidgetOptions/Row";
+import { Col } from "../../../styled/WidgetOptions/Col";
 
 const EditEssayPlainText = ({ item, setQuestionData, t }) => {
   const handleItemChangeChange = (prop, uiStyle) => {
@@ -28,6 +40,17 @@ const EditEssayPlainText = ({ item, setQuestionData, t }) => {
     const newItem = cloneDeep(item);
 
     newItem.validation[prop] = uiStyle;
+    setQuestionData(newItem);
+  };
+
+  const handleUIStyleChange = (prop, val) => {
+    const newItem = cloneDeep(item);
+
+    if (!newItem.ui_style) {
+      newItem.ui_style = {};
+    }
+
+    newItem.ui_style[prop] = val;
     setQuestionData(newItem);
   };
 
@@ -113,6 +136,71 @@ const EditEssayPlainText = ({ item, setQuestionData, t }) => {
         >
           {t("component.essayText.submitOverLimit")}
         </Checkbox>
+
+        <Layout>
+          <Row gutter={36}>
+            <Col md={12}>
+              <SpecialCharactersOption
+                onChange={checked => {
+                  if (checked) {
+                    handleItemChangeChange("character_map", []);
+                  } else {
+                    handleItemChangeChange("character_map", undefined);
+                  }
+                }}
+                checked={!!item.character_map}
+              />
+            </Col>
+            <Col md={12}>
+              <BrowserSpellcheckOption
+                onChange={checked => handleItemChangeChange("spellcheck", checked)}
+                checked={!!item.spellcheck}
+              />
+            </Col>
+          </Row>
+
+          {Array.isArray(item.character_map) && (
+            <Row gutter={36}>
+              <Col md={12}>
+                <CharactersToDisplayOption
+                  onChange={val => handleItemChangeChange("character_map", val.split(""))}
+                  value={item.character_map.join("")}
+                />
+              </Col>
+            </Row>
+          )}
+
+          <Row gutter={36}>
+            <Col md={12}>
+              <MinHeightOption
+                onChange={val => handleUIStyleChange("min_height", +val)}
+                value={get(item, "ui_style.min_height", 0)}
+              />
+            </Col>
+            <Col md={12}>
+              <MaxHeightOption
+                onChange={val => handleUIStyleChange("max_height", +val)}
+                value={get(item, "ui_style.max_height", 0)}
+              />
+            </Col>
+          </Row>
+
+          <Row gutter={36}>
+            <Col md={12}>
+              <PlaceholderOption
+                onChange={val => handleItemChangeChange("placeholder", val)}
+                value={item.placeholder}
+              />
+            </Col>
+            <Col md={12}>
+              <FontSizeOption
+                onChange={val => handleUIStyleChange("fontsize", val)}
+                value={get(item, "ui_style.fontsize", "normal")}
+              />
+            </Col>
+          </Row>
+        </Layout>
+
         <Extras>
           <Extras.Distractors />
           <Extras.Hints />

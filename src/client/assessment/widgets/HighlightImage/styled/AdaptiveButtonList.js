@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { mobileWidth } from "@edulastic/colors";
+import styled from 'styled-components';
+import { mobileWidth } from '@edulastic/colors';
 
 export const AdaptiveButtonList = styled.div`
   display: flex;
@@ -13,12 +13,12 @@ export const AdaptiveButtonList = styled.div`
   & > *:last-child {
     margin-right: 0;
   }
-
+  
   @media (max-width: ${mobileWidth}) {
     flex-direction: column;
     align-items: center;
     width: 100%;
-
+    
     & > * {
       margin-right: 0px;
     }

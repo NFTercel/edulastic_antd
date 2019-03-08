@@ -12,7 +12,7 @@ import ItemsTable from "../ReviewItemsTable/ReviewItemsTable";
 import { getItemsTypesSelector, getStandardsSelector } from "../../ducks";
 import { setTestDataAction } from "../../../../ducks";
 import { getSummarySelector } from "../../../Summary/ducks";
-import { getQuestionsSelector } from "../../../../../sharedDucks/questions";
+import { getQuestionsSelector } from "../../../../../Shared/Ducks/questions";
 import { Calculator, Photo } from "../../../common";
 import Breadcrumb from "../../../../../src/components/Breadcrumb";
 import { SecondHeader } from "./styled";

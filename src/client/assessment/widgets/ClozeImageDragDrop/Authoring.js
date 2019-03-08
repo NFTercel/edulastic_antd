@@ -142,16 +142,7 @@ class Authoring extends Component {
 
   render() {
     const { t, item, theme } = this.props;
-    const {
-      maxRespCount,
-      responseLayout,
-      background,
-      imageAlterText,
-      isEditAriaLabels,
-      imageTitle,
-      responses,
-      imageWidth
-    } = item;
+    const { maxRespCount, responseLayout, background, imageAlterText, isEditAriaLabels, responses, imageWidth } = item;
 
     const { isColorPickerVisible } = this.state;
     const hasActive = item.responses && item.responses.filter(it => it.active === true).length > 0;
@@ -221,15 +212,6 @@ class Authoring extends Component {
                 </ColorPickerContainer>
               )}
               <PaddingDiv left={20}>{t("component.cloze.imageDragDrop.fillcolor")}</PaddingDiv>
-            </div>
-            <div style={{ alignItems: "center" }}>
-              <Input
-                size="large"
-                style={{ width: 220 }}
-                defaultValue={imageTitle}
-                onChange={val => this.onItemPropChange("imageTitle", val.target.value)}
-              />
-              <PaddingDiv left={20}>{t("component.clozeImageDragDrop.textonhover")}</PaddingDiv>
             </div>
             <div style={{ alignItems: "center" }}>
               <InputNumber

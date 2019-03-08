@@ -1,13 +1,13 @@
-import API from '@edulastic/api/src/utils/API';
+import API from "@edulastic/api/src/utils/API";
 
 const api = new API();
-const prefix = '/test-activity';
+const prefix = "/test-activity";
 
 const create = data =>
   api
     .callApi({
       url: prefix,
-      method: 'post',
+      method: "post",
       data
     })
     .then(result => result.data.result);
@@ -16,16 +16,16 @@ const fetchReports = () =>
   api
     .callApi({
       url: `${prefix}/?status=graded`,
-      method: 'get'
+      method: "get"
     })
     .then(result => result.data.result);
 
-const submit = testActivityId =>
+const submit = (testActivityId, groupId) =>
   api
     .callApi({
       url: `${prefix}/${testActivityId}/status`,
-      method: 'put',
-      data: { status: 1 }
+      method: "put",
+      data: { status: 1, groupId }
     })
     .then(result => result.data);
 
@@ -33,7 +33,7 @@ const previousResponses = testActivityId =>
   api
     .callApi({
       url: `${prefix}/${testActivityId}/previousResponses`,
-      method: 'get'
+      method: "get"
     })
     .then(result => result.data.result);
 
@@ -41,7 +41,7 @@ const getById = testActivityId =>
   api
     .callApi({
       url: `${prefix}/${testActivityId}`,
-      method: 'get'
+      method: "get"
     })
     .then(result => result.data.result);
 

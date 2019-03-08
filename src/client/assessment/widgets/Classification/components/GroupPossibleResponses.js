@@ -21,7 +21,7 @@ const GroupPossibleResponses = ({ checkboxChange, checkboxVal, items, t, firstFo
       </Checkbox>
       <Row gutter={70}>
         {items.map((item, index) => (
-          <Col key={index} span={12}>
+          <Col data-cy={`group-container-${index}`} key={index} span={12}>
             <Group
               prefix={`group${index}`}
               item={item}

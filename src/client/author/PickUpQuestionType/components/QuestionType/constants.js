@@ -856,8 +856,8 @@ export const getCards = onSelectQuestionType => {
           default_control: "undo"
         },
         toolbar: {
-          tools: ["segmentsPoint"],
-          default_tool: "segmentsPoint"
+          tools: [],
+          default_tool: null
         },
         numberlineAxis: {
           leftArrow: false,
@@ -932,7 +932,8 @@ export const getCards = onSelectQuestionType => {
           valid_response: {
             score: 1,
             value: []
-          }
+          },
+          alt_responses: []
         }
       },
       onSelectQuestionType
@@ -973,9 +974,9 @@ export const getCards = onSelectQuestionType => {
               .substr(2, 9)}`
           }
         ],
-        controlbar: {
-          controls: ["undo", "redo"],
-          default_control: "undo"
+        toolbar: {
+          controls: [],
+          default_control: ""
         },
         stimulus: "[This is the stem. axisLabels]",
         validation: {
@@ -989,7 +990,8 @@ export const getCards = onSelectQuestionType => {
           valid_response: {
             score: 1,
             value: []
-          }
+          },
+          alt_responses: []
         },
         canvas: {
           x_max: 10,
@@ -1050,7 +1052,7 @@ export const getCards = onSelectQuestionType => {
           layout_snapto: "grid",
           xAxisLabel: "X",
           yAxisLabel: "Y",
-          title_position: 15,
+          title_position: 55,
           line_position: 34,
           point_box_position: 60
         },

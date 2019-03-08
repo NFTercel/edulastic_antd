@@ -5,7 +5,16 @@ import { withNamespaces } from "@edulastic/localization";
 import AxisLabelsMoreOptions from "./AxisLabelsMoreOptions";
 import { RENDERING_BASE, FRACTIONS_FORMAT } from "../../Builder/config/constants";
 
-const AxisLabelsOptions = ({ t, graphData, setOptions, setNumberline, setCanvas, fillSections, cleanSections }) => {
+const AxisLabelsOptions = ({
+  t,
+  graphData,
+  setOptions,
+  setNumberline,
+  setCanvas,
+  fillSections,
+  cleanSections,
+  setValidation
+}) => {
   const fontSizeList = [
     {
       id: "small",
@@ -83,6 +92,7 @@ const AxisLabelsOptions = ({ t, graphData, setOptions, setNumberline, setCanvas,
         setNumberline={setNumberline}
         renderingBaseList={renderingBaseList}
         fractionsFormatList={fractionsFormatList}
+        setValidation={setValidation}
       />
     </Fragment>
   );
@@ -95,7 +105,8 @@ AxisLabelsOptions.propTypes = {
   graphData: PropTypes.object.isRequired,
   setOptions: PropTypes.func.isRequired,
   setNumberline: PropTypes.func.isRequired,
-  setCanvas: PropTypes.func.isRequired
+  setCanvas: PropTypes.func.isRequired,
+  setValidation: PropTypes.func.isRequired
 };
 
 const enhance = compose(withNamespaces("assessment"));

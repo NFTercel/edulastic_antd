@@ -43,7 +43,7 @@ const Group = ({
     </Subtitle>
     <Input size="large" value={item.title} onChange={e => onTitleChange(index, e.target.value)} />
     <Subtitle>{text}</Subtitle>
-    <div style={{ marginBottom: 30 }}>
+    <div data-cy="group-choices" style={{ marginBottom: 30 }}>
       <List
         prefix={prefix}
         items={item.responses}

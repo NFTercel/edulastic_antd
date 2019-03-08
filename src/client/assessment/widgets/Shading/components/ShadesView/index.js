@@ -12,6 +12,9 @@ const ShadesView = ({
   colCount,
   onCellClick,
   shaded,
+  hidden,
+  border,
+  hover,
   correctAnswers,
   showAnswers,
   marginTop,
@@ -47,8 +50,21 @@ const ShadesView = ({
     ) !== -1;
 
   let count = -1;
+
+  const getVisibility = ({ rowIndex, columnIndex }) => {
+    let res = "visible";
+
+    hidden.forEach(([row, column]) => {
+      if (row === rowIndex && column === columnIndex) {
+        res = "hidden";
+      }
+    });
+
+    return res;
+  };
+
   return (
-    <Wrapper marginTop={marginTop}>
+    <Wrapper border={border} marginTop={marginTop}>
       {rowsArray.map((row, i) => (
         <Ul key={i}>
           {columnsArray.map((col, j) => {
@@ -60,6 +76,9 @@ const ShadesView = ({
                   isCorrectAnswer(i, j) ||
                   (!Array.isArray(correctAnswers[0]) && isShadeActive(i, j) && correctAnswers[0] > count)
                 }
+                border={border}
+                hover={hover}
+                visibility={getVisibility({ rowIndex: i, columnIndex: j })}
                 checkAnswers={checkAnswers}
                 showAnswers={showAnswers}
                 locked={isLockedIndexExists(i, j)}
@@ -84,6 +103,9 @@ ShadesView.propTypes = {
   colCount: PropTypes.number.isRequired,
   onCellClick: PropTypes.func.isRequired,
   shaded: PropTypes.array.isRequired,
+  hover: PropTypes.bool,
+  border: PropTypes.string,
+  hidden: PropTypes.array,
   lockedCells: PropTypes.any,
   correctAnswers: PropTypes.any,
   showAnswers: PropTypes.any,
@@ -94,9 +116,12 @@ ShadesView.propTypes = {
 ShadesView.defaultProps = {
   lockedCells: undefined,
   correctAnswers: [],
+  hidden: [],
   showAnswers: false,
   marginTop: undefined,
-  checkAnswers: false
+  checkAnswers: false,
+  border: "full",
+  hover: true
 };
 
 export default ShadesView;

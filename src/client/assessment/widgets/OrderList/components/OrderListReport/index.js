@@ -12,12 +12,14 @@ class OrderListReport extends Component {
   }
 
   render() {
-    const { validation, showAnswers, evaluation, list } = this.props;
+    const { validation, showAnswers, evaluation, list, listStyle } = this.props;
+
     return (
-      <div>
+      <div style={listStyle}>
         {this.rendererQuestions.map((q, i) => (
           <OrderListReportItem
             key={i}
+            listStyle={listStyle}
             correct={evaluation && evaluation[i]}
             correctText={showAnswers && list[validation.valid_response.value[i]]}
             showAnswers={showAnswers}
@@ -36,6 +38,7 @@ OrderListReport.propTypes = {
   questionsList: PropTypes.array.isRequired,
   list: PropTypes.array.isRequired,
   previewIndexesList: PropTypes.array.isRequired,
+  listStyle: PropTypes.object.isRequired,
   validation: PropTypes.object,
   showAnswers: PropTypes.bool,
   evaluation: PropTypes.array

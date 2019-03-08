@@ -4,22 +4,25 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Col, Icon } from "antd";
 import { cloneDeep as _cloneDeep, uniq as _uniq, curry as _curry } from "lodash";
+import { test } from "@edulastic/constants";
 import { SettingsBtn, StyledRowLabel, ModalWrapper, InitOptions } from "./styled";
 import ClassSelector from "./ClassSelector";
 import StudentSelector from "./StudentSelector";
 import DateSelector from "./DateSelector";
 import PolicySelector from "./PolicySelector";
+import TestTypeSelector from "./TestTypeSelector";
 import Footer from "./Footer";
 import { selectsData } from "../../../common";
-import { fetchGroupMembersAction, getStudentsSelector } from "../../../../../sharedDucks/groups";
+import { fetchGroupMembersAction, getStudentsSelector } from "../../../../../Shared/Ducks/groups";
 import { getCurrentAssignmentSelector, saveAssignmentAction } from "../../ducks";
 import Settings from "./Settings";
 import { getListOfStudents } from "../../utils";
 
+const { releaseGradeLabels, type } = test;
+
 const EditModal = ({ title, visible, onCancel, onOk, modalData, group, students, fetchStudents, saveAssignment }) => {
   let [showSettings, setSettings] = useState(false);
   let [assignment, updateAssignment] = useState(modalData);
-
   // toggle advanced settings
   const toggleSettings = () => setSettings(prev => !prev);
 
@@ -30,6 +33,27 @@ const EditModal = ({ title, visible, onCancel, onOk, modalData, group, students,
     });
     updateAssignment(nextState);
   };
+
+  const handleAssignmentTypeChange = testType => {
+    let nextState = { ...assignment, testType };
+    if (testType === type.PRACTICE) {
+      nextState = {
+        ...nextState,
+        maxAttempts: 3,
+        releaseScore: releaseGradeLabels.WITH_ANSWERS,
+        isGenerateReport: false
+      };
+    } else {
+      nextState = {
+        ...nextState,
+        maxAttempts: 1,
+        releaseScore: releaseGradeLabels.DONT_RELEASE,
+        isGenerateReport: true
+      };
+    }
+    updateAssignment(nextState);
+  };
+
   const changeField = _curry(onChange);
 
   const updateStudents = studentList => {
@@ -57,7 +81,6 @@ const EditModal = ({ title, visible, onCancel, onOk, modalData, group, students,
   const disabled = assignment.specificStudents
     ? !selectedStudents || selectedStudents.length == 0
     : !assignment.class.length;
-
   return (
     <ModalWrapper
       data-cy="title"
@@ -89,6 +112,12 @@ const EditModal = ({ title, visible, onCancel, onOk, modalData, group, students,
           closePolicy={assignment.closePolicy}
           changeField={changeField}
         />
+        <TestTypeSelector
+          testType={assignment.testType}
+          isGenerateReport={assignment.isGenerateReport}
+          onAssignmentTypeChange={handleAssignmentTypeChange}
+          onGenerateReportFieldChange={changeField("isGenerateReport")}
+        />
       </InitOptions>
       <StyledRowLabel gutter={16}>
         <Col>
@@ -98,7 +127,16 @@ const EditModal = ({ title, visible, onCancel, onOk, modalData, group, students,
         </Col>
       </StyledRowLabel>
 
-      {showSettings && <Settings modalData={modalData} onChange={onChange} selectsData={selectsData} />}
+      {showSettings && (
+        <Settings
+          selectsData={selectsData}
+          test={test}
+          releaseGradeType={assignment.releaseScore}
+          maxAttempts={assignment.maxAttempts}
+          onUpdateRleaseGradeType={changeField("releaseScore")}
+          onUpdateMaxAttempts={changeField("maxAttempts")}
+        />
+      )}
     </ModalWrapper>
   );
 };

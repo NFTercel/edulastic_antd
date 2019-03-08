@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { cloneDeep, difference } from "lodash";
+import { cloneDeep, difference, get } from "lodash";
 
 import { Paper, Stimulus, InstructorStimulus } from "@edulastic/common";
 import { withNamespaces } from "@edulastic/localization";
@@ -10,9 +10,12 @@ import { PREVIEW, CLEAR, CHECK, SHOW, EDIT } from "../../constants/constantsForQ
 import BlockContainer from "./styled/BlockContainer";
 import { Svg } from "./styled/Svg";
 import { Polygon } from "./styled/Polygon";
+import { getFontSize } from "../../utils/helpers";
 
 const HotspotPreview = ({ view, item, smallSize, saveAnswer, userAnswer, previewTab }) => {
   const { areas, area_attributes, image, validation, multiple_responses, previewAreas } = item;
+  const fontSize = getFontSize(get(item, "ui_style.fontsize"));
+  const maxWidth = get(item, "max_width", 900);
 
   const [isCheck, setIsCheck] = useState(false);
 
@@ -49,7 +52,7 @@ const HotspotPreview = ({ view, item, smallSize, saveAnswer, userAnswer, preview
     let collection = cloneDeep(validAnswer);
 
     altAnswers.forEach(answer => {
-      if (difference(answer.value, userAnswer).length === 0) {
+      if (difference(answer.value, userAnswer).length !== answer.value.length) {
         collection = cloneDeep(answer.value);
       }
     });
@@ -59,21 +62,19 @@ const HotspotPreview = ({ view, item, smallSize, saveAnswer, userAnswer, preview
 
   const allValidAnswers = validate();
 
-  const preview = previewTab === CHECK || previewTab === SHOW;
-
   return (
-    <Paper padding={smallSize} boxShadow={smallSize ? "none" : ""}>
+    <Paper style={{ fontSize }} padding={smallSize} boxShadow={smallSize ? "none" : ""}>
       <InstructorStimulus>{item.instructor_stimulus}</InstructorStimulus>
       {view === PREVIEW && !smallSize && <Stimulus dangerouslySetInnerHTML={{ __html: item.stimulus }} />}
 
       {!smallSize ? (
-        <BlockContainer justifyContent="center">
+        <BlockContainer style={{ maxWidth }} justifyContent="center">
           <Svg width={+width} height={+height}>
             <image href={source} width={+width} height={+height} preserveAspectRatio="none" x={0} y={0} />
             {areas.map((area, i) => (
               <Polygon
                 key={i}
-                showAnswer={view !== EDIT && preview}
+                showAnswer={view !== EDIT && ((previewTab === CHECK && userAnswer.includes(i)) || previewTab === SHOW)}
                 onClick={handleClick(i)}
                 points={area.map(point => `${point.x},${point.y}`).join(" ")}
                 selected={userAnswer.includes(i)}

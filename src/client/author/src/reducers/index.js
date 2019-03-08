@@ -6,8 +6,8 @@ import dictionaries from "./dictionaries";
 import author_assignments from "./assignments";
 import author_classboard_gradebook from "./gradeBook";
 import author_classboard_testActivity from "./testActivity";
-import authorGroups from "../../sharedDucks/groups";
-import authorQuestions from "../../sharedDucks/questions";
+import authorGroups from "../../Shared/Ducks/groups";
+import authorQuestions from "../../Shared/Ducks/questions";
 import classResponse from "./classResponse";
 import studentResponse from "./studentResponse";
 import feedbackResponse from "./feedbackResponse";
@@ -18,6 +18,7 @@ import { itemDetail } from "../../ItemDetail";
 import { question } from "../../QuestionEditor";
 import { testsAddItems } from "../../TestPage/components/AddItems";
 import { testAssignmentsReducer } from "../../TestPage/components/Assign";
+import { assessmentCreate } from "../../AssessmentCreate";
 
 const authorReducers = {
   authorUi,
@@ -39,7 +40,8 @@ const authorReducers = {
   studentResponse,
   feedbackResponse,
   tests,
-  testList
+  testList,
+  assessmentCreate
 };
 
 export default authorReducers;

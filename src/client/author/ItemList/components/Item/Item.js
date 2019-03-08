@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { get } from "lodash";
 import { withNamespaces } from "@edulastic/localization";
-import { MoveLink } from "@edulastic/common";
+import { MoveLink, MathFormulaDisplay } from "@edulastic/common";
 import { MAX_TAB_WIDTH } from "../../../src/constants/others";
 import {
   Container,
@@ -99,7 +99,7 @@ class Item extends Component {
         <Question>
           <QuestionContent>
             <MoveLink onClick={this.moveToItem}>{item._id}</MoveLink>
-            <div dangerouslySetInnerHTML={{ __html: this.description }} />
+            <MathFormulaDisplay dangerouslySetInnerHTML={{ __html: this.description }} />
           </QuestionContent>
           {windowWidth > MAX_TAB_WIDTH && (
             <ViewButton>

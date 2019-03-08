@@ -5,9 +5,9 @@ import { compose } from "redux";
 import { withRouter } from "react-router-dom";
 import { cloneDeep } from "lodash";
 import styled, { withTheme } from "styled-components";
-import { Paper } from "@edulastic/common";
-import { withNamespaces } from "@edulastic/localization";
-import { AdaptiveCloze } from "../ClozeDropDown/styled/AdaptiveCloze";
+import { Paper } from '@edulastic/common';
+import { withNamespaces } from '@edulastic/localization';
+import { AdaptiveCloze } from '../ClozeDropDown/styled/AdaptiveCloze';
 
 import { setQuestionDataAction } from "../../../author/QuestionEditor/ducks";
 
@@ -97,7 +97,9 @@ class ClozeText extends Component {
       <div>
         {view === "edit" && (
           <React.Fragment>
-            <AdaptiveCloze background={theme.widgets.clozeText.editViewBgColor}>
+            <AdaptiveCloze
+              background={theme.widgets.clozeText.editViewBgColor}
+            >
               <div className="authoring">
                 <Authoring item={itemForEdit} />
                 <CorrectAnswers

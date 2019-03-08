@@ -45,7 +45,6 @@ const onHandler = (board, xMin, xMax, settings, lineSettings) => {
 
   let { ticksDistance } = settings;
   const { fractionsFormat, showLabels, labelShowMax, labelShowMin, minorTicks } = settings;
-  console.log(settings);
   let fracTicksDistance = null;
   if (isString(ticksDistance) && ticksDistance.indexOf("/") !== -1) {
     fracTicksDistance = getFraction(ticksDistance);
@@ -110,9 +109,7 @@ const onHandler = (board, xMin, xMax, settings, lineSettings) => {
    * Minor ticks
    * */
   if (minorTicks) {
-    console.log("ticks", ticks);
     const minors = createMinorTicks(minorTicks, ticks.sort((a, b) => a - b));
-    console.log("minors", minors);
     board.$board.create("ticks", [newAxis, minors], {
       strokeColor: "#d6d6d6",
       highlightStrokeColor: "#d6d6d6",
@@ -134,15 +131,36 @@ const onHandler = (board, xMin, xMax, settings, lineSettings) => {
    * Ticks labels
    * */
   let labels = ticks.map(t => {
-    let res = null;
-    if (Number.isInteger(t)) {
-      res = t;
-    } else if (t >= 0) {
-      res = Math.floor(t * 100) / 100;
+    if (showLabels) {
+      let res = null;
+      if (Number.isInteger(t)) {
+        res = t;
+      } else if (t >= 0) {
+        res = Math.floor(t * 100) / 100;
+      } else {
+        res = Math.ceil(t * 100) / 100;
+      }
+      return res;
     } else {
-      res = Math.ceil(t * 100) / 100;
+      const tickArr = settings.specificPoints
+        .split(",")
+        .map(s => parseFloat(s))
+        .filter(num => isNaN(num) === false);
+
+      if (t === xMin || t === xMax || tickArr.some(specTick => specTick === t)) {
+        let res = null;
+        if (Number.isInteger(t)) {
+          res = t;
+        } else if (t >= 0) {
+          res = Math.floor(t * 100) / 100;
+        } else {
+          res = Math.ceil(t * 100) / 100;
+        }
+        return res;
+      } else {
+        return "";
+      }
     }
-    return res;
   });
 
   if (fracTicksDistance) {
@@ -152,20 +170,6 @@ const onHandler = (board, xMin, xMax, settings, lineSettings) => {
 
     labels = labels.map(t => toFractionHTML(t, fracTicksDistance.denominator, fractionsFormat));
   }
-
-  // todo: clear the code
-  console.log("labelShowMin", labelShowMin);
-  console.log("labelShowMax", labelShowMax);
-  console.log("labels", labels);
-  if (!labelShowMin) {
-    if (labels[0] !== 0) {
-      labels[0] = ""; // todo: clear the code
-    }
-  }
-  if (!labelShowMax) {
-    labels[labels.length - 1] = "";
-  }
-  console.log("labels", labels);
 
   board.$board.create("ticks", [newAxis, ticks], {
     straightFirst: false,
@@ -181,7 +185,7 @@ const onHandler = (board, xMin, xMax, settings, lineSettings) => {
     tickEndings: [1, 1],
     majorHeight: 25,
     minorHeight: 15,
-    drawLabels: showLabels,
+    drawLabels: true,
     ticksDistance,
     label: {
       offset: [0, -15],
@@ -195,11 +199,40 @@ const onHandler = (board, xMin, xMax, settings, lineSettings) => {
     labels
   });
 
+  if (!showLabels) {
+    newAxis.ticks[1].labels.forEach((label, index) => {
+      if (parseInt(label.htmlStr, 10) === 0) {
+        board.$board.removeObject(newAxis.ticks[1].labels[index]);
+      }
+    });
+  }
+
   if (!labelShowMin) {
-    if (labels[0] === 0) {
-      // console.log(newAxis)
-      // board.$board.removeObject(newAxis.ticks[0].labels[0]);
-    }
+    newAxis.ticks[1].labels.forEach((label, index) => {
+      let compareValue = label.htmlStr;
+
+      if (compareValue[0] === "−") {
+        compareValue = "-" + compareValue.substr(1, compareValue.length - 1);
+      }
+
+      if (parseInt(compareValue, 10) === xMin) {
+        board.$board.removeObject(newAxis.ticks[1].labels[index]);
+      }
+    });
+  }
+
+  if (!labelShowMax) {
+    newAxis.ticks[1].labels.forEach((label, index) => {
+      let compareValue = label.htmlStr;
+
+      if (compareValue[0] === "−") {
+        compareValue = "-" + compareValue.substr(1, compareValue.length - 1);
+      }
+
+      if (parseInt(compareValue, 10) === xMax) {
+        board.$board.removeObject(newAxis.ticks[1].labels[index]);
+      }
+    });
   }
 
   return newAxis;

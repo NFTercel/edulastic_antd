@@ -1,6 +1,6 @@
-import { mobileWidth } from "@edulastic/colors";
-import { Select } from "antd";
-import styled from "styled-components";
+import { mobileWidth } from '@edulastic/colors';
+import { Select } from 'antd';
+import styled from 'styled-components';
 
 export const AdaptiveSelect = styled(Select)`
   margin-top: 40px

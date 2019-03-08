@@ -73,7 +73,12 @@ module.exports = {
     WITH_RESPONSE: "Release scores and student responses",
     WITH_ANSWERS: "Release scores,student responses and correct answers"
   },
-  releaseGradeKeys: ["DONT_RELEASE", "SCORE_ONLY", "WITH_RESPONSE", "WITH_ANSWERS"],
+  releaseGradeLabels: {
+    DONT_RELEASE: "DONT_RELEASE",
+    SCORE_ONLY: "SCORE_ONLY",
+    WITH_RESPONSE: "WITH_RESPONSE",
+    WITH_ANSWERS: "WITH_ANSWERS"
+  },
   calculators: {
     NONE: "None",
     SCIENTIFIC: "Scientific",

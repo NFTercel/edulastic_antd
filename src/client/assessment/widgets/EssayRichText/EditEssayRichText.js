@@ -1,8 +1,8 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
-import { cloneDeep, isEqual } from "lodash";
+import { cloneDeep, isEqual, get } from "lodash";
 import ReactQuill from "react-quill";
-import { Checkbox, Row, Col, Input } from "antd";
+import { Checkbox, Input } from "antd";
 
 import { arrayMove } from "react-sortable-hoc";
 
@@ -21,8 +21,22 @@ import SortableList from "./components/SortableList";
 import { ValidList } from "./constants/validList";
 import { QlToolbar } from "./styled/QlToolbar";
 import Extras from "../../containers/Extras";
+import {
+  Layout,
+  FontSizeOption,
+  PlaceholderOption,
+  BrowserSpellcheckOption,
+  MinHeightOption,
+  MaxHeightOption,
+  SpecialCharactersOption,
+  CharactersToDisplayOption
+} from "../../containers/WidgetOptions/components";
+import { QuestionContext } from "../../components/QuestionWrapper";
+import { Row } from "../../styled/WidgetOptions/Row";
+import { Col } from "../../styled/WidgetOptions/Col";
 
 const EditEssayRichText = ({ item, setQuestionData, t }) => {
+  const { changeItem, changeUIStyle } = useContext(QuestionContext);
   const [act, setAct] = useState(item.formatting_options || []);
 
   useEffect(() => {
@@ -138,6 +152,71 @@ const EditEssayRichText = ({ item, setQuestionData, t }) => {
         >
           {t("component.essayText.submitOverLimit")}
         </Checkbox>
+        <Layout>
+          <Row gutter={36}>
+            <Col md={12}>
+              <SpecialCharactersOption
+                disabled
+                onChange={checked => {
+                  if (checked) {
+                    changeItem("character_map", []);
+                  } else {
+                    changeItem("character_map", undefined);
+                  }
+                }}
+                checked={!!item.character_map}
+              />
+            </Col>
+            {Array.isArray(item.character_map) && (
+              <Col md={12}>
+                <CharactersToDisplayOption
+                  disabled
+                  onChange={val => changeItem("character_map", val.split(""))}
+                  value={item.character_map.join("")}
+                />
+              </Col>
+            )}
+          </Row>
+
+          <Row gutter={36}>
+            <Col md={12}>
+              <MinHeightOption
+                onChange={val => changeUIStyle("min_height", +val)}
+                value={get(item, "ui_style.min_height", 0)}
+              />
+            </Col>
+            <Col md={12}>
+              <MaxHeightOption
+                onChange={val => changeUIStyle("max_height", +val)}
+                value={get(item, "ui_style.max_height", 0)}
+              />
+            </Col>
+          </Row>
+
+          <Row gutter={36}>
+            <Col md={12}>
+              <PlaceholderOption
+                onChange={val => changeItem("placeholder", val)}
+                value={get(item, "placeholder", "")}
+              />
+            </Col>
+            <Col md={12}>
+              <BrowserSpellcheckOption
+                onChange={val => changeItem("spellcheck", val)}
+                checked={get(item, "spellcheck", false)}
+              />
+            </Col>
+          </Row>
+
+          <Row gutter={36}>
+            <Col md={12}>
+              <FontSizeOption
+                onChange={val => changeUIStyle("fontsize", val)}
+                value={get(item, "ui_style.fontsize", "normal")}
+              />
+            </Col>
+          </Row>
+        </Layout>
         <Extras>
           <Extras.Distractors />
           <Extras.Hints />

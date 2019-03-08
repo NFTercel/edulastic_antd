@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { cloneDeep, isEqual } from "lodash";
 
-import { Paper, FlexContainer, Stimulus, InstructorStimulus } from "@edulastic/common";
+import { Paper, FlexContainer, Stimulus, InstructorStimulus, MathFormulaDisplay } from "@edulastic/common";
 import { withNamespaces } from "@edulastic/localization";
 
 import { SHOW, CLEAR } from "../../constants/constantsForQuestions";
@@ -203,7 +203,7 @@ class SortListPreview extends PureComponent {
         <InstructorStimulus>{item.instructor_stimulus}</InstructorStimulus>
         {!smallSize && (
           <Stimulus>
-            <div dangerouslySetInnerHTML={{ __html: item.stimulus }} />
+            <MathFormulaDisplay dangerouslySetInnerHTML={{ __html: item.stimulus }} />
           </Stimulus>
         )}
         <FlexContainer alignItems="flex-start" style={styles.wrapperStyles(smallSize)}>

@@ -16,7 +16,7 @@ import QuestionMetadata from "../../../../assessment/containers/QuestionMetadata
 import ItemHeader from "../ItemHeader/ItemHeader";
 import { saveQuestionAction, setQuestionDataAction } from "../../ducks";
 import { getItemIdSelector } from "../../../ItemDetail/ducks";
-import { getCurrentQuestionSelector } from "../../../sharedDucks/questions";
+import { getCurrentQuestionSelector } from "../../../Shared/Ducks/questions";
 import { checkAnswerAction, showAnswerAction } from "../../../src/actions/testItem";
 
 class Container extends Component {
@@ -104,7 +104,10 @@ class Container extends Component {
         title: "ITEM DETAIL",
         to: `/author/items/${testItemId}/item-detail`
       },
-      { title: question.title, to: "" }
+      {
+        title: question.title,
+        to: ""
+      }
     ];
   }
 
@@ -138,6 +141,8 @@ class Container extends Component {
           changePreviewTab={this.handleChangePreviewTab}
           onSave={this.handleSave}
           view={view}
+          showCheckButton={question.validation.checkAnswerButton}
+          allowedAttempts={question.validation.checkAttempts}
           previewTab={previewTab}
           breadcrumb={this.breadcrumb}
         />

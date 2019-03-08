@@ -14,6 +14,4 @@ export const Text = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: ${({ smallSize, theme }) =>
-    smallSize ? theme.widgets.orderList.textSmallFontSize : theme.widgets.orderList.textFontSize};
 `;

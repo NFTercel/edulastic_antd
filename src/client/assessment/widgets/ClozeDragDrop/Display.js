@@ -1,9 +1,9 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { cloneDeep } from "lodash";
-import { withTheme } from "styled-components";
+import styled, { withTheme } from "styled-components";
 
-import { InstructorStimulus } from "@edulastic/common";
+import { InstructorStimulus, WithMathFormula } from "@edulastic/common";
 
 import CorrectAnswerBoxLayout from "../../components/CorrectAnswerBoxLayout";
 import { QuestionHeader } from "../../styled/QuestionHeader";
@@ -19,6 +19,9 @@ import { getFontSize } from "../../utils/helpers";
 const defaultTemplateMarkup =
   '<p>"It\'s all clear" he</p><p class="response-btn" contenteditable="false"><span class="index">1</span><span class="text">Response</span></p><p>Have you the </p><p class="response-btn" contenteditable="false"><span class="index">1</span><span class="text">Response</span></p><p> and the bags? <br /> Great Scott!!! Jump, archie, jump, and I\'ll swing for it</p>';
 
+const MathSpan = WithMathFormula(styled.span`
+  user-select: none;
+`);
 class ClozeDragDropDisplay extends Component {
   constructor(props) {
     super(props);
@@ -301,7 +304,7 @@ class ClozeDragDropDisplay extends Component {
               </Droppable>
             );
           }
-          return <span style={{ userSelect: "none" }} key={index} dangerouslySetInnerHTML={{ __html: templatePart }} />;
+          return <MathSpan key={index} dangerouslySetInnerHTML={{ __html: templatePart }} />;
         })}
       </div>
     );

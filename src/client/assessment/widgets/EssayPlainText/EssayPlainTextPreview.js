@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Input } from "antd";
 import { compose } from "redux";
 import { withTheme } from "styled-components";
+import { get } from "lodash";
 
 import { Paper, Stimulus, FlexContainer, InstructorStimulus } from "@edulastic/common";
 import { withNamespaces } from "@edulastic/localization";
@@ -13,7 +14,8 @@ import { Toolbar } from "../../styled/Toolbar";
 import { Item } from "../../styled/Item";
 
 import { ToolbarItem } from "./styled/ToolbarItem";
-import { preventEvent } from "../../utils/helpers";
+import { preventEvent, getFontSize, getSpellCheckAttributes } from "../../utils/helpers";
+import Character from "./components/Character";
 
 const EssayPlainTextPreview = ({ view, saveAnswer, t, item, smallSize, userAnswer, theme }) => {
   const [text, setText] = useState(Array.isArray(userAnswer) ? "" : userAnswer);
@@ -23,8 +25,6 @@ const EssayPlainTextPreview = ({ view, saveAnswer, t, item, smallSize, userAnswe
   const [selection, setSelection] = useState(null);
 
   const [buffer, setBuffer] = useState("");
-
-  const [cursor, setCursor] = useState(null);
 
   let node;
 
@@ -45,7 +45,7 @@ const EssayPlainTextPreview = ({ view, saveAnswer, t, item, smallSize, userAnswe
       setSelection(null);
     }
 
-    setCursor({
+    setSelection({
       start: node.textAreaRef.selectionStart,
       end: node.textAreaRef.selectionEnd
     });
@@ -66,10 +66,10 @@ const EssayPlainTextPreview = ({ view, saveAnswer, t, item, smallSize, userAnswe
         break;
       }
       case PASTE: {
-        if (cursor.end) {
-          setText(text.slice(0, cursor.start) + buffer + text.slice(cursor.end));
+        if (selection.end) {
+          setText(text.slice(0, selection.start) + buffer + text.slice(selection.end));
         } else {
-          setText(text.slice(0, cursor.start) + buffer + text.slice(cursor.start));
+          setText(text.slice(0, selection.start) + buffer + text.slice(selection.start));
         }
         break;
       }
@@ -93,6 +93,10 @@ const EssayPlainTextPreview = ({ view, saveAnswer, t, item, smallSize, userAnswe
       ? { color: theme.widgets.essayPlainText.wordCountLimitedColor }
       : {};
 
+  const minHeight = get(item, "ui_style.min_height", "inherit");
+  const maxHeight = get(item, "ui_style.max_height", "inherit");
+  const fontSize = getFontSize(get(item, "ui_style.fontsize", "normal"));
+
   return (
     <Paper padding={smallSize} boxShadow={smallSize ? "none" : ""}>
       <InstructorStimulus>{item.instructor_stimulus}</InstructorStimulus>
@@ -103,6 +107,18 @@ const EssayPlainTextPreview = ({ view, saveAnswer, t, item, smallSize, userAnswe
           {item.show_copy && <ToolbarItem onClick={handleAction(COPY)}>{t("component.essayText.copy")}</ToolbarItem>}
           {item.show_cut && <ToolbarItem onClick={handleAction(CUT)}>{t("component.essayText.cut")}</ToolbarItem>}
           {item.show_paste && <ToolbarItem onClick={handleAction(PASTE)}>{t("component.essayText.paste")}</ToolbarItem>}
+          {Array.isArray(item.character_map) && (
+            <Character
+              onSelect={char => {
+                setSelection({
+                  start: selection.start + char.length,
+                  end: selection.start + char.length
+                });
+                setText(text.slice(0, selection.start) + char + text.slice(selection.end));
+              }}
+              characters={item.character_map}
+            />
+          )}
         </FlexContainer>
       </Toolbar>
 
@@ -112,6 +128,9 @@ const EssayPlainTextPreview = ({ view, saveAnswer, t, item, smallSize, userAnswe
         }}
         style={{
           borderRadius: 0,
+          minHeight,
+          maxHeight,
+          fontSize,
           background:
             item.max_word < wordCount
               ? theme.widgets.essayPlainText.textInputLimitedBgColor
@@ -125,6 +144,8 @@ const EssayPlainTextPreview = ({ view, saveAnswer, t, item, smallSize, userAnswe
         onPaste={preventEvent}
         onCopy={preventEvent}
         onCut={preventEvent}
+        placeholder={item.placeholder || ""}
+        {...getSpellCheckAttributes(item.spellcheck)}
       />
 
       {item.show_word_count && (

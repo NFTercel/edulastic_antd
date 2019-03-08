@@ -5,7 +5,18 @@ import { withNamespaces } from "@edulastic/localization";
 import AxisSegmentsMoreOptions from "./AxisSegmentsMoreOptions";
 import { RENDERING_BASE } from "../../Builder/config/constants";
 
-const AxisSegmentsOptions = ({ t, setCanvas, setOptions, setNumberline, fillSections, cleanSections, graphData }) => {
+const AxisSegmentsOptions = ({
+  t,
+  setCanvas,
+  setOptions,
+  setNumberline,
+  fillSections,
+  cleanSections,
+  graphData,
+  setValidation,
+  setControls,
+  toolbar
+}) => {
   const getFontSizeList = () => [
     {
       id: "small",
@@ -66,6 +77,8 @@ const AxisSegmentsOptions = ({ t, setCanvas, setOptions, setNumberline, fillSect
         setCanvas={setCanvas}
         canvasConfig={canvas}
         setOptions={setOptions}
+        toolbar={graphData.toolbar}
+        setControls={setControls}
         fillSections={fillSections}
         cleanSections={cleanSections}
         setNumberline={setNumberline}
@@ -73,6 +86,8 @@ const AxisSegmentsOptions = ({ t, setCanvas, setOptions, setNumberline, fillSect
         fontSizeList={getFontSizeList()}
         orientationList={getOrientationList()}
         renderingBaseList={getRenderingBaseList()}
+        setValidation={setValidation}
+        graphData={graphData}
       />
     </Fragment>
   );
@@ -85,7 +100,8 @@ AxisSegmentsOptions.propTypes = {
   setCanvas: PropTypes.func.isRequired,
   setNumberline: PropTypes.func.isRequired,
   setOptions: PropTypes.func.isRequired,
-  graphData: PropTypes.object.isRequired
+  graphData: PropTypes.object.isRequired,
+  setValidation: PropTypes.func.isRequired
 };
 
 const enhance = compose(withNamespaces("assessment"));

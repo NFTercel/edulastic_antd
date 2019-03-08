@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { withTheme } from "styled-components";
 
-import { CenteredText } from "@edulastic/common";
+import { CenteredText, MathFormulaDisplay } from "@edulastic/common";
 
 import DropContainer from "../../../components/DropContainer";
 
@@ -21,6 +21,8 @@ const TableRow = ({
   possible_responses,
   onDrop,
   validArray,
+  width,
+  height,
   theme
 }) => {
   const styles = {
@@ -28,7 +30,8 @@ const TableRow = ({
       display: "flex",
       flexWrap: "wrap",
       padding: "70px 50px",
-      height: "100%",
+      width,
+      height,
       borderRadius: 4,
       backgroundColor: theme.widgets.classification.dropContainerBgColor
     }
@@ -41,13 +44,19 @@ const TableRow = ({
       cols.push(
         <RowTitleCol key={index} colCount={colCount}>
           <CenteredText style={{ wordWrap: "break-word", textAlign: "left" }}>
-            <div dangerouslySetInnerHTML={{ __html: rowTitles[index / colCount] }} />
+            <MathFormulaDisplay dangerouslySetInnerHTML={{ __html: rowTitles[index / colCount] }} />
           </CenteredText>
         </RowTitleCol>
       );
     }
     cols.push(
-      <Column key={index} rowTitles={rowTitles} colCount={colCount}>
+      <Column
+        data-cy={`drag-drop-board-${index}`}
+        id={`drag-drop-board-${index}`}
+        key={index}
+        rowTitles={rowTitles}
+        colCount={colCount}
+      >
         <DropContainer
           style={{
             ...styles.columnContainerStyle,
@@ -81,6 +90,8 @@ const TableRow = ({
 
 TableRow.propTypes = {
   startIndex: PropTypes.number.isRequired,
+  width: PropTypes.string.isRequired,
+  height: PropTypes.string.isRequired,
   colCount: PropTypes.number.isRequired,
   arrayOfRows: PropTypes.object.isRequired,
   rowTitles: PropTypes.array.isRequired,

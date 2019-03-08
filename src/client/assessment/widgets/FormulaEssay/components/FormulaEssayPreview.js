@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { MathFormulaDisplay } from "@edulastic/common";
 
 import MathEssayInput from "./MathEssayInput";
 
@@ -9,7 +10,7 @@ const FormulaEssayPreview = ({ item, lines, setLines }) => (
   <div>
     <InstructorStimulus>{item.instructor_stimulus}</InstructorStimulus>
 
-    <div style={{ marginBottom: 15 }} dangerouslySetInnerHTML={{ __html: item.stimulus }} />
+    <MathFormulaDisplay style={{ marginBottom: 15 }} dangerouslySetInnerHTML={{ __html: item.stimulus }} />
 
     <MathEssayInput
       item={item}

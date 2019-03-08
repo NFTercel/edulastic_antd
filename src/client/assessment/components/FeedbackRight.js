@@ -73,27 +73,32 @@ class FeedbackRight extends Component {
   };
 
   render() {
+    const { studentName } = this.props;
     const { score, maxScore, feedback } = this.state;
     const { t, user } = this.props;
     const isError = maxScore < score;
-    const name = user && user.user ? user.user.firstName : "";
+    const isStudentName = studentName !== undefined && studentName.length !== 0;
+    let title;
+
+    if (isStudentName) {
+      title = (
+        <TitleDiv style={{ marginTop: 0 }}>
+          <Avatar
+            style={{ verticalAlign: "middle", background: "#fff", color: "green", border: "1px solid green" }}
+            size="small"
+          >
+            {studentName.charAt(0)}
+          </Avatar>
+          &nbsp;
+          {studentName}
+        </TitleDiv>
+      );
+    } else {
+      title = null;
+    }
 
     return (
-      <StyledCardTwo
-        bordered={false}
-        title={
-          <TitleDiv style={{ marginTop: 0 }}>
-            <Avatar
-              style={{ verticalAlign: "middle", background: "#fff", color: "green", border: "1px solid green" }}
-              size="small"
-            >
-              {name.charAt(0)}
-            </Avatar>
-            &nbsp;
-            {name}
-          </TitleDiv>
-        }
-      >
+      <StyledCardTwo bordered={isStudentName} title={title}>
         <StyledDivSec>
           <ScoreInputWrapper>
             <ScoreInput onChange={this.onChangeScore} onBlur={this.onFeedbackSubmit} value={score} />
@@ -145,7 +150,7 @@ const StyledCardTwo = styled(Card)`
   box-shadow: 3px 2px 7px lightgray;
   display: inline-block;
   margin: 0px 0 auto 32px;
-  width: 27%;
+  min-width: 250px;
 `;
 
 const StyledDivSec = styled.div`

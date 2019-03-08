@@ -10,6 +10,6 @@ export const IconTrashWrapper = styled.div`
 
   :hover {
     cursor: pointer;
-    background: ${props => props.theme.sortableList.iconTrashWrapperBgHoverColor};
+    background: #f9f9f9;
   }
 `;

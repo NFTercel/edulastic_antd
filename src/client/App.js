@@ -31,11 +31,20 @@ const Loading = () => <div> Loading ...</div>;
 
 class App extends Component {
   render() {
+    const { user } = this.props;
+    let defaultRoute = "/home/assignments";
+    if (user && user.isAuthenticated) {
+      if (user.user.role === "teacher") {
+        defaultRoute = "/author/assignments";
+      }
+    } else {
+      defaultRoute = "/Login";
+    }
     return (
       <div>
         <Suspense fallback={<Loading />}>
           <Switch>
-            <Redirect exact path="/" to="/home/assignments" />
+            <Redirect exact path="/" to={defaultRoute} />
             <Route path="/author" component={Author} />
             <Route path="/home" component={Dashboard} />
             <Route path="/Signup" component={TeacherSignup} />

@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { SortableElement } from "react-sortable-hoc";
+import { MathFormulaDisplay } from "@edulastic/common";
 
 import { Container } from "../styled/Container";
 import { StyledDragHandle } from "../styled/StyledDragHandle";
@@ -15,7 +16,7 @@ const OrderListPreviewItem = SortableElement(({ children, showDragHandle, smallS
       </StyledDragHandle>
     )}
     <Text showDragHandle={showDragHandle} smallSize={smallSize}>
-      <div dangerouslySetInnerHTML={{ __html: children }} />
+      <MathFormulaDisplay dangerouslySetInnerHTML={{ __html: children }} />
     </Text>
   </Container>
 ));
