@@ -1,7 +1,7 @@
 import { userBuilder } from "./generate";
 import LoginPage from "../e2e/framework/student/loginPage.js";
 
-Cypress.LocalStorage.clear = () => {};
+Cypress.LocalStorage.clear = () => { };
 const BASE_URL = Cypress.config("API_URL");
 
 Cypress.Commands.add("createUser", overrides => {
@@ -36,13 +36,13 @@ Cypress.Commands.add("setToken", (role = "teacher") => {
   const postData =
     role == "teacher"
       ? {
-          email: "auto.teacher1@snapwiz.com",
-          password: "snapwiz"
-        }
+        email: "auto.teacher1@snapwiz.com",
+        password: "snapwiz"
+      }
       : {
-          email: "auto.student3@snapwiz.com",
-          password: "snapwiz"
-        };
+        email: "auto.student3@snapwiz.com",
+        password: "snapwiz"
+      };
   /* cy.request({
           url: `${BASE_URL}/auth/login`,
           method: 'POST',
@@ -270,7 +270,7 @@ class DndSimulatorDataTransfer {
     return "";
   }
 
-  setDragImage(img, xOffset, yOffset) {}
+  setDragImage(img, xOffset, yOffset) { }
 }
 
 Cypress.Commands.add(

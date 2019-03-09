@@ -5,7 +5,16 @@ import { FlexContainer } from "@edulastic/common";
 import { white } from "@edulastic/colors";
 import HeaderWrapper from "../../../src/mainContent/headerWrapper";
 import { MAX_MOBILE_WIDTH } from "../../../src/constants/others";
-import { Container, Title, Back, LeftSide, MobileContainer, ReferenceText, ReferenceValue, RightSide } from "./styled";
+import {
+  Container,
+  Title,
+  Back,
+  LeftSide,
+  MobileContainer,
+  ReferenceText,
+  ReferenceValue,
+  RightSide
+} from "./styled";
 
 const ItemHeader = ({ title, children, link, reference, windowWidth }) => {
   const width = windowWidth;
@@ -42,7 +51,10 @@ const ItemHeader = ({ title, children, link, reference, windowWidth }) => {
   ) : (
     <MobileContainer>
       <Container>
-        <FlexContainer alignItems="center" style={{ flex: 1, paddingBottom: 20, flexDirection: "column" }}>
+        <FlexContainer
+          alignItems="center"
+          style={{ flex: 1, paddingBottom: 20, flexDirection: "column" }}
+        >
           {renderLeftSide()}
         </FlexContainer>
         <RightSide>{children}</RightSide>

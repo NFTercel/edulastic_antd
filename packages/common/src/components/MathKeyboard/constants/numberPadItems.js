@@ -1,8 +1,8 @@
 import React from "react";
 
-import LeftIco from "../keyboardButtons/left.svg";
-import RightIco from "../keyboardButtons/right.svg";
-import DeleteIco from "../keyboardButtons/delete.svg";
+import LeftIco from '../keyboardButtons/left.svg';
+import RightIco from '../keyboardButtons/right.svg';
+import DeleteIco from '../keyboardButtons/delete.svg';
 
 export const NUMBER_PAD_ITEMS = [
   { value: "7", label: "7" },

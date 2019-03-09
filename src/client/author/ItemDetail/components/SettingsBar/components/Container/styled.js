@@ -1,6 +1,6 @@
-import { greenDark, white, mobileWidth } from "@edulastic/colors";
-import { FlexContainer } from "@edulastic/common";
-import styled from "styled-components";
+import { greenDark, white, mobileWidth } from '@edulastic/colors';
+import { FlexContainer } from '@edulastic/common';
+import styled from 'styled-components';
 
 export const Content = styled.div`
   width: 25vw;
@@ -13,9 +13,9 @@ export const Content = styled.div`
   padding: 30px;
   box-shadow: -3px 3px 6px 0 rgba(0, 0, 0, 0.16);
   overflow-y: auto;
-
-  @media (max-width: ${mobileWidth}) {
-    width: 100%;
+  
+   @media (max-width: ${mobileWidth}) {
+    width: 100%
   }
 `;
 

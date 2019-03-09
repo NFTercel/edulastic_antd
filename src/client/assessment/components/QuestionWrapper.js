@@ -185,7 +185,7 @@ class QuestionWrapper extends Component {
     const { type, timespent, data, showFeedback, multiple, view, setQuestionData, t, ...restProps } = this.props;
     const { main, advanced, activeTab } = this.state;
     const Question = getQuestion(type);
-    const studentName = data.activity.studentName;
+    const studentName = ""; //data.activity.studentName;
     const changeItem = (prop, uiStyle) => {
       const newItem = cloneDeep(data);
 
@@ -203,10 +203,11 @@ class QuestionWrapper extends Component {
       newItem.ui_style[prop] = val;
       setQuestionData(newItem);
     };
+
     return (
       <ThemeProvider theme={themes.default}>
         <QuestionContext.Provider value={{ item: data, setQuestionData, t, changeItem, changeUIStyle }}>
-          <PaperWrapper style={{ width: "-webkit-fill-available" }}>
+          <PaperWrapper style={{ width: "-webkit-fill-available", display: "flex" }}>
             {type === "graph" && view === "edit" && (
               <QuestionMenu activeTab={activeTab} main={main} advanced={advanced} />
             )}

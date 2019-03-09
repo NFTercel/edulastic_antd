@@ -8,7 +8,13 @@ import { withNamespaces } from "@edulastic/localization";
 import SettingsBarItem from "../SettingsBarItem/SettingsBarItem";
 import SettingsBarTags from "../SettingsBarTags/SettingsBarTags";
 import SettingsBarUseTabs from "../SettingsBarUseTabs/SettingsBarUseTabs";
-import { Content, Items, Checkboxes, Heading, SettingsButtonWrapper } from "./styled";
+import {
+  Content,
+  Items,
+  Checkboxes,
+  Heading,
+  SettingsButtonWrapper
+} from "./styled";
 
 const layouts = [
   {

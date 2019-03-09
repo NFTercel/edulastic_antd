@@ -1,6 +1,14 @@
 import React from "react";
 import { Icon } from "antd";
-import { Link, CloseModal, LinksWrapper, NavigationWrapper, StyledText } from "./styled";
+import {
+  Link,
+  CloseModal,
+  LinksWrapper,
+  NavigationWrapper,
+  StyledText,
+  StyledTextInfo,
+  CloseModalText
+} from "./styled";
 
 const BottomNavigation = ({ prevStudent, nextStudent, prevQuestion, nextQuestion, hideModal }) => (
   <NavigationWrapper>

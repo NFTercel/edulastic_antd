@@ -18,6 +18,7 @@ import {
 import { getAdditionalDataSelector } from "../../../sharedDucks/classBoard";
 // components
 import ClassSelect from "../../../Shared/Components/ClassSelect/ClassSelect";
+import ClassHeader from "../../../Shared/Components/ClassHeader/ClassHeader";
 import StudentSelect from "../../../Shared/Components/StudentSelect/StudentSelect";
 import FeedbackForm from "../FeedbackForm/FeedbackForm";
 import ClassQuestions from "./ClassQuestions";
@@ -78,7 +79,7 @@ class ClassResponses extends Component {
     const { classResponse, additionalData, studentResponse, loadStudentResponses } = this.props;
     const testActivity = studentResponse ? studentResponse.testActivity : null;
     const questionActivities = studentResponse ? studentResponse.questionActivities : null;
-    const showClassQuestions = testActivity && !showFeedbackForm;
+    const showClassQuestions = testActivity !== undefined && !showFeedbackForm;
 
     if (questionActivities) {
       questionActivities.forEach((item, i) => {
@@ -107,6 +108,7 @@ class ClassResponses extends Component {
 
     return (
       <div>
+        <ClassHeader additionalData={additionalData || {}} onCreate={this.handleCreate} />
         <StyledFlexContainer justifyContent="space-between">
           <PaginationInfo>
             <a>
@@ -203,7 +205,7 @@ class ClassResponses extends Component {
           </PaginationButtonGroup>
         </StyledFlexContainer>
         {showClassQuestions && (
-          <ClassQuestions testActivity={testActivity} showOnly={null} currentStudent={currentStudent || []} />
+          <ClassQuestions showOnly={null} testActivity={testActivity} currentStudent={currentStudent || []} />
         )}
         {showFeedbackForm && (
           <StyledFlexContainer justifyContent="flex-end">

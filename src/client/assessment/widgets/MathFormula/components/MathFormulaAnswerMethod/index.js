@@ -7,8 +7,8 @@ import { FlexContainer } from "@edulastic/common";
 import { math } from "@edulastic/constants";
 import { withNamespaces } from "@edulastic/localization";
 
-import { Label } from "../../../../styled/WidgetOptions/Label";
-import { MathInput } from "@edulastic/common";
+import { Label } from '../../../../styled/WidgetOptions/Label';
+import { MathInput } from '@edulastic/common';
 
 import { IconTrash } from "../../styled/IconTrash";
 import ThousandsSeparators from "../ThousandsSeparators";

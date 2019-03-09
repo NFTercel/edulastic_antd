@@ -1,6 +1,6 @@
-import { FlexContainer, Paper } from "@edulastic/common";
-import { darkBlueSecondary, mobileWidth } from "@edulastic/colors";
-import styled from "styled-components";
+import { FlexContainer, Paper } from '@edulastic/common';
+import { darkBlueSecondary, mobileWidth } from '@edulastic/colors';
+import styled from 'styled-components';
 
 export const Content = styled(Paper)`
   width: 100%;
@@ -14,8 +14,8 @@ export const Content = styled(Paper)`
 
   @media (max-width: ${mobileWidth}) {
     padding-left: 10px;
-    margin-right: ${props => !props.value && "20px !important"};
-    margin-left: ${props => props.value && "20px !important"};
+    margin-right: ${props => !props.value && '20px !important'};
+    margin-left: ${props => props.value && '20px !important'};
   }
 `;
 
@@ -38,8 +38,8 @@ export const MobileSide = styled.div`
   align-items: center;
   justify-content: center;
   height: calc(100vh - 220px);
-  right: ${props => (props.type === "right" ? "0" : "unset")}
-  left: ${props => (props.type === "left" ? "0" : "unset")}
+  right: ${props => (props.type === 'right' ? '0' : 'unset')}
+  left: ${props => (props.type === 'left' ? '0' : 'unset')}
   background: ${darkBlueSecondary};
   width: 25px;
   bottom: 20px;

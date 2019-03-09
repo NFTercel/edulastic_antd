@@ -5,8 +5,8 @@ import { isObject } from "lodash";
 
 import { math } from "@edulastic/constants";
 
-import { KEYBOARD_BUTTONS } from "./constants/keyboardButtons";
-import { NUMBER_PAD_ITEMS } from "./constants/numberPadItems";
+import { KEYBOARD_BUTTONS } from './constants/keyboardButtons';
+import { NUMBER_PAD_ITEMS } from './constants/numberPadItems';
 
 import Keyboard from "../Keyboard";
 

@@ -71,15 +71,15 @@ export const Dump = styled.div`
   @media (max-width: 1820px) {
     width: calc(25% - 20px);
   }
-
+  
   @media (max-width: 1460px) {
     width: calc(33% - 20px);
   }
-
+  
   @media (max-width: 1024px) {
     width: calc(50% - 20px);
   }
-
+  
   @media (max-width: 480px) {
     width: 100%;
   }

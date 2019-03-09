@@ -1,16 +1,16 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+
 import { Link } from "react-router-dom";
 import { Dropdown } from "antd";
 import { withNamespaces } from "@edulastic/localization";
 import { FlexContainer } from "@edulastic/common";
 
 import arrowUpIcon from "../../assets/arrow-up.svg";
+import assignedIcon from "../../../Shared/Assets/assigned.svg";
 import presentationIcon from "../../assets/presentation.svg";
 import additemsIcon from "../../assets/add-items.svg";
 import piechartIcon from "../../assets/pie-chart.svg";
-import assignedIcon from "../../../Shared/Assets/assigned.svg";
-
 import ActionMenu from "../ActionMenu/ActionMenu";
 
 import {

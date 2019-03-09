@@ -19,5 +19,5 @@ export const getUserNameSelector = createSelector(
 
 export const getCurrentGroup = createSelector(
   stateSelector,
-  state => state.user && state.user.orgData && state.orgData.defaultClass
+  state => state.user && state.user.orgData && state.user.orgData.defaultClass
 );

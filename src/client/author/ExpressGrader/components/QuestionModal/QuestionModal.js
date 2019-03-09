@@ -1,7 +1,7 @@
 import React from "react";
 import Question from "../Question/Question";
-import BottomNavigation from "../BottomNavigation/BottomNavigation";
 import { ModalWrapper } from "./styled";
+import BottomNavigation from "../BottomNavigation/BottomNavigation";
 
 class QuestionModal extends React.Component {
   constructor() {
@@ -50,13 +50,12 @@ class QuestionModal extends React.Component {
     if (rowIndex === null && colIndex === null) {
       const maxQuestions = tableData.length;
       const maxStudents = tableData[rowIndex].length;
-
       this.setState({
         loaded,
-        maxStudents,
-        maxQuestions,
         rowIndex: newrowIndex,
-        colIndex: newcolIndex
+        colIndex: newcolIndex,
+        maxQuestions,
+        maxStudents
       });
     }
   }

@@ -2,16 +2,16 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Col, Select, Input, Checkbox } from "antd";
 
-import { typedList as types, math } from "@edulastic/constants";
-import { MathKeyboard } from "@edulastic/common";
-import { withNamespaces } from "@edulastic/localization";
+import { typedList as types, math } from '@edulastic/constants';
+import { MathKeyboard } from '@edulastic/common';
+import { withNamespaces } from '@edulastic/localization';
 
 import { Block } from "../../styled/WidgetOptions/Block";
 import { Heading } from "../../styled/WidgetOptions/Heading";
 import { Label } from "../../styled/WidgetOptions/Label";
 
-import TypedList from "../TypedList";
-import NumberPad from "../NumberPad";
+import TypedList from '../TypedList';
+import NumberPad from '../NumberPad';
 
 import { StyledRow } from "./styled/StyledRow";
 
@@ -63,10 +63,10 @@ const KeyPadOptions = ({ t, onChange, item }) => {
 
   const getNumberPad = () => {
     if (!item.numberPad || !item.numberPad.length) {
-      onChange("numberPad", MathKeyboard.NUMBER_PAD_ITEMS.map(({ value }) => value));
+      onChange('numberPad', MathKeyboard.NUMBER_PAD_ITEMS.map(({ value }) => value));
       return MathKeyboard.NUMBER_PAD_ITEMS;
     }
-    return item.numberPad.map(num => {
+    return item.numberPad.map((num) => {
       const res = MathKeyboard.NUMBER_PAD_ITEMS.find(({ value }) => num === value);
 
       return res || { value: "", label: t("component.options.empty") };

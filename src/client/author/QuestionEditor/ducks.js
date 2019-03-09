@@ -1,9 +1,9 @@
-import { createSelector } from "reselect";
-import { testItemsApi, questionsApi } from "@edulastic/api";
-import { call, put, all, takeEvery, select } from "redux-saga/effects";
-import { message } from "antd";
-import { getItemDetailSelector, UPDATE_ITEM_DETAIL_SUCCESS } from "../ItemDetail/ducks";
-import { history } from "../../configureStore";
+import { createSelector } from 'reselect';
+import { testItemsApi, questionsApi } from '@edulastic/api';
+import { call, put, all, takeEvery, select } from 'redux-saga/effects';
+import { message } from 'antd';
+import { getItemDetailSelector, UPDATE_ITEM_DETAIL_SUCCESS } from '../ItemDetail/ducks';
+import { history } from '../../configureStore';
 import {
   UPDATE_QUESTION,
   SET_FIRST_MOUNT,

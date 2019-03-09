@@ -1,7 +1,6 @@
 import { takeEvery, call, put, all, select } from "redux-saga/effects";
 import { classResponseApi } from "@edulastic/api";
 import { message } from "antd";
-//import { getCurrentGroup } from "../src/selectors/user";
 import { getCurrentGroup } from "../src/selectors/user";
 
 import {
@@ -36,7 +35,7 @@ function* receiveClassResponseSaga({ payload }) {
 
 function* receiveStudentResponseSaga({ payload }) {
   try {
-    const groupId = yield select(getCurrentGroup);
+    const groupId = "5c332bbd3bcb10293f6d592c"; //yield select(getCurrentGroup);
     const studentResponse = yield call(classResponseApi.studentResponse, payload, groupId);
 
     yield put({

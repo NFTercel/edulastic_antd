@@ -33,11 +33,13 @@ class ClassQuestions extends Component {
     const {
       showOnly = null,
       currentStudent,
-      classResponse: { testItems },
-      studentResponse: { questionActivities }
+      studentResponse,
+      classResponse: { testItems }
     } = this.props;
     const userQActivities =
       currentStudent && currentStudent.questionActivities ? currentStudent.questionActivities : [];
+    const questionActivities =
+      studentResponse && studentResponse.questionActivities ? studentResponse.questionActivities : [];
 
     if (!testItems || !questionActivities) {
       return [];

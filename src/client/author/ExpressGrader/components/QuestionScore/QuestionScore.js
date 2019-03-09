@@ -29,9 +29,8 @@ class QuestionScore extends Component {
     let score;
     let maxScore;
     let studentScore;
-    const { question, tableData } = this.props;
+    const { question, tableData, showQuestionModal } = this.props;
     const isQuestion = question && question.score !== undefined && question.maxScore !== undefined;
-
     if (isQuestion) {
       score = question.score;
       maxScore = question.maxScore;
@@ -43,7 +42,7 @@ class QuestionScore extends Component {
     }
 
     return (
-      <StyledWrapper onClick={() => showQuestionModal(record, tableData)}>
+      <StyledWrapper onClick={() => showQuestionModal(question, tableData)}>
         <StyledText color={this.getScoreColor(score, maxScore)}>{studentScore}</StyledText>
       </StyledWrapper>
     );

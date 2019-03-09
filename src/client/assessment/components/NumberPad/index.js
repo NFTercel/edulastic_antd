@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { MathKeyboard } from "@edulastic/common";
+import { MathKeyboard } from '@edulastic/common';
 
 import NumberPadItem from "./components/NumberPadItem";
 import { NumberPadWrapper } from "./styled/NumberPadWrapper";

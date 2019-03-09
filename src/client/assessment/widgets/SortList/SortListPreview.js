@@ -57,7 +57,7 @@ class SortListPreview extends PureComponent {
         return null;
       }),
       selected:
-        userAnswer.length > 0
+        userAnswer && userAnswer.length > 0
           ? userAnswer.map(index => (index !== null ? source[index] : null))
           : Array.from({ length: source.length }).fill(null),
       active: ""
@@ -82,7 +82,7 @@ class SortListPreview extends PureComponent {
     });
 
     const newSelected =
-      userAnswer.length > 0
+      userAnswer && userAnswer.length > 0
         ? userAnswer.map(index => (index !== null ? source[index] : null))
         : Array.from({ length: source.length }).fill(null);
 
@@ -201,7 +201,7 @@ class SortListPreview extends PureComponent {
     return (
       <Paper padding={smallSize} boxShadow={smallSize ? "none" : ""}>
         <InstructorStimulus>{item.instructor_stimulus}</InstructorStimulus>
-        {!smallSize && (
+        {item && item.stimulus && !smallSize && (
           <Stimulus>
             <MathFormulaDisplay dangerouslySetInnerHTML={{ __html: item.stimulus }} />
           </Stimulus>

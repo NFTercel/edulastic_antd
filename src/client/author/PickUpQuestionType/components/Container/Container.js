@@ -162,7 +162,10 @@ class Container extends Component {
           </Menu>
         </LeftSide>
         <RightSide>
-          <Header title={t("component.pickupcomponent.headertitle")} link={this.link} />
+          <Header
+            title={t("component.pickupcomponent.headertitle")}
+            link={this.link}
+          />
           <PaddingDiv
             left={30}
             right={30}

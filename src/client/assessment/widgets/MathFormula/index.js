@@ -10,8 +10,8 @@ import { withNamespaces } from "@edulastic/localization";
 import { setQuestionDataAction } from "../../../author/QuestionEditor/ducks";
 import { checkAnswerAction } from "../../../author/src/actions/testItem";
 
-import QuestionTextArea from "../../components/QuestionTextArea";
-import { Subtitle } from "../../styled/Subtitle";
+import QuestionTextArea from '../../components/QuestionTextArea';
+import { Subtitle } from '../../styled/Subtitle';
 
 import { CLEAR, PREVIEW, EDIT } from "../../constants/constantsForQuestions";
 

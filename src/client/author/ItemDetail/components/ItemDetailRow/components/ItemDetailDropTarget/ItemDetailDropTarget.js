@@ -6,7 +6,10 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 import { Types } from "../../../../constants";
-import { moveItemDetailWidgetAction, setItemDetailDraggingAction } from "../../../../ducks";
+import {
+  moveItemDetailWidgetAction,
+  setItemDetailDraggingAction
+} from "../../../../ducks";
 import { Container } from "./styled";
 
 const ItemDetailDropTarget = ({ connectDropTarget, isOver, canDrop }) =>
