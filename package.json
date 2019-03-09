@@ -66,7 +66,7 @@
     "normalizr": "^3.3.0",
     "overlay-pslg": "^1.0.0",
     "prop-types": "^15.6.2",
-    "query-string": "^6.2.0",
+    "query-string": "^6.3.0",
     "rc-color-picker": "^1.2.6",
     "react": "16.8",
     "react-ace": "^6.2.0",

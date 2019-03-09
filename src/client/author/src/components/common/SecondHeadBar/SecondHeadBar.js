@@ -112,23 +112,16 @@ class SecondHeadBar extends Component {
                 justifyContent: "flex-end"
               }}
             >
-              {showCheckButton && (
-                <Button onClick={this.handleCheckClick}>
-                  <ButtonLink
-                    color="primary"
-                    icon={
-                      <IconCheck
-                        color={attempts >= allowedAttempts ? darkGrey : option ? white : blue}
-                        width={16}
-                        height={16}
-                      />
-                    }
-                    style={{ color: attempts >= allowedAttempts ? darkGrey : option ? white : blue }}
-                  >
-                    {t("component.questioneditor.buttonbar.checkanswer")}
-                  </ButtonLink>
-                </Button>
-              )}
+              <Button onClick={() => changePreviewTab("check")}>
+                <ButtonLink
+                  color="primary"
+                  icon={<IconCheck color="primary" width={16} height={16} />}
+                  style={{ color: option ? white : blue }}
+                >
+                  {t("component.questioneditor.buttonbar.checkanswer")}
+                </ButtonLink>
+              </Button>
+              )
               <Button onClick={() => changePreviewTab("show")}>
                 <ButtonLink
                   color="primary"

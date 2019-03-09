@@ -133,7 +133,8 @@ const EditModal = ({ title, visible, onCancel, onOk, modalData, group, students,
           test={test}
           releaseGradeType={assignment.releaseScore}
           maxAttempts={assignment.maxAttempts}
-          onUpdateRleaseGradeType={changeField("releaseScore")}
+          assignmentSettings={assignment}
+          updateAssignmentSettings={updateAssignment}
           onUpdateMaxAttempts={changeField("maxAttempts")}
         />
       )}
@@ -153,7 +154,8 @@ EditModal.propTypes = {
 };
 
 EditModal.defaultProps = {
-  onOk: null
+  onOk: null,
+  students: []
 };
 
 export default connect(

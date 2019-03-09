@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Col, Select, Radio } from "antd";
-import { StyledRowLabel, StyledRow, StudentWrapper } from "./styled";
+import { StyledRowLabel, StyledRow } from "./styled";
 
 const RadioGroup = Radio.Group;
 
@@ -47,10 +47,13 @@ const StudentsSelector = ({ specificStudents, students = [], updateStudents, onC
 );
 
 StudentsSelector.propTypes = {
-  studentsNames: PropTypes.array.isRequired,
+  studentNames: PropTypes.array.isRequired,
   students: PropTypes.array.isRequired,
-  show: PropTypes.bool.isRequired,
-  updateStudents: PropTypes.bool.isRequired
+  updateStudents: PropTypes.func.isRequired
+};
+
+StudentsSelector.defaultProps = {
+  studentNames: []
 };
 
 export default StudentsSelector;

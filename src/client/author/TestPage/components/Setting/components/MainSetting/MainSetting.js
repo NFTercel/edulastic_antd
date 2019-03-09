@@ -26,7 +26,9 @@ import {
   Line,
   NormalText,
   StyledRadioGroup,
-  RadioWrapper
+  RadioWrapper,
+  TestTypeSelect,
+  GenerateReportSelect
 } from "./styled";
 
 const {
@@ -52,7 +54,16 @@ const testTypes = {
 };
 
 const releaseGradeKeys = ["DONT_RELEASE", "SCORE_ONLY", "WITH_RESPONSE", "WITH_ANSWERS"];
-
+const generateReport = {
+  YES: {
+    val: "Yes",
+    type: true
+  },
+  NO: {
+    val: "No",
+    type: false
+  }
+};
 class MainSetting extends Component {
   constructor(props) {
     super(props);
@@ -61,6 +72,7 @@ class MainSetting extends Component {
       markAsDoneValue: props.entity.markAsDoneValue,
       calcType: props.entity.calcType,
       evalType: props.entity.evalType,
+      isGenerateReport: true,
       enable: true,
       showAdvancedOption: false
     };
@@ -88,11 +100,13 @@ class MainSetting extends Component {
         setTestData({
           releaseScore: releaseGradeLabels.DONT_RELEASE
         });
+        this.setState({ isGenerateReport: true });
       } else {
         setMaxAttempts(3);
         setTestData({
           releaseScore: releaseGradeLabels.WITH_ANSWERS
         });
+        this.setState({ isGenerateReport: false });
       }
     }
     setTestData({
@@ -136,7 +150,8 @@ class MainSetting extends Component {
       shuffleQ,
       shuffleAns,
       answerOnPaper,
-      requirePassword
+      requirePassword,
+      testType
     } = entity;
 
     const isSmallSize = windowWidth > 993 ? 1 : 0;
@@ -213,19 +228,38 @@ class MainSetting extends Component {
               </Description>
             </Block>
             <Block id="test-type">
-              <Title>Test Type</Title>
-              <Body />
-              <Description>
-                <Select
-                  defaultValue={testTypes[ASSESSMENT]}
-                  style={{ width: "20%", height: 40, marginRight: 30 }}
-                  onChange={this.updateTestData("testType")}
-                >
-                  {Object.keys(testTypes).map(key => (
-                    <Option key={key}>{testTypes[key]}</Option>
-                  ))}
-                </Select>
-              </Description>
+              <Row>
+                <Col span={12}>
+                  <Title>Test Type</Title>
+                  <Body />
+                  <Description>
+                    <TestTypeSelect defaultValue={ASSESSMENT} onChange={this.updateTestData("testType")}>
+                      {Object.keys(testTypes).map(key => (
+                        <Option key={key} value={key}>
+                          {testTypes[key]}
+                        </Option>
+                      ))}
+                    </TestTypeSelect>
+                  </Description>
+                </Col>
+                <Col span={12}>
+                  {testType === PRACTICE && (
+                    <React.Fragment>
+                      {" "}
+                      <Title>Generate Report </Title>
+                      <Body>
+                        <GenerateReportSelect defaultValue={this.state.isGenerateReport}>
+                          {Object.keys(generateReport).map(key => (
+                            <Select.Option key={key} value={generateReport[key].type}>
+                              {generateReport[key].val}
+                            </Select.Option>
+                          ))}
+                        </GenerateReportSelect>
+                      </Body>
+                    </React.Fragment>
+                  )}
+                </Col>
+              </Row>
             </Block>
 
             <Block id="require-safe-exame-browser">
@@ -239,20 +273,6 @@ class MainSetting extends Component {
               <Description>
                 {
                   "Ensure secure testing environment by using Safe Exam Browser to lockdown the studen's device. To use this feature Safe Exam Browser (on Windows/Mac only) must be"
-                }
-              </Description>
-            </Block>
-
-            <Block id="show-questions">
-              <Title>Release Answers With Grades</Title>
-              <Body>
-                <Switch defaultChecked={activityReview} onChange={this.updateTestData("activityReview")} />
-              </Body>
-              <Description>
-                {"Select "}
-                <BlueText>OFF</BlueText>
-                {
-                  ", if you do not want students to see the assessment questions, responses, and the correct answers after they submit."
                 }
               </Description>
             </Block>

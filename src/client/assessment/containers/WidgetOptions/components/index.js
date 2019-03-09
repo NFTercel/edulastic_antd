@@ -18,6 +18,9 @@ export { default as ResponseContainerPositionOption } from "./ResponseContainerP
 export { default as StemNumerationOption } from "./StemNumeration";
 export { default as ListStyleOption } from "./ListStyle";
 export { default as MaxWidthOption } from "./MaxWidth";
+export { default as VerticalTopOption } from "./VerticalTopCheckbox";
+export { default as ImageScaleOption } from "./ImageScaleCheckbox";
+export { default as MultipleLineOption } from "./MultipleLineCheckbox";
 
 export { default as SpecialCharacters } from "./SpecialCharacters";
 export { default as Scoring } from "./Scoring";

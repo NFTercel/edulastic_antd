@@ -22,6 +22,7 @@ const ItemDetail = lazy(() => import("../ItemDetail"));
 const ItemAdd = lazy(() => import("../ItemAdd"));
 const PickUpQuestionType = lazy(() => import("../PickUpQuestionType"));
 const CurriculumContainer = lazy(() => import("../CurriculumSequence"));
+const ResponseFrequency = lazy(() => import("../ResponseFrequency"));
 
 // eslint-disable-next-line react/prop-types
 const Author = ({ match, history, isSidebarCollapsed }) => {
@@ -128,6 +129,11 @@ const Author = ({ match, history, isSidebarCollapsed }) => {
                 exact
                 path="/author/questions/edit"
                 component={QuestionEditor}
+              />
+              <Route
+                exact
+                path="/author/response-frequency/test/:testId"
+                component={ResponseFrequency}
               />
             </Switch>
           </Suspense>

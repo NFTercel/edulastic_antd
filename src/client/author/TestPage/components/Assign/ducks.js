@@ -77,12 +77,10 @@ const module = "authorTestAssignments";
 const currentSelector = state => state[module].current;
 
 export const getAssignmentsSelector = state => (state[module].isLoading ? [] : state[module].assignments);
-
 export const getCurrentAssignmentSelector = createSelector(
   currentSelector,
   getAssignmentsSelector,
-  getTestSelector,
-  (current, assignments, testSettings) => {
+  (current, assignments) => {
     if (current && current !== "new") {
       let assignment = assignments.filter(item => item._id == current)[0];
       return assignment;
@@ -93,11 +91,7 @@ export const getCurrentAssignmentSelector = createSelector(
       openPolicy: "Automatically on Start Date",
       closePolicy: "Automatically on Due Date",
       class: [],
-      specificStudents: false,
-      releaseScore: testSettings.releaseScore
-      //TODO testType: testSettings.testType,
-      //TODO maxAttempts: testSettings.maxAttempts,
-      //TODO isGenerateReport: testSettings.testType === test.type.PRACTICE ? false : true
+      specificStudents: false
     };
   }
 );

@@ -1,0 +1,46 @@
+{
+  "columns": [
+    {
+      "title": "Q#",
+      "dataIndex": "qLabel",
+      "key": "qLabel",
+      "width": 50
+    },
+    {
+      "title": "Question Type",
+      "dataIndex": "qType",
+      "key": "qType",
+      "width": 150
+    },
+    {
+      "title": "Standards",
+      "dataIndex": "standards",
+      "key": "standards",
+      "width": 150
+    },
+    {
+      "title": "Max Score",
+      "dataIndex": "maxScore",
+      "key": "maxScore",
+      "width": 50
+    },
+    {
+      "title": "Correct %",
+      "dataIndex": "corr_cnt",
+      "key": "corr_cnt",
+      "width": 100
+    },
+    {
+      "title": "Skip %",
+      "dataIndex": "skip_cnt",
+      "key": "skip_cnt",
+      "width": 70
+    },
+    {
+      "title": "Response",
+      "dataIndex": "resp_cnts",
+      "key": "resp_cnts",
+      "width": 400
+    }
+  ]
+}

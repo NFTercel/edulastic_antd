@@ -41,9 +41,36 @@ const fetchSkillReport = classId =>
     })
     .then(result => result.data.result);
 
+const fetchResponseFrequency = params => {
+  let { testId, districtId, schoolId, teacherId } = params;
+  let str = "";
+
+  if (testId) {
+    str += "testId=" + testId;
+  }
+
+  if (districtId) {
+    if (str != "") str += "&";
+    str += "districtId=" + districtId;
+  }
+
+  if (schoolId) {
+    if (str != "") str += "&";
+    str += "schoolId=" + schoolId;
+  }
+
+  if (teacherId) {
+    if (str != "") str += "&";
+    str += "schoolId=" + schoolId;
+  }
+
+  return api.callApi({ url: `/report/responseFrequency?${str}` });
+};
+
 export default {
   fetchReports,
   fetchTestActivityDetail,
   fetchTestActivityReport,
-  fetchSkillReport
+  fetchSkillReport,
+  fetchResponseFrequency
 };

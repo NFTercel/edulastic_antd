@@ -13,7 +13,7 @@ const Footer = ({ onCancel, onOk, disabled }) => (
   </FooterWrapper>
 );
 
-Footer.PropTypes = {
+Footer.propTypes = {
   onCancel: PropTypes.func.isRequired,
   onOk: PropTypes.func.isRequired
 };

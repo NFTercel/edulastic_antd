@@ -1,4 +1,4 @@
-import { mobileWidth, tabletWidth } from "@edulastic/colors";
+import { mobileWidth, tabletWidth, red } from "@edulastic/colors";
 import styled from "styled-components";
 import { Table, Button } from "antd";
 
@@ -141,6 +141,18 @@ export const BtnAction = styled(Button)`
 
 export const AssignedImg = styled.img`
   color: #12a6e8;
+`;
+
+export const PracticeIcon = styled.span`
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border: 2px solid ${red};
+  text-align: center;
+  color: ${red};
+  border-radius: 50%;
+  font-weight: bold;
+  padding-left: 3px;
 `;
 
 export const ExpandDivdier = styled.div`

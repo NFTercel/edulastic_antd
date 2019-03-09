@@ -1,18 +1,17 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Col, Radio } from "antd";
-
 //components
 import { AlignRight, AlignSwitchRight, StyledRowSettings, SettingsWrapper, MaxAttemptIInput } from "./styled";
 //selectors
-import { getActivityReview } from "../../../Setting/ducks";
+import { getTestEntitySelector } from "../../../../ducks";
 import { test } from "@edulastic/constants";
 const { releaseGradeTypes } = test;
 const calculators = ["None", "Scientific", "Basic", "Graphing"];
 const evaluationtypes = ["All or Nothing", "Partial Credit", "Dont penalize for incorrect selection"];
 const releaseGradeKeys = ["DONT_RELEASE", "SCORE_ONLY", "WITH_RESPONSE", "WITH_ANSWERS"];
 
-const Settings = ({ activityReview, releaseGradeType, maxAttempts, onUpdateRleaseGradeType, onUpdateMaxAttempts }) => {
+const Settings = ({ maxAttempts, onUpdateMaxAttempts, testSettings, assignmentSettings, updateAssignmentSettings }) => {
   const [isAutomatic, setAssignmentCompletionType] = useState(0);
 
   const [calcType, setCalcType] = useState(0);
@@ -30,6 +29,13 @@ const Settings = ({ activityReview, releaseGradeType, maxAttempts, onUpdateRleas
     setEvaluationType(e.target.value);
   };
 
+  const overRideSettings = (key, val) => {
+    const newSettingsState = {
+      ...assignmentSettings,
+      [key]: val
+    };
+    updateAssignmentSettings(newSettingsState);
+  };
   return (
     <SettingsWrapper>
       {/* Mark as done */}
@@ -48,7 +54,10 @@ const Settings = ({ activityReview, releaseGradeType, maxAttempts, onUpdateRleas
       <StyledRowSettings gutter={16}>
         <Col span={8}>RELEASE SCORES AUTOMATICALLY</Col>
         <Col span={16}>
-          <AlignRight value={releaseGradeType} onChange={e => onUpdateRleaseGradeType(e.target.value)}>
+          <AlignRight
+            defaultValue={assignmentSettings.releaseScore || testSettings.releaseScore}
+            onChange={e => overRideSettings("releaseScore", e.target.value)}
+          >
             {releaseGradeKeys.map(item => (
               <Radio value={item} key={item}>
                 {releaseGradeTypes[item]}
@@ -77,7 +86,7 @@ const Settings = ({ activityReview, releaseGradeType, maxAttempts, onUpdateRleas
       <StyledRowSettings gutter={16}>
         <Col span={8}>REQUIRE SAFE EXAM BROWSER</Col>
         <Col span={16}>
-          <AlignSwitchRight defaultChecked={activityReview} />
+          <AlignSwitchRight defaultChecked={testSettings.activityReview} />
         </Col>
       </StyledRowSettings>
       {/* Require Safe Exam Browser */}
@@ -162,7 +171,7 @@ const Settings = ({ activityReview, releaseGradeType, maxAttempts, onUpdateRleas
 
 export default connect(
   state => ({
-    activityReview: getActivityReview(state)
+    testSettings: getTestEntitySelector(state)
   }),
   null
 )(Settings);

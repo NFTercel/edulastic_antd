@@ -12,6 +12,7 @@ import { getAssignmentsSelector } from "../../../src/selectors/assignments";
 import SortBar from "../SortBar/SortBar";
 import FilterBar from "../FilterBar/FilterBar";
 import TableList from "../TableList/TableList";
+import ReleaseGradeSettingsModal from "../ReleaseGradeSettings/ReleaseGradeSetting";
 import MobileTableList from "../MobileTabList/MobileTableList";
 import ListHeader from "../../../src/components/common/ListHeader";
 
@@ -24,7 +25,8 @@ class Assignments extends Component {
     this.state = {
       searchStr: "",
       blockStyle: "tile",
-      isShowFilter: false
+      isShowFilter: false,
+      showReleaseGradeSettings: false
     };
   }
 
@@ -36,6 +38,13 @@ class Assignments extends Component {
   handleCreate = () => {
     const { history } = this.props;
     history.push("/author/assessments/create");
+  };
+
+  onOpenReleaseScoreSettings = () => {
+    this.setState({ showReleaseGradeSettings: true });
+  };
+  onCloseReleaseScoreSettings = () => {
+    this.setState({ showReleaseGradeSettings: false });
   };
 
   render() {
@@ -69,12 +78,16 @@ class Assignments extends Component {
                 </FullFlexContainer>
               </FlexContainer>
               <StyledCard>
-                <TableList assignments={assignments} />
+                <TableList assignments={assignments} onOpenReleaseScoreSettings={this.onOpenReleaseScoreSettings} />
                 <MobileTableList assignments={assignments} windowWidth={windowWidth} windowHeight={windowHeight} />
               </StyledCard>
             </Main>
           </FlexContainer>
         </Container>
+        <ReleaseGradeSettingsModal
+          showReleaseGradeSettings={this.state.showReleaseGradeSettings}
+          onCloseReleaseScoreSettings={this.onCloseReleaseScoreSettings}
+        />
       </div>
     );
   }

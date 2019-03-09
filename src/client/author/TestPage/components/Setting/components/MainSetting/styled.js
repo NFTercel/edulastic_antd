@@ -1,4 +1,4 @@
-import { Anchor, Radio } from "antd";
+import { Anchor, Radio, Select } from "antd";
 import styled from "styled-components";
 import { mobileWidth } from "@edulastic/colors";
 
@@ -100,6 +100,13 @@ export const RadioGroup = styled(Radio.Group)`
     margin-bottom: 18px;
     margin-right: 40px;
   }
+`;
+export const GenerateReportSelect = styled(Select)`
+  height: 40px;
+`;
+export const TestTypeSelect = styled(GenerateReportSelect)`
+  width: 80%;
+  margin-right: 30px;
 `;
 
 export const BlueText = styled.span`
