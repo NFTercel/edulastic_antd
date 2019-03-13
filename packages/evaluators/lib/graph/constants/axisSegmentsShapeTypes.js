@@ -5,14 +5,14 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.AxisSegmentsShapeTypes = void 0;
 var AxisSegmentsShapeTypes = {
-  POINT: "segmentsPoint",
-  SEGMENT: "bothIncludedSegment",
-  SEGMENT_LEFT_POINT_HOLLOW: "onlyRightIncludedSegment",
-  SEGMENT_RIGHT_POINT_HOLLOW: "onlyLeftIncludedSegment",
-  SEGMENT_BOTH_POINT_HOLLOW: "bothNotIncludedSegment",
-  RAY_LEFT_DIRECTION: "infinityToIncludedSegment",
-  RAY_RIGHT_DIRECTION: "includedToInfinitySegment",
-  RAY_LEFT_DIRECTION_RIGHT_HOLLOW: "infinityToNotIncludedSegment",
-  RAY_RIGHT_DIRECTION_LEFT_HOLLOW: "notIncludedToInfinitySegment"
+  POINT: "point",
+  SEGMENT: "segment",
+  SEGMENT_LEFT_POINT_HOLLOW: "segment_left_point_hollow",
+  SEGMENT_RIGHT_POINT_HOLLOW: "segment_right_point_hollow",
+  SEGMENT_BOTH_POINT_HOLLOW: "segment_both_points_hollow",
+  RAY_LEFT_DIRECTION: "ray_left_direction",
+  RAY_RIGHT_DIRECTION: "ray_right_direction",
+  RAY_LEFT_DIRECTION_RIGHT_HOLLOW: "ray_left_direction_right_hollow",
+  RAY_RIGHT_DIRECTION_LEFT_HOLLOW: "ray_right_direction_left_hollow"
 };
 exports.AxisSegmentsShapeTypes = AxisSegmentsShapeTypes;

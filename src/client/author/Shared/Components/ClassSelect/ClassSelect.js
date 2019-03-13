@@ -3,14 +3,16 @@ import { Select } from "antd";
 import { FlexContainer } from "@edulastic/common";
 import { Container, StyledSelect } from "./styled";
 
-const ClassSort = ({ classname }) => (
+const ClassSelect = ({ classname }) => (
   <FlexContainer>
     <Container>
       <StyledSelect defaultValue="">
-        <Select.Option value="">{classname}</Select.Option>
+        {classname.map(({ name }) => (
+          <Select.Option value="">{name}</Select.Option>
+        ))}
       </StyledSelect>
     </Container>
   </FlexContainer>
 );
 
-export default ClassSort;
+export default ClassSelect;

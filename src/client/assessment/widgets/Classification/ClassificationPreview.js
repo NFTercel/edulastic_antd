@@ -123,7 +123,7 @@ const ClassificationPreview = ({
   const boxes = createEmptyArrayOfArrays();
 
   const onDrop = (itemCurrent, itemTo) => {
-    const columnCount = get(item, "ui_style.column_count", 0);
+    const columnCount = get(item, "max_response_per_cell", 4);
 
     const dItems = cloneDeep(dragItems);
     const ansArrays = cloneDeep(answers);

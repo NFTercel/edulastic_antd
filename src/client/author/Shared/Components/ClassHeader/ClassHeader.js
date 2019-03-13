@@ -3,7 +3,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { Component } from "react";
 import { compose } from "redux";
-import { message } from "antd";
+import { Popconfirm, Switch, message } from "antd";
 import moment from "moment";
 import { withNamespaces } from "@edulastic/localization";
 import Assigned from "../../Assets/assigned.svg";
@@ -96,6 +96,13 @@ class ClassHeader extends Component {
             <img src={Assigned} />
             <SpaceD />
             {t("common.reports")}
+          </StyledAnchor>
+          <StyledAnchor>
+            <StyledLink to={`/author/standardsBasedReport/${this.props.assignmentId}/${this.props.classId}`}>
+              <img src={Assigned} />
+              <SpaceD />
+              {t("common.standardBasedReports")}
+            </StyledLink>
           </StyledAnchor>
         </StyledTabs>
         <StyledDiv>

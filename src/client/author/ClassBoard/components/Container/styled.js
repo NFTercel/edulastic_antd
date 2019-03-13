@@ -8,21 +8,23 @@ const classBoardTheme = themes.default.classboard;
 
 export const PaginationInfo = styled.span`
   font-weight: bold;
+  display: inline-block
+  margin-left:30px;
+
   font-size: 10px;
   word-spacing:5px;
-  display:inline-block
-  margin-left:30px;
   color: ${classBoardTheme.headerContainerColor}
 `;
 
-export const PaginationInfoF = styled.span`
+export const CheckContainer = styled.span`
   font-weight: bold;
-  font-size: 15px;
   display: inline-block;
   margin-left: 30px;
+
+  font-size: 15px;
 `;
 
-export const PaginationInfoS = styled.span`
+export const ButtonGroup = styled.div`
   display: inline-block;
 `;
 
@@ -46,6 +48,24 @@ export const StyledCard = styled(Card)`
   box-shadow: 3px 2px 7px lightgray;
 `;
 
+export const StudentButton = styled(Button)`
+  border-bottom-right-radius: 0px;
+  border-top-right-radius: 0px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  padding: 0px 30px;
+  color: black;
+`;
+
+export const QuestionButton = styled(Button)`
+  border-bottom-right-radius: 4px;
+  border-top-right-radius: 4px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  padding: 0px 30px;
+  color: black;
+`;
+
 export const BarDiv = styled.div`
   width: 1px;
   height: 30px;
@@ -64,7 +84,7 @@ export const SpaceDiv = styled.div`
   width:20px;
 `;
 
-export const SpaceDivF = styled.div`
+export const ButtonSpace = styled.div`
   display:inline-block
   width:13px;
 `;

@@ -1,3 +1,5 @@
+import { questionType as questionTypes } from "@edulastic/constants";
+
 const filterData = [
   {
     mode: "multiple",
@@ -47,7 +49,7 @@ const filterData = [
     size: "large",
     title: "Question Types",
     onChange: "questionType",
-    data: [{ value: "", text: "All types" }, { value: "sub1", text: "Sub1" }]
+    data: questionTypes.selectsData
   },
   {
     size: "large",

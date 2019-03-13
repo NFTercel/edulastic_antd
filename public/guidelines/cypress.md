@@ -58,8 +58,8 @@ At root level we have following folders -
   describe('Author - "Multiple choice - block layout" type question', () => { ...
   context('User creates question.', () => { ...
   it('[Tc_301]:test => Enter question text', () => { ...
-    
-   ...})
+
+  ...})
   })
   })
 

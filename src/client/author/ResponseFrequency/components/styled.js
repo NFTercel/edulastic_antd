@@ -1,7 +1,8 @@
 import styled from "styled-components";
-import { Row, Col } from "antd";
+import { Row, Col, Button } from "antd";
 import { TableData } from "../../styled/table";
 import { CustomTooltip } from "./customToolTip";
+import { CustomChartTooltip } from "./charts/tooltip";
 import { Card } from "@edulastic/common";
 import { darkGrey, grey, lightBlue, black } from "@edulastic/colors";
 
@@ -113,6 +114,17 @@ export const StyledResponseTagContainer = styled(Col)`
 
 export const StyledSimpleBarChart = styled(StyledCard)`
   padding: 10px;
+  overflow: hidden;
+
+  .navigator-left {
+    left: 5px;
+    top: 50%;
+  }
+
+  .navigator-right {
+    right: 5px;
+    top: 50%;
+  }
 
   .recharts-wrapper .recharts-cartesian-grid-horizontal line:first-child,
   .recharts-wrapper .recharts-cartesian-grid-horizontal line:last-child {
@@ -137,4 +149,33 @@ export const StyledCustomTooltip = styled(CustomTooltip)`
       }
     }
   }
+`;
+
+export const StyledChartNavButton = styled(Button)`
+  position: absolute;
+  height: 50px;
+  width: 50px;
+  border: solid 1px #c0c0c0;
+  border-radius: 25px;
+  background-color: white;
+  color: black;
+`;
+
+export const StyledCustomChartTooltip = styled(CustomChartTooltip)`
+  min-width: 200px;
+  max-width: 600px;
+  min-height: 75px;
+  background-color: #f0f0f0;
+  color: black;
+  border: solid 1px #bebebe;
+  box-shadow: 0 0 20px #c0c0c0;
+  padding: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: pre;
+`;
+
+export const QuestionTypeHeading = styled.p`
+  font-size: 20px;
+  font-weight: 900;
 `;

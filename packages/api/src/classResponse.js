@@ -11,7 +11,7 @@ const classResponse = ({ testId }) =>
 
     .then(result => result.data.result);
 
-const studentResponse = ({ testActivityId }, groupId) =>
+const studentResponse = ({ testActivityId, groupId }) =>
   api
     .callApi({
       url: `/test-activity/${testActivityId}/report`,
@@ -20,11 +20,7 @@ const studentResponse = ({ testActivityId }, groupId) =>
         groupId
       }
     })
-    .then(result => result.data.result)
-    .catch(function(error) {
-      // handle error
-      console.log(error);
-    });
+    .then(result => result.data.result);
 
 const feedbackResponse = ({ body, testActivityId, questionId, groupId }) =>
   api

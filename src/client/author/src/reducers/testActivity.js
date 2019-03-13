@@ -3,6 +3,7 @@ import {
   RECEIVE_TESTACTIVITY_SUCCESS,
   RECEIVE_TESTACTIVITY_ERROR
 } from "../constants/actions";
+import { transformGradeBookResponse } from "../../ClassBoard/Transformer";
 
 import { createAction } from "redux-starter-kit";
 import { produce } from "immer";
@@ -24,12 +25,13 @@ const reducer = (state = initialState, { type, payload }) => {
   let nextState;
   switch (type) {
     case RECEIVE_TESTACTIVITY_REQUEST:
-      return { ...state, loading: true };
+      return { ...state, loading: true, assignmentId: payload.assignmentId, classId: payload.classId };
     case RECEIVE_TESTACTIVITY_SUCCESS:
       return {
         ...state,
         loading: false,
-        entities: payload.entities,
+        data: payload.gradebookData,
+        entities: transformGradeBookResponse(payload.gradebookData),
         additionalData: payload.additionalData
       };
     case REALTIME_GRADEBOOK_TEST_ACTIVITY_ADD:

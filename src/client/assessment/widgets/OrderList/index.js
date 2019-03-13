@@ -46,13 +46,31 @@ class OrderList extends Component {
   }
 
   render() {
+    const {
+      qIndex,
+      view,
+      previewTab,
+      smallSize,
+      item,
+      userAnswer,
+      testItem,
+      evaluation,
+      t,
+      setQuestionData,
+      saveAnswer
+    } = this.props;
+    const { correctTab } = this.state;
+
+    const fontSize = getFontSize(get(item, "ui_style.fontsize", "normal"));
+    const styleType = get(item, "ui_style.type", "list");
+    const axis = styleType === "inline" ? "x" : "y";
+    const columns = styleType === "inline" ? 3 : 1;
+
     const handleQuestionChange = value => {
-      const { setQuestionData, item } = this.props;
       setQuestionData({ ...item, stimulus: value });
     };
 
     const onSortOrderListEnd = ({ oldIndex, newIndex }) => {
-      const { item, setQuestionData } = this.props;
       const newData = cloneDeep(item);
 
       newData.list = arrayMove(newData.list, oldIndex, newIndex);
@@ -61,7 +79,6 @@ class OrderList extends Component {
     };
 
     const handleQuestionsChange = (value, index) => {
-      const { setQuestionData, item } = this.props;
       const newData = cloneDeep(item);
 
       newData.list[value] = index;
@@ -70,7 +87,6 @@ class OrderList extends Component {
     };
 
     const handleDeleteQuestion = index => {
-      const { setQuestionData, item, saveAnswer } = this.props;
       const newItem = cloneDeep(item);
 
       newItem.list = newItem.list.filter((q, i) => i !== index);
@@ -89,7 +105,6 @@ class OrderList extends Component {
     };
 
     const handleAddQuestion = () => {
-      const { setQuestionData, item, saveAnswer } = this.props;
       const newItem = cloneDeep(item);
 
       newItem.list = [...item.list, ""];
@@ -110,9 +125,7 @@ class OrderList extends Component {
     };
 
     const handleCorrectSortEnd = ({ oldIndex, newIndex }) => {
-      const { setQuestionData, item } = this.props;
       const newItem = cloneDeep(item);
-      const { correctTab } = this.state;
 
       if (correctTab === 0) {
         newItem.validation.valid_response.value = arrayMove(
@@ -132,17 +145,13 @@ class OrderList extends Component {
     };
 
     const onSortPreviewEnd = ({ oldIndex, newIndex }) => {
-      const { saveAnswer, userAnswer } = this.props;
-
       const newPreviewList = arrayMove(userAnswer, oldIndex, newIndex);
 
       saveAnswer(newPreviewList);
     };
 
     const handleAddAltResponse = () => {
-      const { setQuestionData, item } = this.props;
       const newItem = cloneDeep(item);
-      const { correctTab } = this.state;
 
       newItem.validation.alt_responses.push({
         score: 1,
@@ -156,7 +165,6 @@ class OrderList extends Component {
     };
 
     const handleDeleteAltAnswers = index => {
-      const { setQuestionData, item } = this.props;
       const newItem = cloneDeep(item);
 
       newItem.validation.alt_responses.splice(index, 1);
@@ -168,9 +176,7 @@ class OrderList extends Component {
     };
 
     const handleUpdatePoints = points => {
-      const { setQuestionData, item } = this.props;
       const newItem = cloneDeep(item);
-      const { correctTab } = this.state;
 
       if (correctTab === 0) {
         newItem.validation.valid_response.score = points;
@@ -181,47 +187,32 @@ class OrderList extends Component {
       setQuestionData(newItem);
     };
 
-    const renderOptions = () => {
-      const { item } = this.props;
-      const { correctTab } = this.state;
-
-      return (
-        <OptionsList
-          data-cy="match-option-list"
-          prefix="options2"
-          readOnly
-          items={
-            correctTab === 0
-              ? item.validation.valid_response.value.map(ind => item.list[ind])
-              : item.validation.alt_responses[correctTab - 1].value.map(ind => item.list[ind])
-          }
-          onSortEnd={handleCorrectSortEnd}
-          useDragHandle
-          columns={1}
-          points={
-            correctTab === 0
-              ? item.validation.valid_response.score
-              : item.validation.alt_responses[correctTab - 1].score
-          }
-          onChangePoints={handleUpdatePoints}
-        />
-      );
-    };
+    const renderOptions = () => (
+      <OptionsList
+        fontSize={fontSize}
+        axis={axis}
+        data-cy="match-option-list"
+        prefix="options2"
+        readOnly
+        items={
+          correctTab === 0
+            ? item.validation.valid_response.value.map(ind => item.list[ind])
+            : item.validation.alt_responses[correctTab - 1].value.map(ind => item.list[ind])
+        }
+        onSortEnd={handleCorrectSortEnd}
+        useDragHandle
+        columns={columns}
+        points={
+          correctTab === 0 ? item.validation.valid_response.score : item.validation.alt_responses[correctTab - 1].score
+        }
+        onChangePoints={handleUpdatePoints}
+      />
+    );
 
     const onTabChange = (index = 0) => {
       this.setState({
         correctTab: index
       });
-    };
-
-    const { qIndex, view, previewTab, smallSize, item, userAnswer, testItem, evaluation, t } = this.props;
-    const { correctTab } = this.state;
-
-    const fontSize = getFontSize(get(item, "ui_style.fontsize", "normal"));
-
-    const listStyle = {
-      fontSize,
-      display: get(item, "ui_style.type", "list") === "inline" ? "flex" : "block"
     };
 
     if (!item) return null;
@@ -237,6 +228,7 @@ class OrderList extends Component {
               <QuestionTextArea onChange={handleQuestionChange} value={item.stimulus} style={{ marginBottom: 30 }} />
               <Subtitle data-cy="list-container">{t("component.orderlist.list")}</Subtitle>
               <List
+                fontSize={fontSize}
                 onAdd={handleAddQuestion}
                 items={item.list}
                 onSortEnd={onSortOrderListEnd}
@@ -268,7 +260,9 @@ class OrderList extends Component {
                 questionsList={item.list}
                 previewIndexesList={userAnswer}
                 evaluation={evaluation}
-                listStyle={listStyle}
+                listStyle={{ fontSize }}
+                axis={axis}
+                columns={columns}
               />
             )}
 
@@ -281,7 +275,9 @@ class OrderList extends Component {
                 evaluation={evaluation}
                 validation={item.validation}
                 list={item.list}
-                listStyle={listStyle}
+                listStyle={{ fontSize }}
+                axis={axis}
+                columns={columns}
               />
             )}
 
@@ -290,7 +286,9 @@ class OrderList extends Component {
                 onSortEnd={onSortPreviewEnd}
                 questions={userAnswer.map(index => item.list[index])}
                 smallSize={smallSize}
-                listStyle={listStyle}
+                listStyle={{ fontSize }}
+                axis={axis}
+                columns={columns}
               />
             )}
           </Wrapper>

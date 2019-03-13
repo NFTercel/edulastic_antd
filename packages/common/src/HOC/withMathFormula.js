@@ -144,10 +144,7 @@ export const withMathFormula = WrappedComponent => {
           onLoaded={() => this.startMathValidating()}
         >
           <React.Fragment>
-            {/* FIX IT */}
-            {/* {newInnerHtml !== undefined &&
-              <StyledWrappedComponent {...this.props} dangerouslySetInnerHTML={{ __html: newInnerHtml }} />
-            } */}
+            <StyledWrappedComponent {...this.props} dangerouslySetInnerHTML={{ __html: newInnerHtml }} />
             <NoneDiv>
               <span ref={this.mathFieldRef} className="input__math__field" />
             </NoneDiv>

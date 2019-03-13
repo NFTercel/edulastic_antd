@@ -33,10 +33,11 @@ function* receiveGradeBookSaga({ payload }) {
 
 function* receiveTestActivitySaga({ payload }) {
   try {
-    const { result, additionalData } = yield call(classBoardApi.testActivity, payload);
+    //test, testItemsData, testActivities, studentNames, testQuestionActivities
+    const { additionalData, ...gradebookData } = yield call(classBoardApi.testActivity, payload);
     yield put({
       type: RECEIVE_TESTACTIVITY_SUCCESS,
-      payload: { entities: result, additionalData }
+      payload: { gradebookData, additionalData }
     });
   } catch (err) {
     const errorMessage = "Receive tests is failing";
@@ -61,21 +62,21 @@ export const stateTestActivitySelector = state => state.author_classboard_testAc
 export const getGradeBookSelector = createSelector(
   stateTestActivitySelector,
   state => {
-    const entities = state.entities;
+    const { entities } = state;
     const total = entities.length;
     const submittedEntities = entities.filter(x => x.status === "submitted");
     const submittedNumber = submittedEntities.length;
-    //TODO: handle absent
+    // TODO: handle absent
     const absentNumber = 0;
     const submittedScores = submittedEntities
       .map(({ score, maxScore }) => score / maxScore)
       .reduce((prev, cur) => prev + cur, 0);
     const submittedScoresAverage = submittedNumber > 0 ? submittedScores / submittedNumber : 0;
-    const startedEntities = entities.filter(x => x.status != "notStarted");
-    let questionMap = {};
-    for (let entity of startedEntities) {
-      const questionActivities = entity.questionActivities;
-      for (let { _id, notStarted, skipped, correct, timeSpent, partiallyCorrect } of questionActivities) {
+    const startedEntities = entities.filter(x => x.status !== "notStarted");
+    const questionMap = {};
+    for (const entity of startedEntities) {
+      const { questionActivities } = entity;
+      for (const { _id, notStarted, skipped, correct, timeSpent, partiallyCorrect } of questionActivities) {
         if (!questionMap[_id]) {
           questionMap[_id] = {
             _id,
@@ -132,6 +133,11 @@ export const getTestActivitySelector = createSelector(
 export const getAdditionalDataSelector = createSelector(
   stateTestActivitySelector,
   state => state.additionalData
+);
+
+export const getAssignmentClassIdSelector = createSelector(
+  stateTestActivitySelector,
+  ({ classId, assignmentId }) => ({ classId, assignmentId })
 );
 
 export const stateClassResponseSelector = state => state.classResponse;

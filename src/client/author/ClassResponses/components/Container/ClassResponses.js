@@ -7,15 +7,15 @@ import { Link } from "react-router-dom";
 import { withNamespaces } from "@edulastic/localization";
 import { ComposedChart, Bar, XAxis, YAxis, ResponsiveContainer } from "recharts";
 // actions
-import { receiveStudentResponseAction } from "../../../src/actions/classBoard";
+import { receiveStudentResponseAction, receiveClassResponseAction } from "../../../src/actions/classBoard";
 // selectors
 import {
   getClassResponseSelector,
   getStudentResponseSelector,
-  getTestActivitySelector
-} from "../../../sharedDucks/classBoard";
-// ducks
-import { getAdditionalDataSelector } from "../../../sharedDucks/classBoard";
+  getTestActivitySelector,
+  getAdditionalDataSelector,
+  getAssignmentClassIdSelector
+} from "../../../ClassBoard/ducks";
 // components
 import ClassSelect from "../../../Shared/Components/ClassSelect/ClassSelect";
 import ClassHeader from "../../../Shared/Components/ClassHeader/ClassHeader";
@@ -49,9 +49,28 @@ class ClassResponses extends Component {
   };
 
   componentDidMount() {
-    const { loadStudentResponses, match } = this.props;
+    const { loadStudentResponses, match, testActivity, additionalData, history, loadClassResponses } = this.props;
+    if (testActivity.length === 0) {
+      history.goBack();
+    }
+    const { testId, classId } = additionalData;
     const { testActivityId } = match.params;
-    loadStudentResponses({ testActivityId });
+    loadStudentResponses({ testActivityId, groupId: classId });
+    loadClassResponses({ testId });
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    const {
+      studentResponse: { testActivity }
+    } = props;
+    if (!testActivity) {
+      return null;
+    }
+    const { testId, classId } = testActivity;
+    if (testId !== state.testId) {
+      return { testId, groupId: classId };
+    }
+    return null;
   }
 
   handleCreate = () => {
@@ -75,11 +94,11 @@ class ClassResponses extends Component {
     let totalMaxScore = 0;
     const data = [];
     const { showFeedbackForm } = this.state;
-    const studentItems = this.props.testActivity;
+    const { testActivity: studentItems } = this.props;
     const { classResponse, additionalData, studentResponse, loadStudentResponses } = this.props;
     const testActivity = studentResponse ? studentResponse.testActivity : null;
     const questionActivities = studentResponse ? studentResponse.questionActivities : null;
-    const showClassQuestions = testActivity !== undefined && !showFeedbackForm;
+    const showClassQuestions = !!testActivity && !showFeedbackForm;
 
     if (questionActivities) {
       questionActivities.forEach((item, i) => {
@@ -95,20 +114,29 @@ class ClassResponses extends Component {
       });
     }
 
-    const assignmentId = testActivity ? testActivity.assignmentId : "";
+    let assignmentId = testActivity ? testActivity.assignmentId : "";
     const groupId = testActivity ? testActivity.groupId : "";
-    const classId = testActivity ? testActivity._id : "";
+    let classId = testActivity ? testActivity._id : "";
     const userId = testActivity ? testActivity.userId : "";
     const classassignment = classResponse ? classResponse.title : "";
     const classname = additionalData ? additionalData.className : "";
+    const classnames = [{ name: classname }];
     const currentStudent = studentItems.find(student => student.studentId === userId);
     const studentName = currentStudent ? currentStudent.studentName : "";
     const linkToClass = `/author/classboard/${assignmentId}/${groupId}`;
     const linkToResponses = `/author/classresponses/${classId}`;
+    const { assignmentIdClassId } = this.props;
+    assignmentId = assignmentId || assignmentIdClassId.assignmentId;
+    classId = classId || assignmentIdClassId.classId;
 
     return (
       <div>
-        <ClassHeader additionalData={additionalData || {}} onCreate={this.handleCreate} />
+        <ClassHeader
+          additionalData={additionalData || {}}
+          assignmentId={assignmentIdClassId.assignmentId}
+          classId={assignmentIdClassId.classId}
+          onCreate={this.handleCreate}
+        />
         <StyledFlexContainer justifyContent="space-between">
           <PaginationInfo>
             <a>
@@ -129,7 +157,7 @@ class ClassResponses extends Component {
           </PaginationInfo>
           <SelectWrapper>
             <StudentSelect students={studentItems} loadStudentResponses={loadStudentResponses} />
-            <ClassSelect classname={classname} />
+            <ClassSelect classname={classnames} />
           </SelectWrapper>
         </StyledFlexContainer>
         <StyledCard bordered={false}>
@@ -204,8 +232,12 @@ class ClassResponses extends Component {
             </OverallButton>
           </PaginationButtonGroup>
         </StyledFlexContainer>
-        {showClassQuestions && (
-          <ClassQuestions showOnly={null} testActivity={testActivity} currentStudent={currentStudent || []} />
+        {showClassQuestions && !!studentResponse && (
+          <ClassQuestions
+            currentStudent={currentStudent || []}
+            studentResponse={studentResponse}
+            classResponse={classResponse}
+          />
         )}
         {showFeedbackForm && (
           <StyledFlexContainer justifyContent="flex-end">
@@ -225,10 +257,12 @@ const enhance = compose(
       classResponse: getClassResponseSelector(state),
       studentResponse: getStudentResponseSelector(state),
       testActivity: getTestActivitySelector(state),
-      additionalData: getAdditionalDataSelector(state)
+      additionalData: getAdditionalDataSelector(state),
+      assignmentIdClassId: getAssignmentClassIdSelector(state)
     }),
     {
-      loadStudentResponses: receiveStudentResponseAction
+      loadStudentResponses: receiveStudentResponseAction,
+      loadClassResponses: receiveClassResponseAction
     }
   )
 );
@@ -238,7 +272,10 @@ export default enhance(ClassResponses);
 ClassResponses.propTypes = {
   history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
-  classResponse: PropTypes.shape({}).isRequired,
-  studentResponse: PropTypes.shape({}).isRequired,
-  loadStudentResponses: PropTypes.func.isRequired
+  classResponse: PropTypes.object.isRequired,
+  studentResponse: PropTypes.object.isRequired,
+  testActivity: PropTypes.array.isRequired,
+  additionalData: PropTypes.object.isRequired,
+  loadStudentResponses: PropTypes.func.isRequired,
+  loadClassResponses: PropTypes.func.isRequired
 };

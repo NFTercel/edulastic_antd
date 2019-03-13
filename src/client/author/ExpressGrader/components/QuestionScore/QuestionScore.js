@@ -1,41 +1,29 @@
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/prop-types */
-/* eslint-disable jsx-a11y/alt-text */
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { StyledText, StyledWrapper } from "./styled";
 
+function getScoreColor(value, maxScore) {
+  let color;
+  switch (value) {
+    case 0:
+      color = "red";
+      break;
+    case maxScore:
+      color = "green";
+      break;
+    default:
+      color = "yellow";
+      break;
+  }
+  return color;
+}
+
 class QuestionScore extends Component {
-  constructor() {
-    super();
-  }
-
-  getScoreColor(value, maxScore) {
-    let color;
-    switch (value) {
-      case 0:
-        color = "red";
-        break;
-      case maxScore:
-        color = "green";
-        break;
-      default:
-        color = "yellow";
-        break;
-    }
-    return color;
-  }
-
   render() {
-    let score;
-    let maxScore;
-    let studentScore;
     const { question, tableData, showQuestionModal } = this.props;
     const isQuestion = question && question.score !== undefined && question.maxScore !== undefined;
-    if (isQuestion) {
-      score = question.score;
-      maxScore = question.maxScore;
-      studentScore = question.score;
-    } else {
+    let { score, maxScore, score: studentScore } = question;
+    if (!isQuestion) {
       score = 0;
       maxScore = 0;
       studentScore = "-";
@@ -43,10 +31,16 @@ class QuestionScore extends Component {
 
     return (
       <StyledWrapper onClick={() => showQuestionModal(question, tableData)}>
-        <StyledText color={this.getScoreColor(score, maxScore)}>{studentScore}</StyledText>
+        <StyledText color={getScoreColor(score, maxScore)}>{studentScore}</StyledText>
       </StyledWrapper>
     );
   }
 }
+
+QuestionScore.propTypes = {
+  question: PropTypes.object.isRequired,
+  tableData: PropTypes.object.isRequired,
+  showQuestionModal: PropTypes.func.isRequired
+};
 
 export default QuestionScore;

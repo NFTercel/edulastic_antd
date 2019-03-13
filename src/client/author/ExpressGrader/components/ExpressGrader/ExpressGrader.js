@@ -17,10 +17,10 @@ import {
 import {
   getGradeBookSelector,
   getTestActivitySelector,
-  getAdditionalDataSelector
-} from "../../../sharedDucks/classBoard";
-// selectors
-import { getClassResponseSelector, getStudentResponseSelector } from "../../../src/selectors/classBoard";
+  getAdditionalDataSelector,
+  getClassResponseSelector,
+  getStudentResponseSelector
+} from "../../../ClassBoard/ducks";
 // components
 import ScoreTable from "../ScoreTable/ScoreTable";
 import QuestionModal from "../QuestionModal/QuestionModal";
@@ -36,8 +36,6 @@ class ExpressGrader extends Component {
       tableData: null,
       isVisibleModal: false
     };
-    this.showQuestionModal = this.showQuestionModal.bind(this);
-    this.hideQuestionModal = this.hideQuestionModal.bind(this);
   }
 
   componentDidMount() {
@@ -45,7 +43,7 @@ class ExpressGrader extends Component {
     const { assignmentId, classId, testActivityId } = match.params;
     loadGradebook(assignmentId, classId);
     loadTestActivity(assignmentId, classId);
-    loadStudentResponses({ testActivityId });
+    loadStudentResponses({ testActivityId, groupId: classId });
   }
 
   handleCreate = () => {
@@ -54,20 +52,20 @@ class ExpressGrader extends Component {
     history.push(`${match.url}/create`);
   };
 
-  showQuestionModal(record, tableData) {
+  showQuestionModal = (record, tableData) => {
     this.setState({
       record,
       tableData,
       isVisibleModal: true
     });
-  }
+  };
 
-  hideQuestionModal() {
+  hideQuestionModal = () => {
     this.setState({
       isVisibleModal: false,
       record: null
     });
-  }
+  };
 
   render() {
     const {
@@ -80,7 +78,6 @@ class ExpressGrader extends Component {
     const { isVisibleModal, record, tableData } = this.state;
     const { assignmentId, classId } = this.props.match.params;
     const questionActivities = studentResponse !== undefined ? studentResponse.questionActivities : [];
-
     return (
       <div>
         <ClassHeader
@@ -89,13 +86,12 @@ class ExpressGrader extends Component {
           active="expressgrader"
           assignmentId={assignmentId}
           onCreate={this.handleCreate}
+          additionalData={additionalData || {}}
         />
         <StyledFlexContainer justifyContent="space-between">
           <PaginationInfo>
-            <a>
-              &lt; <Link to="/author/assignments">RECENTS ASSIGNMENTS</Link>
-            </a>{" "}
-            / <a>CALIFORNIA VERSION 4</a> / <a>CLASS 1</a>
+            &lt; <Link to="/author/assignments">RECENTS ASSIGNMENTS</Link> /{" "}
+            {additionalData && <a>{additionalData.testName}</a>} / {additionalData && <a>{additionalData.className}</a>}
           </PaginationInfo>
         </StyledFlexContainer>
         <ScoreTable

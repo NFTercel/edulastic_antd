@@ -101,7 +101,7 @@ function* saveAssignment({ payload }) {
   try {
     const studentsList = yield select(getStudentsSelector);
     const testId = yield select(getTestIdSelector);
-    const classData = generateClassData(payload.class, payload.students, studentsList, payload.specificStudents);
+    let classData = generateClassData(payload.class, payload.students, studentsList, payload.specificStudents);
     const assignedBy = yield select(getUserNameSelector);
     // if no class is selected dont bother sending a request.
     if (!classData.length) {
@@ -111,6 +111,23 @@ function* saveAssignment({ payload }) {
     const startDate = payload.startDate && moment(payload.startDate).valueOf();
     const endDate = payload.endDate && moment(payload.endDate).valueOf();
 
+    const isUpdate = !!payload._id;
+
+    // if updating, and releaseScore changes,remove the class level settings :D
+    if (isUpdate) {
+      const currentData = yield select(getCurrentAssignmentSelector);
+
+      if (currentData.releaseScore === payload.releaseScore) {
+        const { scoreReleasedClasses: releasedClasses } = currentData;
+        classData = classData.map(item => {
+          if (releasedClasses.includes(item._id)) {
+            item.releaseScore = true;
+          }
+          return item;
+        });
+      }
+    }
+
     const data = omit(
       {
         ...payload,
@@ -119,10 +136,8 @@ function* saveAssignment({ payload }) {
         endDate,
         testId
       },
-      ["_id", "__v", "createdAt", "updatedAt", "students"]
+      ["_id", "__v", "createdAt", "updatedAt", "students", "scoreReleasedClasses"]
     );
-    const isUpdate = !!payload._id;
-
     const result = isUpdate
       ? yield call(assignmentApi.update, payload._id, data)
       : yield call(assignmentApi.create, { assignments: [data], assignedBy });

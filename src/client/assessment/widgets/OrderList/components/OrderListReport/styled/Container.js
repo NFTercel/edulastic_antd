@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  width: 100%;
-  display: flex;
+  width: ${props => (props.columns === 1 ? 100 / props.columns : 100 / props.columns - 2)}%;
+  display: inline-flex;
   align-items: stretch;
   margin-bottom: 10px;
   background: ${({ correct, theme }) =>

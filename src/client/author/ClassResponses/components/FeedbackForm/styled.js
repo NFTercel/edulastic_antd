@@ -6,7 +6,7 @@ export const StyledCardTwo = styled(Card)`
   border-radius: 10px;
   box-shadow: 3px 2px 7px lightgray;
   display: inline-block;
-  margin: 0px 0 auto 32px
+  margin: 0px 0 auto 0px
   min-width: 250px;
 `;
 

@@ -214,77 +214,76 @@ const MatchListPreview = ({
             </FlexContainer>
           ))}
         </FlexContainer>
-        {dragItems.length > 0 && (
-          <CorrectAnswersContainer title={t("component.matchList.dragItemsTitle")}>
-            <DropContainer drop={drop} flag="dragItems" style={styles.dragItemsContainerStyle} noBorder>
-              <FlexContainer style={{ width: "100%" }} alignItems="stretch" justifyContent="center">
-                {group_possible_responses ? (
-                  possible_response_groups.map((i, index) => (
-                    <Fragment key={index}>
-                      <FlexContainer
-                        style={{ flex: 1 }}
-                        flexDirection="column"
-                        alignItems="center"
-                        justifyContent="flex-start"
-                      >
-                        <Subtitle
-                          style={{
-                            color: theme.widgets.matchList.previewSubtitleColor
-                          }}
-                        >
-                          {i.title}
-                        </Subtitle>
-                        <FlexContainer justifyContent="center" style={{ width: "100%", flexWrap: "wrap" }}>
-                          {i.responses.map(
-                            (ite, ind) =>
-                              dragItems.includes(ite) && (
-                                <DragItem flag="dragItems" onDrop={onDrop} key={ind} item={ite} getStyles={getStyles} />
-                              )
-                          )}
-                        </FlexContainer>
-                      </FlexContainer>
-                      {index !== possible_response_groups.length - 1 && (
-                        <div
-                          style={{
-                            width: 0,
-                            marginLeft: 35,
-                            marginRight: 35,
-                            borderLeft: `1px solid ${theme.widgets.matchList.groupSeparatorBorderColor}`
-                          }}
-                        />
-                      )}
-                    </Fragment>
-                  ))
-                ) : (
-                  <Fragment>
+
+        <CorrectAnswersContainer title={t("component.matchList.dragItemsTitle")}>
+          <DropContainer drop={drop} flag="dragItems" style={styles.dragItemsContainerStyle} noBorder>
+            <FlexContainer style={{ width: "100%" }} alignItems="stretch" justifyContent="center">
+              {group_possible_responses ? (
+                possible_response_groups.map((i, index) => (
+                  <Fragment key={index}>
                     <FlexContainer
                       style={{ flex: 1 }}
                       flexDirection="column"
                       alignItems="center"
                       justifyContent="flex-start"
                     >
+                      <Subtitle
+                        style={{
+                          color: theme.widgets.matchList.previewSubtitleColor
+                        }}
+                      >
+                        {i.title}
+                      </Subtitle>
                       <FlexContainer justifyContent="center" style={{ width: "100%", flexWrap: "wrap" }}>
-                        {dragItems.map(
+                        {i.responses.map(
                           (ite, ind) =>
                             dragItems.includes(ite) && (
-                              <DragItem
-                                flag="dragItems"
-                                onDrop={onDrop}
-                                key={ind}
-                                renderIndex={ind}
-                                item={ite}
-                                getStyles={getStyles}
-                              />
+                              <DragItem flag="dragItems" onDrop={onDrop} key={ind} item={ite} getStyles={getStyles} />
                             )
                         )}
                       </FlexContainer>
                     </FlexContainer>
+                    {index !== possible_response_groups.length - 1 && (
+                      <div
+                        style={{
+                          width: 0,
+                          marginLeft: 35,
+                          marginRight: 35,
+                          borderLeft: `1px solid ${theme.widgets.matchList.groupSeparatorBorderColor}`
+                        }}
+                      />
+                    )}
                   </Fragment>
-                )}
-              </FlexContainer>
-            </DropContainer>
-          </CorrectAnswersContainer>
-        )}
+                ))
+              ) : (
+                <Fragment>
+                  <FlexContainer
+                    style={{ flex: 1 }}
+                    flexDirection="column"
+                    alignItems="center"
+                    justifyContent="flex-start"
+                  >
+                    <FlexContainer justifyContent="center" style={{ width: "100%", flexWrap: "wrap" }}>
+                      {dragItems.map(
+                        (ite, ind) =>
+                          dragItems.includes(ite) && (
+                            <DragItem
+                              flag="dragItems"
+                              onDrop={onDrop}
+                              key={ind}
+                              renderIndex={ind}
+                              item={ite}
+                              getStyles={getStyles}
+                            />
+                          )
+                      )}
+                    </FlexContainer>
+                  </FlexContainer>
+                </Fragment>
+              )}
+            </FlexContainer>
+          </DropContainer>
+        </CorrectAnswersContainer>
       </div>
 
       {previewTab === SHOW && (

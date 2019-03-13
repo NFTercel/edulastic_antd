@@ -1,4 +1,6 @@
 import React from "react";
+import PropTypes from "prop-types";
+
 import Question from "../Question/Question";
 import { ModalWrapper } from "./styled";
 import BottomNavigation from "../BottomNavigation/BottomNavigation";
@@ -15,12 +17,6 @@ class QuestionModal extends React.Component {
       maxQuestions: null,
       maxStudents: null
     };
-    this.hideModal = this.hideModal.bind(this);
-    this.prevStudent = this.prevStudent.bind(this);
-    this.nextStudent = this.nextStudent.bind(this);
-    this.nextQuestion = this.nextQuestion.bind(this);
-    this.prevQuestion = this.prevQuestion.bind(this);
-    this.keyListener = this.keyListener.bind(this);
   }
 
   componentDidMount() {
@@ -64,7 +60,7 @@ class QuestionModal extends React.Component {
     document.removeEventListener("keydown", this.keyListener, false);
   }
 
-  keyListener(event) {
+  keyListener = event => {
     if (event.keyCode === 37) {
       this.prevQuestion();
     }
@@ -77,59 +73,59 @@ class QuestionModal extends React.Component {
     if (event.keyCode === 40) {
       this.nextStudent();
     }
-  }
+  };
 
-  showModal() {
+  showModal = () => {
     const { showQuestionModal } = this.props;
     showQuestionModal();
-  }
+  };
 
-  hideModal() {
+  hideModal = () => {
     const { hideQuestionModal } = this.props;
     hideQuestionModal();
-  }
+  };
 
-  nextStudent() {
+  nextStudent = () => {
     const { maxStudents } = this.state;
-    let rowIndex = this.state.rowIndex;
+    const { rowIndex } = this.state;
     const nextIndex = rowIndex + 1;
     if (nextIndex !== maxStudents) {
       this.setState({ loaded: false }, () => {
         this.setState({ rowIndex: nextIndex, loaded: true });
       });
     }
-  }
+  };
 
-  prevStudent() {
-    let rowIndex = this.state.rowIndex;
+  prevStudent = () => {
+    const { rowIndex } = this.state;
     if (rowIndex !== 0) {
       const prevIndex = rowIndex - 1;
       this.setState({ loaded: false }, () => {
         this.setState({ rowIndex: prevIndex, loaded: true });
       });
     }
-  }
+  };
 
-  nextQuestion() {
+  nextQuestion = () => {
     const { maxQuestions } = this.state;
-    let colIndex = this.state.colIndex;
+    const { colIndex } = this.state;
     const nextIndex = colIndex + 1;
     if (nextIndex !== maxQuestions) {
       this.setState({ loaded: false }, () => {
         this.setState({ colIndex: nextIndex, loaded: true });
       });
     }
-  }
+  };
 
-  prevQuestion() {
-    let colIndex = this.state.colIndex;
+  prevQuestion = () => {
+    const { colIndex } = this.state;
     if (colIndex !== 0) {
       const prevIndex = colIndex - 1;
       this.setState({ loaded: false }, () => {
         this.setState({ colIndex: prevIndex, loaded: true });
       });
     }
-  }
+  };
 
   render() {
     let question = null;
@@ -167,5 +163,13 @@ class QuestionModal extends React.Component {
     );
   }
 }
+
+QuestionModal.propTypes = {
+  record: PropTypes.object.isRequired,
+  tableData: PropTypes.array.isRequired,
+  isVisibleModal: PropTypes.bool.isRequired,
+  showQuestionModal: PropTypes.func.isRequired,
+  hideQuestionModal: PropTypes.func.isRequired
+};
 
 export default QuestionModal;

@@ -42,9 +42,14 @@ export const generateClassData = (classes = [], selectedStudents = [], studentLi
 
 export const formatAssignment = assignment => {
   let students = [];
-  let classes = (assignment.class || []).map(item => {
+  const scoreReleasedClasses = [];
+  const classes = (assignment.class || []).map(item => {
     if (assignment.specificStudents) {
       students = [...students, ...item.students];
+    }
+    // ignore false, it wont be overriding anything!
+    if (assignment.releaseScore) {
+      scoreReleasedClasses.push(item._id);
     }
     return item._id;
   });
@@ -52,6 +57,7 @@ export const formatAssignment = assignment => {
   return {
     ...assignment,
     class: classes,
-    students: uniq(students)
+    students: uniq(students),
+    scoreReleasedClasses
   };
 };

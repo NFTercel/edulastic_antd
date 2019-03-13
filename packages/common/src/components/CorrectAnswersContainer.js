@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
-import { mainBgColor } from "@edulastic/colors";
+import { dashBorderColor } from "@edulastic/colors";
 import { Subtitle } from "@edulastic/common";
 
 const CorrectAnswersContainer = ({ title, children }) => (
@@ -24,9 +24,10 @@ CorrectAnswersContainer.defaultProps = {
 export default CorrectAnswersContainer;
 
 const Container = styled.div`
+  margin: 20px 0;
   padding: 22px 35px;
   min-height: 206px;
   border-radius: 10px;
-  background-color: ${mainBgColor};
+  background-color: ${dashBorderColor};
   flex-grow: 1;
 `;

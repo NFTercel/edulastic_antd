@@ -219,15 +219,25 @@ class CustomQuillComponent extends React.Component {
     this.state.quillVal = props.value;
   }
 
+  componentDidUpdate(prevProps) {
+    const { value } = this.props;
+
+    if (prevProps.value !== value) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ quillVal: value });
+    }
+  }
+
   showToolbar = () => {
     this.setState({ active: true });
   };
 
   onFocus = () => {
-    const { clearOnFirstFocus } = this.props;
+    const { clearOnFirstFocus, onChange } = this.props;
     const { firstFocus } = this.state;
     if (firstFocus && clearOnFirstFocus) {
       this.setState({ quillVal: "" });
+      onChange("");
       this.quillRef.getEditor().setText("");
       this.setState({ firstFocus: false });
     }

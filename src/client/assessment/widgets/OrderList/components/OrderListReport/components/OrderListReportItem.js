@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import { SortableElement } from "react-sortable-hoc";
 import { compose } from "redux";
@@ -16,41 +16,43 @@ import { IconWrapper } from "../styled/IconWrapper";
 import { IconCheck } from "../styled/IconCheck";
 import { IconClose } from "../styled/IconClose";
 
-const OrderListReportItem = SortableElement(({ children, correctText, correct, showAnswers, ind, t, theme }) => (
-  <div>
-    <Container correct={correct}>
-      <Text>
-        <FlexContainer>
-          <Index>{ind}</Index>
-          <MathFormulaDisplay dangerouslySetInnerHTML={{ __html: children }} />
-        </FlexContainer>
-        {correct && (
-          <IconWrapper color={theme.widgets.orderList.correctIconWrapperColor}>
-            <IconCheck />
-          </IconWrapper>
-        )}
-        {!correct && (
-          <IconWrapper color={theme.widgets.orderList.incorrectIconWrapperColor}>
-            <IconClose />
-          </IconWrapper>
-        )}
-      </Text>
-    </Container>
-    {showAnswers && !correct && (
-      <CorrectAnswerItem>
+const OrderListReportItem = SortableElement(
+  ({ children, correctText, correct, showAnswers, ind, t, theme, columns }) => (
+    <Fragment>
+      <Container columns={columns} correct={correct}>
         <Text>
           <FlexContainer>
-            <Index color={theme.widgets.orderList.incorrectIndexColor}>{ind}</Index>
-            <QuestionText>
-              <span>{t("component.orderlist.correctanswer")}</span>{" "}
-              <MathFormulaDisplay dangerouslySetInnerHTML={{ __html: correctText }} />
-            </QuestionText>
+            <Index>{ind}</Index>
+            <MathFormulaDisplay dangerouslySetInnerHTML={{ __html: children }} />
           </FlexContainer>
+          {correct && (
+            <IconWrapper color={theme.widgets.orderList.correctIconWrapperColor}>
+              <IconCheck />
+            </IconWrapper>
+          )}
+          {!correct && (
+            <IconWrapper color={theme.widgets.orderList.incorrectIconWrapperColor}>
+              <IconClose />
+            </IconWrapper>
+          )}
         </Text>
-      </CorrectAnswerItem>
-    )}
-  </div>
-));
+      </Container>
+      {showAnswers && !correct && (
+        <CorrectAnswerItem>
+          <Text>
+            <FlexContainer>
+              <Index color={theme.widgets.orderList.incorrectIndexColor}>{ind}</Index>
+              <QuestionText>
+                <span>{t("component.orderlist.correctanswer")}</span>{" "}
+                <MathFormulaDisplay dangerouslySetInnerHTML={{ __html: correctText }} />
+              </QuestionText>
+            </FlexContainer>
+          </Text>
+        </CorrectAnswerItem>
+      )}
+    </Fragment>
+  )
+);
 
 OrderListReportItem.propTypes = {
   children: PropTypes.string.isRequired,
@@ -59,12 +61,14 @@ OrderListReportItem.propTypes = {
   correctText: PropTypes.string,
   ind: PropTypes.number.isRequired,
   t: PropTypes.func.isRequired,
-  theme: PropTypes.object.isRequired
+  theme: PropTypes.object.isRequired,
+  columns: PropTypes.number
 };
 
 OrderListReportItem.defaultProps = {
   showAnswers: false,
-  correctText: ""
+  correctText: "",
+  columns: 1
 };
 
 const enhance = compose(

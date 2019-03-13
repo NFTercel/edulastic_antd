@@ -1,7 +1,7 @@
 import { userBuilder } from "./generate";
 import LoginPage from "../e2e/framework/student/loginPage.js";
 
-Cypress.LocalStorage.clear = () => { };
+Cypress.LocalStorage.clear = () => {};
 const BASE_URL = Cypress.config("API_URL");
 
 Cypress.Commands.add("createUser", overrides => {
@@ -36,13 +36,13 @@ Cypress.Commands.add("setToken", (role = "teacher") => {
   const postData =
     role == "teacher"
       ? {
-        email: "auto.teacher1@snapwiz.com",
-        password: "snapwiz"
-      }
+          email: "auto.teacher1@snapwiz.com",
+          password: "snapwiz"
+        }
       : {
-        email: "auto.student3@snapwiz.com",
-        password: "snapwiz"
-      };
+          email: "auto.student3@snapwiz.com",
+          password: "snapwiz"
+        };
   /* cy.request({
           url: `${BASE_URL}/auth/login`,
           method: 'POST',
@@ -85,13 +85,13 @@ Cypress.Commands.add(
       console.log("Result = ", body.result);
       cy.fixture("assignments").then(asgns => {
         const postData = asgns["default"];
-        postData["startDate"] = startDt.valueOf();
-        postData["endDate"] = dueDt.valueOf();
+        postData["assignments"][0]["startDate"] = startDt.valueOf();
+        postData["assignments"][0]["endDate"] = dueDt.valueOf();
         console.log("asdnDO - ", postData);
         cy.request({
           url: `${BASE_URL}/assignments`,
           method: "POST",
-          body: [postData],
+          body: postData,
           headers: {
             authorization: body.result.token,
             "Content-Type": "application/json"
@@ -270,7 +270,7 @@ class DndSimulatorDataTransfer {
     return "";
   }
 
-  setDragImage(img, xOffset, yOffset) { }
+  setDragImage(img, xOffset, yOffset) {}
 }
 
 Cypress.Commands.add(

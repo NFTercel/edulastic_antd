@@ -1,11 +1,9 @@
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/prop-types */
-/* eslint-disable jsx-a11y/alt-text */
 import React, { Fragment, Component } from "react";
+import PropTypes from "prop-types";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { receiveStudentResponseAction } from "../../../src/actions/classBoard";
-import { getStudentResponseSelector } from "../../../src/selectors/classBoard";
+import { getStudentResponseSelector, getClassResponseSelector } from "../../../ClassBoard/ducks";
 import ClassQuestions from "../../../ClassResponses/components/Container/ClassQuestions";
 
 class Question extends Component {
@@ -15,18 +13,18 @@ class Question extends Component {
   }
 
   componentDidMount() {
-    const { record, loadStudentResponses } = this.props;
+    const { record, loadStudentResponses, match } = this.props;
     const { testActivityId } = record;
+    const { classId } = match.params;
 
     if (testActivityId) {
-      loadStudentResponses({ testActivityId });
+      loadStudentResponses({ testActivityId, groupId: classId });
     }
   }
 
   render() {
     let isEmpty = true;
-    const { studentResponse, record } = this.props;
-    const questionId = record ? record.id : null;
+    const { studentResponse, classResponse } = this.props;
     const currentStudent = {
       studentName: ""
     };
@@ -36,7 +34,11 @@ class Question extends Component {
     return (
       <Fragment>
         {!isEmpty && (
-          <ClassQuestions showOnly={questionId} currentStudent={currentStudent} studentResponse={studentResponse} />
+          <ClassQuestions
+            currentStudent={currentStudent}
+            studentResponse={studentResponse}
+            classResponse={classResponse}
+          />
         )}
       </Fragment>
     );
@@ -46,12 +48,20 @@ class Question extends Component {
 const enhance = compose(
   connect(
     state => ({
-      studentResponse: getStudentResponseSelector(state)
+      studentResponse: getStudentResponseSelector(state),
+      classResponse: getClassResponseSelector(state)
     }),
     {
       loadStudentResponses: receiveStudentResponseAction
     }
   )
 );
+
+Question.propTypes = {
+  studentResponse: PropTypes.object.isRequired,
+  classResponse: PropTypes.object.isRequired,
+  record: PropTypes.object.isRequired,
+  loadStudentResponses: PropTypes.func.isRequired
+};
 
 export default enhance(Question);

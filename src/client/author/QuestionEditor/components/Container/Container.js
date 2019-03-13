@@ -115,7 +115,7 @@ class Container extends Component {
     const { view, question } = this.props;
     const { previewTab, showModal } = this.state;
     const itemId = question === null ? "" : question._id;
-
+    const { checkAnswerButton = false, checkAttempts = 1 } = question.validation || {};
     return (
       <div>
         {showModal && (
@@ -141,8 +141,8 @@ class Container extends Component {
           changePreviewTab={this.handleChangePreviewTab}
           onSave={this.handleSave}
           view={view}
-          showCheckButton={question.validation.checkAnswerButton}
-          allowedAttempts={question.validation.checkAttempts}
+          showCheckButton={checkAnswerButton}
+          allowedAttempts={checkAttempts}
           previewTab={previewTab}
           breadcrumb={this.breadcrumb}
         />

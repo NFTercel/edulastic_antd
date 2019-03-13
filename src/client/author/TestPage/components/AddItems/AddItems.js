@@ -53,13 +53,13 @@ class AddItems extends PureComponent {
 
   state = {
     search: getClearSearchState(),
-    selectedTests: []
+    selectedTestItems: []
   };
 
   componentDidMount() {
     const { selectedItems, getCurriculums } = this.props;
     this.setState({
-      selectedTests: selectedItems
+      selectedTestItems: selectedItems
     });
 
     getCurriculums();
@@ -140,9 +140,9 @@ class AddItems extends PureComponent {
     );
   };
 
-  setSelectedTests = value => {
+  setSelectedTestItems = value => {
     this.setState({
-      selectedTests: value
+      selectedTestItems: value
     });
   };
 
@@ -157,7 +157,7 @@ class AddItems extends PureComponent {
       onAddItems
     } = this.props;
 
-    const { search, selectedTests } = this.state;
+    const { search, selectedTestItems } = this.state;
     return (
       <Container>
         <TopMenu>
@@ -196,8 +196,8 @@ class AddItems extends PureComponent {
                 {!loading && (
                   <ItemsTable
                     items={items}
-                    setSelectedTests={this.setSelectedTests}
-                    selectedTests={selectedTests}
+                    setSelectedTests={this.setSelectedTestItems}
+                    selectedTests={selectedTestItems}
                     onAddItems={onAddItems}
                   />
                 )}

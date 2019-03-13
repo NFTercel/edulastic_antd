@@ -24,13 +24,13 @@ class Item extends Component {
   static propTypes = {
     item: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
-    match: PropTypes.object.isRequired,
+
     t: PropTypes.func.isRequired
   };
 
   moveToItem = () => {
-    const { history, item, match } = this.props;
-    history.push(`${match.url}/${item._id}`);
+    const { history, item } = this.props;
+    history.push(`/author/tests/${item._id}`);
   };
 
   get name() {

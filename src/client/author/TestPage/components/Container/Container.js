@@ -2,6 +2,7 @@ import React, { PureComponent } from "react";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { Spin } from "antd";
 import { withRouter } from "react-router-dom";
 import { cloneDeep } from "lodash";
 import uuidv4 from "uuid/v4";
@@ -17,7 +18,8 @@ import {
   setDefaultTestDataAction,
   getTestSelector,
   getTestItemsRowsSelector,
-  getTestsCreatingSelector
+  getTestsCreatingSelector,
+  getTestsLoadingSelector
 } from "../../ducks";
 import { getSelectedItemSelector } from "../AddItems/ducks";
 import { getUserSelector } from "../../../src/selectors/user";
@@ -43,7 +45,8 @@ class Container extends PureComponent {
     windowWidth: PropTypes.number.isRequired,
     selectedRows: PropTypes.object,
     test: PropTypes.object,
-    user: PropTypes.object
+    user: PropTypes.object,
+    isTestLoading: PropTypes.bool.isRequired
   };
 
   static defaultProps = {
@@ -108,7 +111,10 @@ class Container extends PureComponent {
   };
 
   renderContent = () => {
-    const { test, setData, rows } = this.props;
+    const { test, setData, rows, isTestLoading } = this.props;
+    if (isTestLoading) {
+      return <Spin />;
+    }
     const { current } = this.state;
     const selectedItems = test.testItems.map(({ _id = uuidv4() }) => _id);
     switch (current) {
@@ -236,7 +242,8 @@ const enhance = compose(
       rows: getTestItemsRowsSelector(state),
       creating: getTestsCreatingSelector(state),
       selectedRows: getSelectedItemSelector(state),
-      user: getUserSelector(state)
+      user: getUserSelector(state),
+      isTestLoading: getTestsLoadingSelector(state)
     }),
     {
       createTest: createTestAction,

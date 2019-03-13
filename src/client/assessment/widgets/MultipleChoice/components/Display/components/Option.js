@@ -29,21 +29,26 @@ const getFontSize = size => {
 };
 
 const Option = props => {
-  const { index, item, showAnswer, userSelections, onChange, smallSize, uiStyle, correct, view } = props;
+  const { index, item, showAnswer, userSelections, onChange, smallSize, uiStyle, correct } = props;
   const isSelected = userSelections.includes(item.value);
+  const indexOfAnswer = userSelections.indexOf(item.value);
+  const isCorrect = indexOfAnswer !== -1 && correct ? correct[indexOfAnswer] : undefined;
 
   let className = "";
+  if (correct) {
+    if (isCorrect && isSelected) {
+      className = "right";
+    } else if (!isCorrect && isSelected) {
+      className = "wrong";
+    }
+  }
 
   if (showAnswer) {
-    className = "right";
-  }
-
-  if (correct) {
-    className = "right";
-  }
-
-  if (correct === false) {
-    className = "wrong";
+    if (correct[index]) {
+      className = "right";
+    } else if (!isCorrect && isSelected) {
+      className = "wrong";
+    }
   }
 
   const fontSize = getFontSize(uiStyle.fontsize);
@@ -114,17 +119,10 @@ const Option = props => {
     }
   };
 
-  const isChecked = isSelected && !className && uiStyle.type === "block" && !showAnswer;
   const width = uiStyle.columns ? `${100 / uiStyle.columns - 1}%` : "100%";
-  let labelClassName = isChecked ? "checked" : className;
-  const isPreview = view === "preview" && !isSelected;
-
-  if (isPreview) {
-    labelClassName = "preview";
-  }
 
   return (
-    <Label width={width} smallSize={smallSize} className={labelClassName} showAnswer>
+    <Label width={width} smallSize={smallSize} className={className} showAnswer>
       <PaddingDiv top={smallSize ? 0 : 10} bottom={smallSize ? 0 : 10}>
         <FlexContainer justifyContent={uiStyle.type === "radioBelow" ? "center" : "space-between"}>
           {renderCheckbox()}
@@ -146,8 +144,7 @@ Option.propTypes = {
   onChange: PropTypes.func.isRequired,
   smallSize: PropTypes.bool,
   uiStyle: PropTypes.object.isRequired,
-  correct: PropTypes.object.isRequired,
-  view: PropTypes.string.isRequired
+  correct: PropTypes.object.isRequired
 };
 
 Option.defaultProps = {

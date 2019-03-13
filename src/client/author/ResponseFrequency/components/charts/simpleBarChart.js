@@ -11,14 +11,19 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  LabelList
+  LabelList,
+  Brush
 } from "recharts";
-import { StyledSimpleBarChart } from "../styled";
+import { StyledSimpleBarChart, StyledChartNavButton, StyledCustomChartTooltip, QuestionTypeHeading } from "../styled";
 import colorRange1 from "../../static/json/colorRange1.json";
 
 export class SimpleBarChart extends PureComponent {
+  page = 7;
+
   state = {
-    data: []
+    data: [],
+    startIndex: 0,
+    endIndex: this.page - 1
   };
 
   constructor(props) {
@@ -57,8 +62,11 @@ export class SimpleBarChart extends PureComponent {
 
       let sum = tmp.corr_cnt + tmp.incorr_cnt + tmp.skip_cnt + tmp.part_cnt;
       tmp.name = data;
-      tmp.correct = ((tmp.corr_cnt / sum) * 100).toFixed(2);
-      tmp.incorrect = 100 - ((tmp.corr_cnt / sum) * 100).toFixed(2);
+      tmp.correct = Number(((tmp.corr_cnt / sum) * 100).toFixed(0));
+      if (isNaN(tmp.correct)) tmp.correct = 0;
+      tmp.incorrect = 100 - tmp.correct;
+      tmp.fill = colorRange1[Math.floor(tmp.correct / 25)];
+      tmp.assessment = nextProps.assessment.testName;
       return tmp;
     });
     return arr;
@@ -76,13 +84,76 @@ export class SimpleBarChart extends PureComponent {
     }
   };
 
+  scrollLeft = () => {
+    let diff;
+    if (this.state.startIndex > 0) {
+      if (this.state.startIndex - 0 >= this.page) {
+        diff = this.page;
+      } else {
+        diff = this.state.startIndex;
+      }
+      this.setState({
+        startIndex: this.state.startIndex - diff,
+        endIndex: this.state.endIndex - diff,
+        data: [...this.state.data]
+      });
+    }
+  };
+
+  scrollRight = () => {
+    let diff;
+    if (this.state.endIndex < this.state.data.length - 1) {
+      if (this.state.data.length - 1 - this.state.endIndex >= this.page) {
+        diff = this.page;
+      } else {
+        diff = this.state.data.length - 1 - this.state.endIndex;
+      }
+      this.setState({
+        startIndex: this.state.startIndex + diff,
+        endIndex: this.state.endIndex + diff,
+        data: [...this.state.data]
+      });
+    }
+  };
+
   render() {
     return (
       <StyledSimpleBarChart className="chart-simple-bar-chart">
+        <QuestionTypeHeading>
+          Question Type performance for Assessment: {this.props.assessment.testName}
+        </QuestionTypeHeading>
+        <StyledChartNavButton
+          type="primary"
+          shape="circle"
+          icon="left"
+          size={"large"}
+          className="navigator navigator-left"
+          onClick={this.scrollLeft}
+          style={{
+            visibility: this.state.startIndex == 0 ? "hidden" : "visible"
+          }}
+        />
+        <StyledChartNavButton
+          type="primary"
+          shape="circle"
+          icon="right"
+          size={"large"}
+          className="navigator navigator-right"
+          onClick={this.scrollRight}
+          style={{
+            visibility: this.state.data.length - 1 == this.state.endIndex ? "hidden" : "visible"
+          }}
+        />
         <ResponsiveContainer width={"100%"} height={400}>
-          <BarChart width={730} height={250} data={this.state.data}>
+          <BarChart width={730} height={400} data={this.state.data}>
             <CartesianGrid vertical={false} strokeWidth={0.5} />
-            <XAxis dataKey="name" tick={this.constants.TICK_FILL} tickFormatter={this.xTickFormatter} />
+            <XAxis
+              allowDataOverflow={true}
+              dataKey="name"
+              tick={this.constants.TICK_FILL}
+              tickFormatter={this.xTickFormatter}
+              interval={0}
+            />
             <YAxis
               type={"number"}
               domain={[0, 110]}
@@ -91,13 +162,16 @@ export class SimpleBarChart extends PureComponent {
               tickFormatter={this.yTickFormatter}
               label={this.constants.Y_AXIS_LABEL}
             />
-            <Tooltip cursor={false} />
-            <Bar dataKey="correct" stackId="a" unit={"%"}>
-              {this.state.data.map((entry, index) => {
-                return <Cell key={index} fill={this.constants.colors[Math.floor(entry.correct / 25)]} />;
-              })}
-            </Bar>
-            <Bar dataKey="incorrect" stackId="a" fill={"#c0c0c0"}>
+            <Tooltip cursor={false} content={<StyledCustomChartTooltip />} />
+            <Brush
+              dataKey="name"
+              height={0}
+              width={0}
+              startIndex={this.state.startIndex}
+              endIndex={this.state.endIndex}
+            />
+            <Bar dataKey="correct" stackId="a" unit={"%"} />
+            <Bar dataKey="incorrect" stackId="a">
               <LabelList
                 dataKey="correct"
                 position="insideBottom"
@@ -105,6 +179,9 @@ export class SimpleBarChart extends PureComponent {
                 offset={5}
                 formatter={this.yTickFormatter}
               />
+              {this.state.data.map((entry, index) => {
+                return <Cell key={entry.name} fill={"#c0c0c0"} />;
+              })}
             </Bar>
           </BarChart>
         </ResponsiveContainer>

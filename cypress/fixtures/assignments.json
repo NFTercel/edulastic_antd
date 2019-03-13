@@ -1,5 +1,7 @@
 {
-    "default" : {
+  "default": {
+    "assignments": [
+      {
         "openPolicy": "Automatically on Start Date",
         "closePolicy": "Automatically on Due Date",
         "class": [
@@ -8,15 +10,13 @@
             "status": 3,
             "totalNumber": 0,
             "submittedNumber": 0,
-            "students": [
-              "5c3ecd43cf2a9b2bc31d64bf"
-            ]
+            "students": ["5c3ecd43cf2a9b2bc31d64bf"]
           }
         ],
         "specificStudents": true,
-        "testId": "5c52f36b24d89e24b60560b0",
-        "assignedBy": {
-          "id": "5c3c8b1d311b9c19eb11a05b"
-        }
+        "testId": "5c52f36b24d89e24b60560b0"
       }
+    ],
+    "assignedBy": "auto"
+  }
 }

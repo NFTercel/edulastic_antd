@@ -164,6 +164,7 @@ export const reducer = (state = initialState, { type, payload }) => {
     case UPDATE_TEST_SUCCESS:
       return {
         ...state,
+        entity: { ...state.entity, version: payload.entity.version },
         creating: false
       };
     case CREATE_TEST_ERROR:

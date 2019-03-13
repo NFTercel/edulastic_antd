@@ -29,6 +29,7 @@ const evaluators = {
   clozeImageText,
   math,
   clozeDragDrop,
+  highlightImage: essayRichText,
   shortText,
   essayRichText,
   essayPlainText: essayRichText,

@@ -2,68 +2,51 @@ import React, { Component } from "react";
 import QuestionScore from "../QuestionScore/QuestionScore";
 import { StyledCard, TableData, StyledDivMid, StyledTag, StyledText } from "./styled";
 
+function getDataForTable(data) {
+  let dataSource;
+  if (data && data.length !== 0) {
+    dataSource = data.map((student, index) => {
+      const students = [];
+      const rowIndex = index;
+      const studentInfo = {
+        studentId: student.studentId,
+        studentName: student.studentName
+      };
+      const testActivityId = student.testActivityId ? student.testActivityId : null;
+      student.questionActivities.forEach((question, index) => {
+        const key = `Q${index}`;
+        question.key = key;
+        students[key] = question;
+        question.colIndex = index;
+        question.id = question._id;
+        question.rowIndex = rowIndex;
+        question.testActivityId = testActivityId;
+      });
+
+      students.students = studentInfo;
+      students.score = { score: student.score, maxScore: student.maxScore };
+      return students;
+    });
+  } else {
+    dataSource = [];
+  }
+
+  return dataSource;
+}
+
 class ScoreTable extends Component {
   constructor() {
     super();
     this.state = {
-      columnData: [],
-      columnInfo: [],
-      testActivityId: null
+      columnData: []
     };
-    this.getColumnsForTable = this.getColumnsForTable.bind(this);
   }
 
-  componentDidMount() {
-    const { testActivity } = this.props;
-    const columnData = this.getDataForTable(testActivity);
-
-    this.setState({ columnData });
+  static getDerivedStateFromProps(props) {
+    const { testActivity } = props;
+    const columnData = getDataForTable(testActivity);
+    return { columnData };
   }
-
-  componentWillReceiveProps(nextProps) {
-    const { testActivity } = nextProps;
-    const columnData = this.getDataForTable(testActivity);
-
-    this.setState({ columnData });
-  }
-
-  getDataForTable = data => {
-    let dataSource;
-    let testActivity = null;
-
-    if (data && data.length !== 0) {
-      dataSource = data.map((student, index) => {
-        const students = [];
-        const rowIndex = index;
-        const score =
-          student.score && student.maxScore ? `${((student.score / student.maxScore) * 100).toFixed(2)}%` : "-";
-        const studentInfo = {
-          studentId: student.studentId,
-          studentName: student.studentName
-        };
-        const testActivityId = student.testActivityId ? student.testActivityId : null;
-        student.questionActivities.forEach((question, index) => {
-          const key = `Q${index}`;
-          question.key = key;
-          students[key] = question;
-          question.colIndex = index;
-          question.id = question._id;
-          question.rowIndex = rowIndex;
-          question.testActivityId = testActivityId;
-        });
-
-        students.students = studentInfo;
-        students.score = { score: student.score, maxScore: student.maxScore };
-        testActivity = testActivityId;
-
-        return students;
-      });
-    } else {
-      dataSource = [];
-    }
-
-    return dataSource;
-  };
 
   getColumnsForTable = length => {
     const { showQuestionModal, questionActivities } = this.props;
@@ -77,7 +60,7 @@ class ScoreTable extends Component {
             width: "12%",
             dataIndex: "students",
             render: record => <StyledDivMid>{record.studentName}</StyledDivMid>,
-            sorter: (a, b) => a["students"].studentName.length - b["students"].studentName.length,
+            sorter: (a, b) => a.students.studentName.length - b.students.studentName.length,
             sortDirections: ["descend"]
           },
           {
@@ -92,21 +75,21 @@ class ScoreTable extends Component {
               </StyledDivMid>
             ),
             onFilter: (value, record) => record.score.indexOf(value) === 0,
-            sorter: (a, b) => a["score"] - b["score"],
+            sorter: (a, b) => a.score - b.score,
             sortDirections: ["descend"]
           }
         ]
       }
     ];
 
-    for (let index = 1; index < length; index++) {
+    for (let index = 0; index < length; index++) {
       let successAnswer = 0;
-      let students = this.props.testActivity;
+      const { testActivity: students } = this.props;
       const key = `Q${index}`;
       const isQuestionActivities = questionActivities !== undefined && questionActivities.length !== 0;
       const title = (
         <StyledDivMid>
-          Q{index}
+          Q{index + 1}
           {isQuestionActivities && questionActivities[index].standards.map(tag => <StyledTag>{tag.level}</StyledTag>)}
         </StyledDivMid>
       );
@@ -118,18 +101,18 @@ class ScoreTable extends Component {
       );
 
       students.forEach(student => {
-        student && student.questionActivities[index].correct && successAnswer++;
+        if (student && student.questionActivities[index].correct) successAnswer++;
       });
 
       const column = {
-        title: title,
+        title,
         children: [
           {
-            key: key,
+            key,
             dataIndex: key,
             title: questionAvarageScore,
             render: record => {
-              const tableData = this.state.columnData;
+              const { columnData: tableData } = this.state;
               const isTest = record && record.testActivityId;
               const cell = isTest ? (
                 <QuestionScore question={record} tableData={tableData} showQuestionModal={showQuestionModal} />

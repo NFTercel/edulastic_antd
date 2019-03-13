@@ -31,7 +31,7 @@ const TableRow = ({
       flexWrap: "wrap",
       padding: "70px 50px",
       width,
-      height,
+      minHeight: height,
       borderRadius: 4,
       backgroundColor: theme.widgets.classification.dropContainerBgColor
     }

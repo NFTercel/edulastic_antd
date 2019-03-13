@@ -8,8 +8,8 @@ import { StyledDragHandle } from "../styled/StyledDragHandle";
 import { Text } from "../styled/Text";
 import DragHandle from "./DragHandle";
 
-const OrderListPreviewItem = SortableElement(({ children, showDragHandle, smallSize }) => (
-  <Container>
+const OrderListPreviewItem = SortableElement(({ children, showDragHandle, smallSize, columns }) => (
+  <Container columns={columns}>
     {showDragHandle && (
       <StyledDragHandle smallSize={smallSize}>
         <DragHandle smallSize={smallSize} />
@@ -25,12 +25,14 @@ OrderListPreviewItem.propTypes = {
   children: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
   showDragHandle: PropTypes.bool,
-  smallSize: PropTypes.bool
+  smallSize: PropTypes.bool,
+  columns: PropTypes.number
 };
 
 OrderListPreviewItem.defaultProps = {
   showDragHandle: true,
-  smallSize: false
+  smallSize: false,
+  columns: 1
 };
 
 export default OrderListPreviewItem;

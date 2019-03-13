@@ -54,7 +54,7 @@ class Container extends Component {
       if (res.metaData) {
         obj.metaData = res.metaData;
       }
-
+      console.log(obj);
       this.setState(obj);
     }
   }
@@ -74,7 +74,7 @@ class Container extends Component {
   render() {
     return (
       <StyledContainer type="flex">
-        <SimpleBarChart data={this.state.data} />
+        <SimpleBarChart data={this.state.data} assessment={this.state.metaData} />
         <StyledCard>
           <Row type="flex" justify="center" className="question-area">
             <Col className="question-container">

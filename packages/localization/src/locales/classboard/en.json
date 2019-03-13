@@ -7,7 +7,7 @@
     "redirect": "REDIRECT",
     "more": "MORE",
     "attempts": "ATTEMPTS",
-    "avg_time": "AVG TIME (SECONDS)"
-
+    "avg_time": "AVG TIME (SECONDS)",
+    "standardBasedReports": "STANDARDS BASED REPORT"
   }
 }

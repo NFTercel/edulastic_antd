@@ -133,7 +133,7 @@ class Display extends Component {
                 </Pointer>
                 <ClozeTextInput
                   value={userAnswers[dropTargetIndex]}
-                  style={{ width: "100%", height: "100%", margin: 0 }}
+                  style={{ width: "100%", height: "100%", margin: 0, fontSize }}
                   dropTargetIndex={dropTargetIndex}
                   onChange={({ value }) => this.selectChange(value, dropTargetIndex)}
                   placeholder={uiStyle.placeholder}

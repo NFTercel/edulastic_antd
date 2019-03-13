@@ -7,14 +7,14 @@ import OrderListPreviewItem from "./components/OrderListPreviewItem";
 
 class OrderListPreview extends Component {
   render() {
-    const { questions, smallSize, listStyle } = this.props;
+    const { questions, smallSize, listStyle, columns } = this.props;
 
     return (
       <div data-cy="order-preview-container" style={listStyle}>
         {questions &&
           !!questions.length &&
           questions.map((q, i) => (
-            <OrderListPreviewItem showDragHandle smallSize={smallSize} key={i} index={i}>
+            <OrderListPreviewItem columns={columns} showDragHandle smallSize={smallSize} key={i} index={i}>
               {q}
             </OrderListPreviewItem>
           ))}
@@ -26,12 +26,14 @@ class OrderListPreview extends Component {
 OrderListPreview.propTypes = {
   listStyle: PropTypes.object.isRequired,
   questions: PropTypes.array,
-  smallSize: PropTypes.bool
+  smallSize: PropTypes.bool,
+  columns: PropTypes.number
 };
 
 OrderListPreview.defaultProps = {
   questions: [],
-  smallSize: false
+  smallSize: false,
+  columns: 1
 };
 
 const enhance = compose(SortableContainer);
