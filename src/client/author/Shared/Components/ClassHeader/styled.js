@@ -86,14 +86,14 @@ export const StyledAnchor = styled.a`
   font-weight: 600;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: #e5e5e5;
   width: auto;
   padding: 0px 15px;
   text-align: center;
   height: 45px;
   margin: 0 7px;
   border-radius: 20px;
-  background-color: ${props => (props.isActive ? "#fff" : "#3393dc")};
+  background-color: ${props => (props.isActive ? "#f3f3f3" : "#0e93dc")};
   -webkit-transition: background-color 0.3s;
   transition: background-color 0.3s;
 
@@ -101,14 +101,14 @@ export const StyledAnchor = styled.a`
     font-size: 0.6em;
   }
   :hover {
-    color: ${props => (props.isActive ? "#0288d1" : "#fff")};
-    background-color: ${props => (props.isActive ? white : white)};
+    color: ${props => (props.isActive ? "#0288d1" : "#e5e5e5")};
+    background-color: ${props => (props.isActive ? "#f3f3f3" : "#f3f3f3")};
     a {
-      color: ${props => (props.isActive ? "#0288d1" : "#000")};
+      color: ${props => (props.isActive ? "#0288d1" : "#434b5d")};
     }
   }
   a {
-    color: ${props => (props.isActive ? "#000" : "#fff")};
+    color: ${props => (props.isActive ? "#434b5d" : "#e5e5e5")};
   }
 `;
 
