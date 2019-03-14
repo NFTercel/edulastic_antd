@@ -3,7 +3,7 @@ import { Select } from "antd";
 import { FlexContainer } from "@edulastic/common";
 import { Container, StyledSelect, StyledClassID } from "./styled";
 
-const ClassSelect = ({ classname, classid }) => (
+const ClassSelect = ({ classname, classid = "" }) => (
   <FlexContainer>
     <Container>
       <StyledSelect defaultValue="">
