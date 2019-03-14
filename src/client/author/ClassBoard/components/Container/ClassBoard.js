@@ -172,7 +172,7 @@ class ClassBoard extends Component {
               QUESTION
             </QuestionButton>
           </StudentButtonDiv>
-          <ClassSelect classname={selectedTab === "Student" ? classname : questionsIds} />
+          <ClassSelect classid="DI" classname={selectedTab === "Student" ? classname : questionsIds} />
         </StyledFlexContainer>
         {selectedTab === "Student" ? (
           <React.Fragment>
@@ -181,35 +181,8 @@ class ClassBoard extends Component {
             </StyledCard>
             <StyledFlexContainer justifyContent="space-between">
               <CheckContainer>
-                {/* <StyledAnc onClick={this.changeStateTrue}>
-                  <img src={Ghat} alt="" />
-                </StyledAnc>
-                <SpaceDiv />
-                <StyledAnc onClick={this.changeStateFalse}>
-                  <img src={Stats} alt="" />
-                </StyledAnc>
-                <SpaceDiv />
-                <BarDiv />
-                <SpaceDiv /> */}
                 <StyledCheckbox checked>SELECT ALL</StyledCheckbox>
               </CheckContainer>
-              {/* <ButtonGroup>
-                <StyledButton>
-                  <img src={Ptools} alt="" />
-                  <ButtonSpace />
-                  {t("common.print")}
-                </StyledButton>
-                <StyledButton>
-                  <img src={Elinks} alt="" />
-                  <ButtonSpace />
-                  {t("common.redirect")}
-                </StyledButton>
-                <StyledButton>
-                  <img src={More} alt="" />
-                  <ButtonSpace />
-                  {t("common.more")}
-                </StyledButton>
-              </ButtonGroup> */}
             </StyledFlexContainer>
             {flag ? (
               <DisneyCard testActivity={testActivity} assignmentId={assignmentId} classId={classId} />

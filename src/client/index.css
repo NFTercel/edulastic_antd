@@ -1004,3 +1004,8 @@ span.token.active-word {
   width: 32px !important;
   height: 32px !important;
 }
+
+.ant-select-dropdown-menu-item {
+  display: flex;
+  align-items: center;
+}
