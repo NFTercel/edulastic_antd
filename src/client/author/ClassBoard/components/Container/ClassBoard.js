@@ -46,6 +46,7 @@ import {
   CheckContainer,
   ButtonGroup,
   StyledFlexContainer,
+  StudentButtonDiv,
   StudentButton,
   QuestionButton
 } from "./styled";
@@ -157,7 +158,7 @@ class ClassBoard extends Component {
             &lt; <AnchorLink to="/author/assignments">RECENTS ASSIGNMENTS</AnchorLink> /{" "}
             <Anchor>{additionalData.testName}</Anchor> / <Anchor>{additionalData.className}</Anchor>
           </PaginationInfo>
-          <div>
+          <StudentButtonDiv>
             <StudentButton
               type={selectedTab === "Student" ? "primary" : ""}
               onClick={e => this.onTabChange(e, "Student")}
@@ -170,7 +171,7 @@ class ClassBoard extends Component {
             >
               QUESTION
             </QuestionButton>
-          </div>
+          </StudentButtonDiv>
           <ClassSelect classname={selectedTab === "Student" ? classname : questionsIds} />
         </StyledFlexContainer>
         {selectedTab === "Student" ? (

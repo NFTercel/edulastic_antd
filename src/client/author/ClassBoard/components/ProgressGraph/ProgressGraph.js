@@ -4,7 +4,7 @@
 import React, { Component } from "react";
 import BarGraph from "../BarGraph/BarGraph";
 
-import { StyledProgress, StyledDiv, GraphText } from "./styled";
+import { StyledProgress, StyledDiv, StyledProgressDiv, GraphText, GraphDescription } from "./styled";
 
 // eslint-disable-next-line no-trailing-spaces
 export default class Graph extends Component {
@@ -16,21 +16,24 @@ export default class Graph extends Component {
     return (
       <StyledDiv>
         <div>
-          <StyledProgress
-            className="getProgress"
-            strokeLinecap="square"
-            type="circle"
-            percent={percentage}
-            width={150}
-            strokeWidth={15}
-            strokeColor="#00b0ff"
-            format={percent => `${percent}%`}
-          />
+          <StyledProgressDiv>
+            <StyledProgress
+              className="getProgress"
+              strokeLinecap="square"
+              type="circle"
+              percent={percentage}
+              width={150}
+              strokeWidth={15}
+              strokeColor="#00b0ff"
+              format={percent => `${percent}%`}
+            />
+            <GraphDescription>average score %</GraphDescription>
+          </StyledProgressDiv>
           <GraphText>
             <p>
               {this.props.gradebook.submittedNumber} out of {this.props.gradebook.total} Submitted
             </p>
-            <p>({this.props.gradebook.absentNumber} Absent)</p>
+            <p>({this.props.gradebook.total - this.props.gradebook.submittedNumber} Absent)</p>
           </GraphText>
         </div>
         <BarGraph gradebook={gradebook} />

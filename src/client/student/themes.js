@@ -118,7 +118,7 @@ export const themes = {
       attemptsRowReviewLinkColor: "#00b0ff"
     },
     classboard: {
-      headerContainerColor: "00b0ff",
+      headerContainerColor: "#00b0ff",
       headerAnchorLink: "#00b0ff",
       headerBarbgcolor: "lightgray",
       headerCheckboxColor: "#1890ffd9",
