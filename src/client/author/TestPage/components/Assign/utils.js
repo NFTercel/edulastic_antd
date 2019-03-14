@@ -43,6 +43,7 @@ export const generateClassData = (classes = [], selectedStudents = [], studentLi
 export const formatAssignment = assignment => {
   let students = [];
   const scoreReleasedClasses = [];
+  const googleAssignmentIds = {};
   const classes = (assignment.class || []).map(item => {
     if (assignment.specificStudents) {
       students = [...students, ...item.students];
@@ -52,6 +53,9 @@ export const formatAssignment = assignment => {
     if (assignment.releaseScore) {
       scoreReleasedClasses.push(item._id);
     }
+    if (item.googleId) {
+      googleAssignmentIds[item._id] = item.googleId;
+    }
     return item._id;
   });
 
@@ -59,6 +63,7 @@ export const formatAssignment = assignment => {
     ...assignment,
     class: classes,
     students: uniq(students),
-    scoreReleasedClasses
+    scoreReleasedClasses,
+    googleAssignmentIds
   };
 };

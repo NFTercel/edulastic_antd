@@ -9,9 +9,7 @@ export const CustomTooltip = ({ className, correct, correctThreshold, ...attrs }
           {correct}%
         </div>
       ) : (
-        <div className="response-frequency-table-correct-td" style={{ backgroundColor: "#FFFFFF" }}>
-          {correct}%
-        </div>
+        <div className="response-frequency-table-correct-td">{correct}%</div>
       )}
     </Tooltip>
   );

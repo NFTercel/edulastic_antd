@@ -9,12 +9,12 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
   LabelList,
   Brush
 } from "recharts";
 import { StyledSimpleBarChart, StyledChartNavButton, StyledCustomChartTooltip, QuestionTypeHeading } from "../styled";
+import { CustomChartXTick } from "./customChartXTick";
 import colorRange1 from "../../static/json/colorRange1.json";
 
 export class SimpleBarChart extends PureComponent {
@@ -32,7 +32,7 @@ export class SimpleBarChart extends PureComponent {
     this.constants = {
       COLOR_BLACK: "#010101",
       TICK_FILL: { fill: "#010101", fontWeight: "bold" },
-      Y_AXIS_LABEL: { value: "Percentage", angle: -90, position: "insideLeft", textAnchor: "middle" },
+      Y_AXIS_LABEL: { value: "Performance", angle: -90, position: "insideLeft", textAnchor: "middle" },
       ticks: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
       colors: colorRange1
     };
@@ -45,8 +45,8 @@ export class SimpleBarChart extends PureComponent {
 
   static parseData(nextProps) {
     let hmap = groupBy(nextProps.data, "qType");
-
     let arr = Object.keys(hmap).map((data, i) => {
+      let qCount = hmap[data].length;
       let tmp = hmap[data].reduce(
         (total, currentValue, currentIndex) => {
           let { corr_cnt = 0, incorr_cnt = 0, skip_cnt = 0, part_cnt = 0 } = currentValue;
@@ -62,6 +62,7 @@ export class SimpleBarChart extends PureComponent {
 
       let sum = tmp.corr_cnt + tmp.incorr_cnt + tmp.skip_cnt + tmp.part_cnt;
       tmp.name = data;
+      tmp.qCount = qCount;
       tmp.correct = Number(((tmp.corr_cnt / sum) * 100).toFixed(0));
       if (isNaN(tmp.correct)) tmp.correct = 0;
       tmp.incorrect = 100 - tmp.correct;
@@ -74,14 +75,6 @@ export class SimpleBarChart extends PureComponent {
 
   yTickFormatter = val => {
     return val + "%";
-  };
-
-  xTickFormatter = val => {
-    if (val.length > 12) {
-      return val.substring(0, 12) + "...";
-    } else {
-      return val;
-    }
   };
 
   scrollLeft = () => {
@@ -116,6 +109,10 @@ export class SimpleBarChart extends PureComponent {
     }
   };
 
+  getDataByIndex = index => {
+    return this.state.data[index];
+  };
+
   render() {
     return (
       <StyledSimpleBarChart className="chart-simple-bar-chart">
@@ -141,19 +138,13 @@ export class SimpleBarChart extends PureComponent {
           className="navigator navigator-right"
           onClick={this.scrollRight}
           style={{
-            visibility: this.state.data.length - 1 == this.state.endIndex ? "hidden" : "visible"
+            visibility: this.state.data.length <= this.state.endIndex + 1 ? "hidden" : "visible"
           }}
         />
         <ResponsiveContainer width={"100%"} height={400}>
           <BarChart width={730} height={400} data={this.state.data}>
             <CartesianGrid vertical={false} strokeWidth={0.5} />
-            <XAxis
-              allowDataOverflow={true}
-              dataKey="name"
-              tick={this.constants.TICK_FILL}
-              tickFormatter={this.xTickFormatter}
-              interval={0}
-            />
+            <XAxis dataKey="name" tick={<CustomChartXTick getDataByIndex={this.getDataByIndex} />} interval={0} />
             <YAxis
               type={"number"}
               domain={[0, 110]}

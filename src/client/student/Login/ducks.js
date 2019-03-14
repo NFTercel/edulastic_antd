@@ -141,14 +141,17 @@ export default createReducer(initialState, {
 
 export const getClasses = createSelector(
   ["user.user.orgData.classList"],
-  classes => {
-    return classes;
-  }
+  classes => classes
 );
+
 export const getCurrentGroup = createSelector(
   ["user.user.orgData.defaultClass"],
   r => r
 );
 
-//selector
+export const getCurrentSchool = createSelector(
+  ["user.user.orgData.defaultSchool"],
+  r => r
+);
+
 const routeSelector = state => state.router.location.pathname;

@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
+    "@vx/text": "^0.0.183",
     "antd": "^3.10.7",
     "aws-sdk": "^2.411.0",
     "axios": "^0.18.0",
