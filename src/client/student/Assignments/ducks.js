@@ -6,7 +6,7 @@ import { normalize } from "normalizr";
 import { push } from "react-router-redux";
 import { test } from "@edulastic/constants";
 import { assignmentApi, reportsApi, testActivityApi } from "@edulastic/api";
-import { getCurrentGroup } from "../Login/ducks";
+import { getCurrentGroup, getCurrentSchool } from "../Login/ducks";
 
 // external actions
 import {
@@ -79,10 +79,12 @@ function* startAssignment({ payload }) {
     }
     yield put(setActiveAssignmentAction(assignmentId));
     const groupId = yield select(getCurrentGroup);
+    const institutionId = yield select(getCurrentSchool);
     const groupType = "class";
     const { _id: testActivityId } = yield testActivityApi.create({
       assignmentId,
       groupId,
+      institutionId,
       groupType
     });
     // set Activity id

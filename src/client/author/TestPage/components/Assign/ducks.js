@@ -118,10 +118,13 @@ function* saveAssignment({ payload }) {
       const currentData = yield select(getCurrentAssignmentSelector);
 
       if (currentData.releaseScore === payload.releaseScore) {
-        const { scoreReleasedClasses: releasedClasses } = currentData;
+        const { scoreReleasedClasses: releasedClasses, googleAssignmentIds } = currentData;
         classData = classData.map(item => {
           if (releasedClasses.includes(item._id)) {
             item.releaseScore = true;
+          }
+          if (googleAssignmentIds[item._id]) {
+            item.googleId = googleAssignmentIds[item._id];
           }
           return item;
         });

@@ -54,7 +54,6 @@ class Container extends Component {
       if (res.metaData) {
         obj.metaData = res.metaData;
       }
-      console.log(obj);
       this.setState(obj);
     }
   }
