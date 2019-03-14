@@ -145,7 +145,3 @@ export const LOGOUT = "[auth] logout"; // set redux store to initial values
 
 // test page
 export const SET_MAX_ATTEMPT = "[tests] maximum attempt";
-
-// Standard Based Report
-export const GET_STANDARD_BASED_REPORTS = "GET_STANDARD_BASED_REPORTS";
-export const GET_STANDARD_BASED_REPORTS_SUCCESS = "GET_STANDARD_BASED_REPORTS_SUCCESS";

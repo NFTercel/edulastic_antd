@@ -61,7 +61,8 @@ export default class QuestionMath extends React.Component {
         valid_response: {
           ...valid_response,
           score
-        }
+        },
+        alt_responses: []
       }
     };
 

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { compose } from "redux";
@@ -18,10 +18,8 @@ import Hints from "./Hints";
 import { change } from "./helpers";
 import { Row } from "../../styled/WidgetOptions/Row";
 import { Col } from "../../styled/WidgetOptions/Col";
-import { QuestionContext } from "../../components/QuestionWrapper";
 
-const Extras = ({ t, children, theme }) => {
-  const { item, setQuestionData } = useContext(QuestionContext);
+const Extras = ({ t, children, theme, item, setQuestionData }) => {
   const _change = change({ item, setQuestionData });
 
   const inputStyle = {
@@ -117,7 +115,9 @@ Extras.Hints = Hints;
 Extras.propTypes = {
   children: PropTypes.any,
   t: PropTypes.func.isRequired,
-  theme: PropTypes.object.isRequired
+  theme: PropTypes.object.isRequired,
+  setQuestionData: PropTypes.func.isRequired,
+  item: PropTypes.object.isRequired
 };
 
 Extras.defaultProps = {

@@ -10,6 +10,7 @@ import { Checkbox } from "antd";
 import { PaddingDiv, Paper } from "@edulastic/common";
 import { withNamespaces } from "@edulastic/localization";
 import { setQuestionDataAction } from "../../../author/QuestionEditor/ducks";
+import { PREVIEW, EDIT, CLEAR, CHECK, SHOW } from "../../constants/constantsForQuestions";
 
 import Options from "./components/Options";
 import Authoring from "./components/Authoring";
@@ -163,7 +164,7 @@ class MultipleChoice extends Component {
     return (
       <React.Fragment>
         <PaddingDiv>
-          {view === "edit" && (
+          {view === EDIT && (
             <React.Fragment>
               <Paper style={{ marginBottom: 25 }}>
                 <Authoring item={itemForEdit} />
@@ -193,9 +194,9 @@ class MultipleChoice extends Component {
               <Options onChange={this.handleOptionsChange} uiStyle={uiStyle} />
             </React.Fragment>
           )}
-          {view === "preview" && (
+          {view === PREVIEW && (
             <Wrapper>
-              {previewTab === "check" && (
+              {previewTab === CHECK && (
                 <Display
                   checkAnswer
                   data={item}
@@ -212,7 +213,7 @@ class MultipleChoice extends Component {
                   instructorStimulus={item.instructor_stimulus}
                 />
               )}
-              {previewTab === "show" && (
+              {previewTab === SHOW && (
                 <Display
                   showAnswer
                   view={view}
@@ -223,11 +224,12 @@ class MultipleChoice extends Component {
                   handleMultiSelect={this.handleMultiSelect}
                   uiStyle={uiStyle}
                   evaluation={evaluation}
+                  validation={item.validation}
                   qIndex={qIndex}
                   instructorStimulus={item.instructor_stimulus}
                 />
               )}
-              {previewTab === "clear" && (
+              {previewTab === CLEAR && (
                 <Display
                   preview
                   view={view}
@@ -267,7 +269,7 @@ MultipleChoice.propTypes = {
 };
 
 MultipleChoice.defaultProps = {
-  previewTab: "clear",
+  previewTab: CLEAR,
   item: {
     options: []
   },

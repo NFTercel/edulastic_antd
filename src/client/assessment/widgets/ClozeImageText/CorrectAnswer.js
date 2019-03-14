@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { compose } from "redux";
 
 import { withNamespaces } from "@edulastic/localization";
 
@@ -8,7 +10,7 @@ import { CorrectAnswerPointField } from "../../styled/CorrectAnswerPointField";
 import { Points } from "./styled/Points";
 import { CorrectAnswerHeader } from "./styled/CorrectAnswerHeader";
 import Display from "./Display";
-import { QuestionContext } from "../../components/QuestionWrapper";
+import { getQuestionDataSelector } from "../../../author/QuestionEditor/ducks";
 
 class CorrectAnswer extends Component {
   static propTypes = {
@@ -26,7 +28,8 @@ class CorrectAnswer extends Component {
     showDashedBorder: PropTypes.bool.isRequired,
     backgroundColor: PropTypes.string.isRequired,
     imageAlterText: PropTypes.string.isRequired,
-    imageWidth: PropTypes.number.isRequired
+    imageWidth: PropTypes.number.isRequired,
+    item: PropTypes.object.isRequired
   };
 
   constructor(props) {
@@ -66,7 +69,8 @@ class CorrectAnswer extends Component {
       uiStyle,
       showDashedBorder,
       backgroundColor,
-      maxRespCount
+      maxRespCount,
+      item
     } = this.props;
     const { responseScore } = this.state;
     return (
@@ -84,32 +88,35 @@ class CorrectAnswer extends Component {
           />
           <Points>{t("component.correctanswers.points")}</Points>
         </CorrectAnswerHeader>
-        <QuestionContext.Consumer>
-          {({ item }) => (
-            <Display
-              preview
-              setAnswers
-              dragHandler
-              options={options}
-              uiStyle={uiStyle}
-              item={item}
-              question={stimulus}
-              showDashedBorder={showDashedBorder}
-              responseContainers={responses}
-              maxRespCount={maxRespCount}
-              imageUrl={imageUrl}
-              backgroundColor={backgroundColor}
-              userSelections={response.value}
-              imageAlterText={imageAlterText}
-              imageWidth={imageWidth}
-              configureOptions={configureOptions}
-              onChange={this.handleMultiSelect}
-            />
-          )}
-        </QuestionContext.Consumer>
+        <Display
+          preview
+          setAnswers
+          dragHandler
+          options={options}
+          uiStyle={uiStyle}
+          item={item}
+          question={stimulus}
+          showDashedBorder={showDashedBorder}
+          responseContainers={responses}
+          maxRespCount={maxRespCount}
+          imageUrl={imageUrl}
+          backgroundColor={backgroundColor}
+          userSelections={response.value}
+          imageAlterText={imageAlterText}
+          imageWidth={imageWidth}
+          configureOptions={configureOptions}
+          onChange={this.handleMultiSelect}
+        />
       </div>
     );
   }
 }
 
-export default withNamespaces("assessment")(CorrectAnswer);
+const enhance = compose(
+  withNamespaces("assessment"),
+  connect(state => ({
+    item: getQuestionDataSelector(state)
+  }))
+);
+
+export default enhance(CorrectAnswer);

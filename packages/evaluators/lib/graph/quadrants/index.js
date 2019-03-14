@@ -19,42 +19,47 @@ var checkAnswer = function checkAnswer(answer, userResponse, ignoreRepeatedShape
     details: []
   };
   var trueAnswerValue = answer.value;
-  var trueShapes = trueAnswerValue.filter(function (item) {
+  var trueShapes = trueAnswerValue.filter(function(item) {
     return !item.subElement;
   });
   var compareShapes = new _compareShapes.default(trueAnswerValue, userResponse);
-  userResponse.filter(function (elem) {
-    return !elem.subElement;
-  }).forEach(function (testShape) {
-    var compareResult = {
-      id: testShape.id,
-      result: false
-    };
+  userResponse
+    .filter(function(elem) {
+      return !elem.subElement;
+    })
+    .forEach(function(testShape) {
+      var compareResult = {
+        id: testShape.id,
+        result: false
+      };
 
-    for (var i = 0; i < trueShapes.length; i++) {
-      compareResult = compareShapes.compare(testShape.id, trueShapes[i].id);
+      for (var i = 0; i < trueShapes.length; i++) {
+        compareResult = compareShapes.compare(testShape.id, trueShapes[i].id);
 
-      if (compareResult.result) {
-        break;
+        if (compareResult.result) {
+          break;
+        }
       }
-    }
 
-    result.details.push(compareResult);
-  }); // if result contain error shapes
+      result.details.push(compareResult);
+    }); // if result contain error shapes
 
-  if (result.details.findIndex(function (item) {
-    return !item.result;
-  }) > -1) {
+  if (
+    result.details.findIndex(function(item) {
+      return !item.result;
+    }) > -1
+  ) {
     result.commonResult = false;
     return result;
   } // check that all shapes are resolved
 
-
   var relatedIds = [];
-  result.details.forEach(function (item) {
-    if (relatedIds.findIndex(function (id) {
-      return id === item.relatedId;
-    }) === -1) {
+  result.details.forEach(function(item) {
+    if (
+      relatedIds.findIndex(function(id) {
+        return id === item.relatedId;
+      }) === -1
+    ) {
       relatedIds.push(item.relatedId);
     }
   });
@@ -64,31 +69,35 @@ var checkAnswer = function checkAnswer(answer, userResponse, ignoreRepeatedShape
     return result;
   } // compare by slope
 
-
-  if (ignoreRepeatedShapes && ignoreRepeatedShapes === 'yes') {
+  if (ignoreRepeatedShapes && ignoreRepeatedShapes === "yes") {
     result.commonResult = true;
     return result;
   } // compare by points
 
-
-  if (ignoreRepeatedShapes && ignoreRepeatedShapes === 'strict') {
+  if (ignoreRepeatedShapes && ignoreRepeatedShapes === "strict") {
     result.commonResult = true;
 
     var _loop = function _loop(i) {
-      var sameShapes = result.details.filter(function (item) {
+      var sameShapes = result.details.filter(function(item) {
         return item.relatedId === relatedIds[i];
       });
-      var sameShapesType = userResponse.find(function (item) {
+      var sameShapesType = userResponse.find(function(item) {
         return item.id === sameShapes[0].id;
       }).type;
 
-      if (sameShapes.length > 1 && sameShapesType !== _shapeTypes.ShapeTypes.POINT && sameShapesType !== _shapeTypes.ShapeTypes.SEGMENT && sameShapesType !== _shapeTypes.ShapeTypes.VECTOR && sameShapesType !== _shapeTypes.ShapeTypes.POLYGON) {
-        var allowedSubElementsIds = userResponse.find(function (item) {
+      if (
+        sameShapes.length > 1 &&
+        sameShapesType !== _shapeTypes.ShapeTypes.POINT &&
+        sameShapesType !== _shapeTypes.ShapeTypes.SEGMENT &&
+        sameShapesType !== _shapeTypes.ShapeTypes.VECTOR &&
+        sameShapesType !== _shapeTypes.ShapeTypes.POLYGON
+      ) {
+        var allowedSubElementsIds = userResponse.find(function(item) {
           return item.id === sameShapes[0].id;
         }).subElementsIds;
 
         var _loop2 = function _loop2(j) {
-          var checkableShape = userResponse.find(function (item) {
+          var checkableShape = userResponse.find(function(item) {
             return item.id === sameShapes[j].id;
           });
 
@@ -106,11 +115,13 @@ var checkAnswer = function checkAnswer(answer, userResponse, ignoreRepeatedShape
             case _shapeTypes.ShapeTypes.LINE:
             case _shapeTypes.ShapeTypes.RAY:
             default:
-              if (checkableShape.subElementsIds.startPoint !== allowedSubElementsIds.startPoint || checkableShape.subElementsIds.endPoint !== allowedSubElementsIds.endPoint) {
+              if (
+                checkableShape.subElementsIds.startPoint !== allowedSubElementsIds.startPoint ||
+                checkableShape.subElementsIds.endPoint !== allowedSubElementsIds.endPoint
+              ) {
                 sameShapes[j].result = false;
                 result.commonResult = false;
               }
-
           }
         };
 
@@ -127,11 +138,10 @@ var checkAnswer = function checkAnswer(answer, userResponse, ignoreRepeatedShape
     return result;
   } // compare by default
 
-
   result.commonResult = true;
 
   var _loop3 = function _loop3(i) {
-    var sameShapes = result.details.filter(function (item) {
+    var sameShapes = result.details.filter(function(item) {
       return item.relatedId === relatedIds[i];
     });
 
@@ -152,12 +162,12 @@ var checkAnswer = function checkAnswer(answer, userResponse, ignoreRepeatedShape
 
 var evaluator = function evaluator(_ref) {
   var userResponse = _ref.userResponse,
-      validation = _ref.validation;
+    validation = _ref.validation;
   var valid_response = validation.valid_response,
-      alt_responses = validation.alt_responses,
-      ignore_repeated_shapes = validation.ignore_repeated_shapes;
+    alt_responses = validation.alt_responses,
+    ignore_repeated_shapes = validation.ignore_repeated_shapes;
   var score = 0;
-  var maxScore = 0;
+  var maxScore = 1;
   var evaluation = {};
   var answers = [valid_response];
 
@@ -166,7 +176,7 @@ var evaluator = function evaluator(_ref) {
   }
 
   var result = {};
-  answers.forEach(function (answer, index) {
+  answers.forEach(function(answer, index) {
     result = checkAnswer(answer, userResponse, ignore_repeated_shapes);
 
     if (result.commonResult) {

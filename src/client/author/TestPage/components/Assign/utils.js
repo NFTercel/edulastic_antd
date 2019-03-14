@@ -47,6 +47,7 @@ export const formatAssignment = assignment => {
     if (assignment.specificStudents) {
       students = [...students, ...item.students];
     }
+
     // ignore false, it wont be overriding anything!
     if (assignment.releaseScore) {
       scoreReleasedClasses.push(item._id);

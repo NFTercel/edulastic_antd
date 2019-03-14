@@ -22,12 +22,12 @@ const studentResponse = ({ testActivityId, groupId }) =>
     })
     .then(result => result.data.result);
 
-const feedbackResponse = ({ body, testActivityId, questionId, groupId }) =>
+const feedbackResponse = ({ body, testActivityId, questionId }) =>
   api
     .callApi({
       url: `/test-activity/${testActivityId}/question/${questionId}/feedbackAndScore`,
       method: "put",
-      data: { body, groupId }
+      data: body
     })
     .then(result => result.data.result);
 

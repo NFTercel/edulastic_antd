@@ -7,3 +7,8 @@ export const getViewSelector = createSelector(
   stateSelector,
   state => state.view
 );
+
+export const getPreviewSelector = createSelector(
+  stateSelector,
+  state => state.preview
+);

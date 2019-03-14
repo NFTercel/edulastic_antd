@@ -5,6 +5,7 @@ import { compose } from "redux";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { cloneDeep } from "lodash";
+import uuid from "uuid/v4";
 
 import { withNamespaces } from "@edulastic/localization";
 import { PaddingDiv } from "@edulastic/common";
@@ -83,9 +84,8 @@ class Authoring extends Component {
   addNewChoiceBtn = () => {
     const { setQuestionData, t } = this.props;
     const newItem = this.getNewItem();
-
     newItem.options.push({
-      value: newItem.options.length,
+      value: uuid(),
       label: `${t("component.multiplechoice.choice")} ${ALPHABET[newItem.options.length]}`
     });
 

@@ -40,15 +40,17 @@ var shapesAreEqual = function shapesAreEqual(shape1, shape2) {
 var checkAnswer = function checkAnswer(answer, userResponse) {
   var result = [];
   var trueAnswerValue = answer.value;
-  userResponse.forEach(function (testShape) {
+  userResponse.forEach(function(testShape) {
     var resultForShape = {
       shape: testShape,
       result: false
     };
 
-    if (trueAnswerValue.findIndex(function (item) {
-      return shapesAreEqual(item, testShape);
-    }) > -1) {
+    if (
+      trueAnswerValue.findIndex(function(item) {
+        return shapesAreEqual(item, testShape);
+      }) > -1
+    ) {
       resultForShape.result = true;
     }
 
@@ -59,15 +61,15 @@ var checkAnswer = function checkAnswer(answer, userResponse) {
 
 var exactMatchEvaluator = function exactMatchEvaluator(userResponse, answers) {
   var score = 0;
-  var maxScore = 0;
+  var maxScore = 1;
   var evaluation = {};
-  answers.forEach(function (answer, index) {
+  answers.forEach(function(answer, index) {
     var answerResult = {
       result: false,
       details: checkAnswer(answer, userResponse),
       score: 0
     };
-    var trueShapesCount = answerResult.details.filter(function (item) {
+    var trueShapesCount = answerResult.details.filter(function(item) {
       return item.result;
     }).length;
     var allIsTrue = trueShapesCount === answerResult.details.length;
@@ -90,15 +92,15 @@ var exactMatchEvaluator = function exactMatchEvaluator(userResponse, answers) {
 
 var partialMatchPerResponseEvaluator = function partialMatchPerResponseEvaluator(userResponse, answers) {
   var score = 0;
-  var maxScore = 0;
+  var maxScore = 1;
   var evaluation = {};
-  answers.forEach(function (answer, index) {
+  answers.forEach(function(answer, index) {
     var answerResult = {
       result: false,
       details: checkAnswer(answer, userResponse),
       score: 0
     };
-    var trueShapesCount = answerResult.details.filter(function (item) {
+    var trueShapesCount = answerResult.details.filter(function(item) {
       return item.result;
     }).length;
     var allIsTrue = trueShapesCount === answerResult.details.length;
@@ -117,21 +119,23 @@ var partialMatchPerResponseEvaluator = function partialMatchPerResponseEvaluator
 
 var partialMatchEvaluator = function partialMatchEvaluator(userResponse, answers, roundingIsNone) {
   var score = 0;
-  var maxScore = 0;
+  var maxScore = 1;
   var evaluation = {};
-  answers.forEach(function (answer, index) {
+  answers.forEach(function(answer, index) {
     var answerResult = {
       result: false,
       details: checkAnswer(answer, userResponse),
       score: 0
     };
-    var trueShapesCount = answerResult.details.filter(function (item) {
+    var trueShapesCount = answerResult.details.filter(function(item) {
       return item.result;
     }).length;
     var allIsTrue = trueShapesCount === answerResult.details.length;
     answerResult.result = answer.value.length === userResponse.length && allIsTrue;
     var pointsPerOneShape = answer.value.length ? answer.score / answer.value.length : 0;
-    answerResult.score = roundingIsNone ? pointsPerOneShape * trueShapesCount : Math.floor(pointsPerOneShape * trueShapesCount);
+    answerResult.score = roundingIsNone
+      ? pointsPerOneShape * trueShapesCount
+      : Math.floor(pointsPerOneShape * trueShapesCount);
     score = Math.max(answerResult.score, score);
     maxScore = Math.max(answer.score, maxScore);
     evaluation[index] = answerResult;
@@ -145,18 +149,18 @@ var partialMatchEvaluator = function partialMatchEvaluator(userResponse, answers
 
 var evaluator = function evaluator(_ref) {
   var userResponse = _ref.userResponse,
-      validation = _ref.validation;
+    validation = _ref.validation;
   var valid_response = validation.valid_response,
-      alt_responses = validation.alt_responses,
-      scoring_type = validation.scoring_type,
-      rounding = validation.rounding;
+    alt_responses = validation.alt_responses,
+    scoring_type = validation.scoring_type,
+    rounding = validation.rounding;
   var answers = [valid_response];
 
   if (alt_responses) {
     answers = answers.concat((0, _toConsumableArray2.default)(alt_responses));
   }
 
-  var roundingIsNone = rounding && rounding === 'none';
+  var roundingIsNone = rounding && rounding === "none";
 
   switch (scoring_type) {
     case _scoring.ScoringType.PARTIAL_MATCH:

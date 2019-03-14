@@ -25,7 +25,7 @@ class QuestionScore extends Component {
     let { score, maxScore, score: studentScore } = question;
     if (!isQuestion) {
       score = 0;
-      maxScore = 0;
+      maxScore = 1;
       studentScore = "-";
     }
 

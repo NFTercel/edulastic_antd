@@ -89,8 +89,10 @@ export const initialTestState = {
   releaseScore: test.releaseGradeLabels.DONT_RELEASE,
   maxAttempts: 1,
   testType: test.type.ASSESSMENT,
-  activityReview: true,
-  renderingType: "assessment",
+  generateReport: true,
+  safeBrowser: false,
+  shuffleQuestions: false,
+  shuffleAnswers: false,
   status: "draft",
   thumbnail: "https://fakeimg.pl/500x135/",
   createdBy: {

@@ -8,6 +8,7 @@ const getMatches = (response, answer, compareFunction) =>
         return difference(answer[index], resp).length === 0 && difference(resp, answer[index]).length === 0;
 
       case evaluatorTypes.IS_EQUAL:
+      case evaluatorTypes.MCQ_TYPE:
         return isEqual(answer[index], resp);
 
       default:

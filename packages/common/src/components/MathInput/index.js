@@ -123,10 +123,10 @@ class MathInput extends React.PureComponent {
 
   render() {
     const { mathFieldFocus } = this.state;
-    const { alwaysShowKeyboard, showResponse, style, onFocus, onKeyDown, symbols, numberPad } = this.props;
+    const { alwaysShowKeyboard, showResponse, style, onFocus, onKeyDown, symbols, numberPad, fullWidth } = this.props;
 
     return (
-      <MathInputStyles>
+      <MathInputStyles fullWidth={fullWidth}>
         <div
           ref={this.containerRef}
           onFocus={() => {
@@ -167,7 +167,8 @@ MathInput.propTypes = {
   value: PropTypes.string,
   style: PropTypes.object,
   onFocus: PropTypes.func,
-  onKeyDown: PropTypes.func
+  onKeyDown: PropTypes.func,
+  fullWidth: PropTypes.bool
 };
 
 MathInput.defaultProps = {
@@ -176,7 +177,8 @@ MathInput.defaultProps = {
   showResponse: false,
   style: {},
   onFocus: () => {},
-  onKeyDown: () => {}
+  onKeyDown: () => {},
+  fullWidth: false
 };
 
 // export default MathInput;

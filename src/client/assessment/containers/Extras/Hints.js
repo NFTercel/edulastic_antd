@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import { Col } from "antd";
 import { connect } from "react-redux";
@@ -10,13 +10,11 @@ import { setQuestionDataAction, getQuestionDataSelector } from "../../../author/
 import withAddButton from "../../components/HOC/withAddButton";
 import { change, remove, add, sort } from "./helpers";
 import { StyledRow } from "./styled/StyledRow";
-import { QuestionContext } from "../../components/QuestionWrapper";
 import QuillSortableList from "../../components/QuillSortableList";
 
 const SortableListWithAddButton = withAddButton(QuillSortableList);
 
-const Hints = ({ t }) => {
-  const { item, setQuestionData } = useContext(QuestionContext);
+const Hints = ({ t, item, setQuestionData }) => {
   const prop = "hints";
 
   const _change = change({ item, setQuestionData, prop });
@@ -48,7 +46,9 @@ const Hints = ({ t }) => {
 };
 
 Hints.propTypes = {
-  t: PropTypes.func.isRequired
+  t: PropTypes.func.isRequired,
+  setQuestionData: PropTypes.func.isRequired,
+  item: PropTypes.object.isRequired
 };
 
 const enhance = compose(

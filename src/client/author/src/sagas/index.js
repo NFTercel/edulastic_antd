@@ -10,7 +10,6 @@ import { questionSaga } from "../../QuestionEditor";
 import { testsAddItemsSaga } from "../../TestPage/components/AddItems";
 import { testsAssignSaga } from "../../TestPage/components/Assign";
 import assignmentsSaga from "./assignments";
-import standardReportsSaga from "./standardBasedReports";
 import { authorGroupsWatcherSaga } from "../../sharedDucks/groups";
 import { assessmentPageSaga } from "../../AssessmentCreate";
 
@@ -28,8 +27,7 @@ const authorSagas = [
   testsAddItemsSaga(),
   testsAssignSaga(),
   authorGroupsWatcherSaga(),
-  assessmentPageSaga(),
-  standardReportsSaga()
+  assessmentPageSaga()
 ];
 
 export default authorSagas;

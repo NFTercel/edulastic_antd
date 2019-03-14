@@ -3,7 +3,6 @@ import { evaluatorTypes } from "@edulastic/constants";
 
 const getEvaluation = (response, answers, rightIndex, compareFunction) => {
   const evaluation = [];
-
   response.forEach((item, i) => {
     switch (compareFunction) {
       case evaluatorTypes.INNER_DIFFERENCE:
@@ -16,6 +15,9 @@ const getEvaluation = (response, answers, rightIndex, compareFunction) => {
         evaluation[i] = isEqual(answers[rightIndex].value[i], item);
         break;
 
+      case evaluatorTypes.MCQ_TYPE:
+        evaluation[item] = answers[rightIndex].value.includes(item);
+        break;
       default:
         evaluation[i] = includes(answers[rightIndex].value, item);
         break;

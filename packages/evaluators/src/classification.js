@@ -5,7 +5,7 @@ import exactMatchTemplate from "./helpers/exactMatchTemplate";
 
 const exactCompareFunction = ({ answers, userResponse = [] }) => {
   let score = 0;
-  let maxScore = 0;
+  let maxScore = 1;
 
   let rightIndex = 0;
 
@@ -56,7 +56,7 @@ const exactCompareFunction = ({ answers, userResponse = [] }) => {
 
 const partialCompareFunction = ({ answers, userResponse = [] }) => {
   let score = 0;
-  let maxScore = 0;
+  let maxScore = 1;
 
   let rightIndex = 0;
 

@@ -61,7 +61,8 @@ export default class QuestionText extends React.Component {
             value,
             score,
             matching_rule: allow
-          }
+          },
+          alt_responses: []
         }
       };
 
@@ -82,7 +83,8 @@ export default class QuestionText extends React.Component {
             value: answer,
             score,
             matching_rule: allow
-          }
+          },
+          alt_responses: []
         }
       };
 
@@ -102,7 +104,8 @@ export default class QuestionText extends React.Component {
             value: answer,
             score,
             matching_rule: allow
-          }
+          },
+          alt_responses: []
         }
       };
 

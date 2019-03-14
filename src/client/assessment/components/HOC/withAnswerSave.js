@@ -5,12 +5,12 @@ import { compose } from "redux";
 import { withRouter } from "react-router-dom";
 
 import { setUserAnswerAction } from "../../actions/answers";
-import { getAnswerByQuestionIdSelector } from "../../selectors/answers";
+import { getUserAnswerSelector, getEvaluationByIdSelector } from "../../selectors/answers";
 
 const getQuestionId = questionId => questionId || "tmp";
 
 export default WrappedComponent => {
-  const hocComponent = ({ setUserAnswer, testItemId, ...props }) => {
+  const hocComponent = ({ setUserAnswer, testItemId, evaluation, ...props }) => {
     const { data: question } = props;
     const questionId = getQuestionId(question.id);
 
@@ -20,6 +20,7 @@ export default WrappedComponent => {
           setUserAnswer(questionId, data);
         }}
         questionId={questionId}
+        evaluation={evaluation}
         {...props}
       />
     );
@@ -32,21 +33,10 @@ export default WrappedComponent => {
   const enhance = compose(
     withRouter,
     connect(
-      (state, data) => {
-        const { questionId: qId, activity } = data;
-        if (!qId) return {};
-        let userAnswer;
-        if (activity && activity.userResponse) {
-          userAnswer = activity.userResponse;
-        } else {
-          userAnswer = getAnswerByQuestionIdSelector(getQuestionId(qId))(state);
-        }
-
-        return {
-          userAnswer,
-          evaluation: state.evaluation[getQuestionId(qId)]
-        };
-      },
+      (state, props) => ({
+        userAnswer: getUserAnswerSelector(state, props),
+        evaluation: getEvaluationByIdSelector(state, props)
+      }),
       { setUserAnswer: setUserAnswerAction }
     )
   );

@@ -24,7 +24,7 @@ var exactCompareFunction = function exactCompareFunction(_ref) {
     _ref$userResponse = _ref.userResponse,
     userResponse = _ref$userResponse === void 0 ? [] : _ref$userResponse;
   var score = 0;
-  var maxScore = 0;
+  var maxScore = 1;
   var rightIndex = 0;
   answers.forEach(function(_ref2, ind) {
     var _ref2$value = _ref2.value,
@@ -96,7 +96,7 @@ var partialCompareFunction = function partialCompareFunction(_ref3) {
     _ref3$userResponse = _ref3.userResponse,
     userResponse = _ref3$userResponse === void 0 ? [] : _ref3$userResponse;
   var score = 0;
-  var maxScore = 0;
+  var maxScore = 1;
   var rightIndex = 0;
   answers.forEach(function(_ref4, ind) {
     var _ref4$value = _ref4.value,

@@ -1,15 +1,17 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Checkbox, Input } from "antd";
 import { cloneDeep } from "lodash";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { compose } from "redux";
+import { withNamespaces } from "react-i18next";
 
 import { Row } from "../../../styled/WidgetOptions/Row";
 import { Col } from "../../../styled/WidgetOptions/Col";
 import { Label } from "../../../styled/WidgetOptions/Label";
-import { QuestionContext } from "../../../components/QuestionWrapper";
+import { getQuestionDataSelector, setQuestionDataAction } from "../../../../author/QuestionEditor/ducks";
 
-const SpecialCharacters = () => {
-  const { item, setQuestionData, t } = useContext(QuestionContext);
-
+const SpecialCharacters = ({ item, setQuestionData, t }) => {
   const _change = (propName, value) => {
     const newItem = cloneDeep(item);
     newItem[propName] = value;
@@ -47,6 +49,22 @@ const SpecialCharacters = () => {
   );
 };
 
-SpecialCharacters.propTypes = {};
+SpecialCharacters.propTypes = {
+  t: PropTypes.func.isRequired,
+  setQuestionData: PropTypes.func.isRequired,
+  item: PropTypes.object.isRequired
+};
 
-export default SpecialCharacters;
+const enhance = compose(
+  withNamespaces("assessment"),
+  connect(
+    state => ({
+      item: getQuestionDataSelector(state)
+    }),
+    {
+      setQuestionData: setQuestionDataAction
+    }
+  )
+);
+
+export default enhance(SpecialCharacters);

@@ -21,7 +21,7 @@ class FeedbackRight extends Component {
     } = this.props;
     let feedback = "";
     let score = 0;
-    let maxScore = 0;
+    let maxScore = 1;
     if (activity) {
       const {
         feedback: { text: _feedback },
@@ -46,7 +46,7 @@ class FeedbackRight extends Component {
       loadFeedbackResponses,
       widget: { id, activity }
     } = this.props;
-    const { testActivityId } = activity;
+    const { testActivityId, groupId } = activity;
     if (!id || !user || !user.user || !testActivityId) {
       return;
     }
@@ -57,7 +57,8 @@ class FeedbackRight extends Component {
           teacherId: user.user._id,
           teacherName: user.user.firstName,
           text: feedback
-        }
+        },
+        groupId
       },
       testActivityId,
       questionId: id
@@ -125,7 +126,6 @@ FeedbackRight.propTypes = {
   widget: PropTypes.shape({
     evaluation: PropTypes.object
   }).isRequired,
-  testItemId: PropTypes.string.isRequired,
   user: PropTypes.object.isRequired,
   t: PropTypes.func.isRequired,
   loadFeedbackResponses: PropTypes.func.isRequired

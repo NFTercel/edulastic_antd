@@ -1,11 +1,13 @@
-import React, { useRef, useState, useContext } from "react";
+import React, { useRef, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Input } from "antd";
+import { compose } from "redux";
+import { connect } from "react-redux";
 
 import NumberPad from "./NumberPad";
 import { getInputSelection } from "../utils/helpers";
-import { QuestionContext } from "./QuestionWrapper";
+import { getQuestionDataSelector } from "../../author/QuestionEditor/ducks";
 
 const { TextArea } = Input;
 
@@ -70,9 +72,18 @@ const characterMapButtons = [
   "ü"
 ];
 
-const ClozeTextInput = ({ value, btnStyle, dropTargetIndex, onChange, style, placeholder, type, indexNumber }) => {
+const ClozeTextInput = ({
+  value,
+  btnStyle,
+  item,
+  dropTargetIndex,
+  onChange,
+  style,
+  placeholder,
+  type,
+  indexNumber
+}) => {
   const ref = useRef();
-  const { item } = useContext(QuestionContext);
   const MInput = item.multiple_line ? TextArea : Input;
   const [selection, setSelection] = useState({
     start: 0,
@@ -151,6 +162,7 @@ const ClozeTextInput = ({ value, btnStyle, dropTargetIndex, onChange, style, pla
 ClozeTextInput.propTypes = {
   btnStyle: PropTypes.object.isRequired,
   dropTargetIndex: PropTypes.number.isRequired,
+  item: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
   type: PropTypes.string,
@@ -167,7 +179,9 @@ ClozeTextInput.defaultProps = {
   indexNumber: null
 };
 
-export default ClozeTextInput;
+const enhance = compose(connect(state => ({ item: getQuestionDataSelector(state) })));
+
+export default enhance(ClozeTextInput);
 
 const CustomInput = styled.div`
   display: inline-flex;

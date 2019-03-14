@@ -1,10 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
 import { cloneDeep, get } from "lodash";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { compose } from "redux";
+import { withNamespaces } from "react-i18next";
 
 import SpecialCharacters from "../../../containers/WidgetOptions/components/SpecialCharacters";
 import { Row } from "../../../styled/WidgetOptions/Row";
 import { Col } from "../../../styled/WidgetOptions/Col";
-import { QuestionContext } from "../../../components/QuestionWrapper";
 import Container from "./Container";
 import {
   FontSizeOption,
@@ -14,10 +17,10 @@ import {
   BrowserSpellcheckOption,
   MultipleLineOption
 } from "../../../containers/WidgetOptions/components";
+import { changeItemAction } from "../../../../author/src/actions/question";
+import { setQuestionDataAction, getQuestionDataSelector } from "../../../../author/QuestionEditor/ducks";
 
-const Layout = () => {
-  const { item, t, changeItem, setQuestionData } = useContext(QuestionContext);
-
+const Layout = ({ item, t, changeItem, setQuestionData }) => {
   const mapValues = val => (Number.isNaN(+val) ? "" : val);
 
   const changeUiStyle = (prop, value) => {
@@ -90,4 +93,24 @@ const Layout = () => {
   );
 };
 
-export default Layout;
+Layout.propTypes = {
+  t: PropTypes.func.isRequired,
+  setQuestionData: PropTypes.func.isRequired,
+  changeItem: PropTypes.func.isRequired,
+  item: PropTypes.object.isRequired
+};
+
+const enhance = compose(
+  withNamespaces("assessment"),
+  connect(
+    state => ({
+      item: getQuestionDataSelector(state)
+    }),
+    {
+      setQuestionData: setQuestionDataAction,
+      changeItem: changeItemAction
+    }
+  )
+);
+
+export default enhance(Layout);

@@ -18,7 +18,7 @@ const partialMatchTemplate = (mainFunction, mainArguments) => {
 
   return {
     score: isRound ? Math.floor(newScore) : +newScore.toFixed(4),
-    maxScore: newMaxScore,
+    maxScore: newMaxScore > 0 ? newMaxScore : 1,
     evaluation
   };
 };

@@ -9,7 +9,7 @@ const countPartialMatchScores = compareFunction => ({ answers, userResponse = []
   }
 
   let score = 0;
-  let maxScore = 0;
+  let maxScore = 1;
 
   let rightLen = 0;
   let rightIndex = 0;

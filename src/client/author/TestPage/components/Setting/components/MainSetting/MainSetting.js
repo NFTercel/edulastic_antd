@@ -54,7 +54,7 @@ const testTypes = {
 };
 
 const releaseGradeKeys = ["DONT_RELEASE", "SCORE_ONLY", "WITH_RESPONSE", "WITH_ANSWERS"];
-const generateReport = {
+const generateReportTypes = {
   YES: {
     val: "Yes",
     type: true
@@ -72,7 +72,6 @@ class MainSetting extends Component {
       markAsDoneValue: props.entity.markAsDoneValue,
       calcType: props.entity.calcType,
       evalType: props.entity.evalType,
-      isGenerateReport: true,
       enable: true,
       showAdvancedOption: false
     };
@@ -100,13 +99,13 @@ class MainSetting extends Component {
         setTestData({
           releaseScore: releaseGradeLabels.DONT_RELEASE
         });
-        this.setState({ isGenerateReport: true });
+        setTestData({ generateReport: true });
       } else {
         setMaxAttempts(3);
         setTestData({
           releaseScore: releaseGradeLabels.WITH_ANSWERS
         });
-        this.setState({ isGenerateReport: false });
+        setTestData({ generateReport: false });
       }
     }
     setTestData({
@@ -145,13 +144,13 @@ class MainSetting extends Component {
     const {
       releaseScore,
       maxAttempts,
-      requireSafeExamBrowser,
-      activityReview,
-      shuffleQ,
-      shuffleAns,
+      safeBrowser,
+      shuffleQuestions,
+      shuffleAnswers,
       answerOnPaper,
       requirePassword,
-      testType
+      testType,
+      generateReport
     } = entity;
 
     const isSmallSize = windowWidth > 993 ? 1 : 0;
@@ -170,6 +169,43 @@ class MainSetting extends Component {
             </StyledAnchor>
           </Col>
           <Col span={isSmallSize ? 18 : 24}>
+            <Block id="test-type">
+              <Row>
+                <Col span={12}>
+                  <Title>Test Type</Title>
+                  <Body />
+                  <Description>
+                    <TestTypeSelect defaultValue={testType} onChange={this.updateTestData("testType")}>
+                      {Object.keys(testTypes).map(key => (
+                        <Option key={key} value={key}>
+                          {testTypes[key]}
+                        </Option>
+                      ))}
+                    </TestTypeSelect>
+                  </Description>
+                </Col>
+                <Col span={12}>
+                  {testType === PRACTICE && (
+                    <React.Fragment>
+                      {" "}
+                      <Title>Generate Report </Title>
+                      <Body>
+                        <GenerateReportSelect
+                          defaultValue={generateReport}
+                          onChange={this.updateTestData("generateReport")}
+                        >
+                          {Object.keys(generateReportTypes).map(key => (
+                            <Select.Option key={key} value={generateReportTypes[key].type}>
+                              {generateReportTypes[key].val}
+                            </Select.Option>
+                          ))}
+                        </GenerateReportSelect>
+                      </Body>
+                    </React.Fragment>
+                  )}
+                </Col>
+              </Row>
+            </Block>
             <Block id="mark-as-done">
               <Title>Mark as Done</Title>
               <Body>
@@ -227,48 +263,11 @@ class MainSetting extends Component {
                 />
               </Description>
             </Block>
-            <Block id="test-type">
-              <Row>
-                <Col span={12}>
-                  <Title>Test Type</Title>
-                  <Body />
-                  <Description>
-                    <TestTypeSelect defaultValue={ASSESSMENT} onChange={this.updateTestData("testType")}>
-                      {Object.keys(testTypes).map(key => (
-                        <Option key={key} value={key}>
-                          {testTypes[key]}
-                        </Option>
-                      ))}
-                    </TestTypeSelect>
-                  </Description>
-                </Col>
-                <Col span={12}>
-                  {testType === PRACTICE && (
-                    <React.Fragment>
-                      {" "}
-                      <Title>Generate Report </Title>
-                      <Body>
-                        <GenerateReportSelect defaultValue={this.state.isGenerateReport}>
-                          {Object.keys(generateReport).map(key => (
-                            <Select.Option key={key} value={generateReport[key].type}>
-                              {generateReport[key].val}
-                            </Select.Option>
-                          ))}
-                        </GenerateReportSelect>
-                      </Body>
-                    </React.Fragment>
-                  )}
-                </Col>
-              </Row>
-            </Block>
 
             <Block id="require-safe-exame-browser">
               <Title>Require Safe Exam Browser</Title>
               <Body>
-                <Switch
-                  defaultChecked={requireSafeExamBrowser}
-                  onChange={this.updateTestData("requireSafeExamBrowser")}
-                />
+                <Switch defaultChecked={safeBrowser} onChange={this.updateTestData("safeBrowser")} />
               </Body>
               <Description>
                 {
@@ -280,7 +279,7 @@ class MainSetting extends Component {
             <Block id="suffle-question">
               <Title>Shuffle Question</Title>
               <Body>
-                <Switch defaultChecked={shuffleQ} onChange={this.updateTestData("shuffleQ")} />
+                <Switch defaultChecked={shuffleQuestions} onChange={this.updateTestData("shuffleQuestions")} />
               </Body>
               <Description>
                 {"If "}
@@ -292,7 +291,7 @@ class MainSetting extends Component {
             <Block id="show-answer-choice">
               <Title>Shuffle Answer Choice</Title>
               <Body>
-                <Switch defaultChecked={shuffleAns} onChange={this.updateTestData("shuffleAns")} />
+                <Switch defaultChecked={shuffleAnswers} onChange={this.updateTestData("shuffleAnswers")} />
               </Body>
               <Description>
                 {"If set to "}

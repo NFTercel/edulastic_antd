@@ -53,8 +53,7 @@ function* receiveStudentResponseSaga({ payload }) {
 
 function* receiveFeedbackResponseSaga({ payload }) {
   try {
-    const groupId = yield select(getCurrentGroup);
-    const feedbackResponse = yield call(classResponseApi.feedbackResponse, { payload, groupId });
+    const feedbackResponse = yield call(classResponseApi.feedbackResponse, payload);
 
     yield put({
       type: RECEIVE_FEEDBACK_RESPONSE_SUCCESS,

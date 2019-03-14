@@ -6,7 +6,7 @@ import { BY_COUNT_METHOD } from "../../../src/client/assessment/constants/consta
 
 const exactCompareFunction = ({ answers, userResponse = [] }) => {
   let score = 0;
-  let maxScore = 0;
+  let maxScore = 1;
 
   let rightIndex = 0;
 
@@ -63,7 +63,7 @@ const exactCompareFunction = ({ answers, userResponse = [] }) => {
 
 const partialCompareFunction = ({ answers, userResponse = [] }) => {
   let score = 0;
-  let maxScore = 0;
+  let maxScore = 1;
 
   let rightIndex = 0;
 

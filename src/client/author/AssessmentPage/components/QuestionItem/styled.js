@@ -1,15 +1,18 @@
 import styled from "styled-components";
 
-import { white, secondaryTextColor, greenDark } from "@edulastic/colors";
+import { white, secondaryTextColor, greenDark, mainBlueColor, green, red } from "@edulastic/colors";
 
 export const QuestionItemWrapper = styled.div`
-  display: flex;
-  align-items: center;
   margin-bottom: 10px;
   padding: 19px 0 18px 13px;
   background: ${white};
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
+`;
+
+export const AnswerForm = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 export const QuestionNumber = styled.span`
@@ -32,22 +35,6 @@ export const QuestionForm = styled.div`
   margin-left: 13px;
 `;
 
-export const QuestionOption = styled.span`
-  display: inline-block;
-  min-width: 36px;
-  height: 36px;
-  padding-top: 10px;
-  border: 1px solid #eee;
-  border-radius: 18px;
-  font-size: 10px;
-  text-align: center;
-  color: ${secondaryTextColor};
-
-  &:not(:first-child) {
-    margin-left: 9px;
-  }
-`;
-
 export const EditButton = styled.span`
   display: inline-block;
   padding: 8px 15px;
@@ -68,8 +55,36 @@ export const EditButton = styled.span`
   }
 `;
 
-export const QuestionText = styled.p`
-  margin: 0;
-  font-size: 14px;
-  padding: 10px 0;
+export const AnswerIndicator = styled.span`
+  display: inline-block;
+  padding: 8px 15px;
+
+  svg {
+    fill: ${({ correct }) => (correct ? green : red)};
+    width: 13px;
+    height: 13px;
+
+    &:hover {
+      fill: ${greenDark};
+    }
+  }
+`;
+
+export const CorrectAnswer = styled.p`
+  margin: 15px 0 0 5px;
+`;
+
+export const CorrectAnswerTitle = styled.span`
+  display: inline-block;
+  margin-right: 5px;
+  font-size: 11px;
+  text-transform: uppercase;
+  color: ${secondaryTextColor};
+`;
+
+export const CorrectAnswerValue = styled.span`
+  display: inline-block;
+  font-size: 11px;
+  font-weight: bold;
+  color: ${secondaryTextColor};
 `;

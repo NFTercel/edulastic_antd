@@ -7,6 +7,7 @@ import { Popconfirm, Switch, message } from "antd";
 import moment from "moment";
 import { withNamespaces } from "@edulastic/localization";
 import Assigned from "../../Assets/assigned.svg";
+import classBoard from "../../Assets/presentation.svg";
 
 import {
   Container,
@@ -20,7 +21,9 @@ import {
   StyledSwitch,
   StyledDiv,
   StyledTabs,
-  StyledAnchor
+  StyledAnchor,
+  StyledButton,
+  Img
 } from "./styled";
 
 class ClassHeader extends Component {
@@ -71,13 +74,21 @@ class ClassHeader extends Component {
         <StyledTitle>
           <StyledParaFirst>{additionalData.className || "loading..."}</StyledParaFirst>
           <StyledParaSecond>
-            (Due on {additionalData.endDate && moment(dueDate).format("MMMM Do YYYY")})
+            Done(Due on {additionalData.endDate && moment(dueDate).format("D MMMM YYYY")})
           </StyledParaSecond>
         </StyledTitle>
         <StyledTabs>
+          <StyledAnchor isActive={active === "summary"}>
+            <StyledLink isActive={active === "summary"} to={`/author/summary/${assignmentId}/${classId}`}>
+              <Img src={classBoard} />
+              <SpaceD />
+              SUMMARY
+            </StyledLink>
+          </StyledAnchor>
+
           <StyledAnchor isActive={active === "classboard"}>
             <StyledLink isActive={active === "classboard"} to={`/author/classboard/${assignmentId}/${classId}`}>
-              <img src={Assigned} />
+              <Img src={classBoard} />
               <SpaceD />
               {t("common.liveClassBoard")}
             </StyledLink>
@@ -87,19 +98,14 @@ class ClassHeader extends Component {
               isActive={active === "expressgrader"}
               to={`/author/expressgrader/${assignmentId}/${classId}/${testActivityId}`}
             >
-              <img src={Assigned} />
+              <Img src={Assigned} />
               <SpaceD />
               {t("common.expressGrader")}
             </StyledLink>
           </StyledAnchor>
-          <StyledAnchor isActive={active === "reports"}>
-            <img src={Assigned} />
-            <SpaceD />
-            {t("common.reports")}
-          </StyledAnchor>
           <StyledAnchor>
             <StyledLink to={`/author/standardsBasedReport/${this.props.assignmentId}/${this.props.classId}`}>
-              <img src={Assigned} />
+              <Img src={Assigned} />
               <SpaceD />
               {t("common.standardBasedReports")}
             </StyledLink>
@@ -115,8 +121,7 @@ class ClassHeader extends Component {
             okText="Yes"
             cancelText="No"
           />
-          <StyledParaThird>Release Scores</StyledParaThird>
-          <StyledSwitch defaultChecked onChange={this.changeCondition} />
+          <StyledButton>... More</StyledButton>
         </StyledDiv>
       </Container>
     );

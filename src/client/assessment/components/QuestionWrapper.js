@@ -4,7 +4,6 @@ import { ThemeProvider } from "styled-components";
 import { questionType } from "@edulastic/constants";
 import { connect } from "react-redux";
 import { compose } from "redux";
-import { cloneDeep } from "lodash";
 import { withNamespaces } from "@edulastic/localization";
 
 import { PaperWrapper } from "./Graph/common/styled_components";
@@ -100,8 +99,6 @@ const getQuestion = type => {
   }
 };
 
-export const QuestionContext = React.createContext({});
-
 class QuestionWrapper extends Component {
   state = {
     main: [],
@@ -185,53 +182,30 @@ class QuestionWrapper extends Component {
     const { type, timespent, data, showFeedback, multiple, view, setQuestionData, t, ...restProps } = this.props;
     const { main, advanced, activeTab } = this.state;
     const Question = getQuestion(type);
-    const studentName = ""; //data.activity.studentName;
-    const changeItem = (prop, uiStyle) => {
-      const newItem = cloneDeep(data);
-
-      newItem[prop] = uiStyle;
-      setQuestionData(newItem);
-    };
-
-    const changeUIStyle = (prop, val) => {
-      const newItem = cloneDeep(data);
-
-      if (!newItem.ui_style) {
-        newItem.ui_style = {};
-      }
-
-      newItem.ui_style[prop] = val;
-      setQuestionData(newItem);
-    };
+    const studentName = ""; // data.activity.studentName;
 
     return (
       <ThemeProvider theme={themes.default}>
-        <QuestionContext.Provider value={{ item: data, setQuestionData, t, changeItem, changeUIStyle }}>
-          <PaperWrapper style={{ width: "-webkit-fill-available", display: "flex" }}>
-            {type === "graph" && view === "edit" && (
-              <QuestionMenu activeTab={activeTab} main={main} advanced={advanced} />
-            )}
-            <Fragment>
-              <div style={{ flex: "auto" }}>
-                <Timespent timespent={timespent} view={view} />
-                <Question
-                  {...restProps}
-                  setQuestionData={setQuestionData}
-                  item={data}
-                  view={view}
-                  cleanSections={this.cleanSections}
-                  fillSections={this.fillSections}
-                />
-              </div>
-              {showFeedback &&
-                (multiple ? (
-                  <FeedbackBottom widget={data} />
-                ) : (
-                  <FeedbackRight widget={data} studentName={studentName} />
-                ))}
-            </Fragment>
-          </PaperWrapper>
-        </QuestionContext.Provider>
+        <PaperWrapper style={{ width: "-webkit-fill-available", display: "flex" }}>
+          {type === "graph" && view === "edit" && (
+            <QuestionMenu activeTab={activeTab} main={main} advanced={advanced} />
+          )}
+          <Fragment>
+            <div style={{ flex: "auto" }}>
+              <Timespent timespent={timespent} view={view} />
+              <Question
+                {...restProps}
+                setQuestionData={setQuestionData}
+                item={data}
+                view={view}
+                cleanSections={this.cleanSections}
+                fillSections={this.fillSections}
+              />
+            </div>
+            {showFeedback &&
+              (multiple ? <FeedbackBottom widget={data} /> : <FeedbackRight widget={data} studentName={studentName} />)}
+          </Fragment>
+        </PaperWrapper>
       </ThemeProvider>
     );
   }

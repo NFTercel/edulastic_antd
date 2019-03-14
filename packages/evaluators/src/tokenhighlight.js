@@ -6,7 +6,7 @@ import partialMatchTemplate from "./helpers/partialMatchTemplate";
 // exact-match evaluator
 const exactMatchEvaluator = ({ userResponse = [], answers }) => {
   let score = 0;
-  let maxScore = 0;
+  let maxScore = 1;
 
   let evaluation = [];
 
@@ -36,7 +36,7 @@ const exactMatchEvaluator = ({ userResponse = [], answers }) => {
 
 const partialMatchEvaluator = ({ userResponse = [], answers }) => {
   let score = 0;
-  let maxScore = 0;
+  let maxScore = 1;
 
   let rightLen = 0;
   let evaluation = [];

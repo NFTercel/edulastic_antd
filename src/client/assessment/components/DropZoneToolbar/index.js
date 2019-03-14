@@ -9,6 +9,7 @@ import LargeInput from "./components/LargeInput";
 const DropZoneToolbar = ({ width, height, altText, handleChange, t }) => (
   <Container>
     <LargeInput
+      data-cy="image-width-input"
       type="number"
       label={t("component.hotspot.widthLabel")}
       value={width}
@@ -16,6 +17,7 @@ const DropZoneToolbar = ({ width, height, altText, handleChange, t }) => (
       onChange={handleChange("width")}
     />
     <LargeInput
+      data-cy="image-height-input"
       type="number"
       label={t("component.hotspot.heightLabel")}
       value={height}
@@ -23,6 +25,7 @@ const DropZoneToolbar = ({ width, height, altText, handleChange, t }) => (
       onChange={handleChange("height")}
     />
     <LargeInput
+      data-cy="image-alternative-input"
       type="text"
       textAlign="left"
       marginRight={15}

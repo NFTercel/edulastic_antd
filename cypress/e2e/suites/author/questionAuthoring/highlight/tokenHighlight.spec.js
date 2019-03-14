@@ -1,3 +1,4 @@
+/// <reference types="Cypress"/>
 import EditItemPage from "../../../../framework/author/itemList/itemDetail/editPage";
 import TokenHighlightPage from "../../../../framework/author/itemList/questionType/highlight/tokenHighlightPage";
 import PreviewItemPage from "../../../../framework/author/itemList/itemDetail/previewPage";
@@ -9,11 +10,11 @@ describe('Author - "Token highlight" type question', () => {
     queText: "Highlight the correct part?",
     template: [
       "This is first paragraph.And of two sentences.",
-      "This is second paragraph.And of three sentenses.Third sentense is here."
+      "This is second paragraph.And of three sentences. Third sentense is here."
     ],
     correct: {
       para: [0],
-      sentence: ["And of two sentenses", "Third sentense is here"],
+      sentence: ["And of two sentences", "Third sentense is here"],
       word: ["first", "three", "Third"]
     },
     extlink: "www.testdomain.com",
@@ -39,7 +40,7 @@ describe('Author - "Token highlight" type question', () => {
 
   context("User creates question", () => {
     before("visit items page and select question type", () => {
-      editItem.getItemWithId("5c358b480c8e6f22190d5ce0");
+      editItem.getItemWithId("5c88a7c965790664ff78b4ba");
       editItem.deleteAllQuestion();
       // create new que and select type
       editItem.addNew().chooseQuestion(queData.group, queData.queType);
@@ -60,12 +61,13 @@ describe('Author - "Token highlight" type question', () => {
         .getTemplateEditor()
         .click()
         .type(queData.template[0])
-        .type("{enter}")
+        .type("{enter}{enter}")
         .type(queData.template[1]);
 
+      question.getQuestionEditor().click();
       // token
       question.goToEditToken();
-      const tokens = [{ sel: "Paragraph", count: 2 }, { sel: "Sentence", count: 5 }, { sel: "Word", count: 20 }];
+      const tokens = [{ sel: "Paragraph", count: 1 }, { sel: "Sentence", count: 5 }, { sel: "Word", count: 17 }];
 
       tokens.forEach(token => {
         const { sel, count } = token;
@@ -96,8 +98,8 @@ describe('Author - "Token highlight" type question', () => {
       // set correct ans
       question
         .getAllTokenAnswer()
-        .eq(0)
-        .click()
+        .first()
+        .click({ force: true })
         .should("have.class", ACTIVEWORD);
     });
 
@@ -110,22 +112,12 @@ describe('Author - "Token highlight" type question', () => {
     context("[Tc_214] :  preview and validate checkAns,ShowAns,Clear", () => {
       it("[Tc_1] : Paragraph Token, validate checkAns,ShowAns,Clear", () => {
         preview.header.preview();
-        // enter right ans and check
-        question
-          .getAllTokenOnPreview()
-          .eq(0)
-          .as("answered")
-          .click()
-          .should("have.class", ACTIVEWORD);
-
+        // show ans
         preview
-          .getCheckAnswer()
+          .getShowAnswer()
           .click()
           .then(() => {
-            preview.getAntMsg().should("contain", "score: 1/1");
-            cy.get("@answered")
-              .should("have.css", "background-color", GREEN_BG)
-              .and("have.css", "border-color", GREEN_BD);
+            cy.get(`.${ACTIVEWORD}`).should("contain", queData.template[0]);
           });
 
         // clear
@@ -138,12 +130,32 @@ describe('Author - "Token highlight" type question', () => {
             });
           });
 
+        // enter right ans and check
+        question
+          .getAllTokenOnPreview()
+          .eq(0)
+          .as("answered")
+          .click({ force: true })
+          .should("have.class", ACTIVEWORD);
+
+        preview
+          .getCheckAnswer()
+          .click()
+          .then(() => {
+            preview.getAntMsg().should("contain", "score: 1/1");
+            cy.get("@answered")
+              .should("have.css", "background-color", GREEN_BG)
+              .and("have.css", "border-color", GREEN_BD);
+          });
+
+        preview.getClear().click();
+
         // enter wrong ans and check
         question
           .getAllTokenOnPreview()
           .eq(1)
           .as("answered")
-          .click()
+          .click({ force: true })
           .should("have.class", ACTIVEWORD);
 
         preview
@@ -157,14 +169,6 @@ describe('Author - "Token highlight" type question', () => {
           });
 
         preview.getClear().click();
-
-        // show ans
-        preview
-          .getShowAnswer()
-          .click()
-          .then(() => {
-            cy.get(`.${ACTIVEWORD}`).should("contain", queData.template[0]);
-          });
       });
 
       it("[Tc_2] : Sentence Token, validate checkAns", () => {
@@ -184,6 +188,7 @@ describe('Author - "Token highlight" type question', () => {
           });
         });
 
+        preview.header.preview();
         // enter right ans and check
         question.getAllTokenOnPreview().then($ele => {
           queData.correct.sentence.forEach(text => {
@@ -198,7 +203,7 @@ describe('Author - "Token highlight" type question', () => {
           .getCheckAnswer()
           .click()
           .then(() => {
-            preview.getAntMsg().the.should("contain", "score: 1/1");
+            preview.getAntMsg().should("contain", "score: 1/1");
             queData.correct.sentence.forEach(text => {
               question
                 .getAllTokenOnPreview()
@@ -247,6 +252,7 @@ describe('Author - "Token highlight" type question', () => {
           });
         });
 
+        preview.header.preview();
         // enter right ans and check
         question.getAllTokenOnPreview().then($ele => {
           queData.correct.word.forEach(text => {
@@ -261,7 +267,7 @@ describe('Author - "Token highlight" type question', () => {
           .getCheckAnswer()
           .click()
           .then(() => {
-            preview.getAntMsg().the.should("contain", "score: 1/1");
+            preview.getAntMsg().should("contain", "score: 1/1");
             queData.correct.word.forEach(text => {
               question
                 .getAllTokenOnPreview()

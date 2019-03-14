@@ -45,7 +45,7 @@ var evaluator = function evaluator(_ref) {
   var valid_response = validation.valid_response,
     alt_responses = validation.alt_responses;
   var score = 0;
-  var maxScore = 0;
+  var maxScore = 1;
   var evaluation = {};
   var answers = [valid_response];
 

@@ -68,12 +68,16 @@ class ScoreTable extends Component {
             title: "score",
             width: "15%",
             dataIndex: "score",
-            render: record => (
-              <StyledDivMid>
-                <StyledText color="#75B49B">{record.score ? record.score : 0}%</StyledText>(
-                <StyledText color="#75B49B">{record.score}</StyledText> / {record.maxScore})
-              </StyledDivMid>
-            ),
+            render: record => {
+              const { score = 0, maxScore = 0 } = record;
+              const percent = maxScore === 0 ? "-" : `${((100 * score) / maxScore).toFixed(0)}%`;
+              return (
+                <StyledDivMid>
+                  <StyledText color="#75B49B">{percent}</StyledText>(<StyledText color="#75B49B">{score}</StyledText> /{" "}
+                  {maxScore})
+                </StyledDivMid>
+              );
+            },
             onFilter: (value, record) => record.score.indexOf(value) === 0,
             sorter: (a, b) => a.score - b.score,
             sortDirections: ["descend"]
@@ -93,16 +97,15 @@ class ScoreTable extends Component {
           {isQuestionActivities && questionActivities[index].standards.map(tag => <StyledTag>{tag.level}</StyledTag>)}
         </StyledDivMid>
       );
+      students.forEach(student => {
+        if (student && student.questionActivities[index].correct) successAnswer++;
+      });
       const questionAvarageScore = (
         <StyledDivMid>
           <StyledText color="#75B49B">{`${Math.round((successAnswer / length) * 100)}%`}</StyledText>(
           <StyledText color="#75B49B">{successAnswer}</StyledText>/ {length})
         </StyledDivMid>
       );
-
-      students.forEach(student => {
-        if (student && student.questionActivities[index].correct) successAnswer++;
-      });
 
       const column = {
         title,

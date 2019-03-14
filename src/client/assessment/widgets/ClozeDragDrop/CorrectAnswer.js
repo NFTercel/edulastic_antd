@@ -51,6 +51,7 @@ class CorrectAnswer extends Component {
       <div>
         <CorrectAnswerHeader>
           <CorrectAnswerPointField
+            data-cy="points"
             type="number"
             value={responseScore}
             onChange={this.updateScore}

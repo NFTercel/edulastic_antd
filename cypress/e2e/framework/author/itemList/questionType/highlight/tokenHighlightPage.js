@@ -44,6 +44,7 @@ class TokenhighLightPage {
   getAllTokens() {
     return this.editToken()
       .parent()
+      .parent()
       .siblings()
       .filter(".token");
   }

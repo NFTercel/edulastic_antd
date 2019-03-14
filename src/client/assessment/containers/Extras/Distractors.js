@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import { Col } from "antd";
 import { connect } from "react-redux";
@@ -12,12 +12,10 @@ import withAddButton from "../../components/HOC/withAddButton";
 
 import { change, remove, add, sort } from "./helpers";
 import { StyledRow } from "./styled/StyledRow";
-import { QuestionContext } from "../../components/QuestionWrapper";
 
 const SortableListWithAddButton = withAddButton(SortableList);
 
-const Distractors = ({ t }) => {
-  const { item, setQuestionData } = useContext(QuestionContext);
+const Distractors = ({ t, setQuestionData, item }) => {
   const prop = "distractor_rationale_response_level";
 
   const _change = change({ item, setQuestionData, prop });
@@ -50,7 +48,9 @@ const Distractors = ({ t }) => {
 };
 
 Distractors.propTypes = {
-  t: PropTypes.func.isRequired
+  t: PropTypes.func.isRequired,
+  setQuestionData: PropTypes.func.isRequired,
+  item: PropTypes.object.isRequired
 };
 
 const enhance = compose(

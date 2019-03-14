@@ -173,3 +173,6 @@ export const TableData = styled(Table)`
     }
   }
 `;
+export const DivWrapper = styled.div`
+  display: flex;
+`;

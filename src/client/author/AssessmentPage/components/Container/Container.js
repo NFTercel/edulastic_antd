@@ -1,7 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router";
 import { compose } from "redux";
-import uuid from "uuid/v4";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { Spin } from "antd";
@@ -18,13 +17,15 @@ import {
 } from "../../../TestPage/ducks";
 import { getQuestionsArraySelector } from "../../../sharedDucks/questions";
 import { getItemDetailByIdAction, updateItemDetailByIdAction } from "../../../src/actions/itemDetail";
+import { changeViewAction } from "../../../src/actions/view";
 import { getItemDetailSelector } from "../../../src/selectors/itemDetail";
+import { getViewSelector } from "../../../src/selectors/view";
 import Header from "../Header/Header";
 import Worksheet from "../Worksheet/Worksheet";
 
 const tabs = {
   DESCRIPTION: "description",
-  WORKSHEET: "worksheet",
+  WORKSHEET: "edit",
   REVIEW: "review",
   SETTINGS: "settings"
 };
@@ -59,16 +60,12 @@ class Container extends React.Component {
     assessment: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
     match: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired,
     questions: PropTypes.array.isRequired,
     updateItemDetailById: PropTypes.func.isRequired,
     currentTestItem: PropTypes.object.isRequired,
-    setTestData: PropTypes.func.isRequired,
-    updateTest: PropTypes.func.isRequired
-  };
-
-  state = {
-    currentTab: tabs.WORKSHEET
+    updateTest: PropTypes.func.isRequired,
+    changeView: PropTypes.func.isRequired,
+    currentTab: PropTypes.string.isRequired
   };
 
   componentDidMount() {
@@ -86,8 +83,9 @@ class Container extends React.Component {
     }
   }
 
-  handleChangeCurrentTab = currentTab => () => {
-    this.setState({ currentTab });
+  handleChangeCurrentTab = tab => () => {
+    const { changeView } = this.props;
+    changeView(tab);
   };
 
   handleSave = (status = "draft") => () => {
@@ -111,69 +109,24 @@ class Container extends React.Component {
     updateItemDetailById(testItem._id, updatedTestItem, true);
   };
 
-  handleAddAnnotation = question => {
-    const { assessment, setTestData } = this.props;
-    const annotation = {
-      uuid: uuid(),
-      type: "point",
-      class: "Annotation",
-      toolbarMode: "question",
-      ...question
-    };
-
-    const newAnnotations = [...assessment.annotations];
-
-    const annotationIndex = newAnnotations.findIndex(item => item.questionId === question.questionId);
-
-    if (annotationIndex > -1) {
-      newAnnotations.splice(annotationIndex, 1);
-    }
-
-    newAnnotations.push(annotation);
-
-    const updatedAssessment = {
-      annotations: newAnnotations
-    };
-
-    setTestData(updatedAssessment);
-  };
-
-  handleReupload = () => {
-    const {
-      match: {
-        params: { assessmentId }
-      },
-      history
-    } = this.props;
-    history.push(`/author/assessments/create?assessmentId=${assessmentId}`);
-  };
-
   renderContent() {
-    const { currentTab } = this.state;
-    const {
-      assessment: { docUrl, annotations }
-    } = this.props;
+    const { currentTab } = this.props;
 
     switch (currentTab) {
       case tabs.WORKSHEET:
-        return (
-          <Worksheet
-            documentUrl={docUrl}
-            annotations={annotations}
-            onAddAnnotation={this.handleAddAnnotation}
-            onReupload={this.handleReupload}
-          />
-        );
+        return <Worksheet key="worksheet" />;
+      case tabs.REVIEW:
+        return <Worksheet key="review" review />;
       default:
         return null;
     }
   }
 
   render() {
-    const { currentTab } = this.state;
     const {
       loading,
-      assessment: { title, status }
+      assessment: { title, status },
+      currentTab
     } = this.props;
 
     if (loading) {
@@ -203,14 +156,16 @@ const enhance = compose(
       assessment: getTestEntitySelector(state),
       loading: getTestsLoadingSelector(state),
       questions: getQuestionsArraySelector(state),
-      currentTestItem: getItemDetailSelector(state)
+      currentTestItem: getItemDetailSelector(state),
+      currentTab: getViewSelector(state)
     }),
     {
       receiveTestById: receiveTestByIdAction,
       receiveItemDetailById: getItemDetailByIdAction,
       updateItemDetailById: updateItemDetailByIdAction,
       setTestData: setTestDataAction,
-      updateTest: updateTestAction
+      updateTest: updateTestAction,
+      changeView: changeViewAction
     }
   )
 );

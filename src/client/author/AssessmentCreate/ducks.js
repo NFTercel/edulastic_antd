@@ -61,7 +61,7 @@ const defaultTestItem = {
 };
 
 function* createAssessmentSaga({ payload }) {
-  let fileURI;
+  let fileURI = "";
   let testItem;
 
   try {

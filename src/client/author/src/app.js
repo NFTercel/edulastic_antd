@@ -23,7 +23,7 @@ const ItemAdd = lazy(() => import("../ItemAdd"));
 const PickUpQuestionType = lazy(() => import("../PickUpQuestionType"));
 const CurriculumContainer = lazy(() => import("../CurriculumSequence"));
 const ResponseFrequency = lazy(() => import("../ResponseFrequency"));
-const StandardsBasedReport = lazy(() => import("./StandardsBasedReport"));
+const StandardsBasedReport = lazy(() => import("../StandardsBasedReport"));
 
 // eslint-disable-next-line react/prop-types
 const Author = ({ match, history, isSidebarCollapsed }) => {

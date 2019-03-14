@@ -66,7 +66,7 @@ export const StyledDiv = styled.div`
 `;
 
 export const StyledTabs = styled.div`
-  width: 37%;
+  width: 72%;
   height: 62px;
   display: flex;
   align-items: center;
@@ -78,24 +78,43 @@ export const StyledAnchorA = styled.a`
   font-weight: 600;
   color: ${white};
   padding: 17px 12px 15px 12px;
-  width: 100%;
+  width: auto;
+  padding: 0px 15px;
   text-align: center;
   border-bottom: 4px solid lightgray;
   background-color: #3393dc;
 `;
 
 export const StyledAnchor = styled.a`
-  display: inline-block;
+  display: flex;
   font-size: 0.8em;
   font-weight: 600;
+  align-items: center;
+  justify-content: center;
   color: white;
-  width: 100%;
+  width: auto;
+  padding: 0px 15px;
   text-align: center;
-  padding: 5px 0px;
+  height: 45px;
   margin: 0 7px;
   border-radius: 20px;
   background-color: ${props => (props.isActive ? "#fff" : "#3393dc")};
   @media (max-width: 1450px) {
     font-size: 0.6em;
   }
+`;
+
+export const Img = styled.img`
+  width: 27px;
+  height: 27px;
+`;
+
+export const StyledButton = styled.button`
+  width: 90px;
+  height: 27px;
+  background: transparent;
+  color: #fff;
+  border: 1px solid #45aaf3;
+  font-size: 12px;
+  border-radius: 3px;
 `;

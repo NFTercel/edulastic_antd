@@ -69,7 +69,7 @@ const HotspotPreview = ({ view, item, smallSize, saveAnswer, userAnswer, preview
 
       {!smallSize ? (
         <BlockContainer style={{ maxWidth }} justifyContent="center">
-          <Svg width={+width} height={+height}>
+          <Svg data-cy="answer-container" width={+width} height={+height}>
             <image href={source} width={+width} height={+height} preserveAspectRatio="none" x={0} y={0} />
             {areas.map((area, i) => (
               <Polygon
@@ -95,7 +95,7 @@ const HotspotPreview = ({ view, item, smallSize, saveAnswer, userAnswer, preview
         </BlockContainer>
       ) : (
         <BlockContainer justifyContent="center">
-          <Svg width={320} height={170}>
+          <Svg data-cy="answer-container" width={320} height={170}>
             <image href={source} width={320} height={170} preserveAspectRatio="none" x={0} y={0} />
             {previewAreas.map((areaPreviewPoints, i) => (
               <Polygon

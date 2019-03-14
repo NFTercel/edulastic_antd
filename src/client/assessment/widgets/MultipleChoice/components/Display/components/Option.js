@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { maxBy, isEmpty } from "lodash";
 
 import { PaddingDiv, FlexContainer, MathFormulaDisplay } from "@edulastic/common";
 
@@ -29,25 +30,48 @@ const getFontSize = size => {
 };
 
 const Option = props => {
-  const { index, item, showAnswer, userSelections, onChange, smallSize, uiStyle, correct } = props;
+  const {
+    index,
+    item,
+    showAnswer,
+    userSelections,
+    onChange,
+    smallSize,
+    uiStyle,
+    correct = [],
+    checkAnswer,
+    validation
+  } = props;
+
   const isSelected = userSelections.includes(item.value);
-  const indexOfAnswer = userSelections.indexOf(item.value);
-  const isCorrect = indexOfAnswer !== -1 && correct ? correct[indexOfAnswer] : undefined;
+  const isCorrect = correct[item.value];
+
+  let validAnswers = [];
+
+  if (!isEmpty(validation)) {
+    validAnswers = [validation.valid_response, ...validation.alt_responses];
+  }
 
   let className = "";
+
   if (correct) {
     if (isCorrect && isSelected) {
       className = "right";
-    } else if (!isCorrect && isSelected) {
+    } else if (isCorrect === false && isSelected) {
       className = "wrong";
     }
   }
 
   if (showAnswer) {
-    if (correct[index]) {
+    const correctAnswer = maxBy(validAnswers, "score").value;
+    if (correctAnswer.includes(index)) {
       className = "right";
-    } else if (!isCorrect && isSelected) {
-      className = "wrong";
+    } else if (isSelected) {
+      if (validAnswers.some(ans => ans.value.includes(index))) {
+        className = "right";
+      } else {
+        className = "wrong";
+      }
     }
   }
 
@@ -72,7 +96,7 @@ const Option = props => {
 
   const container = (
     <CheckboxContainer smallSize={smallSize}>
-      <input type="checkbox" name="mcq_group" value={index} checked={isSelected} onChange={onChange} />
+      <input type="checkbox" name="mcq_group" value={item.value} checked={isSelected} onChange={onChange} />
       <span
         style={{
           display: "flex",
@@ -127,8 +151,8 @@ const Option = props => {
         <FlexContainer justifyContent={uiStyle.type === "radioBelow" ? "center" : "space-between"}>
           {renderCheckbox()}
           <IconWrapper>
-            {isSelected && className === "right" && <IconCheck />}
-            {isSelected && className === "wrong" && <IconClose />}
+            {((isSelected && checkAnswer) || showAnswer) && className === "right" && <IconCheck />}
+            {((isSelected && checkAnswer) || showAnswer) && className === "wrong" && <IconClose />}
           </IconWrapper>
         </FlexContainer>
       </PaddingDiv>
@@ -143,6 +167,8 @@ Option.propTypes = {
   userSelections: PropTypes.array,
   onChange: PropTypes.func.isRequired,
   smallSize: PropTypes.bool,
+  checkAnswer: PropTypes.bool.isRequired,
+  validation: PropTypes.any.isRequired,
   uiStyle: PropTypes.object.isRequired,
   correct: PropTypes.object.isRequired
 };

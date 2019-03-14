@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { compose } from "redux";
 import { withTheme } from "styled-components";
 
+import { MathFormulaDisplay } from "@edulastic/common";
 import { CHECK, SHOW, CLEAR } from "../../../../constants/constantsForQuestions";
 
 import DragHandle from "../DragHandle";
@@ -15,7 +16,6 @@ import { WithIndex } from "./styled/WithIndex";
 import { TextEmpty } from "./styled/TextEmpty";
 import { IconCheck } from "./styled/IconCheck";
 import { IconClose } from "./styled/IconClose";
-import { MathFormulaDisplay } from "@edulastic/common";
 
 function collectSource(connector, monitor) {
   return {

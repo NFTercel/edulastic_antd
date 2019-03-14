@@ -1,17 +1,15 @@
 import React, { useState } from "react";
-import { connect } from "react-redux";
 import { Col, Radio } from "antd";
 //components
 import { AlignRight, AlignSwitchRight, StyledRowSettings, SettingsWrapper, MaxAttemptIInput } from "./styled";
 //selectors
-import { getTestEntitySelector } from "../../../../ducks";
 import { test } from "@edulastic/constants";
 const { releaseGradeTypes } = test;
 const calculators = ["None", "Scientific", "Basic", "Graphing"];
 const evaluationtypes = ["All or Nothing", "Partial Credit", "Dont penalize for incorrect selection"];
 const releaseGradeKeys = ["DONT_RELEASE", "SCORE_ONLY", "WITH_RESPONSE", "WITH_ANSWERS"];
 
-const Settings = ({ maxAttempts, onUpdateMaxAttempts, testSettings, assignmentSettings, updateAssignmentSettings }) => {
+const Settings = ({ onUpdateMaxAttempts, testSettings, assignmentSettings, updateAssignmentSettings }) => {
   const [isAutomatic, setAssignmentCompletionType] = useState(0);
 
   const [calcType, setCalcType] = useState(0);
@@ -74,7 +72,7 @@ const Settings = ({ maxAttempts, onUpdateMaxAttempts, testSettings, assignmentSe
           <MaxAttemptIInput
             type="number"
             size="large"
-            value={maxAttempts}
+            value={assignmentSettings.maxAttempts || testSettings.maxAttempts}
             onChange={e => onUpdateMaxAttempts(e.target.value)}
             min={1}
             step={1}
@@ -86,25 +84,22 @@ const Settings = ({ maxAttempts, onUpdateMaxAttempts, testSettings, assignmentSe
       <StyledRowSettings gutter={16}>
         <Col span={8}>REQUIRE SAFE EXAM BROWSER</Col>
         <Col span={16}>
-          <AlignSwitchRight defaultChecked={testSettings.activityReview} />
+          <AlignSwitchRight
+            defaultChecked={assignmentSettings.safeBrowser || testSettings.safeBrowser}
+            onChange={value => overRideSettings("safeBrowser", value)}
+          />
         </Col>
       </StyledRowSettings>
       {/* Require Safe Exam Browser */}
-
-      {/*Release Answers With Grades */}
-      <StyledRowSettings gutter={16}>
-        <Col span={8}>RELEASE ANSWERS WITH GRADES</Col>
-        <Col span={16}>
-          <AlignSwitchRight />
-        </Col>
-      </StyledRowSettings>
-      {/*Release Answers With Grades */}
 
       {/* Shuffle Question */}
       <StyledRowSettings gutter={16}>
         <Col span={8}>SHUFFLE QUESTION</Col>
         <Col span={16}>
-          <AlignSwitchRight defaultChecked />
+          <AlignSwitchRight
+            defaultChecked={assignmentSettings.shuffleQuestions || testSettings.shuffleQuestions}
+            onChange={value => overRideSettings("shuffleQuestions", value)}
+          />
         </Col>
       </StyledRowSettings>
       {/* Shuffle Question */}
@@ -113,7 +108,10 @@ const Settings = ({ maxAttempts, onUpdateMaxAttempts, testSettings, assignmentSe
       <StyledRowSettings gutter={16}>
         <Col span={8}>SHUFFLE ANSWER CHOICE</Col>
         <Col span={16}>
-          <AlignSwitchRight defaultChecked />
+          <AlignSwitchRight
+            defaultChecked={assignmentSettings.shuffleAnswers || testSettings.shuffleAnswers}
+            onChange={value => overRideSettings("shuffleAnswers", value)}
+          />
         </Col>
       </StyledRowSettings>
       {/* Shuffle Answer Choice */}
@@ -169,9 +167,4 @@ const Settings = ({ maxAttempts, onUpdateMaxAttempts, testSettings, assignmentSe
   );
 };
 
-export default connect(
-  state => ({
-    testSettings: getTestEntitySelector(state)
-  }),
-  null
-)(Settings);
+export default Settings;

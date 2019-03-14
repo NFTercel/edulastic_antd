@@ -25,6 +25,7 @@ var getMatches = function getMatches(response, answer, compareFunction) {
         );
 
       case _constants.evaluatorTypes.IS_EQUAL:
+      case _constants.evaluatorTypes.MCQ_TYPE:
         return (0, _isEqual2.default)(answer[index], resp);
 
       default:

@@ -25,10 +25,10 @@ var countExactMatchScores = function countExactMatchScores(compareFunction) {
     }
 
     var score = 0;
-    var maxScore = 0;
+    var maxScore = 1;
     var rightLen = 0;
     var rightIndex = 0;
-    answers.forEach(function(_ref2) {
+    answers.forEach(function(_ref2, index) {
       var answer = _ref2.value,
         totalScore = _ref2.score;
 
@@ -41,8 +41,9 @@ var countExactMatchScores = function countExactMatchScores(compareFunction) {
       score = Math.max(score, currentScore);
       maxScore = Math.max(maxScore, totalScore);
 
-      if (currentScore === score && score !== 0) {
+      if ((currentScore === score && score !== 0) || (maxScore === totalScore && currentScore === score)) {
         rightLen = answer.length;
+        rightIndex = index;
       }
     });
     var evaluation = (0, _getEvaluation.default)(existingResponse, answers, rightIndex, compareFunction);

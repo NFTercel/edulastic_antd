@@ -1,5 +1,5 @@
-import { ScoringType } from '../const/scoring';
-import { AxisSegmentsShapeTypes } from './constants/axisSegmentsShapeTypes';
+import { ScoringType } from "../const/scoring";
+import { AxisSegmentsShapeTypes } from "./constants/axisSegmentsShapeTypes";
 
 const shapesAreEqual = (shape1, shape2) => {
   if (shape1.type !== shape2.type) {
@@ -18,7 +18,8 @@ const shapesAreEqual = (shape1, shape2) => {
     case AxisSegmentsShapeTypes.SEGMENT_RIGHT_POINT_HOLLOW:
     case AxisSegmentsShapeTypes.SEGMENT_BOTH_POINT_HOLLOW:
       return shape1.point1 === shape2.point1 && shape1.point2 === shape2.point2;
-    default: return false;
+    default:
+      return false;
   }
 };
 
@@ -27,7 +28,7 @@ const checkAnswer = (answer, userResponse) => {
 
   const trueAnswerValue = answer.value;
 
-  userResponse.forEach((testShape) => {
+  userResponse.forEach(testShape => {
     const resultForShape = {
       shape: testShape,
       result: false
@@ -45,7 +46,7 @@ const checkAnswer = (answer, userResponse) => {
 
 const exactMatchEvaluator = (userResponse, answers) => {
   let score = 0;
-  let maxScore = 0;
+  let maxScore = 1;
 
   const evaluation = {};
 
@@ -78,7 +79,7 @@ const exactMatchEvaluator = (userResponse, answers) => {
 
 const partialMatchPerResponseEvaluator = (userResponse, answers) => {
   let score = 0;
-  let maxScore = 0;
+  let maxScore = 1;
 
   const evaluation = {};
 
@@ -109,7 +110,7 @@ const partialMatchPerResponseEvaluator = (userResponse, answers) => {
 
 const partialMatchEvaluator = (userResponse, answers, roundingIsNone) => {
   let score = 0;
-  let maxScore = 0;
+  let maxScore = 1;
 
   const evaluation = {};
 
@@ -149,7 +150,7 @@ const evaluator = ({ userResponse, validation }) => {
     answers = answers.concat([...alt_responses]);
   }
 
-  const roundingIsNone = rounding && rounding === 'none';
+  const roundingIsNone = rounding && rounding === "none";
 
   switch (scoring_type) {
     case ScoringType.PARTIAL_MATCH:
@@ -161,6 +162,5 @@ const evaluator = ({ userResponse, validation }) => {
       return exactMatchEvaluator(userResponse, answers);
   }
 };
-
 
 export default evaluator;

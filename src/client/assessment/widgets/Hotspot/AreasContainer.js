@@ -88,25 +88,33 @@ const AreasContainer = ({ itemData, areas, width, imageSrc, height, t, setQuesti
       <div style={{ width: width + 117 }}>
         <Container justifyContent="flex-end" childMarginRight={45}>
           <Button disabled={historyTab === 0} onClick={handleUndoClick}>
-            <IconUndo />
+            <IconUndo data-cy="area-undo" />
             <AreaText>{t("component.hotspot.undo")}</AreaText>
           </Button>
           <Button disabled={history.length === 0 || historyTab === history.length - 1} onClick={handleRedoClick}>
-            <IconRedo />
+            <IconRedo data-cy="area-redo" />
             <AreaText>{t("component.hotspot.redo")}</AreaText>
           </Button>
           <Button onClick={handleClearClick}>
-            <IconEraseText />
+            <IconEraseText data-cy="area-clear" />
             <AreaText>{t("component.hotspot.clear")}</AreaText>
           </Button>
         </Container>
         <FlexContainer childMarginRight={0} alignItems="stretch">
           <SideBar>
-            <ButtonWithShadow onClick={handleModeChange(DRAW_MODE)} active={mode === DRAW_MODE}>
+            <ButtonWithShadow
+              data-cy="area-draw-mode"
+              onClick={handleModeChange(DRAW_MODE)}
+              active={mode === DRAW_MODE}
+            >
               <IconDraw />
               <AreaText>{t("component.hotspot.draw")}</AreaText>
             </ButtonWithShadow>
-            <ButtonWithShadow onClick={handleModeChange(DELETE_MODE)} active={mode === DELETE_MODE}>
+            <ButtonWithShadow
+              data-cy="area-delete-mode"
+              onClick={handleModeChange(DELETE_MODE)}
+              active={mode === DELETE_MODE}
+            >
               <IconTrash />
               <AreaText>{t("component.hotspot.delete")}</AreaText>
             </ButtonWithShadow>

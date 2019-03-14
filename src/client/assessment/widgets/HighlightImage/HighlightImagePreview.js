@@ -30,7 +30,7 @@ const HighlightImagePreview = ({ view, item, smallSize, saveAnswer, userAnswer, 
 
   const [currentColor, setCurrentColor] = useState(line_color[0]);
 
-  const width = image ? "100%" : "auto";
+  const width = image ? image.width : "auto";
   const height = image ? image.height : 470;
   const altText = image ? image.altText : "";
   const file = image ? image.source : "";

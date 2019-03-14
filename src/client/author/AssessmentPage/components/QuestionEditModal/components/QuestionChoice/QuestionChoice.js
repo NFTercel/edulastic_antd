@@ -83,7 +83,8 @@ export default class QuestionChoice extends React.Component {
             valid_response: {
               value: checked,
               score
-            }
+            },
+            alt_responses: []
           },
           multiple_responses: checked.length > 1
         };
@@ -104,7 +105,8 @@ export default class QuestionChoice extends React.Component {
           valid_response: {
             value: correctAnswers,
             score
-          }
+          },
+          alt_responses: []
         },
         multiple_responses: correctAnswers.length > 1
       };

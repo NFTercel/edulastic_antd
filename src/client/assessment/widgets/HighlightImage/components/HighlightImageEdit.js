@@ -121,7 +121,11 @@ const HighlightImageEdit = ({ item, setQuestionData, t }) => {
           multiple={false}
         >
           {({ getRootProps, getInputProps, isDragActive }) => (
-            <div {...getRootProps()} className={`dropzone ${isDragActive ? "dropzone--isActive" : ""}`}>
+            <div
+              data-cy="dropzone-image-container"
+              {...getRootProps()}
+              className={`dropzone ${isDragActive ? "dropzone--isActive" : ""}`}
+            >
               <input {...getInputProps()} />
 
               <StyledDropZone loading={loading} isDragActive={isDragActive} thumb={thumb} />

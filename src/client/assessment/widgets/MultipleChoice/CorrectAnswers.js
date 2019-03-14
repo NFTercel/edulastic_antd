@@ -64,19 +64,11 @@ class CorrectAnswers extends Component {
   updateCorrectValidationAnswers = answers => {
     const { question, setQuestionData } = this.props;
     const newData = cloneDeep(question);
-
-    const correctAnswer = [];
-    answers.forEach((answer, index) => {
-      if (answer) {
-        correctAnswer.push(index);
-      }
-    });
-
     const updatedValidation = {
       ...question.data,
       valid_response: {
         score: question.validation.valid_response.score,
-        value: correctAnswer
+        value: answers
       }
     };
     newData.validation.valid_response = updatedValidation.valid_response;
@@ -87,16 +79,10 @@ class CorrectAnswers extends Component {
     const { question, setQuestionData } = this.props;
     const newData = cloneDeep(question);
 
-    const correctAnswer = [];
-    answers.forEach((answer, index) => {
-      if (answer) {
-        correctAnswer.push(index);
-      }
-    });
     const updatedAltResponses = newData.validation.alt_responses;
     updatedAltResponses[tabIndex] = {
       score: newData.validation.alt_responses[tabIndex].score,
-      value: correctAnswer
+      value: answers
     };
 
     newData.validation.alt_responses = updatedAltResponses;

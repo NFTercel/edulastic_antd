@@ -39,7 +39,7 @@ class ShadingPage {
       .get("body")
       .contains(que)
       .parent()
-      .next()
+      .siblings()
       .find("ul")
       .eq(index);
   }

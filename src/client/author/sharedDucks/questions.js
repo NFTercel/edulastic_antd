@@ -1,11 +1,13 @@
 import { createAction, createReducer } from "redux-starter-kit";
 import { createSelector } from "reselect";
-import { values as _values, groupBy as _groupBy, intersection as _intersection } from "lodash";
+import { values as _values, groupBy as _groupBy, intersection as _intersection, cloneDeep as _cloneDeep } from "lodash";
 
 // actions types
 export const LOAD_QUESTIONS = "[author questions] load questions";
 export const UPDATE_QUESTION = "[author questions] update questions";
 export const SET_FIRST_MOUNT = "[author questions] set first mount";
+export const CHANGE_ITEM = "[author questions] change item";
+export const CHANGE_ITEM_UI_STYLE = "[author questions] change item ui_style";
 export const ADD_QUESTION = "[author questions] add question";
 export const CHANGE_CURRENT_QUESTION = "[author quesitons] change current question";
 export const ADD_ALIGNMENT = "[author questions] add alignment";
@@ -15,6 +17,8 @@ export const REMOVE_ALIGNMENT = "[author questions] remove alignment";
 export const loadQuestionsAction = createAction(LOAD_QUESTIONS);
 export const addQuestionAction = createAction(ADD_QUESTION);
 export const updateQuestionAction = createAction(UPDATE_QUESTION);
+export const changeItemAction = createAction(CHANGE_ITEM);
+export const changeUIStyleAction = createAction(CHANGE_ITEM_UI_STYLE);
 export const setFirstMountAction = createAction(SET_FIRST_MOUNT);
 export const changeCurrentQuestionAction = createAction(CHANGE_CURRENT_QUESTION);
 export const addAlignmentAction = createAction(ADD_ALIGNMENT);
@@ -34,6 +38,23 @@ const loadQuestions = (state, { payload }) => {
 // update question by id
 const updateQuestion = (state, { payload }) => {
   state.byId[payload.id] = payload;
+};
+
+const changeItem = (state, { payload }) => {
+  const newItem = _cloneDeep(state.byId[state.current]);
+  newItem[payload.prop] = payload.value;
+  state.byId[state.current] = newItem;
+};
+
+const changeUIStyle = (state, { payload }) => {
+  const newItem = _cloneDeep(state.byId[state.current]);
+
+  if (!newItem.ui_style) {
+    newItem.ui_style = {};
+  }
+
+  newItem.ui_style[payload.prop] = payload.value;
+  state.byId[state.current] = newItem;
 };
 
 const setFirstMount = (state, { id }) => {
@@ -89,6 +110,8 @@ const removeAlignment = (state, { payload }) => {
 export default createReducer(initialState, {
   [LOAD_QUESTIONS]: loadQuestions,
   [UPDATE_QUESTION]: updateQuestion,
+  [CHANGE_ITEM]: changeItem,
+  [CHANGE_ITEM_UI_STYLE]: changeUIStyle,
   [ADD_QUESTION]: addQuestion,
   [SET_FIRST_MOUNT]: setFirstMount,
   [CHANGE_CURRENT_QUESTION]: changeCurrent,

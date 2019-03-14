@@ -42,23 +42,24 @@ class CorrectAnswer extends Component {
     onUpdatePoints(parseFloat(e.target.value, 10));
   };
 
-  handleMultiSelect = index => {
+  handleMultiSelect = answerId => {
     const { onUpdateValidationValue, multipleResponses } = this.props;
-    let { userSelections } = this.state;
-    const changedOption = parseInt(index, 10);
+    let userSelections = [...this.state.userSelections];
 
-    userSelections[changedOption] = !userSelections[changedOption];
-    if (!multipleResponses) {
-      userSelections = userSelections.map((it, i) => changedOption === i);
-    }
+    userSelections = userSelections.includes(answerId)
+      ? userSelections.filter(item => item !== answerId) // remove selection if already selected
+      : multipleResponses
+      ? [...userSelections, answerId]
+      : [answerId];
+
     this.setState({ userSelections });
-
     onUpdateValidationValue(userSelections);
   };
 
   render() {
     const { t, options, stimulus, response, uiStyle } = this.props;
     const { responseScore } = this.state;
+
     return (
       <div>
         <CorrectAnswerHeader>

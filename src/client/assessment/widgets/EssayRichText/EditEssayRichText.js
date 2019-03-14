@@ -1,8 +1,10 @@
-import React, { Fragment, useState, useEffect, useContext } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { cloneDeep, isEqual, get } from "lodash";
 import ReactQuill from "react-quill";
 import { Checkbox, Input } from "antd";
+import { compose } from "redux";
+import { connect } from "react-redux";
 
 import { arrayMove } from "react-sortable-hoc";
 
@@ -31,12 +33,11 @@ import {
   SpecialCharactersOption,
   CharactersToDisplayOption
 } from "../../containers/WidgetOptions/components";
-import { QuestionContext } from "../../components/QuestionWrapper";
 import { Row } from "../../styled/WidgetOptions/Row";
 import { Col } from "../../styled/WidgetOptions/Col";
+import { changeItemAction, changeUIStyleAction } from "../../../author/src/actions/question";
 
-const EditEssayRichText = ({ item, setQuestionData, t }) => {
-  const { changeItem, changeUIStyle } = useContext(QuestionContext);
+const EditEssayRichText = ({ item, setQuestionData, t, changeItem, changeUIStyle }) => {
   const [act, setAct] = useState(item.formatting_options || []);
 
   useEffect(() => {
@@ -229,6 +230,8 @@ const EditEssayRichText = ({ item, setQuestionData, t }) => {
 EditEssayRichText.propTypes = {
   item: PropTypes.object.isRequired,
   setQuestionData: PropTypes.func.isRequired,
+  changeUIStyle: PropTypes.func.isRequired,
+  changeItem: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired
 };
 
@@ -238,4 +241,12 @@ EditEssayRichText.modules = {
   }
 };
 
-export default withNamespaces("assessment")(EditEssayRichText);
+const enhance = compose(
+  withNamespaces("assessment"),
+  connect(
+    ({ user }) => ({ user }),
+    { changeItem: changeItemAction, changeUIStyle: changeUIStyleAction }
+  )
+);
+
+export default enhance(EditEssayRichText);

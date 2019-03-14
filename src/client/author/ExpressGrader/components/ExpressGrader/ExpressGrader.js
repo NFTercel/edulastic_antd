@@ -1,5 +1,3 @@
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable jsx-a11y/alt-text */
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
@@ -46,6 +44,15 @@ class ExpressGrader extends Component {
     loadStudentResponses({ testActivityId, groupId: classId });
   }
 
+  static getDerivedStateFromProps(props, state) {
+    const { loadClassResponses, additionalData: { testId } = {} } = props;
+    if (testId !== state.testId) {
+      loadClassResponses({ testId });
+      return { testId };
+    }
+    return null;
+  }
+
   handleCreate = () => {
     // eslint-disable-next-line react/prop-types
     const { history, match } = this.props;
@@ -73,10 +80,11 @@ class ExpressGrader extends Component {
       creating,
       testActivity,
       studentResponse,
-      additionalData
+      additionalData,
+      match
     } = this.props;
     const { isVisibleModal, record, tableData } = this.state;
-    const { assignmentId, classId } = this.props.match.params;
+    const { assignmentId, classId } = match.params;
     const questionActivities = studentResponse !== undefined ? studentResponse.questionActivities : [];
     return (
       <div>
@@ -133,14 +141,14 @@ const enhance = compose(
 
 export default enhance(ExpressGrader);
 
+/* eslint-disable react/require-default-props */
 ExpressGrader.propTypes = {
-  // eslint-disable-next-line react/no-unused-prop-types
-  count: PropTypes.number.isRequired,
-  // eslint-disable-next-line react/no-unused-prop-types
-  loading: PropTypes.bool.isRequired,
-  history: PropTypes.object.isRequired,
-  match: PropTypes.object.isRequired,
-  // eslint-disable-next-line react/no-unused-prop-types
-  windowWidth: PropTypes.number.isRequired,
-  testActivity: PropTypes.object.isRequired
+  history: PropTypes.object,
+  match: PropTypes.object,
+  testActivity: PropTypes.object,
+  additionalData: PropTypes.object,
+  studentResponse: PropTypes.object,
+  loadGradebook: PropTypes.func,
+  loadTestActivity: PropTypes.func,
+  loadStudentResponses: PropTypes.func
 };

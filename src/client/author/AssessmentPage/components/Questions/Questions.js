@@ -7,6 +7,9 @@ import PropTypes from "prop-types";
 import { SHORT_TEXT, MULTIPLE_CHOICE, CLOZE_DROP_DOWN, MATH } from "@edulastic/constants/const/questionType";
 import { methods } from "@edulastic/constants/const/math";
 
+import { getPreviewSelector, getViewSelector } from "../../../src/selectors/view";
+import { checkAnswerAction } from "../../../src/actions/testItem";
+import { changePreviewAction } from "../../../src/actions/view";
 import { EXACT_MATCH } from "../../../../assessment/constants/constantsForQuestions";
 import {
   addQuestionAction,
@@ -17,7 +20,7 @@ import {
 import AddQuestion from "../AddQuestion/AddQuestion";
 import QuestionItem from "../QuestionItem/QuestionItem";
 import QuestionEditModal from "../QuestionEditModal/QuestionEditModal";
-import { QuestionsWrapper } from "./styled";
+import { QuestionsWrapper, AnswerActionsWrapper, AnswerAction } from "./styled";
 
 const defaultQuestionValue = {
   [MULTIPLE_CHOICE]: [],
@@ -82,7 +85,8 @@ const createQuestion = type => ({
     valid_response: {
       score: 1,
       value: defaultQuestionValue[type]
-    }
+    },
+    alt_responses: []
   },
   multiple_responses: false,
   ...(type === MATH ? mathData : {})
@@ -105,7 +109,8 @@ const updateMultipleChoice = optionsValue => {
       valid_response: {
         score: 1,
         value: []
-      }
+      },
+      alt_responses: []
     }
   };
 };
@@ -117,7 +122,8 @@ const updateShortText = value => ({
       score: 1,
       matching_rule: EXACT_MATCH,
       value
-    }
+    },
+    alt_responses: []
   }
 });
 
@@ -127,6 +133,22 @@ const validationCreators = {
 };
 
 class Questions extends React.Component {
+  static propTypes = {
+    list: PropTypes.array,
+    questionsById: PropTypes.object,
+    addQuestion: PropTypes.func.isRequired,
+    updateQuestion: PropTypes.func.isRequired,
+    checkAnswer: PropTypes.func.isRequired,
+    changePreview: PropTypes.func.isRequired,
+    previewMode: PropTypes.string.isRequired,
+    viewMode: PropTypes.string.isRequired
+  };
+
+  static defaultProps = {
+    list: [],
+    questionsById: {}
+  };
+
   state = {
     currentEditQuestionIndex: -1
   };
@@ -169,6 +191,20 @@ class Questions extends React.Component {
       currentEditQuestionIndex: -1
     });
 
+  handleCheckAnswer = () => {
+    const { checkAnswer, changePreview } = this.props;
+
+    changePreview("check");
+    checkAnswer("edit");
+  };
+
+  handleShowAnswer = () => {
+    const { checkAnswer, changePreview } = this.props;
+
+    changePreview("show");
+    checkAnswer("edit");
+  };
+
   get currentQuestion() {
     const { currentEditQuestionIndex } = this.state;
     const { list } = this.props;
@@ -183,7 +219,9 @@ class Questions extends React.Component {
 
   render() {
     const { currentEditQuestionIndex } = this.state;
-    const { list } = this.props;
+    const { list, previewMode, viewMode } = this.props;
+
+    const review = viewMode === "review";
 
     return (
       <>
@@ -193,13 +231,25 @@ class Questions extends React.Component {
               <QuestionItem
                 key={question.id}
                 index={i}
-                question={question}
+                data={question}
                 onCreateOptions={this.handleCreateOptions}
                 onOpenEdit={this.handleOpenEditModal(i)}
+                previewMode={previewMode}
+                viewMode={viewMode}
               />
             ))}
           </div>
-          <AddQuestion onAdd={this.handleAddQuestion} />
+          {!review && <AddQuestion onAdd={this.handleAddQuestion} />}
+          {review && (
+            <AnswerActionsWrapper>
+              <AnswerAction active={previewMode === "check"} onClick={this.handleCheckAnswer}>
+                Check Answer
+              </AnswerAction>
+              <AnswerAction active={previewMode === "show"} onClick={this.handleShowAnswer}>
+                Show Answer
+              </AnswerAction>
+            </AnswerActionsWrapper>
+          )}
         </QuestionsWrapper>
         <QuestionEditModal
           visible={this.editModalVisible}
@@ -214,27 +264,19 @@ class Questions extends React.Component {
   }
 }
 
-Questions.propTypes = {
-  list: PropTypes.array,
-  questionsById: PropTypes.object,
-  addQuestion: PropTypes.func.isRequired,
-  updateQuestion: PropTypes.func.isRequired
-};
-
-Questions.defaultProps = {
-  list: [],
-  questionsById: {}
-};
-
 const enhance = compose(
   connect(
     state => ({
       list: getQuestionsArraySelector(state),
-      questionsById: getQuestionsSelector(state)
+      questionsById: getQuestionsSelector(state),
+      previewMode: getPreviewSelector(state),
+      viewMode: getViewSelector(state)
     }),
     {
       addQuestion: addQuestionAction,
-      updateQuestion: updateQuestionAction
+      updateQuestion: updateQuestionAction,
+      checkAnswer: checkAnswerAction,
+      changePreview: changePreviewAction
     }
   )
 );

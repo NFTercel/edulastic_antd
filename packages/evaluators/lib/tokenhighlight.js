@@ -25,7 +25,7 @@ var exactMatchEvaluator = function exactMatchEvaluator(_ref) {
     userResponse = _ref$userResponse === void 0 ? [] : _ref$userResponse,
     answers = _ref.answers;
   var score = 0;
-  var maxScore = 0;
+  var maxScore = 1;
   var evaluation = [];
   var userAnswer = userResponse
     .filter(function(ans) {
@@ -74,7 +74,7 @@ var partialMatchEvaluator = function partialMatchEvaluator(_ref3) {
     userResponse = _ref3$userResponse === void 0 ? [] : _ref3$userResponse,
     answers = _ref3.answers;
   var score = 0;
-  var maxScore = 0;
+  var maxScore = 1;
   var rightLen = 0;
   var evaluation = [];
   var userAnswer = userResponse

@@ -22,7 +22,7 @@ var exactMatchTemplate = function exactMatchTemplate(mainFunction, mainArguments
 
   return {
     score: newScore,
-    maxScore: newMaxScore,
+    maxScore: newMaxScore > 0 ? newMaxScore : 1,
     evaluation: evaluation
   };
 };

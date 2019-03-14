@@ -10,7 +10,7 @@ const testTypes = {
   [PRACTICE]: "Practice"
 };
 
-const generateReport = {
+const generateReportTypes = {
   YES: {
     val: "Yes",
     type: true
@@ -21,7 +21,7 @@ const generateReport = {
   }
 };
 
-const TestTypeSelector = ({ testType, onAssignmentTypeChange, isGenerateReport, onGenerateReportFieldChange }) => {
+const TestTypeSelector = ({ testType, onAssignmentTypeChange, generateReport, onGenerateReportFieldChange }) => {
   return (
     <React.Fragment>
       <StyledRowLabel gutter={16} />
@@ -50,10 +50,10 @@ const TestTypeSelector = ({ testType, onAssignmentTypeChange, isGenerateReport, 
               </StyledRowLabel>
               <StyledRow>
                 <Col span={24}>
-                  <TestTypeDropDown defaultValue={isGenerateReport} onChange={onGenerateReportFieldChange}>
-                    {Object.keys(generateReport).map(key => (
-                      <Select.Option key={key} value={generateReport[key].type}>
-                        {generateReport[key].val}
+                  <TestTypeDropDown defaultValue={generateReport} onChange={onGenerateReportFieldChange}>
+                    {Object.keys(generateReportTypes).map(key => (
+                      <Select.Option key={key} value={generateReportTypes[key].type}>
+                        {generateReportTypes[key].val}
                       </Select.Option>
                     ))}
                   </TestTypeDropDown>

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { compose } from "redux";
@@ -17,12 +17,10 @@ import { Label } from "../../../styled/WidgetOptions/Label";
 import { SectionHeading } from "../../../styled/WidgetOptions/SectionHeading";
 
 import { FormGroup } from "../styled/FormGroup";
-import { QuestionContext } from "../../../components/QuestionWrapper";
 
 const roundingTypes = [rounding.roundDown, rounding.none];
 
-const Scoring = ({ setQuestionData, t, scoringTypes, isSection, showSelect }) => {
-  const { item: questionData } = useContext(QuestionContext);
+const Scoring = ({ setQuestionData, t, scoringTypes, isSection, questionData, showSelect }) => {
   const handleChangeValidation = (param, value) => {
     const newData = cloneDeep(questionData);
 
@@ -210,7 +208,9 @@ const Scoring = ({ setQuestionData, t, scoringTypes, isSection, showSelect }) =>
 Scoring.propTypes = {
   setQuestionData: PropTypes.func.isRequired,
   scoringTypes: PropTypes.array.isRequired,
+  questionData: PropTypes.object.isRequired,
   t: PropTypes.func.isRequired,
+  showSelect: PropTypes.bool,
   isSection: PropTypes.bool
 };
 

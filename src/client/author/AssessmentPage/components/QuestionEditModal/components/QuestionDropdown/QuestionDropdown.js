@@ -22,7 +22,8 @@ export default class QuestionDropdown extends React.Component {
         valid_response: {
           score: 1,
           value: []
-        }
+        },
+        alt_responses: []
       }
     }
   };
@@ -105,7 +106,8 @@ export default class QuestionDropdown extends React.Component {
         valid_response: {
           value: [value],
           score
-        }
+        },
+        alt_responses: []
       }
     };
 

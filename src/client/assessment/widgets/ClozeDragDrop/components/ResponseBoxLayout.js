@@ -72,6 +72,7 @@ const ResponseBoxLayout = ({ smallSize, hasGroupResponses, responses, fontSize, 
       {!hasGroupResponses &&
         responses.map((option, index) => (
           <div
+            id={`response-item-${index}`}
             key={index}
             className="draggable_box"
             style={{

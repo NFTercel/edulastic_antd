@@ -1,107 +1,190 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Input } from "antd";
 import { Draggable } from "react-drag-and-drop";
+import { isArray, isUndefined } from "lodash";
 
 import { SHORT_TEXT, MULTIPLE_CHOICE, CLOZE_DROP_DOWN, MATH } from "@edulastic/constants/const/questionType";
-import { IconPencilEdit } from "@edulastic/icons";
-import { MathInput } from "@edulastic/common";
+import { IconPencilEdit, IconCheck, IconClose } from "@edulastic/icons";
 
-import { QuestionItemWrapper, QuestionNumber, QuestionForm, QuestionOption, EditButton, QuestionText } from "./styled";
+import withAnswerSave from "../../../../assessment/components/HOC/withAnswerSave";
+import FormChoice from "./components/FormChoice/FormChoice";
+import FormText from "./components/FormText/FormText";
+import FormDropdown from "./components/FormDropdown/FormDropdown";
+import FormMath from "./components/FormMath/FormMath";
+import {
+  QuestionItemWrapper,
+  QuestionNumber,
+  QuestionForm,
+  EditButton,
+  AnswerForm,
+  AnswerIndicator,
+  CorrectAnswer,
+  CorrectAnswerTitle,
+  CorrectAnswerValue
+} from "./styled";
 
-export default class QuestionItem extends React.Component {
+class QuestionItem extends React.Component {
   static propTypes = {
     index: PropTypes.number.isRequired,
-    question: PropTypes.object.isRequired,
+    data: PropTypes.object.isRequired,
     onCreateOptions: PropTypes.func.isRequired,
-    onOpenEdit: PropTypes.func.isRequired
+    onOpenEdit: PropTypes.func.isRequired,
+    saveAnswer: PropTypes.func.isRequired,
+    evaluation: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
+    userAnswer: PropTypes.any,
+    previewMode: PropTypes.string.isRequired,
+    viewMode: PropTypes.string.isRequired
+  };
+
+  static defaultProps = {
+    evaluation: undefined,
+    userAnswer: undefined
   };
 
   state = {
     dragging: false
   };
 
-  onDragStart = () => this.setState({ dragging: true });
+  handleDragStart = () => this.setState({ dragging: true });
 
-  onDragEnd = () => this.setState({ dragging: false });
+  handleDragEnd = () => this.setState({ dragging: false });
 
-  renderMultipleChoice = () => {
-    const {
-      question: { id, type, options },
-      onCreateOptions
-    } = this.props;
+  renderMultipleChoiceAnswer = (value, options) => {
+    const labels = value.reduce((result, current) => {
+      const option = options.find(o => o.value === current);
 
-    return options.length > 0 ? (
-      options.map(({ label, value }) => <QuestionOption key={label + value}>{label}</QuestionOption>)
-    ) : (
-      <Input size="large" onPressEnter={onCreateOptions(id, type)} />
-    );
+      if (!option) return result;
+
+      return [...result, option.label];
+    }, []);
+
+    return labels.join(", ");
   };
 
-  renderText = () => {
+  renderShortTextAnswer = value => value;
+
+  renderDropDownAnswer = value => value.join(", ");
+
+  renderMathAnswer = value => value.map(answer => answer.value).join(", ");
+
+  renderCorrectAnswer = () => {
     const {
-      question: {
-        id,
+      data: {
         type,
-        validation: { valid_response }
+        validation: {
+          valid_response: { value }
+        },
+        options
       },
-      onCreateOptions
+      evaluation
     } = this.props;
 
-    return valid_response.value && valid_response.value.length > 0 ? (
-      <QuestionText>{valid_response.value}</QuestionText>
-    ) : (
-      <Input size="large" onPressEnter={onCreateOptions(id, type)} />
+    const allCorrect = isArray(evaluation) ? evaluation.every(v => v) : evaluation;
+
+    if (allCorrect) return null;
+
+    let answerRenderer;
+
+    switch (type) {
+      case MULTIPLE_CHOICE:
+        answerRenderer = this.renderMultipleChoiceAnswer;
+        break;
+      case SHORT_TEXT:
+        answerRenderer = this.renderShortTextAnswer;
+        break;
+      case CLOZE_DROP_DOWN:
+        answerRenderer = this.renderDropDownAnswer;
+        break;
+      case MATH:
+        answerRenderer = this.renderMathAnswer;
+        break;
+      default:
+        answerRenderer = () => {};
+    }
+
+    return (
+      <CorrectAnswer>
+        <CorrectAnswerTitle>Correct Answer:</CorrectAnswerTitle>
+        <CorrectAnswerValue>{answerRenderer(value, options)}</CorrectAnswerValue>
+      </CorrectAnswer>
     );
   };
 
-  renderSelect = () => {
-    const {
-      question: { options }
-    } = this.props;
+  renderContent = () => {
+    const { data, saveAnswer, viewMode, onCreateOptions, evaluation } = this.props;
 
-    return options[0].map((option, key) => <QuestionOption key={option + key}>{option}</QuestionOption>);
+    const props = {
+      saveAnswer,
+      question: data,
+      mode: viewMode
+    };
+
+    switch (data.type) {
+      case MULTIPLE_CHOICE:
+        return <FormChoice onCreateOptions={onCreateOptions} evaluation={evaluation} {...props} />;
+      case SHORT_TEXT:
+        return <FormText onCreateAnswer={onCreateOptions} {...props} />;
+      case CLOZE_DROP_DOWN:
+        return <FormDropdown {...props} />;
+      case MATH:
+        return <FormMath {...props} />;
+      default:
+        return null;
+    }
   };
 
-  renderMath = () => {
-    const {
-      question: {
-        validation: { valid_response }
-      }
-    } = this.props;
-    const answer = valid_response.value[0];
+  renderEditButton = () => {
+    const { onOpenEdit } = this.props;
+    return (
+      <EditButton onClick={onOpenEdit}>
+        <IconPencilEdit />
+      </EditButton>
+    );
+  };
 
-    return answer && answer.value && <QuestionText>{answer.value}</QuestionText>;
+  renderAnswerIndicator = () => {
+    const { evaluation } = this.props;
+
+    if (isUndefined(evaluation)) {
+      return null;
+    }
+
+    const correct = isArray(evaluation) ? evaluation.every(value => value) : evaluation;
+
+    return <AnswerIndicator correct={correct}>{correct ? <IconCheck /> : <IconClose />}</AnswerIndicator>;
   };
 
   render() {
     const { dragging } = this.state;
     const {
-      question: { id, type },
+      data: { id },
       index,
-      onOpenEdit
+      viewMode,
+      previewMode
     } = this.props;
+
+    const review = viewMode === "review";
 
     return (
       <QuestionItemWrapper>
-        <Draggable
-          type="question"
-          data={JSON.stringify({ id, index })}
-          onDragStart={this.onDragStart}
-          onDragEnd={this.onDragEnd}
-        >
-          <QuestionNumber dragging={dragging}>{index + 1}</QuestionNumber>
-        </Draggable>
-        <QuestionForm>
-          {type === MULTIPLE_CHOICE && this.renderMultipleChoice()}
-          {type === SHORT_TEXT && this.renderText()}
-          {type === CLOZE_DROP_DOWN && this.renderSelect()}
-          {type === MATH && this.renderMath()}
-        </QuestionForm>
-        <EditButton onClick={onOpenEdit}>
-          <IconPencilEdit />
-        </EditButton>
+        <AnswerForm>
+          <Draggable
+            type="question"
+            data={JSON.stringify({ id, index })}
+            onDragStart={this.handleDragStart}
+            onDragEnd={this.handleDragEnd}
+            enabled={!review}
+          >
+            <QuestionNumber dragging={dragging}>{index + 1}</QuestionNumber>
+          </Draggable>
+          <QuestionForm>{this.renderContent()}</QuestionForm>
+          {!review && this.renderEditButton()}
+          {review && this.renderAnswerIndicator()}
+        </AnswerForm>
+        {review && previewMode === "show" && this.renderCorrectAnswer()}
       </QuestionItemWrapper>
     );
   }
 }
+
+export default withAnswerSave(QuestionItem);

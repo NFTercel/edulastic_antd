@@ -276,7 +276,11 @@ class ClozeDragDropDisplay extends Component {
             return (
               <Droppable drop={() => ({ dropTargetIndex })}>
                 {!hasGroupResponses && (
-                  <ResponseContainer style={btnStyle} smallSize={smallSize}>
+                  <ResponseContainer
+                    id={`response-container-${dropTargetIndex}`}
+                    style={btnStyle}
+                    smallSize={smallSize}
+                  >
                     <Draggable
                       className="content"
                       onDrop={this.onDrop}

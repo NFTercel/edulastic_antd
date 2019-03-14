@@ -126,7 +126,7 @@ var exactMatchEvaluator =
               switch ((_context.prev = _context.next)) {
                 case 0:
                   score = 0;
-                  maxScore = 0;
+                  maxScore = 1;
                   evaluation = [];
                   _context.prev = 3;
 

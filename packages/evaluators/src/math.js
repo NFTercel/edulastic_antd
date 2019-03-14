@@ -1,9 +1,8 @@
-import axios from 'axios';
-import { omitBy } from 'lodash';
-import { ScoringType } from './const/scoring';
+import axios from "axios";
+import { omitBy } from "lodash";
+import { ScoringType } from "./const/scoring";
 
-const url =
-  'https://9ehy0wtpo7.execute-api.us-east-1.amazonaws.com/dev/evaluate';
+const url = "https://9ehy0wtpo7.execute-api.us-east-1.amazonaws.com/dev/evaluate";
 
 const evaluate = data =>
   axios
@@ -15,10 +14,7 @@ const evaluate = data =>
 const getChecks = validation => {
   const altResponses = validation.alt_responses || [];
 
-  const values = [
-    ...validation.valid_response.value,
-    ...altResponses.reduce((acc, res) => [...acc, ...res.value], [])
-  ];
+  const values = [...validation.valid_response.value, ...altResponses.reduce((acc, res) => [...acc, ...res.value], [])];
 
   return values.reduce((valAcc, val, valIndex) => {
     let options = val.options || {};
@@ -27,9 +23,9 @@ const getChecks = validation => {
     let midRes = Object.keys(options).reduce((acc, key, i) => {
       const fieldVal = options[key];
 
-      acc += i === 0 ? ':' : '';
+      acc += i === 0 ? ":" : "";
 
-      if (key === 'argument') {
+      if (key === "argument") {
         return acc;
       }
 
@@ -37,24 +33,21 @@ const getChecks = validation => {
         return acc;
       }
 
-      if (key === 'setThousandsSeparator') {
+      if (key === "setThousandsSeparator") {
         if (fieldVal.length) {
           const stringArr = `[${fieldVal.map(f => `'${f}'`)}]`;
           acc += `${key}=${stringArr}`;
         } else {
           return acc;
         }
-      } else if (key === 'allowThousandsSeparator') {
+      } else if (key === "allowThousandsSeparator") {
         return acc;
-      } else if (key === 'setDecimalSeparator') {
+      } else if (key === "setDecimalSeparator") {
         acc += `${key}='${fieldVal}'`;
-      } else if (key === 'allowedUnits') {
+      } else if (key === "allowedUnits") {
         acc += `${key}=[${fieldVal}]`;
-      } else if (key === 'syntax') {
-        acc +=
-          options.argument === undefined
-            ? fieldVal
-            : `${fieldVal}=${options.argument}`;
+      } else if (key === "syntax") {
+        acc += options.argument === undefined ? fieldVal : `${fieldVal}=${options.argument}`;
       } else {
         acc += `${key}=${fieldVal}`;
       }
@@ -62,22 +55,22 @@ const getChecks = validation => {
       return `${acc},`;
     }, val.method);
 
-    if (midRes[midRes.length - 1] === ',') {
+    if (midRes[midRes.length - 1] === ",") {
       midRes = midRes.slice(0, midRes.length - 1);
     }
 
     valAcc += midRes;
 
-    valAcc += valIndex + 1 === values.length ? '' : ';';
+    valAcc += valIndex + 1 === values.length ? "" : ";";
 
     return valAcc;
-  }, '');
+  }, "");
 };
 
 // exact match evaluator
 const exactMatchEvaluator = async (userResponse, answers, checks) => {
   let score = 0;
-  let maxScore = 0;
+  let maxScore = 1;
   let evaluation = [];
   try {
     const getAnswerCorrectMethods = answer => {
@@ -93,12 +86,12 @@ const exactMatchEvaluator = async (userResponse, answers, checks) => {
       let valid = false;
       for (let correct of corrects) {
         const data = {
-          input: userResponse.replace(/\\ /g, ' '),
-          expected: correct ? correct.replace(/\\ /g, ' ') : ':',
+          input: userResponse.replace(/\\ /g, " "),
+          expected: correct ? correct.replace(/\\ /g, " ") : ":",
           checks
         };
         const { result } = await evaluate(data);
-        if (result === 'true') {
+        if (result === "true") {
           valid = true;
           break;
         }
@@ -121,12 +114,7 @@ const exactMatchEvaluator = async (userResponse, answers, checks) => {
 };
 
 const evaluator = async ({ userResponse, validation }) => {
-  const {
-    valid_response,
-    alt_responses = [],
-    scoring_type,
-    min_score_if_attempted: attemptScore
-  } = validation;
+  const { valid_response, alt_responses = [], scoring_type, min_score_if_attempted: attemptScore } = validation;
   const answers = [valid_response, ...alt_responses];
 
   let result;

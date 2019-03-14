@@ -1,4 +1,3 @@
-
 const checkAnswer = (answer, userResponse) => {
   const result = {
     commonResult: false,
@@ -7,14 +6,13 @@ const checkAnswer = (answer, userResponse) => {
 
   const trueAnswerValue = answer.value;
 
-  userResponse.forEach((testItem) => {
+  userResponse.forEach(testItem => {
     const resultForItem = {
       point: testItem.point,
       result: false
     };
 
-    if (trueAnswerValue.findIndex(item => item.point === testItem.point &&
-        item.position === testItem.position) > -1) {
+    if (trueAnswerValue.findIndex(item => item.point === testItem.point && item.position === testItem.position) > -1) {
       resultForItem.result = true;
     }
 
@@ -31,7 +29,7 @@ const evaluator = ({ userResponse, validation }) => {
   const { valid_response, alt_responses } = validation;
 
   let score = 0;
-  let maxScore = 0;
+  let maxScore = 1;
 
   const evaluation = {};
 
@@ -57,6 +55,5 @@ const evaluator = ({ userResponse, validation }) => {
     evaluation
   };
 };
-
 
 export default evaluator;

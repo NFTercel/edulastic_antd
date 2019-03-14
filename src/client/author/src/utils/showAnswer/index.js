@@ -1,20 +1,4 @@
-import multipleChoice from "./multipleChoice";
-import orderList from "./orderList";
-import clozeDragDrop from "./clozeDragDrop";
-import clozeImageDragDrop from "./clozeImageDragDrop";
-import clozeImageDropDown from "./clozeImageDropDown";
-import clozeDropDown from "./clozeDropDown";
-import clozeText from "./clozeText";
-
-const evaluators = {
-  orderList,
-  multipleChoice,
-  clozeDragDrop,
-  clozeImageDragDrop,
-  clozeImageDropDown,
-  clozeDropDown,
-  clozeText
-};
+import evaluators from "../evaluators";
 
 const createShowAnswerResult = (questions, answers) => {
   const questionIds = Object.keys(questions);

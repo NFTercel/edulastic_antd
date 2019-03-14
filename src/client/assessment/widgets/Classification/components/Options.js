@@ -1,5 +1,9 @@
-import React, { useContext } from "react";
+import React from "react";
 import { get, cloneDeep } from "lodash";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { compose } from "redux";
+import { withNamespaces } from "react-i18next";
 
 import WidgetOptions from "../../../containers/WidgetOptions";
 import Extras from "../../../containers/Extras";
@@ -15,11 +19,9 @@ import {
 } from "../../../containers/WidgetOptions/components";
 import { Row } from "../../../styled/WidgetOptions/Row";
 import { Col } from "../../../styled/WidgetOptions/Col";
-import { QuestionContext } from "../../../components/QuestionWrapper";
+import { setQuestionDataAction, getQuestionDataSelector } from "../../../../author/QuestionEditor/ducks";
 
-const Options = () => {
-  const { item, t, setQuestionData } = useContext(QuestionContext);
-
+const Options = ({ item, t, setQuestionData }) => {
   const changeItem = (prop, val) => {
     const newItem = cloneDeep(item);
 
@@ -103,4 +105,22 @@ const Options = () => {
   );
 };
 
-export default Options;
+Options.propTypes = {
+  t: PropTypes.func.isRequired,
+  setQuestionData: PropTypes.func.isRequired,
+  item: PropTypes.object.isRequired
+};
+
+const enhance = compose(
+  withNamespaces("assessment"),
+  connect(
+    state => ({
+      item: getQuestionDataSelector(state)
+    }),
+    {
+      setQuestionData: setQuestionDataAction
+    }
+  )
+);
+
+export default enhance(Options);

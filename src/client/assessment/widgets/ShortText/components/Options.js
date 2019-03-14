@@ -1,5 +1,8 @@
-import React, { useContext } from "react";
+import React from "react";
 import { get, cloneDeep } from "lodash";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { compose } from "redux";
 
 import WidgetOptions from "../../../containers/WidgetOptions";
 import { Block } from "../../../styled/WidgetOptions/Block";
@@ -16,11 +19,9 @@ import {
 } from "../../../containers/WidgetOptions/components";
 import { Row } from "../../../styled/WidgetOptions/Row";
 import { Col } from "../../../styled/WidgetOptions/Col";
-import { QuestionContext } from "../../../components/QuestionWrapper";
+import { setQuestionDataAction, getQuestionDataSelector } from "../../../../author/QuestionEditor/ducks";
 
-const Options = () => {
-  const { item, setQuestionData } = useContext(QuestionContext);
-
+const Options = ({ item, setQuestionData }) => {
   const _change = (prop, uiStyle) => {
     const newItem = cloneDeep(item);
 
@@ -102,4 +103,20 @@ const Options = () => {
   );
 };
 
-export default Options;
+Options.propTypes = {
+  setQuestionData: PropTypes.func.isRequired,
+  item: PropTypes.object.isRequired
+};
+
+const enhance = compose(
+  connect(
+    state => ({
+      item: getQuestionDataSelector(state)
+    }),
+    {
+      setQuestionData: setQuestionDataAction
+    }
+  )
+);
+
+export default enhance(Options);

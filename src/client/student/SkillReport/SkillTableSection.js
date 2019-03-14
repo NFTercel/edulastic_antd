@@ -57,7 +57,7 @@ class DomainDetail extends Component {
     const columns = computeColumns(t);
     let sumData = [];
     let score = 0;
-    let maxScore = 0;
+    let maxScore = 1;
     if (summary) {
       const getStandardsScoreDetails = id =>
         skillReport.reports.reportData.standardLevel.filter(item => item.standard_id === id);
@@ -65,7 +65,7 @@ class DomainDetail extends Component {
         const standardsData = getStandardsScoreDetails(standard._id)[0] || {};
         const percentage = (standardsData.score / standardsData.max_points) * 100;
         score += standardsData.score || 0;
-        maxScore += standardsData.max_points || 0;
+        maxScore += standardsData.max_points || 1;
         return {
           domain: standard.description || "-",
           grade: standard.identifier || "-",

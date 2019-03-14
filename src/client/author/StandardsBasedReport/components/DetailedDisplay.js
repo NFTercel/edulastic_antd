@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import { Card, Table, Icon } from "antd";
 import { connect } from "react-redux";
 import { compose } from "redux";
-import { getReceivedBasedReportsAction } from "../../src/actions/standardBasedReport";
+import PropTypes from "prop-types";
+
+import { getTestActivitySelector, getAdditionalDataSelector } from "../../ClassBoard/ducks";
 
 const columns = [
   {
@@ -30,15 +32,19 @@ const columns = [
 
 class DetailedDisplay extends Component {
   filterData = () => {
-    const { standardReportsReducer: { entities } = {}, data } = this.props;
-    const studentData = entities.result.filter(std => std.questionActivities.filter(questionActivity => data.qIds.filter(qId => questionActivity._id === qId).length > 0));
+    const { testActivity, data } = this.props;
+    const studentData = testActivity.filter(std =>
+      std.questionActivities.filter(
+        questionActivity => data.qIds.filter(qId => questionActivity._id === qId).length > 0
+      )
+    );
     return studentData;
   };
 
   displayData = () => {
-    const { standardReportsReducer: { entities } = {} } = this.props;
+    const { additionalData } = this.props;
     const filteredData = this.filterData();
-    const assignmentMasteryArray = entities.additionalData.assignmentMastery;
+    const assignmentMasteryArray = additionalData.assignmentMastery;
     assignmentMasteryArray.sort((a, b) => b.threshold - a.threshold);
 
     return filteredData.map((std, index) => {
@@ -66,14 +72,12 @@ class DetailedDisplay extends Component {
   };
 
   render() {
-    const { data } = this.props
+    const { data } = this.props;
     return (
       <React.Fragment>
         <Card title="Student Performance">
           <h5>Demo</h5>
-          <p>
-            {data.desc}
-          </p>
+          <p>{data.desc}</p>
           <Table columns={columns} dataSource={this.displayData()} pagination={false} />
         </Card>
       </React.Fragment>
@@ -83,8 +87,15 @@ class DetailedDisplay extends Component {
 
 const enhance = compose(
   connect(state => ({
-    standardReportsReducer: state.standardReports.data
+    testActivity: getTestActivitySelector(state),
+    additionalData: getAdditionalDataSelector(state)
   }))
 );
 
 export default enhance(DetailedDisplay);
+DetailedDisplay.propTypes = {
+  data: PropTypes.object.isRequired,
+  /* eslint-disable react/require-default-props */
+  additionalData: PropTypes.object,
+  testActivity: PropTypes.array
+};

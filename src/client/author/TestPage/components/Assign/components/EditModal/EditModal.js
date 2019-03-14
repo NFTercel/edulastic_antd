@@ -15,12 +15,24 @@ import Footer from "./Footer";
 import { selectsData } from "../../../common";
 import { fetchGroupMembersAction, getStudentsSelector } from "../../../../../sharedDucks/groups";
 import { getCurrentAssignmentSelector, saveAssignmentAction } from "../../ducks";
+import { getTestEntitySelector } from "../../../../ducks";
 import Settings from "./Settings";
 import { getListOfStudents } from "../../utils";
 
 const { releaseGradeLabels, type } = test;
 
-const EditModal = ({ title, visible, onCancel, onOk, modalData, group, students, fetchStudents, saveAssignment }) => {
+const EditModal = ({
+  title,
+  visible,
+  onCancel,
+  onOk,
+  modalData,
+  group,
+  students,
+  fetchStudents,
+  saveAssignment,
+  testSettings
+}) => {
   let [showSettings, setSettings] = useState(false);
   let [assignment, updateAssignment] = useState(modalData);
   // toggle advanced settings
@@ -41,14 +53,14 @@ const EditModal = ({ title, visible, onCancel, onOk, modalData, group, students,
         ...nextState,
         maxAttempts: 3,
         releaseScore: releaseGradeLabels.WITH_ANSWERS,
-        isGenerateReport: false
+        generateReport: false
       };
     } else {
       nextState = {
         ...nextState,
         maxAttempts: 1,
         releaseScore: releaseGradeLabels.DONT_RELEASE,
-        isGenerateReport: true
+        generateReport: true
       };
     }
     updateAssignment(nextState);
@@ -113,10 +125,10 @@ const EditModal = ({ title, visible, onCancel, onOk, modalData, group, students,
           changeField={changeField}
         />
         <TestTypeSelector
-          testType={assignment.testType}
-          isGenerateReport={assignment.isGenerateReport}
+          testType={assignment.testType || testSettings.testType}
+          generateReport={assignment.generateReport || testSettings.generateReport}
           onAssignmentTypeChange={handleAssignmentTypeChange}
-          onGenerateReportFieldChange={changeField("isGenerateReport")}
+          onGenerateReportFieldChange={changeField("generateReport")}
         />
       </InitOptions>
       <StyledRowLabel gutter={16}>
@@ -131,11 +143,10 @@ const EditModal = ({ title, visible, onCancel, onOk, modalData, group, students,
         <Settings
           selectsData={selectsData}
           test={test}
-          releaseGradeType={assignment.releaseScore}
-          maxAttempts={assignment.maxAttempts}
           assignmentSettings={assignment}
           updateAssignmentSettings={updateAssignment}
           onUpdateMaxAttempts={changeField("maxAttempts")}
+          testSettings={testSettings}
         />
       )}
     </ModalWrapper>
@@ -161,7 +172,8 @@ EditModal.defaultProps = {
 export default connect(
   state => ({
     students: getStudentsSelector(state),
-    modalData: getCurrentAssignmentSelector(state)
+    modalData: getCurrentAssignmentSelector(state),
+    testSettings: getTestEntitySelector(state)
   }),
   {
     fetchStudents: fetchGroupMembersAction,
