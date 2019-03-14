@@ -26,12 +26,7 @@ export const StyledTitle = styled.h1`
   padding: 0;
 `;
 
-export const StyledLink = styled(Link)`
-  color: ${props => (props.isActive ? "#000" : "#fff")};
-  :hover {
-    color: white;
-  }
-`;
+export const StyledLink = styled(Link)``;
 
 export const StyledParaFirst = styled.p`
   font-size: 0.9em;
@@ -99,8 +94,21 @@ export const StyledAnchor = styled.a`
   margin: 0 7px;
   border-radius: 20px;
   background-color: ${props => (props.isActive ? "#fff" : "#3393dc")};
+  -webkit-transition: background-color 0.3s;
+  transition: background-color 0.3s;
+
   @media (max-width: 1450px) {
     font-size: 0.6em;
+  }
+  :hover {
+    color: ${props => (props.isActive ? "#0288d1" : "#fff")};
+    background-color: ${props => (props.isActive ? white : white)};
+    a {
+      color: ${props => (props.isActive ? "#0288d1" : "#000")};
+    }
+  }
+  a {
+    color: ${props => (props.isActive ? "#000" : "#fff")};
   }
 `;
 
