@@ -181,7 +181,7 @@ class ClassBoard extends Component {
             </StyledCard>
             <StyledFlexContainer justifyContent="space-between">
               <CheckContainer>
-                <StyledAnc onClick={this.changeStateTrue}>
+                {/* <StyledAnc onClick={this.changeStateTrue}>
                   <img src={Ghat} alt="" />
                 </StyledAnc>
                 <SpaceDiv />
@@ -190,10 +190,10 @@ class ClassBoard extends Component {
                 </StyledAnc>
                 <SpaceDiv />
                 <BarDiv />
-                <SpaceDiv />
+                <SpaceDiv /> */}
                 <StyledCheckbox checked>SELECT ALL</StyledCheckbox>
               </CheckContainer>
-              <ButtonGroup>
+              {/* <ButtonGroup>
                 <StyledButton>
                   <img src={Ptools} alt="" />
                   <ButtonSpace />
@@ -209,7 +209,7 @@ class ClassBoard extends Component {
                   <ButtonSpace />
                   {t("common.more")}
                 </StyledButton>
-              </ButtonGroup>
+              </ButtonGroup> */}
             </StyledFlexContainer>
             {flag ? (
               <DisneyCard testActivity={testActivity} assignmentId={assignmentId} classId={classId} />

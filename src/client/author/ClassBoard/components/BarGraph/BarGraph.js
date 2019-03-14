@@ -54,10 +54,10 @@ export default class BarGraph extends Component {
             <Bar stackId="a" dataKey="lightGrey" fill="#f5f5f5" />
             <Bar stackId="a" dataKey="darkGrey" fill="#e5e5e5" />
             <Line
-              type="monotone"
               dataKey="green"
               stroke="#1baae9"
-              dot={{ stroke: "#1baae9", strokeWidth: 2, fill: "#1baae9" }}
+              strokeWidth="3"
+              dot={{ stroke: "#1baae9", strokeWidth: 5, fill: "#1baae9" }}
             />
           </ComposedChart>
         </ResponsiveContainer>
