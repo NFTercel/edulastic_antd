@@ -62,6 +62,7 @@ export const StudentButton = styled(Button)`
   border-bottom-left-radius: 4px;
   padding: 0px 30px;
   font-size: 11px;
+  font-weight: 600;
 `;
 
 export const QuestionButton = styled(Button)`
@@ -71,6 +72,7 @@ export const QuestionButton = styled(Button)`
   border-bottom-left-radius: 0px;
   padding: 0px 30px;
   font-size: 11px;
+  font-weight: 600;
 `;
 
 export const BarDiv = styled.div`
