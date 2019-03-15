@@ -13,16 +13,16 @@ export const Container = styled(HeaderWrapper)`
   align-items: center;
   justify-content: space-between;
   background-color: ${darkBlueSecondary};
-  padding: 0px 15px;
   height: 62px;
   z-index: 1;
+  padding: 0 2.5%;
 `;
 
 export const StyledTitle = styled.h1`
   color: ${white};
   font-size: 22px;
   font-weight: bold;
-  margin: 20px;
+  margin: 20px 0;
   padding: 0;
 `;
 
@@ -56,9 +56,7 @@ export const StyledSwitch = styled(Switch)`
   background-color: ${classBoardTheme.SwitchColor};
 `;
 
-export const StyledDiv = styled.div`
-  margin-right: 20px;
-`;
+export const StyledDiv = styled.div``;
 
 export const StyledTabs = styled.div`
   width: 72%;

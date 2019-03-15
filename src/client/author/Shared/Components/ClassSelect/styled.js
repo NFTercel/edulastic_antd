@@ -8,7 +8,6 @@ export const Container = styled.div`
   align-items: center;
 
   .ant-select {
-    margin-right: 23px;
     width: 168px;
   }
 

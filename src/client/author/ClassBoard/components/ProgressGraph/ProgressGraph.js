@@ -22,7 +22,7 @@ export default class Graph extends Component {
               strokeLinecap="square"
               type="circle"
               percent={percentage}
-              width={150}
+              width={167}
               strokeWidth={15}
               strokeColor="#00b0ff"
               format={percent => `${percent}%`}

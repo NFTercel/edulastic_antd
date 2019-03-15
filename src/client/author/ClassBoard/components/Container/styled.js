@@ -43,9 +43,11 @@ export const Anchor = styled.a`
 export const StyledCard = styled(Card)`
   margin: auto;
   width: 95%;
-  height: 270px;
   border-radius: 10px;
   box-shadow: 3px 2px 7px lightgray;
+  .ant-card-body {
+    padding: 30px 30px 15px 30px;
+  }
 `;
 
 export const StudentButtonDiv = styled.div`

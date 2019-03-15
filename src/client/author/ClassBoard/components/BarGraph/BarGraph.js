@@ -25,7 +25,7 @@ export default class BarGraph extends Component {
     return (
       <MainDiv className="studentBarChart">
         <ResponsiveContainer width="100%" height={240}>
-          <ComposedChart barGap={1} barSize={36} data={data} margin={{ top: 20, right: 60, bottom: 0, left: 20 }}>
+          <ComposedChart barGap={1} barSize={36} data={data}>
             <XAxis
               dataKey="name"
               axisLine={false}
