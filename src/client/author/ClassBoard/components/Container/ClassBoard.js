@@ -20,7 +20,7 @@ import {
 } from "../../ducks";
 // components
 import Score from "../Score/Score";
-import DisneyCard from "../DisneyCard/DisneyCard";
+import DisneyCardContainer from "../DisneyCardContainer/DisneyCardContainer";
 import Graph from "../ProgressGraph/ProgressGraph";
 import ClassSelect from "../../../Shared/Components/ClassSelect/ClassSelect";
 import ClassHeader from "../../../Shared/Components/ClassHeader/ClassHeader";
@@ -185,7 +185,7 @@ class ClassBoard extends Component {
               </CheckContainer>
             </StyledFlexContainer>
             {flag ? (
-              <DisneyCard testActivity={testActivity} assignmentId={assignmentId} classId={classId} />
+              <DisneyCardContainer testActivity={testActivity} assignmentId={assignmentId} classId={classId} />
             ) : (
               <Score gradebook={gradebook} assignmentId={assignmentId} classId={classId} />
             )}
