@@ -21,9 +21,9 @@ export const StyledProgressDiv = styled.div`
 export const GraphDescription = styled.p`
   text-align: center;
   font-weight: 600;
-  font-size: 9px;
+  font-size: 10px;
   color: #b1b1b1;
-  margin: 9px 0 0 0;
+  margin: 3px 0 0 0;
   padding: 0;
   text-transform: uppercase;
   position: absolute;

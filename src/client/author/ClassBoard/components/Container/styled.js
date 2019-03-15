@@ -53,6 +53,10 @@ export const StyledCard = styled(Card)`
 export const StudentButtonDiv = styled.div`
   margin-left: auto;
   margin-right: 20px !important;
+
+  .ant-btn-primary {
+    background-color: #0e93dc;
+  }
 `;
 
 export const StudentButton = styled(Button)`

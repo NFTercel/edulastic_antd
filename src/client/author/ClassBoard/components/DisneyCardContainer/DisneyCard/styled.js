@@ -80,7 +80,7 @@ export const CircularDiv = styled.div`
   text-align: center;
   color: ${classBoardTheme.CardCircularColor};
   font-weight: 600;
-  line-height: 42px;
+  line-height: 38px;
 `;
 
 export const StyledDiv = styled.div`

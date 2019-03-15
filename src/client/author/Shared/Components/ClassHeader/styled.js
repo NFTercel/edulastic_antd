@@ -64,6 +64,7 @@ export const StyledTabs = styled.div`
   height: 62px;
   display: flex;
   align-items: center;
+  justify-content: center;
 `;
 
 export const StyledAnchorA = styled.a`
@@ -90,7 +91,7 @@ export const StyledAnchor = styled.a`
   padding: 0px 15px;
   text-align: center;
   height: 45px;
-  margin: 0 7px;
+  margin: 0 10px;
   border-radius: 20px;
   background-color: ${props => (props.isActive ? "#f3f3f3" : "#0e93dc")};
   -webkit-transition: background-color 0.3s;
