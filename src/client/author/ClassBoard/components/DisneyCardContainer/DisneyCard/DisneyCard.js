@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import {
   MainDiv,
+  MainDivLeft,
   PerfomanceSection,
   StyledCard,
   Space,
@@ -22,6 +23,7 @@ import {
   StyledParaF,
   StyledParaFF,
   ColorSpan,
+  StyledName,
   StyledParaS,
   StyledParaSS,
   StyledParaSSS,
@@ -60,15 +62,13 @@ export default class DisneyCard extends Component {
         const studentData = (
           <StyledCard bordered={false}>
             <PaginationInfoF>
-              <div>
-                <CircularDiv>DI</CircularDiv>
-                <Space />
-                <SpaceDiv />
-                <StyledDiv>
-                  <StyledParaF>{student.studentName ? student.studentName : "-"}</StyledParaF>
-                  {student.present ? <StyledParaS>{status}</StyledParaS> : <StyledColorParaS>ABSENT</StyledColorParaS>}
-                </StyledDiv>
-              </div>
+              <CircularDiv>DI</CircularDiv>
+              <Space />
+              <SpaceDiv />
+              <StyledName>
+                <StyledParaF>{student.studentName ? student.studentName : "-"}</StyledParaF>
+                {student.present ? <StyledParaS>{status}</StyledParaS> : <StyledColorParaS>ABSENT</StyledColorParaS>}
+              </StyledName>
               <SquareDiv />
             </PaginationInfoF>
             <PaginationInfoS>
@@ -102,7 +102,6 @@ export default class DisneyCard extends Component {
             </PaginationInfoT>
             <StyledDivLine />
             <PagInfo>
-              <GSpan>&gt;&gt;</GSpan>
               <Link to={`/author/classresponses/${student.testActivityId}`}>
                 VIEW RESPONSES <GSpan>&gt;&gt;</GSpan>
               </Link>
@@ -113,6 +112,14 @@ export default class DisneyCard extends Component {
       });
     }
 
-    return <MainDiv>{styledCard}</MainDiv>;
+    return (
+      <div>
+        {testActivity && testActivity.length < 4 ? (
+          <MainDivLeft>{styledCard}</MainDivLeft>
+        ) : (
+          <MainDiv>{styledCard}</MainDiv>
+        )}
+      </div>
+    );
   }
 }

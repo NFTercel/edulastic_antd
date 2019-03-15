@@ -9,8 +9,6 @@ const classBoardTheme = themes.default.classboard;
 export const PaginationInfo = styled.span`
   font-weight: 600;
   display: inline-block
-  margin-left:30px;
-
   font-size: 11px;
   word-spacing:5px;
   color: ${classBoardTheme.headerContainerColor}
@@ -19,9 +17,10 @@ export const PaginationInfo = styled.span`
 export const CheckContainer = styled.span`
   font-weight: bold;
   display: inline-block;
-  margin-left: 30px;
-
   font-size: 15px;
+  > span {
+    margin-left: 0;
+  }
 `;
 
 export const ButtonGroup = styled.div`
@@ -29,7 +28,8 @@ export const ButtonGroup = styled.div`
 `;
 
 export const StyledFlexContainer = styled(FlexContainer)`
-  margin: 20px 10px;
+  width: 95%;
+  margin: 20px auto;
 `;
 
 export const AnchorLink = styled(Link)`

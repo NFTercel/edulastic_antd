@@ -8,4 +8,8 @@ export const MainDiv = styled.div`
   .highcharts-title {
     display: none;
   }
+
+  .xAxis {
+    font-weight: 600;
+  }
 `;

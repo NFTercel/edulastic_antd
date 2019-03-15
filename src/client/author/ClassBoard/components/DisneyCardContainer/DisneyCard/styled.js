@@ -5,7 +5,16 @@ import { themes } from "../../../../../student/themes";
 const classBoardTheme = themes.default.classboard;
 
 export const MainDiv = styled.div`
-  margin-left: 10px;
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const MainDivLeft = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  .ant-card {
+    margin-right: 4%;
+  }
 `;
 
 export const PerfomanceSection = styled.div`
@@ -20,7 +29,10 @@ export const StyledCard = styled(Card)`
   border-radius: 10px;
   box-shadow: 3px 2px 7px lightgray;
   display: inline-block;
-  margin: 0px 0px 32px 32px;
+  margin: 0;
+  .ant-card-body {
+    padding: 19px 22px;
+  }
 `;
 
 export const Space = styled.div`
@@ -41,13 +53,8 @@ export const GSpan = styled.span`
   font-size: 10px;
 `;
 
-export const PaginationInfoF = styled.span`
-  display: inline-block;
-  margin-left: -5px;
-  width: 105%;
+export const PaginationInfoF = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
 `;
 
 export const PaginationInfoS = styled.span`
@@ -65,20 +72,25 @@ export const PaginationInfoT = styled.span`
 `;
 
 export const CircularDiv = styled.div`
-  width: 47px;
-  height: 47px;
+  width: 42px;
+  height: 42px;
   border: 2px solid #5cb497;
-  display: inline-block;
-  border-radius: 128px;
+  display: block;
+  border-radius: 50%;
   text-align: center;
-  padding-top: 14px;
   color: ${classBoardTheme.CardCircularColor};
-  padding-bottom: 28px;
-  font-weight: bold;
+  font-weight: 600;
+  line-height: 42px;
 `;
 
 export const StyledDiv = styled.div`
   display: inline-block;
+`;
+
+export const StyledName = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;
 
 export const SquareDiv = styled.div`
@@ -87,6 +99,8 @@ export const SquareDiv = styled.div`
   height: 20px;
   border-radius: 3px;
   border: 1px solid lightgray;
+  margin-left: auto;
+  align-self: center;
 `;
 
 export const SquareColorDivGreen = styled.div`
@@ -136,12 +150,15 @@ export const SquareColorDivYellow = styled.div`
 `;
 
 export const StyledParaF = styled.p`
-  font-size: 1.1em;
-  font-weight: bold;
+  font-size: 16px;
+  line-height: 16px;
+  font-weight: 600;
+  margin-bottom: 5px;
 `;
 
 export const StyledParaS = styled.p`
-  font-size: 0.6em;
+  font-size: 10px;
+  line-height: 10px;
   font-weight: bold;
   color: ${classBoardTheme.CardCircularColor};
 `;
@@ -153,8 +170,9 @@ export const StyledColorParaS = styled.p`
 `;
 
 export const StyledParaFF = styled.p`
-  font-size: 0.9em;
-  font-weight: bold;
+  font-size: 13px;
+  font-weight: 600;
+  color: #434b5d;
 `;
 export const ColorSpan = styled.span`
   color: ${classBoardTheme.CardCircularColor};

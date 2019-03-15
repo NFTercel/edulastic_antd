@@ -5,6 +5,7 @@ export const StyledProgress = styled(Progress)`
   margin: 10px 30px;
   .ant-progress-text {
     margin-top: -7px !important;
+    font-weight: bold;
   }
 `;
 

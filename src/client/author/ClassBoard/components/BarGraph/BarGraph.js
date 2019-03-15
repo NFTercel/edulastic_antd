@@ -26,27 +26,33 @@ export default class BarGraph extends Component {
       <MainDiv className="studentBarChart">
         <ResponsiveContainer width="100%" height={240}>
           <ComposedChart barGap={1} barSize={36} data={data} margin={{ top: 20, right: 60, bottom: 0, left: 20 }}>
-            <XAxis dataKey="name" axisLine={false} tickSize={0} />
+            <XAxis
+              dataKey="name"
+              axisLine={false}
+              tickSize={0}
+              dy={8}
+              tick={{ fontSize: "10px", strokeWidth: 2, fill: "#434b5d" }}
+            />
             <YAxis
               dataKey="all"
               yAxisId={0}
               tickCount={4}
               allowDecimals={false}
-              tick={{ strokeWidth: 0, fill: "#999" }}
+              tick={{ fontSize: "10px", strokeWidth: 0, fill: "#b1b1b1" }}
               tickSize={6}
-              label={{ value: "ATTEMPTS", angle: -90, fill: "#999" }}
-              stroke="#999"
+              label={{ value: "ATTEMPTS", angle: -90, fill: "#b1b1b1", fontSize: "10px" }}
+              stroke="#b1b1b1"
             />
             <YAxis
               dataKey="all"
               yAxisId={1}
               tickCount={4}
               allowDecimals={false}
-              tick={{ strokeWidth: 0, fill: "#999" }}
+              tick={{ strokeWidth: 0, fill: "#b1b1b1", fontSize: "10px" }}
               tickSize={6}
-              label={{ value: "AVG TIME (SECONDS)", angle: -90, fill: "#999" }}
+              label={{ value: "AVG TIME (SECONDS)", angle: -90, fill: "#b1b1b1", fontSize: "10px" }}
               orientation="right"
-              stroke="#999"
+              stroke="#b1b1b1"
             />
             <Bar stackId="a" dataKey="green" fill="#1fe3a0" />
             <Bar stackId="a" dataKey="yellow" fill="#fdcc3a" />
