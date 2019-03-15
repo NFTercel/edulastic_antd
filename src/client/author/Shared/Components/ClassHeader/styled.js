@@ -38,7 +38,8 @@ export const SpaceD = styled.div`
 `;
 
 export const StyledParaSecond = styled.p`
-  font-size: 0.5em;
+  font-size: 13px;
+  font-weight: 600;
 `;
 
 export const StyledParaThird = styled.p`
