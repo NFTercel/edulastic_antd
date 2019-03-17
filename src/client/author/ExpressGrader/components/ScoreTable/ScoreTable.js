@@ -21,10 +21,11 @@ function getDataForTable(data) {
         question.id = question._id;
         question.rowIndex = rowIndex;
         question.testActivityId = testActivityId;
+        question.score = isNaN(question.score) ? 0 : question.score;
       });
 
       students.students = studentInfo;
-      students.score = { score: student.score, maxScore: student.maxScore };
+      students.score = { score: isNaN(student.score) ? 0 : student.score, maxScore: student.maxScore };
       return students;
     });
   } else {
@@ -60,7 +61,7 @@ class ScoreTable extends Component {
             width: "12%",
             dataIndex: "students",
             render: record => <StyledDivMid>{record.studentName}</StyledDivMid>,
-            sorter: (a, b) => a.students.studentName.length - b.students.studentName.length,
+            sorter: (a, b) => (a.students.studentName.toUpperCase() > b.students.studentName.toUpperCase() ? 1 : -1),
             sortDirections: ["descend"]
           },
           {
@@ -79,7 +80,7 @@ class ScoreTable extends Component {
               );
             },
             onFilter: (value, record) => record.score.indexOf(value) === 0,
-            sorter: (a, b) => a.score - b.score,
+            sorter: (a, b) => (a.score.score > b.score.score ? 1 : -1),
             sortDirections: ["descend"]
           }
         ]
