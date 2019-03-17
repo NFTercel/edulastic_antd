@@ -70,6 +70,7 @@ export const transformGradeBookResponse = ({
           studentId,
           studentName,
           present: true,
+          check: false,
           status: "notStarted",
           maxScore: testMaxScore,
           questionActivities: emptyQuestionActivities
@@ -118,6 +119,7 @@ export const transformGradeBookResponse = ({
         studentName,
         status: submitted ? "submitted" : "inProgress",
         present,
+        check: false,
         graded,
         maxScore: testMaxScore,
         score,

@@ -56,9 +56,12 @@ class ClassBoard extends Component {
     super(props);
     this.changeStateTrue = this.changeStateTrue.bind(this);
     this.changeStateFalse = this.changeStateFalse.bind(this);
+    this.onSelectAllChange = this.onSelectAllChange.bind(this);
+
     this.state = {
       flag: true,
-      selectedTab: "Student"
+      selectedTab: "Student",
+      selectAll: false
     };
   }
 
@@ -97,6 +100,15 @@ class ClassBoard extends Component {
     });
   }
 
+  onSelectAllChange = e => {
+    this.props.testActivity.map(student => {
+      student.check = e.target.checked;
+    });
+    this.setState({
+      selectAll: e.target.checked
+    });
+  };
+
   handleCreate = () => {
     const { history, match } = this.props;
     history.push(`${match.url}/create`);
@@ -129,9 +141,20 @@ class ClassBoard extends Component {
     return [];
   };
 
+  changeCardCheck = (isCheck, studentId) => {
+    let nCountTrue = 0;
+    this.props.testActivity.map(student => {
+      if (student.studentId === studentId) student.check = isCheck;
+      if (student.check) nCountTrue++;
+    });
+    this.setState({
+      selectAll: nCountTrue == this.props.testActivity.length ? true : false
+    });
+  };
+
   render() {
     const { gradebook, testActivity, creating, match, classResponse, additionalData = { classes: [] }, t } = this.props;
-    const { selectedTab, flag } = this.state;
+    const { selectedTab, flag, selectAll } = this.state;
 
     const { assignmentId, classId } = match.params;
     const testActivityId = this.getTestActivity(testActivity);
@@ -141,6 +164,7 @@ class ClassBoard extends Component {
     for (let i = 0; i < questions.length; i++) {
       questionsIds.push({ name: `Question ${i + 1}` });
     }
+
     return (
       <div>
         <HooksContainer classId={classId} assignmentId={assignmentId} />
@@ -181,11 +205,18 @@ class ClassBoard extends Component {
             </StyledCard>
             <StyledFlexContainer justifyContent="space-between">
               <CheckContainer>
-                <StyledCheckbox checked>SELECT ALL</StyledCheckbox>
+                <StyledCheckbox checked={this.state.selectAll} onChange={this.onSelectAllChange}>
+                  SELECT ALL
+                </StyledCheckbox>
               </CheckContainer>
             </StyledFlexContainer>
             {flag ? (
-              <DisneyCardContainer testActivity={testActivity} assignmentId={assignmentId} classId={classId} />
+              <DisneyCardContainer
+                testActivity={testActivity}
+                assignmentId={assignmentId}
+                classId={classId}
+                changeCardCheck={this.changeCardCheck}
+              />
             ) : (
               <Score gradebook={gradebook} assignmentId={assignmentId} classId={classId} />
             )}

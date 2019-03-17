@@ -1,6 +1,8 @@
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import CardCheckbox from "./CardCheckbox/CardCheckbox";
+
 import {
   MainDiv,
   MainDivLeft,
@@ -14,7 +16,7 @@ import {
   PaginationInfoT,
   CircularDiv,
   StyledDiv,
-  SquareDiv,
+  StyledDivF,
   SquareColorDivGreen,
   SquareColorDivGray,
   SquareColorDisabled,
@@ -34,9 +36,27 @@ import {
 const roundFraction = n => Math.floor(n * 100) / 100;
 
 export default class DisneyCard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      testActivity: this.props.testActivity
+    };
+  }
+
+  componentWillReceiveProps(props) {
+    this.setState({
+      testActivity: this.props.testActivity
+    });
+  }
+
+  changeCardCheck = (isCheck, studentId) => {
+    this.props.changeCardCheck(isCheck, studentId);
+  };
+
   render() {
-    let { testActivity, assignmentId, classId } = this.props;
     let styledCard = [];
+    const { testActivity } = this.props;
+
     if (testActivity.length > 0) {
       testActivity.map(student => {
         //TODO: use constants
@@ -69,7 +89,11 @@ export default class DisneyCard extends Component {
                 <StyledParaF>{student.studentName ? student.studentName : "-"}</StyledParaF>
                 {student.present ? <StyledParaS>{status}</StyledParaS> : <StyledColorParaS>ABSENT</StyledColorParaS>}
               </StyledName>
-              <SquareDiv />
+              <CardCheckbox
+                changeCardCheck={this.changeCardCheck}
+                isCheck={student.check}
+                studentId={student.studentId}
+              />
             </PaginationInfoF>
             <PaginationInfoS>
               <StyledDiv>
@@ -113,13 +137,13 @@ export default class DisneyCard extends Component {
     }
 
     return (
-      <div>
+      <StyledDivF>
         {testActivity && testActivity.length < 4 ? (
           <MainDivLeft>{styledCard}</MainDivLeft>
         ) : (
           <MainDiv>{styledCard}</MainDiv>
         )}
-      </div>
+      </StyledDivF>
     );
   }
 }

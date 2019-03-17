@@ -1,4 +1,4 @@
-import { Card } from "antd";
+import { Card, Checkbox } from "antd";
 import styled from "styled-components";
 import { themes } from "../../../../../student/themes";
 
@@ -93,14 +93,11 @@ export const StyledName = styled.div`
   justify-content: center;
 `;
 
-export const SquareDiv = styled.div`
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border-radius: 3px;
-  border: 1px solid lightgray;
-  margin-left: auto;
+export const StyledCheckbox = styled(Checkbox)`
+  font-size: 0.7em;
+  color: ${classBoardTheme.headerCheckboxColor};
   align-self: center;
+  margin-left: auto;
 `;
 
 export const SquareColorDivGreen = styled.div`
