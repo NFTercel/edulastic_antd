@@ -61,7 +61,8 @@ class ClassBoard extends Component {
     this.state = {
       flag: true,
       selectedTab: "Student",
-      selectAll: false
+      selectAll: false,
+      testActivity: []
     };
   }
 

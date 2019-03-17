@@ -6,7 +6,6 @@ export default class CardCheckbox extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      checked: this.props.isCheck,
       studentId: this.props.studentId
     };
   }
@@ -21,6 +20,7 @@ export default class CardCheckbox extends Component {
   };
 
   render() {
-    return <StyledCheckbox checked={this.state.checked} onChange={this.onChange} />;
+    let isCheck = this.props.isCheck;
+    return <StyledCheckbox checked={isCheck} onChange={this.onChange} />;
   }
 }
