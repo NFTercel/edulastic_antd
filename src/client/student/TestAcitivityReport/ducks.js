@@ -30,7 +30,7 @@ function* loadTestActivityReport({ payload }) {
 
     const [test, reports] = yield all([
       call(testsApi.getById, data.testId, { data: true }),
-      call(reportsApi.fetchTestActivityReport, testActivityId)
+      call(reportsApi.fetchTestActivityReport, testActivityId, groupId)
     ]);
 
     yield put(setFeedbackReportAction(reports.questionActivities));

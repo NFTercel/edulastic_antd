@@ -30,7 +30,7 @@ const ItemDetailWidget = ({
     <div>
       <Container isDragging={isDragging}>
         <div>
-          {widget.widgetType === "question" && (
+          {(widget.widgetType === "question" || widget.widgetType === "resource") && (
             <QuestionWrapper
               testItem
               type={widget.type}

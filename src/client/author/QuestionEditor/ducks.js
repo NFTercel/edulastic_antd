@@ -1,9 +1,11 @@
-import { createSelector } from 'reselect';
-import { testItemsApi, questionsApi } from '@edulastic/api';
-import { call, put, all, takeEvery, select } from 'redux-saga/effects';
-import { message } from 'antd';
-import { getItemDetailSelector, UPDATE_ITEM_DETAIL_SUCCESS } from '../ItemDetail/ducks';
-import { history } from '../../configureStore';
+import { createSelector } from "reselect";
+import { testItemsApi, questionsApi } from "@edulastic/api";
+import { call, put, all, takeEvery, select } from "redux-saga/effects";
+import { values } from "lodash";
+import { message } from "antd";
+import { questionType } from "@edulastic/constants";
+import { getItemDetailSelector, UPDATE_ITEM_DETAIL_SUCCESS } from "../ItemDetail/ducks";
+import { history } from "../../configureStore";
 import {
   UPDATE_QUESTION,
   SET_FIRST_MOUNT,
@@ -13,6 +15,15 @@ import {
 } from "../sharedDucks/questions";
 
 // constants
+export const resourceTypeQuestions = {
+  PASSAGE: questionType.PASSAGE,
+  PROTRACTOR: questionType.PROTRACTOR
+};
+
+export const widgetTypes = {
+  QUESTION: "question",
+  RESOURCE: "resource"
+};
 
 export const RECEIVE_QUESTION_REQUEST = "[question] receive question request";
 export const RECEIVE_QUESTION_SUCCESS = "[question] receive question success";
@@ -222,11 +233,9 @@ function* saveQuestionSaga() {
   try {
     const question = yield select(getCurrentQuestionSelector);
     const itemDetail = yield select(getItemDetailSelector);
-
     let currentQuestionIds = getQuestionIds(itemDetail);
     const { rowIndex, tabIndex } = history.location.state || {};
     const { id } = question;
-
     const entity = {
       ...question,
       firstMount: false
@@ -237,10 +246,13 @@ function* saveQuestionSaga() {
 
       // if a new question add question
       if (isNew) {
+        const widgetType = values(resourceTypeQuestions).includes(entity.type)
+          ? widgetTypes.RESOURCE
+          : widgetTypes.QUESTION;
         itemDetail.rows[rowIndex].widgets.push({
-          widgetType: "question",
+          widgetType,
           type: entity.type,
-          title: "Multiple choice",
+          title: entity.title,
           reference: id,
           tabIndex
         });
@@ -249,14 +261,20 @@ function* saveQuestionSaga() {
 
     currentQuestionIds = getQuestionIds(itemDetail);
     const allQuestions = yield select(getQuestionsArraySelector);
-    const currentQuestions = allQuestions.filter(q => currentQuestionIds.includes(q.id));
+    const currentQuestions = allQuestions.filter(
+      q => currentQuestionIds.includes(q.id) && !values(resourceTypeQuestions).includes(q.type)
+    );
+    const currentResources = allQuestions.filter(
+      q => currentQuestionIds.includes(q.id) && values(resourceTypeQuestions).includes(q.type)
+    );
+
     const data = {
       ...itemDetail,
       data: {
-        questions: currentQuestions
+        questions: currentQuestions,
+        resources: currentResources
       }
     };
-
     const item = yield call(testItemsApi.updateById, itemDetail._id, data);
     yield put({
       type: UPDATE_ITEM_DETAIL_SUCCESS,

@@ -22,8 +22,8 @@ const getQuestions = (testItems = []) => {
   const allQuestions = [];
 
   testItems.forEach(item => {
-    const { questions = [] } = item.data;
-    allQuestions.push(...questions);
+    const { questions = [], resources = [] } = item.data;
+    allQuestions.push(...questions, ...resources);
   });
 
   return allQuestions;
@@ -86,7 +86,8 @@ function* loadTest({ payload }) {
         payload: { testActivityId }
       });
 
-      let lastAttemptedQuestion = questionActivities[0];
+      let lastAttemptedQuestion = questionActivities[0] || {};
+      const { questionActivities } = testActivity;
 
       questionActivities.forEach(item => {
         allAnswers = {

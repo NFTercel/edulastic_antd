@@ -18,7 +18,6 @@ const initialState = {
 
 // set test items
 const setTestItems = (state, { payload }) => {
-  let prev = state.items;
   state.items = payload;
 };
 
@@ -35,8 +34,9 @@ export default createReducer(initialState, {
 
 // get testITem questions
 export const getTestItemQuestions = item => {
-  if (item && item.data && item.data.questions) {
-    return item.data.questions;
+  if (item && item.data) {
+    const { questions = [], resources = [] } = item.data;
+    return [...questions, ...resources];
   } else {
     return [];
   }

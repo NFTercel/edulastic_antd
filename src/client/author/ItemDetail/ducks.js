@@ -202,6 +202,8 @@ function* receiveItemSaga({ payload }) {
   try {
     const data = yield call(testItemsApi.getById, payload.id, payload.params);
     let questions = (data.data && data.data.questions) || [];
+    const resources = (data.data && data.data.resources) || [];
+    questions = [...questions, ...resources];
     questions = _keyBy(questions, "id");
     const item = _omit(data, "data");
     yield put({

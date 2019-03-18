@@ -210,8 +210,8 @@ export const reducer = (state = initialState, { type, payload }) => {
 const getQuestions = (testItems = []) => {
   const allQuestions = [];
   for (const item of testItems) {
-    const { questions = [] } = item.data || {};
-    allQuestions.push(...questions);
+    const { questions = [], resources = [] } = item.data || {};
+    allQuestions.push(...questions, ...resources);
   }
   return allQuestions;
 };
