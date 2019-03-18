@@ -74,6 +74,38 @@ export default class DisneyCardContainer extends Component {
     this.props.changeCardCheck(isCheck, studentId);
   };
 
+  getAvatarName = studentName => {
+    let firstLetter = "";
+    let secondLetter = "";
+
+    if (studentName.length > 0) {
+      if (studentName.indexOf(" ") >= 0) {
+        firstLetter = studentName.substring(0, 1);
+        econdLetter = studentName.substring(studentName.indexOf(" "), 1);
+      } else if (this.countUpperCaseChars(studentName) >= 2) {
+        firstLetter = studentName.match(/^[A-Z]{4}/);
+        secondLetter = studentName.substring(
+          studentName.indexOf(firstLetter),
+          studentName.length - studentName.indexOf(firstLetter)
+        );
+        secondLetter = secondLetter.match(/^[A-Z]{4}/);
+      } else if (studentName.length >= 2) {
+        return studentName.substring(0, 2).toUpperCase();
+      }
+
+      return (firstLetter + secondLetter).toUpperCase();
+    }
+  };
+
+  countUpperCaseChars = str => {
+    var count = 0,
+      len = str.length;
+    for (var i = 0; i < len; i++) {
+      if (/[A-Z]/.test(str.charAt(i))) count++;
+    }
+    return count;
+  };
+
   render() {
     let styledCard = [];
 
@@ -104,7 +136,7 @@ export default class DisneyCardContainer extends Component {
         const studentData = (
           <StyledCard bordered={false}>
             <PaginationInfoF>
-              <CircularDiv>DI</CircularDiv>
+              <CircularDiv>{this.getAvatarName(student.studentName)}</CircularDiv>
               <Space />
               <SpaceDiv />
               <StyledName>
@@ -118,9 +150,7 @@ export default class DisneyCardContainer extends Component {
               />
             </PaginationInfoF>
             <PaginationInfoS>
-              <StyledDiv>
-                <StyledParaFF>Performance</StyledParaFF>
-              </StyledDiv>
+              <StyledParaFF>Performance</StyledParaFF>
               <PerfomanceSection>
                 <StyledParaSS>
                   <ColorSpan>{correctAnswers}</ColorSpan> / {questions}

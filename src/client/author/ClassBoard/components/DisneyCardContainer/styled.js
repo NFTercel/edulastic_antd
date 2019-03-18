@@ -70,14 +70,14 @@ export const PaginationInfoF = styled.div`
   display: flex;
 `;
 
-export const PaginationInfoS = styled.span`
+export const PaginationInfoS = styled.div`
   display: inline-block;
   margin-left: -5px;
   margin-top: 25px;
   width: 100%;
 `;
 
-export const PaginationInfoT = styled.span`
+export const PaginationInfoT = styled.div`
   display: inline-block;
   margin-left: -5px;
   margin-top: 25px;
