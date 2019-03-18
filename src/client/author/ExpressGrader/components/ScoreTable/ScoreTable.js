@@ -20,6 +20,7 @@ function getDataForTable(data) {
         question.colIndex = index;
         question.id = question._id;
         question.rowIndex = rowIndex;
+        question.studentId = student.studentId;
         question.testActivityId = testActivityId;
         question.score = isNaN(question.score) ? 0 : question.score;
       });
@@ -50,7 +51,7 @@ class ScoreTable extends Component {
   }
 
   getColumnsForTable = length => {
-    const { showQuestionModal, questionActivities } = this.props;
+    const { showQuestionModal } = this.props;
     const columns = [
       {
         title: "Questions&Standards",
@@ -91,11 +92,11 @@ class ScoreTable extends Component {
       let successAnswer = 0;
       const { testActivity: students } = this.props;
       const key = `Q${index}`;
-      const isQuestionActivities = questionActivities !== undefined && questionActivities.length !== 0;
+      // const isQuestionActivities = questionActivities !== undefined && questionActivities.length !== 0;
       const title = (
         <StyledDivMid>
           Q{index + 1}
-          {isQuestionActivities && questionActivities[index].standards.map(tag => <StyledTag>{tag.level}</StyledTag>)}
+          {/* {isQuestionActivities && questionActivities[index].standards.map(tag => <StyledTag>{tag.level}</StyledTag>)} */}
         </StyledDivMid>
       );
       students.forEach(student => {
@@ -141,7 +142,6 @@ class ScoreTable extends Component {
     const { columnData } = this.state;
     const { testActivity } = this.props;
     const columnsLength = testActivity && testActivity.length !== 0 ? testActivity[0].questionActivities.length : 0;
-
     if (columnsLength) {
       columnInfo = this.getColumnsForTable(columnsLength);
     }

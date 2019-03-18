@@ -100,7 +100,7 @@ class Display extends Component {
 
     const previewTemplateBoxLayout = (
       <StyledPreviewTemplateBox fontSize={fontSize}>
-        <StyledPreviewContainer width={width}>
+        <StyledPreviewContainer data-cy="image-text-answer-board" width={width}>
           <StyledPreviewImage src={imageUrl || MapImage} alt={imageAlterText} />
           {responseContainers.map((responseContainer, index) => {
             const dropTargetIndex = index;

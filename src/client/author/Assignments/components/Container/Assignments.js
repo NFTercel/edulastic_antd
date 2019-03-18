@@ -5,9 +5,19 @@ import { compose } from "redux";
 
 import { withWindowSizes, FlexContainer } from "@edulastic/common";
 import { withNamespaces } from "@edulastic/localization";
+import { test } from "@edulastic/constants";
 
-import { receiveAssignmentsAction } from "../../../src/actions/assignments";
-import { getAssignmentsSelector } from "../../../src/selectors/assignments";
+import {
+  receiveAssignmentsAction,
+  receiveAssignmentByIdAction,
+  updateReleaseScoreSettingsAction,
+  toggleReleaseScoreSettingsAction
+} from "../../../src/actions/assignments";
+import {
+  getAssignmentsSelector,
+  getCurrentAssignmentSelector,
+  getToggleReleaseGradeStateSelector
+} from "../../../src/selectors/assignments";
 
 import SortBar from "../SortBar/SortBar";
 import FilterBar from "../FilterBar/FilterBar";
@@ -17,7 +27,7 @@ import MobileTableList from "../MobileTabList/MobileTableList";
 import ListHeader from "../../../src/components/common/ListHeader";
 
 import { Container, PaginationInfo, Main, DRadio, StyledCard, FullFlexContainer, StyledFlexContainer } from "./styled";
-
+const { releaseGradeLabels } = test;
 class Assignments extends Component {
   constructor(props) {
     super(props);
@@ -25,8 +35,7 @@ class Assignments extends Component {
     this.state = {
       searchStr: "",
       blockStyle: "tile",
-      isShowFilter: false,
-      showReleaseGradeSettings: false
+      isShowFilter: false
     };
   }
 
@@ -40,15 +49,31 @@ class Assignments extends Component {
     history.push("/author/assessments/create");
   };
 
-  onOpenReleaseScoreSettings = () => {
-    this.setState({ showReleaseGradeSettings: true });
+  onOpenReleaseScoreSettings = (testId, assignmentId) => {
+    const { loadAssignmentById } = this.props;
+    loadAssignmentById({ testId, assignmentId });
   };
-  onCloseReleaseScoreSettings = () => {
-    this.setState({ showReleaseGradeSettings: false });
+
+  onUpdateReleaseScoreSettings = releaseScore => {
+    const { updateReleaseScoreSettings, currentEditableAssignment, toggleReleaseGradePopUp } = this.props;
+    if (releaseScore != releaseGradeLabels.DONT_RELEASE) {
+      const updateReleaseScore = { ...currentEditableAssignment, releaseScore };
+      updateReleaseScoreSettings(updateReleaseScore);
+    } else {
+      toggleReleaseGradePopUp(false);
+    }
   };
 
   render() {
-    const { assignments, creating, t, windowWidth, windowHeight } = this.props;
+    const {
+      assignments,
+      creating,
+      t,
+      windowWidth,
+      windowHeight,
+      isShowReleaseSettingsPopup,
+      toggleReleaseGradePopUp
+    } = this.props;
     return (
       <div>
         <ListHeader
@@ -84,10 +109,13 @@ class Assignments extends Component {
             </Main>
           </FlexContainer>
         </Container>
-        <ReleaseGradeSettingsModal
-          showReleaseGradeSettings={this.state.showReleaseGradeSettings}
-          onCloseReleaseScoreSettings={this.onCloseReleaseScoreSettings}
-        />
+        {isShowReleaseSettingsPopup && (
+          <ReleaseGradeSettingsModal
+            showReleaseGradeSettings={isShowReleaseSettingsPopup}
+            onCloseReleaseScoreSettings={() => toggleReleaseGradePopUp(false)}
+            updateReleaseScoreSettings={this.onUpdateReleaseScoreSettings}
+          />
+        )}
       </div>
     );
   }
@@ -108,10 +136,15 @@ const enhance = compose(
   withNamespaces("header"),
   connect(
     state => ({
-      assignments: getAssignmentsSelector(state)
+      assignments: getAssignmentsSelector(state),
+      currentEditableAssignment: getCurrentAssignmentSelector(state),
+      isShowReleaseSettingsPopup: getToggleReleaseGradeStateSelector(state)
     }),
     {
-      loadAssignments: receiveAssignmentsAction
+      loadAssignments: receiveAssignmentsAction,
+      loadAssignmentById: receiveAssignmentByIdAction,
+      updateReleaseScoreSettings: updateReleaseScoreSettingsAction,
+      toggleReleaseGradePopUp: toggleReleaseScoreSettingsAction
     }
   )
 );

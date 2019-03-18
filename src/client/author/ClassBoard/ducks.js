@@ -4,13 +4,16 @@ import { message } from "antd";
 import { createSelector } from "reselect";
 import { values as _values } from "lodash";
 
+import { setShowScoreAction } from "../src/actions/classBoard";
+
 import {
   RECEIVE_GRADEBOOK_REQUEST,
   RECEIVE_GRADEBOOK_SUCCESS,
   RECEIVE_GRADEBOOK_ERROR,
   RECEIVE_TESTACTIVITY_REQUEST,
   RECEIVE_TESTACTIVITY_SUCCESS,
-  RECEIVE_TESTACTIVITY_ERROR
+  RECEIVE_TESTACTIVITY_ERROR,
+  UPDATE_RELEASE_SCORE
 } from "../src/constants/actions";
 
 function* receiveGradeBookSaga({ payload }) {
@@ -33,12 +36,15 @@ function* receiveGradeBookSaga({ payload }) {
 
 function* receiveTestActivitySaga({ payload }) {
   try {
-    //test, testItemsData, testActivities, studentNames, testQuestionActivities
+    // test, testItemsData, testActivities, studentNames, testQuestionActivities
     const { additionalData, ...gradebookData } = yield call(classBoardApi.testActivity, payload);
     yield put({
       type: RECEIVE_TESTACTIVITY_SUCCESS,
       payload: { gradebookData, additionalData }
     });
+
+    const releaseScore = additionalData.showScore;
+    yield put(setShowScoreAction(releaseScore));
   } catch (err) {
     const errorMessage = "Receive tests is failing";
     yield call(message.error, errorMessage);
@@ -49,10 +55,22 @@ function* receiveTestActivitySaga({ payload }) {
   }
 }
 
+function* releaseScoreSaga({ payload }) {
+  try {
+    const releaseScore = payload.isReleaseScore;
+    yield call(classBoardApi.releaseScore, payload);
+    yield put(setShowScoreAction(releaseScore));
+  } catch (err) {
+    const errorMessage = "Update release score is failing";
+    yield call(message.error, errorMessage);
+  }
+}
+
 export function* watcherSaga() {
   yield all([
     yield takeEvery(RECEIVE_GRADEBOOK_REQUEST, receiveGradeBookSaga),
-    yield takeEvery(RECEIVE_TESTACTIVITY_REQUEST, receiveTestActivitySaga)
+    yield takeEvery(RECEIVE_TESTACTIVITY_REQUEST, receiveTestActivitySaga),
+    yield takeEvery(UPDATE_RELEASE_SCORE, releaseScoreSaga)
   ]);
 }
 
@@ -143,10 +161,17 @@ export const getAssignmentClassIdSelector = createSelector(
 export const stateClassResponseSelector = state => state.classResponse;
 export const stateStudentResponseSelector = state => state.studentResponse;
 export const stateFeedbackResponseSelector = state => state.feedbackResponse;
+export const stateStudentAnswerSelector = state => state.studentQuestionResponse;
+export const stateQuestionAnswersSelector = state => state.classQuestionResponse;
 
 export const getClassResponseSelector = createSelector(
   stateClassResponseSelector,
   state => state.data
+);
+
+export const showScoreSelector = createSelector(
+  stateClassResponseSelector,
+  state => state.showScore
 );
 
 export const getStudentResponseSelector = createSelector(
@@ -156,5 +181,15 @@ export const getStudentResponseSelector = createSelector(
 
 export const getFeedbackResponseSelector = createSelector(
   stateFeedbackResponseSelector,
+  state => state.data
+);
+
+export const getStudentQuestionSelector = createSelector(
+  stateStudentAnswerSelector,
+  state => state.data
+);
+
+export const getClassQuestionSelector = createSelector(
+  stateQuestionAnswersSelector,
   state => state.data
 );

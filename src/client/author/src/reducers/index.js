@@ -11,6 +11,8 @@ import authorQuestions from "../../sharedDucks/questions";
 import classResponse from "./classResponse";
 import studentResponse from "./studentResponse";
 import feedbackResponse from "./feedbackResponse";
+import studentQuestionResponse from "./studentQuestionResponse";
+import classQuestionResponse from "./classQuestionResponse";
 import { itemAdd } from "../../ItemAdd";
 import { testList } from "../../TestList";
 import { tests } from "../../TestPage";
@@ -41,7 +43,9 @@ const authorReducers = {
   feedbackResponse,
   tests,
   testList,
-  assessmentCreate
+  assessmentCreate,
+  studentQuestionResponse,
+  classQuestionResponse
 };
 
 export default authorReducers;

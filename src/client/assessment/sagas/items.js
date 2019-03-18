@@ -62,12 +62,16 @@ function* saveUserResponse({ payload }) {
     const items = yield select(state => state.test && state.test.items);
     const answers = yield select(state => state.answers);
     const userTestActivityId = yield select(state => state.test && state.test.testActivityId);
-
+    const shuffledOptions = yield select(state => state.shuffledOptions);
     const currentItem = items.length && items[itemIndex];
     const questions = getQuestionIds(currentItem);
     const itemAnswers = {};
+    const shuffles = {};
     questions.forEach(question => {
       itemAnswers[question] = answers[question];
+      if (shuffledOptions[question]) {
+        shuffles[question] = shuffledOptions[question];
+      }
     });
 
     const testItemId = currentItem._id;
@@ -80,7 +84,8 @@ function* saveUserResponse({ payload }) {
       testItemId,
       assignmentId,
       testActivityId: userTestActivityId,
-      groupId
+      groupId,
+      shuffledOptions: shuffles
     };
     if (userWork) activity.userWork = userWork;
 

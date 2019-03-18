@@ -1,13 +1,39 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { compose } from "redux";
 import PropTypes from "prop-types";
 import { Bar, ComposedChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+
 import { StyledCard } from "./styled";
 import StudentResponse from "./component/studentResponses/studentResponse";
 import ClassQuestions from "../ClassResponses/components/Container/ClassQuestions";
 
+// actions
+import { receiveAnswersAction } from "../src/actions/classBoard";
+// selectors
+import { getAssignmentClassIdSelector, getClassQuestionSelector } from "../ClassBoard/ducks";
+
 class QuestionViewContainer extends Component {
+  componentDidMount() {
+    const { loadClassQuestionResponses, assignmentIdClassId: { assignmentId, classId } = {}, question } = this.props;
+    loadClassQuestionResponses(assignmentId, classId, question.id);
+  }
+
   render() {
-    const { testActivity, classResponse } = this.props;
+    const {
+      testActivity,
+      classResponse: { testItems, ...others },
+      question,
+      classQuestion
+    } = this.props;
+    const filterdItems = testItems.filter(item => item.data.questions.filter(q => q.id === question.id).length > 0);
+    filterdItems.forEach(item => {
+      item.data.questions = item.data.questions.filter(({ id }) => id === question.id);
+      item.rows = item.rows.map(row => ({
+        ...row,
+        widgets: row.widgets.filter(({ reference }) => reference === question.id)
+      }));
+    });
     const data = [];
     if (testActivity.length > 0) {
       testActivity.map(student => {
@@ -61,12 +87,15 @@ class QuestionViewContainer extends Component {
         <StudentResponse testActivity={testActivity} />
         {testActivity &&
           testActivity.map(student => {
-            if (!student.testActivityId) {
+            if (!student.testActivityId || classQuestion.length === 0) {
               return null;
             }
-            const { testItems, ...others } = classResponse;
             return (
-              <ClassQuestions currentStudent={student || []} classResponse={{ testItems: [testItems[1]], ...others }} />
+              <ClassQuestions
+                currentStudent={student}
+                classResponse={{ testItems: filterdItems, ...others }}
+                questionActivities={classQuestion.filter(({ userId }) => userId === student.studentId)}
+              />
             );
           })}
       </React.Fragment>
@@ -74,9 +103,28 @@ class QuestionViewContainer extends Component {
   }
 }
 
-export default QuestionViewContainer;
+const enhance = compose(
+  connect(
+    state => ({
+      classQuestion: getClassQuestionSelector(state),
+      assignmentIdClassId: getAssignmentClassIdSelector(state)
+    }),
+    {
+      loadClassQuestionResponses: receiveAnswersAction
+    }
+  )
+);
+export default enhance(QuestionViewContainer);
 
 QuestionViewContainer.propTypes = {
   classResponse: PropTypes.object.isRequired,
-  testActivity: PropTypes.object.isRequired
+  assignmentIdClassId: PropTypes.object.isRequired,
+  question: PropTypes.object.isRequired,
+  testActivity: PropTypes.array.isRequired,
+  classQuestion: PropTypes.array,
+  loadClassQuestionResponses: PropTypes.func
+};
+QuestionViewContainer.defaultProps = {
+  classQuestion: [],
+  loadClassQuestionResponses: () => {}
 };

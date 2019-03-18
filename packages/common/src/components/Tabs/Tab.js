@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { textColor, blue, mobileWidth, greenDark, mainBgColor } from "@edulastic/colors";
 import { IconPencilEdit, IconClose } from "@edulastic/icons";
 
-const Tab = ({ label, onClick, active, style, editable, close, onClose, onChange }) => {
+const Tab = ({ label, onClick, active, style, editable, close, onClose, onChange, data_cy }) => {
   const inputTab = (
     <EditableTab onClick={onClick}>
       <Input type="text" value={label} onChange={onChange} />
@@ -16,7 +16,11 @@ const Tab = ({ label, onClick, active, style, editable, close, onClose, onChange
       <IconClose color={blue} width={10} height={10} onClick={onClose} />
     </CloseIcon>
   );
-  const labelBar = <span onClick={onClick}>{label}</span>;
+  const labelBar = (
+    <span data-cy={data_cy || null} onClick={onClick}>
+      {label}
+    </span>
+  );
   return (
     <Container active={active} style={style}>
       {editable ? inputTab : labelBar}
@@ -33,7 +37,8 @@ Tab.propTypes = {
   editable: PropTypes.bool,
   close: PropTypes.bool,
   onChange: PropTypes.func,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
+  data_cy: PropTypes.string
 };
 
 Tab.defaultProps = {
@@ -45,7 +50,8 @@ Tab.defaultProps = {
   onChange: () => {},
   onClose: evt => {
     evt.stopPropagation();
-  }
+  },
+  data_cy: ""
 };
 
 export default Tab;

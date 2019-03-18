@@ -5,8 +5,8 @@ import { isObject } from "lodash";
 
 import { math } from "@edulastic/constants";
 
-import { KEYBOARD_BUTTONS } from './constants/keyboardButtons';
-import { NUMBER_PAD_ITEMS } from './constants/numberPadItems';
+import { KEYBOARD_BUTTONS } from "./constants/keyboardButtons";
+import { NUMBER_PAD_ITEMS } from "./constants/numberPadItems";
 
 import Keyboard from "../Keyboard";
 
@@ -43,7 +43,12 @@ class MathKeyboard extends React.PureComponent {
     return this.keyboardButtons.map(({ label, handler, command = "cmd", types }, i) => {
       if (types.includes(type)) {
         return (
-          <Button key={i} className="num num--type-3" onClick={() => onInput(handler, command)}>
+          <Button
+            data-cy={`virtual-keyboard-${label}`}
+            key={i}
+            className="num num--type-3"
+            onClick={() => onInput(handler, command)}
+          >
             {label}
           </Button>
         );
@@ -102,7 +107,6 @@ class MathKeyboard extends React.PureComponent {
   render() {
     const { dropdownOpened, type } = this.state;
     const { onInput, showResponse, symbols } = this.props;
-
     return (
       <MathKeyboardStyles>
         <div className="keyboard">
@@ -110,6 +114,7 @@ class MathKeyboard extends React.PureComponent {
             <div>
               <Select
                 defaultValue={symbols[0]}
+                data-cy="math-keyboard-dropdown"
                 className="keyboard__header__select"
                 size="large"
                 onSelect={this.handleGroupSelect}
@@ -121,7 +126,7 @@ class MathKeyboard extends React.PureComponent {
                 }
               >
                 {this.selectOptions.map(({ value, label }, index) => (
-                  <Select.Option value={value} key={index}>
+                  <Select.Option value={value} key={index} data-cy={`math-keyboard-dropdown-list-${index}`}>
                     {label}
                   </Select.Option>
                 ))}
@@ -144,6 +149,7 @@ class MathKeyboard extends React.PureComponent {
                     disabled={!item.value}
                     key={index}
                     className="num num--type-1"
+                    data-cy={`virtual-keyboard-${item.data_cy || item.value}`}
                     onClick={() => onInput(item.value)}
                   >
                     {item.label}

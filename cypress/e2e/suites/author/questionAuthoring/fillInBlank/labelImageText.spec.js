@@ -11,7 +11,11 @@ describe('Author - "Label Image with Text" type question', () => {
     extlink: "www.testdomain.com",
     formattext: "formattedtext",
     formula: "s=ar^2",
-    points: "2"
+    points: "2",
+    imageWidth: "500",
+    imageAlternate: "Background",
+    testColor: "#d49c9c",
+    maxRes: "1"
   };
 
   const question = new TextPage();
@@ -27,108 +31,6 @@ describe('Author - "Label Image with Text" type question', () => {
       editItem.deleteAllQuestion();
       // create new que and select type
       editItem.addNew().chooseQuestion(queData.group, queData.queType);
-    });
-
-    context("[Tc_397]:Tc_1 => Enter question text in Compose Question text box", () => {
-      it("Write text in textbox", () => {
-        question
-          .getQuestionEditor()
-          .clear()
-          .type(queData.queText)
-          .should("contain", queData.queText);
-      });
-
-      it("Upload image in the the textbox", () => {
-        cy.fixture("testImages/sample.jpg").then(logo => {
-          question.getQuestionEditor().clear();
-          question.addImageOnEditor(logo);
-          question.checkImageOnEditor();
-        });
-      });
-
-      it("Give external link", () => {
-        question
-          .getQuestionEditor()
-          .clear()
-          .type(queData.formattext);
-
-        question
-          .getQuestionEditor()
-          .find("p")
-          .makeSelection();
-
-        question.editToolBar.link().click();
-
-        cy.focused()
-          .clear()
-          .type(queData.extlink)
-          .type("{enter}");
-
-        question
-          .getQuestionEditor()
-          .contains(queData.formattext)
-          .should("have.attr", "href", queData.extlink);
-      });
-
-      it("Apply formating", () => {
-        question
-          .getQuestionEditor()
-          .clear()
-          .type(queData.formattext);
-
-        question.formates.forEach(formate => {
-          const text = queData.formattext;
-          const { sel, tag } = formate;
-
-          question
-            .getQuestionEditor()
-            .find("p")
-            .makeSelection();
-
-          question.editToolBar
-            .stimulus()
-            .find(sel)
-            .click();
-
-          question
-            .getQuestionEditor()
-            .contains(tag, text)
-            .should("have.length", 1);
-
-          question.editToolBar
-            .stimulus()
-            .find(sel)
-            .click();
-
-          question
-            .getQuestionEditor()
-            .find(tag)
-            .should("not.be.exist");
-        });
-      });
-
-      it("Insert formula", () => {
-        question
-          .getQuestionEditor()
-          .clear()
-          .type(queData.formula);
-
-        question
-          .getQuestionEditor()
-          .find("p")
-          .makeSelection();
-
-        question.editToolBar.formula().click();
-
-        cy.focused()
-          .type(queData.formula)
-          .type("{enter}");
-
-        question
-          .getQuestionEditor()
-          .find(".ql-formula")
-          .should("have.attr", "data-value", queData.formula);
-      });
     });
 
     context("[Tc_398]:Tc_2 => Upload image", () => {
@@ -155,12 +57,7 @@ describe('Author - "Label Image with Text" type question', () => {
         // cy.window()
         //   .its('store')
         //   .invoke('dispatch', { type: '[author questions] update questions', payload: currentQuestion });
-        // const img = Cypress.$('<img />', { src: testImageUrl });
-        // cy.get('[data-cy="drag-drop-image-panel"]').then(($div) => {
-        //   // append the image
-        //   $div.append(img);
-        // });
-        // cy.get('[data-cy="drag-drop-image-panel"] img').click().should('have.attr', 'src', testImageUrl);
+        // cy.get('[data-cy="drag-drop-image-panel"] img').should('have.attr', 'src', testImageUrl);
       });
 
       it("Width(px)", () => {
@@ -237,14 +134,6 @@ describe('Author - "Label Image with Text" type question', () => {
         question.checkAndDeleteAlternates();
       });
 
-      it("Add Alternate Answers", () => {
-        question.getAnswersFieldOnTextPage().each(($el, index) => {
-          cy.wrap($el)
-            .type(queData.choices[index])
-            .should("have.value", queData.choices[index]);
-        });
-      });
-
       it("Check/uncheck Shuffle Possible responses", () => {
         question
           .getShuffleTextImage()
@@ -291,12 +180,28 @@ describe('Author - "Label Image with Text" type question', () => {
         const preview = editItem.header.preview();
         preview.getClear().click();
 
-        preview.getShowAnswer().click();
+        preview
+          .getShowAnswer()
+          .click()
+          .then(() => {
+            cy.contains("h2", "Correct Answer")
+              .next()
+              .then($el => {
+                queData.choices.forEach(ch => {
+                  cy.wrap($el).contains(ch);
+                });
+              });
+          });
       });
 
       it("Click on Clear, Edit", () => {
         const preview = editItem.header.preview();
-        preview.getClear().click();
+        preview
+          .getClear()
+          .click()
+          .then(() => {
+            cy.contains("h2", "Correct Answer").should("not.exist");
+          });
 
         preview.header.edit();
       });
@@ -311,110 +216,23 @@ describe('Author - "Label Image with Text" type question', () => {
       editItem.addNew().chooseQuestion(queData.group, queData.queType);
     });
 
-    context("[Tc_402]:Tc_1 => Enter question text in Compose Question text box", () => {
-      it("Write text in textbox", () => {
-        question
-          .getQuestionEditor()
-          .clear()
-          .type(queData.queText)
-          .should("contain", queData.queText);
-      });
-
-      it("Upload image in the the textbox", () => {
-        cy.fixture("testImages/sample.jpg").then(logo => {
-          question.getQuestionEditor().clear();
-          question.addImageOnEditor(logo);
-          question.checkImageOnEditor();
-        });
-      });
-
-      it("Give external link", () => {
-        question
-          .getQuestionEditor()
-          .clear()
-          .type(queData.formattext);
-
-        question
-          .getQuestionEditor()
-          .find("p")
-          .makeSelection();
-
-        question.editToolBar.link().click();
-
-        cy.focused()
-          .clear()
-          .type(queData.extlink)
-          .type("{enter}");
-
-        question
-          .getQuestionEditor()
-          .contains(queData.formattext)
-          .should("have.attr", "href", queData.extlink);
-      });
-
-      it("Apply formating", () => {
-        question
-          .getQuestionEditor()
-          .clear()
-          .type(queData.formattext);
-
-        question.formates.forEach(formate => {
-          const text = queData.formattext;
-          const { sel, tag } = formate;
-
-          question
-            .getQuestionEditor()
-            .find("p")
-            .makeSelection();
-
-          question.editToolBar
-            .stimulus()
-            .find(sel)
-            .click();
-
-          question
-            .getQuestionEditor()
-            .contains(tag, text)
-            .should("have.length", 1);
-
-          question.editToolBar
-            .stimulus()
-            .find(sel)
-            .click();
-
-          question
-            .getQuestionEditor()
-            .find(tag)
-            .should("not.be.exist");
-        });
-      });
-
-      it("Insert formula", () => {
-        question
-          .getQuestionEditor()
-          .clear()
-          .type(queData.formula);
-
-        question
-          .getQuestionEditor()
-          .find("p")
-          .makeSelection();
-
-        question.editToolBar.formula().click();
-
-        cy.focused()
-          .type(queData.formula)
-          .type("{enter}");
-
-        question
-          .getQuestionEditor()
-          .find(".ql-formula")
-          .should("have.attr", "data-value", queData.formula);
-      });
-    });
-
     context("[Tc_403]:Tc_2 => Upload image", () => {
       it("Upload image to server", () => {
+        cy.fixture("testImages/sample.jpg").then(logo => {
+          Cypress.Blob.base64StringToBlob(logo, "image/jpg").then(blob => {
+            cy.uploadImage(blob).then(result => {
+              // update uploaded image link to store
+              const imageUrl = result.response.body.result.fileUri;
+              const currentQuestion = question.getCurrentStoreQuestion();
+              currentQuestion.imageUrl = imageUrl;
+              cy.window()
+                .its("store")
+                .invoke("dispatch", { type: "[author questions] update questions", payload: currentQuestion });
+              cy.get('[data-cy="drag-drop-image-panel"] img').should("have.attr", "src", imageUrl);
+            });
+          });
+        });
+
         // test with local image
         // const testImageUrl = 'https://edureact-dev.s3.amazonaws.com/1551154644960_blob';
         // const currentQuestion = question.getCurrentStoreQuestion()
@@ -422,12 +240,7 @@ describe('Author - "Label Image with Text" type question', () => {
         // cy.window()
         //   .its('store')
         //   .invoke('dispatch', { type: '[author questions] update questions', payload: currentQuestion });
-        // const img = Cypress.$('<img />', { src: testImageUrl });
-        // cy.get('[data-cy="drag-drop-image-panel"]').then(($div) => {
-        //   // append the image
-        //   $div.append(img);
-        // });
-        // cy.get('[data-cy="drag-drop-image-panel"] img').click().should('have.attr', 'src', testImageUrl);
+        // cy.get('[data-cy="drag-drop-image-panel"] img').should('have.attr', 'src', testImageUrl);
       });
 
       it("Width(px)", () => {
@@ -504,14 +317,6 @@ describe('Author - "Label Image with Text" type question', () => {
         question.checkAndDeleteAlternates();
       });
 
-      it("Add Alternate Answers", () => {
-        question.getAnswersFieldOnTextPage().each(($el, index) => {
-          cy.wrap($el)
-            .type(queData.choices[index])
-            .should("have.value", queData.choices[index]);
-        });
-      });
-
       it("Check/uncheck Shuffle Possible responses", () => {
         question
           .getShuffleTextImage()
@@ -526,8 +331,6 @@ describe('Author - "Label Image with Text" type question', () => {
           .should("not.be.checked");
       });
     });
-
-    context("[Tc_405]:Tc_6 => Advanced option", () => {});
 
     context("[Tc_406]:Tc_5 => Save Question", () => {
       it("Click on save button", () => {
@@ -560,55 +363,31 @@ describe('Author - "Label Image with Text" type question', () => {
         const preview = editItem.header.preview();
         preview.getClear().click();
 
-        preview.getShowAnswer().click();
+        preview
+          .getShowAnswer()
+          .click()
+          .then(() => {
+            cy.contains("h2", "Correct Answer")
+              .next()
+              .then($el => {
+                queData.choices.forEach(ch => {
+                  cy.wrap($el).contains(ch);
+                });
+              });
+          });
       });
 
       it("Click on Clear, Edit", () => {
         const preview = editItem.header.preview();
-        preview.getClear().click();
+        preview
+          .getClear()
+          .click()
+          .then(() => {
+            cy.contains("h2", "Correct Answer").should("not.exist");
+          });
+
+        preview.header.edit();
       });
-    });
-  });
-
-  context("[Tc_408]:Tc_5 => Save questions", () => {
-    it("Click on save button", () => {
-      question.header.save();
-      cy.url().should("contain", "item-detail");
-    });
-  });
-
-  context("[Tc_409]:Tc_6 => Preview items", () => {
-    it("Click on Preview, CheckAnswer", () => {
-      const preview = editItem.header.preview();
-
-      question.getAnswersFieldOnTextPage().each(($el, index) => {
-        cy.wrap($el)
-          .type(queData.choices[index])
-          .should("have.value", queData.choices[index]);
-      });
-
-      preview
-        .getCheckAnswer()
-        .click()
-        .then(() => {
-          cy.get("body")
-            .children()
-            .should("contain", "score: 3/3");
-        });
-    });
-
-    it("Click on ShowAnswer", () => {
-      const preview = editItem.header.preview();
-      preview.getClear().click();
-
-      preview.getShowAnswer().click();
-    });
-
-    it("Click on Clear, Edit", () => {
-      const preview = editItem.header.preview();
-      preview.getClear().click();
-
-      preview.header.edit();
     });
   });
 

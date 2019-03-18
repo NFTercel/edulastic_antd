@@ -2,9 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { compose } from "redux";
-import { withWindowSizes } from "@edulastic/common";
 import { Link } from "react-router-dom";
-import { withNamespaces } from "@edulastic/localization";
 import { ComposedChart, Bar, XAxis, YAxis, ResponsiveContainer } from "recharts";
 // actions
 import { receiveStudentResponseAction, receiveClassResponseAction } from "../../../src/actions/classBoard";
@@ -121,7 +119,7 @@ class ClassResponses extends Component {
     const classassignment = classResponse ? classResponse.title : "";
     const classname = additionalData ? additionalData.className : "";
     const classnames = [{ name: classname }];
-    const currentStudent = studentItems.find(student => student.studentId === userId);
+    const currentStudent = studentItems.find(({ studentId }) => studentId === userId);
     const studentName = currentStudent ? currentStudent.studentName : "";
     const linkToClass = `/author/classboard/${assignmentId}/${groupId}`;
     const linkToResponses = `/author/classresponses/${testActivityId}`;
@@ -237,7 +235,7 @@ class ClassResponses extends Component {
         {showClassQuestions && !!studentResponse && (
           <ClassQuestions
             currentStudent={currentStudent || []}
-            studentResponse={studentResponse}
+            questionActivities={studentResponse.questionActivities}
             classResponse={classResponse}
           />
         )}
@@ -252,8 +250,6 @@ class ClassResponses extends Component {
 }
 
 const enhance = compose(
-  withWindowSizes,
-  withNamespaces("header"),
   connect(
     state => ({
       classResponse: getClassResponseSelector(state),
@@ -281,5 +277,6 @@ ClassResponses.propTypes = {
   additionalData: PropTypes.object,
   loadStudentResponses: PropTypes.func,
   creating: PropTypes.object,
+  assignmentIdClassId: PropTypes.object,
   loadClassResponses: PropTypes.func
 };

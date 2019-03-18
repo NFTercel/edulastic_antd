@@ -29,8 +29,7 @@ export const getRows = item =>
       }
 
       if (widget && widget.entity && widget.entity.activity) {
-        const timespent = widget.entity.activity.timespent;
-        const qIndex = widget.entity.activity.qIndex;
+        const { timespent, qIndex } = widget.entity.activity;
         activity = { timespent, qIndex };
       }
 

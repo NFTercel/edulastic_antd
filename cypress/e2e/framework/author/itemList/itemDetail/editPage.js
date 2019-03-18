@@ -14,6 +14,14 @@ class EditItemPage {
     };
   }
 
+  clickAdvancedOptionsButton() {
+    cy.get('[data-cy="toggleAdvancedOptionsButton"]')
+      .should("be.visible")
+      .click();
+
+    return this;
+  }
+
   clickOnSource() {
     cy.get('[data-cy="source"]')
       .should("be.visible")

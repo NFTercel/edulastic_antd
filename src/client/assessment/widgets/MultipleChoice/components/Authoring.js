@@ -95,15 +95,12 @@ class Authoring extends Component {
   editOptions = (index, value) => {
     const { setQuestionData } = this.props;
     const newItem = this.getNewItem();
-    const { options } = newItem;
-    // if its an option reorder, just quit alredy
-    if (options[index].value !== index) {
-      return;
-    }
+
     newItem.options[index] = {
       value: index,
       label: value
     };
+
     setQuestionData(newItem);
   };
 

@@ -194,8 +194,11 @@ class LabelImageStandardPage {
   }
 
   deleteChoiceByIndex(index) {
-    const selector = `[data-cy=delete_prefix_${index}]`;
-    cy.get(selector).click();
+    const selector = `[data-cy=choice_prefix_${index}]`;
+    cy.get(selector)
+      .children()
+      .last()
+      .click();
     return this;
   }
 
@@ -249,9 +252,9 @@ class LabelImageStandardPage {
       .children()
       .first()
       .next()
-      .contains("Alternate")
+      .contains("Alternate 1")
       .should("be.visible")
-      .first()
+      .next()
       .children()
       .first()
       .click()
@@ -277,39 +280,19 @@ class LabelImageStandardPage {
     return cy.get('[data-cy="drag-drop-board"]').find("div .container");
   }
 
-  dragAndDropResponseToBoard() {
-    const MyDataTransfer = function() {};
-    const dt = new MyDataTransfer();
-    dt.types = [];
+  dragAndDropResponseToBoard(toIndex) {
     this.getResponsesBox()
       .first()
-      .trigger("mousedown", { which: 1, button: 0 })
-      .trigger("dragstart", { dataTransfer: dt })
-      .trigger("mousemove");
-    this.getResponsesBoard()
-      .first()
-      .trigger("drop", { force: true })
-      .trigger("mouseup", { which: 1, button: 0 });
+      .customDragDrop(`#answerboard-dragdropbox-${toIndex}`);
     return this;
   }
 
-  dragAndDropBoardToBoard() {
-    const MyDataTransfer = function() {};
-    const dt = new MyDataTransfer();
-    dt.types = [];
-    this.getResponsesBoard()
-      .first()
-      .should("be.visible")
-      .find("div")
-      .trigger("mousedown", { which: 1, button: 0 })
-      .trigger("dragstart", { dataTransfer: dt })
-      .trigger("mousemove");
-    this.getResponsesBoard()
-      .eq(1)
-      .trigger("drop", { force: true })
-      .trigger("mouseup", { which: 1, button: 0 })
+  dragAndDropBoardToBoard(fromIndex, toIndex) {
+    cy.get(`#answerboard-dragdropbox-${fromIndex}`)
+      .find(".container")
       .children()
-      .should("be.visible");
+      .first()
+      .customDragDrop(`#answerboard-dragdropbox-${toIndex}`);
     return this;
   }
 
@@ -377,7 +360,10 @@ class LabelImageStandardPage {
     const selector = `[data-cy=choice-response-${resIndex}]`;
     return cy
       .get(selector)
-      .find(`[data-cy=delete_prefix_${choiceIndex}]`)
+      .children()
+      .find(`[data-cy=choice_prefix_${choiceIndex}]`)
+      .children()
+      .last()
       .click();
   }
 

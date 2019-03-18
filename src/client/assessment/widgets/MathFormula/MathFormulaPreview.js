@@ -81,7 +81,11 @@ const MathFormulaPreview = ({
   }
   return (
     <div>
-      <MathFormulaDisplay style={{ marginBottom: 15 }} dangerouslySetInnerHTML={{ __html: item.stimulus }} />
+      <MathFormulaDisplay
+        data-cy="preview-header"
+        style={{ marginBottom: 15 }}
+        dangerouslySetInnerHTML={{ __html: item.stimulus }}
+      />
 
       <MathInputWrapper>
         {isStatic && (

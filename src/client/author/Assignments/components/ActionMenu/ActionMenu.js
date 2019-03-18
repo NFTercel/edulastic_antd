@@ -16,10 +16,11 @@ import { Container, StyledMenu, StyledLink, SpaceElement } from "./styled";
 
 const { releaseGradeLabels } = test;
 
-const ActionMenu = (onOpenReleaseScoreSettings, currentAssignment = []) => {
-  const getDontReleaseGradeAssignments = currentAssignment.filter(item => {
-    return item.releaseScore === releaseGradeLabels.DONT_RELEASE;
-  });
+const ActionMenu = (onOpenReleaseScoreSettings, currentAssignment) => {
+  const showRleaseGrade =
+    currentAssignment.releaseScore === releaseGradeLabels.DONT_RELEASE || !currentAssignment.releaseScore;
+  const currentTestId = currentAssignment.testId;
+  const currentAssignmentId = currentAssignment._id;
   const MenuItems = [];
   MenuItems.push(
     <Menu.Item>
@@ -67,9 +68,9 @@ const ActionMenu = (onOpenReleaseScoreSettings, currentAssignment = []) => {
     </Menu.Item>
   );
   {
-    getDontReleaseGradeAssignments.length > 0 &&
+    showRleaseGrade &&
       MenuItems.push(
-        <Menu.Item onClick={onOpenReleaseScoreSettings}>
+        <Menu.Item onClick={() => onOpenReleaseScoreSettings(currentTestId, currentAssignmentId)}>
           <StyledLink target="_blank" rel="noopener noreferrer">
             <img alt="icon" src={responsiveIcon} />
             <SpaceElement />

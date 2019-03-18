@@ -56,7 +56,7 @@ const CorrectAnswers = ({ t, onTabChange, children, correctTab, onAdd, validatio
 
       <div>
         <Tabs value={correctTab} onChange={onTabChange} extra={renderPlusButton()}>
-          <Tab label={t("component.correctanswers.correct")} />
+          <Tab data_cy="correct" label={t("component.correctanswers.correct")} />
           {renderAltResponses()}
         </Tabs>
         {children}

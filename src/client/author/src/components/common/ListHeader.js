@@ -84,7 +84,7 @@ const IconPlusStyled = styled(IconPlus)`
 //   padding-top: 62px;
 //   margin-bottom: 10px;
 // `;
-const Title = styled.h1`
+export const Title = styled.h1`
   color: ${white};
   font-size: 22px;
   font-weight: bold;

@@ -126,3 +126,10 @@ export const StyledButton = styled.button`
   font-size: 12px;
   border-radius: 3px;
 `;
+
+export const MenuWrapper = styled.div`
+  top: 46px;
+  position: absolute;
+  min-width: 90px;
+  right: 10px;
+`;

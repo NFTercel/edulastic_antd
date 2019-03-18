@@ -54,7 +54,6 @@ class ExpressGrader extends Component {
   }
 
   handleCreate = () => {
-    // eslint-disable-next-line react/prop-types
     const { history, match } = this.props;
     history.push(`${match.url}/create`);
   };
@@ -75,14 +74,7 @@ class ExpressGrader extends Component {
   };
 
   render() {
-    const {
-      // eslint-disable-next-line react/prop-types
-      creating,
-      testActivity,
-      studentResponse,
-      additionalData,
-      match
-    } = this.props;
+    const { creating, testActivity, studentResponse, additionalData, match } = this.props;
     const { isVisibleModal, record, tableData } = this.state;
     const { assignmentId, classId } = match.params;
     const questionActivities = studentResponse !== undefined ? studentResponse.questionActivities : [];
@@ -141,7 +133,6 @@ const enhance = compose(
 
 export default enhance(ExpressGrader);
 
-/* eslint-disable react/require-default-props */
 ExpressGrader.propTypes = {
   history: PropTypes.object,
   match: PropTypes.object,

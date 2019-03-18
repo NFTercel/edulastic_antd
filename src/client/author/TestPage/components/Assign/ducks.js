@@ -139,7 +139,7 @@ function* saveAssignment({ payload }) {
         endDate,
         testId
       },
-      ["_id", "__v", "createdAt", "updatedAt", "students", "scoreReleasedClasses"]
+      ["_id", "__v", "createdAt", "updatedAt", "students", "scoreReleasedClasses", "googleAssignmentIds"]
     );
     const result = isUpdate
       ? yield call(assignmentApi.update, payload._id, data)

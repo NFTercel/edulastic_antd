@@ -38,8 +38,9 @@ const menuItems = [
     path: "author/assignments"
   },
   {
-    label: "Skill Report",
-    icon: IconBarChart
+    label: "Report",
+    icon: IconBarChart,
+    path: "author/reports"
   },
   {
     label: "Manage Class",
@@ -80,7 +81,7 @@ class SideMenu extends Component {
     }
   `;
 
-  handleMenu = (item) => {
+  handleMenu = item => {
     const { history } = this.props;
     if (menuItems[item.key].path !== undefined) {
       history.push(`/${menuItems[item.key].path}`);
@@ -92,7 +93,7 @@ class SideMenu extends Component {
     toggleSideBar();
   };
 
-  handleVisibleChange = (flag) => {
+  handleVisibleChange = flag => {
     this.setState({ isVisible: flag });
   };
 

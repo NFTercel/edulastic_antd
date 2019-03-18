@@ -29,7 +29,7 @@ const Distractors = ({ t, setQuestionData, item }) => {
         <Col md={24}>{t("component.options.distractorRationalePerResponse")}</Col>
       </StyledRow>
       <StyledRow gutter={36}>
-        <Col md={24}>
+        <Col data-cy="distractorList" md={24}>
           <SortableListWithAddButton
             buttonText={t("component.options.add")}
             useDragHandle

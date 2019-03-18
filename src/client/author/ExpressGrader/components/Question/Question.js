@@ -1,12 +1,13 @@
-import React, { Fragment, Component } from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { compose } from "redux";
 import { connect } from "react-redux";
-import { receiveStudentResponseAction } from "../../../src/actions/classBoard";
+import { receiveStudentQuestionAction } from "../../../src/actions/classBoard";
 import {
-  getStudentResponseSelector,
   getClassResponseSelector,
-  getAdditionalDataSelector
+  getAdditionalDataSelector,
+  getAssignmentClassIdSelector,
+  getStudentQuestionSelector
 } from "../../../ClassBoard/ducks";
 import ClassQuestions from "../../../ClassResponses/components/Container/ClassQuestions";
 
@@ -17,38 +18,37 @@ class Question extends Component {
   }
 
   componentDidMount() {
-    const { record, loadStudentResponses, additionalData } = this.props;
-    const { testActivityId } = record;
-    const { classId } = additionalData;
-
+    const {
+      record,
+      loadStudentQuestionResponses,
+      assignmentClassId: { assignmentId, classId }
+    } = this.props;
+    const { testActivityId, studentId, _id } = record;
     if (testActivityId) {
-      loadStudentResponses({ testActivityId, groupId: classId });
+      loadStudentQuestionResponses(assignmentId, classId, _id, studentId);
     }
   }
 
   render() {
     let isEmpty = true;
-    const { studentResponse, classResponse, record } = this.props;
+    const { classResponse, record, studentQuestion } = this.props;
     const currentStudent = {
       studentName: ""
     };
-    if (studentResponse) {
-      isEmpty = !Object.keys(studentResponse).length;
-    }
+    isEmpty = !Object.keys(studentQuestion).length;
     const { testItems = [], ...others } = classResponse;
     const selectedItems = testItems.filter(
       ({ data: { questions = [] } = {} }) => questions.filter(({ id }) => id === record._id).length > 0
     );
+    if (isEmpty) {
+      return null;
+    }
     return (
-      <Fragment>
-        {!isEmpty && (
-          <ClassQuestions
-            currentStudent={currentStudent}
-            studentResponse={studentResponse}
-            classResponse={{ testItems: selectedItems, ...others }}
-          />
-        )}
-      </Fragment>
+      <ClassQuestions
+        currentStudent={currentStudent}
+        questionActivities={studentQuestion ? [studentQuestion] : []}
+        classResponse={{ testItems: selectedItems, ...others }}
+      />
     );
   }
 }
@@ -56,21 +56,24 @@ class Question extends Component {
 const enhance = compose(
   connect(
     state => ({
-      studentResponse: getStudentResponseSelector(state),
       classResponse: getClassResponseSelector(state),
-      additionalData: getAdditionalDataSelector(state)
+      additionalData: getAdditionalDataSelector(state),
+      assignmentClassId: getAssignmentClassIdSelector(state),
+      studentQuestion: getStudentQuestionSelector(state)
     }),
     {
-      loadStudentResponses: receiveStudentResponseAction
+      loadStudentQuestionResponses: receiveStudentQuestionAction
     }
   )
 );
 
 Question.propTypes = {
-  studentResponse: PropTypes.object.isRequired,
-  classResponse: PropTypes.object.isRequired,
   record: PropTypes.object.isRequired,
-  loadStudentResponses: PropTypes.func.isRequired
+  loadStudentQuestionResponses: PropTypes.func.isRequired,
+  assignmentClassId: PropTypes.object,
+  studentQuestion: PropTypes.object,
+  classResponse: PropTypes.object,
+  additionalData: PropTypes.object
 };
 
 export default enhance(Question);

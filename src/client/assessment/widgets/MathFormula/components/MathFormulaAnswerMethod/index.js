@@ -7,8 +7,8 @@ import { FlexContainer } from "@edulastic/common";
 import { math } from "@edulastic/constants";
 import { withNamespaces } from "@edulastic/localization";
 
-import { Label } from '../../../../styled/WidgetOptions/Label';
-import { MathInput } from '@edulastic/common';
+import { Label } from "../../../../styled/WidgetOptions/Label";
+import { MathInput } from "@edulastic/common";
 
 import { IconTrash } from "../../styled/IconTrash";
 import ThousandsSeparators from "../ThousandsSeparators";
@@ -92,7 +92,7 @@ const clearOptions = (method, options) => {
   }
 };
 
-const MathFormulaAnswerMethod = ({ onChange, onDelete, method, value, aria_label, options, item, t }) => {
+const MathFormulaAnswerMethod = ({ onChange, index, onDelete, method, value, aria_label, options, item, t }) => {
   useEffect(() => {
     const newOptions = clearOptions(method, { ...options });
 
@@ -192,20 +192,26 @@ const MathFormulaAnswerMethod = ({ onChange, onDelete, method, value, aria_label
   ];
 
   return (
-    <Container>
+    <Container data-cy="math-formula-answer">
       <StyledRow>
         <Col span={12}>
           <Label>{t("component.math.method")}</Label>
-          <Select size="large" value={method} style={{ width: "100%" }} onChange={val => onChange("method", val)}>
+          <Select
+            data-cy="method-selection-dropdown"
+            size="large"
+            value={method}
+            style={{ width: "100%" }}
+            onChange={val => onChange("method", val)}
+          >
             {methods.map(val => (
-              <Select.Option key={val} value={val}>
+              <Select.Option data-cy={`method-selection-dropdown-list-${val}`} key={val} value={val}>
                 {val}
               </Select.Option>
             ))}
           </Select>
         </Col>
         <Col span={2} push={10}>
-          {onDelete && <IconTrash onClick={onDelete} width={22} height={22} />}
+          {onDelete && <IconTrash data-cy="delete-answer-method" onClick={onDelete} width={22} height={22} />}
         </Col>
       </StyledRow>
 
@@ -215,6 +221,7 @@ const MathFormulaAnswerMethod = ({ onChange, onDelete, method, value, aria_label
             <Label>{t("component.math.field")}</Label>
             <Select
               size="large"
+              data-cy="answer-field-dropdown"
               value={options.field || fields[0]}
               style={{ width: "100%" }}
               onChange={val => handleChangeOptions("field", val)}
@@ -239,7 +246,7 @@ const MathFormulaAnswerMethod = ({ onChange, onDelete, method, value, aria_label
         <Fragment>
           <StyledRow gutter={32}>
             <Col span={12}>
-              <Label>{t("component.math.value")}</Label>
+              <Label data-cy="answer-math-input">{t("component.math.value")}</Label>
               <MathInput
                 symbols={item.symbols}
                 numberPad={item.numberPad}
@@ -251,7 +258,12 @@ const MathFormulaAnswerMethod = ({ onChange, onDelete, method, value, aria_label
             </Col>
             <Col span={12}>
               <Label>{t("component.math.ariaLabel")}</Label>
-              <Input.TextArea size="large" value={aria_label} onChange={e => onChange("aria_label", e.target.value)} />
+              <Input.TextArea
+                data-cy="answer-aria-label"
+                size="large"
+                value={aria_label}
+                onChange={e => onChange("aria_label", e.target.value)}
+              />
             </Col>
           </StyledRow>
           {methodsConst.IS_UNIT === method && (
@@ -262,6 +274,7 @@ const MathFormulaAnswerMethod = ({ onChange, onDelete, method, value, aria_label
                   size="large"
                   value={options.allowedUnits}
                   onChange={e => handleChangeOptions("allowedUnits", e.target.value)}
+                  data-cy="answer-allowed-units"
                 />
               </Col>
             </StyledRow>
@@ -273,6 +286,7 @@ const MathFormulaAnswerMethod = ({ onChange, onDelete, method, value, aria_label
         <StyledRow gutter={32}>
           <Col span={12}>
             <Checkbox
+              data-cy="answer-ignore-leading-and-trailing-spaces"
               checked={options.ignoreLeadingAndTrailingSpaces}
               onChange={e => handleChangeOptions("ignoreLeadingAndTrailingSpaces", e.target.checked)}
             >
@@ -281,6 +295,7 @@ const MathFormulaAnswerMethod = ({ onChange, onDelete, method, value, aria_label
           </Col>
           <Col span={12}>
             <Checkbox
+              data-cy="answer-treat-multipleSpacesAsOne"
               checked={options.treatMultipleSpacesAsOne}
               onChange={e => handleChangeOptions("treatMultipleSpacesAsOne", e.target.checked)}
             >
@@ -295,6 +310,7 @@ const MathFormulaAnswerMethod = ({ onChange, onDelete, method, value, aria_label
           <Col span={12}>
             <Label>{t("component.math.rule")}</Label>
             <Select
+              data-cy="answer-rule-dropdown"
               size="large"
               value={options.syntax || ""}
               style={{ width: "100%" }}
@@ -345,6 +361,7 @@ const MathFormulaAnswerMethod = ({ onChange, onDelete, method, value, aria_label
           <StyledRow gutter={32}>
             <Col span={12}>
               <Checkbox
+                data-cy="answer-ignore-order"
                 checked={options.ignoreOrder}
                 onChange={e => handleChangeOptions("ignoreOrder", e.target.checked)}
               >
@@ -353,6 +370,7 @@ const MathFormulaAnswerMethod = ({ onChange, onDelete, method, value, aria_label
             </Col>
             <Col span={12}>
               <Checkbox
+                data-cy="answer-allow-interval"
                 checked={options.allowInterval}
                 onChange={e => handleChangeOptions("allowInterval", e.target.checked)}
               >
@@ -364,6 +382,7 @@ const MathFormulaAnswerMethod = ({ onChange, onDelete, method, value, aria_label
           <StyledRow gutter={32}>
             <Col span={12}>
               <Checkbox
+                data-cy="answer-ignore-trailing-zeros"
                 checked={options.ignoreTrailingZeros}
                 onChange={e => handleChangeOptions("ignoreTrailingZeros", e.target.checked)}
               >
@@ -375,6 +394,7 @@ const MathFormulaAnswerMethod = ({ onChange, onDelete, method, value, aria_label
           <StyledRow gutter={32}>
             <Col span={12}>
               <Checkbox
+                data-cy="answer-ignore-coefficient-of-one"
                 checked={options.ignoreCoefficientOfOne}
                 onChange={e => handleChangeOptions("ignoreCoefficientOfOne", e.target.checked)}
               >
@@ -394,6 +414,7 @@ const MathFormulaAnswerMethod = ({ onChange, onDelete, method, value, aria_label
         <StyledRow gutter={32}>
           <Col span={12}>
             <Checkbox
+              data-cy="answer-inverse-result"
               checked={options.inverseResult}
               onChange={e => handleChangeOptions("inverseResult", e.target.checked)}
             >
@@ -414,6 +435,7 @@ const MathFormulaAnswerMethod = ({ onChange, onDelete, method, value, aria_label
             <Col span={12}>
               <FlexContainer>
                 <Input
+                  data-cy="answer-significant-decimal-places"
                   style={{ width: "30%" }}
                   size="large"
                   type="number"
@@ -429,6 +451,7 @@ const MathFormulaAnswerMethod = ({ onChange, onDelete, method, value, aria_label
               <Checkbox
                 checked={options.ignoreText}
                 onChange={e => handleChangeOptions("ignoreText", e.target.checked)}
+                data-cy="answer-ignore-text-checkbox"
               >
                 {t("component.math.ignoreText")}
               </Checkbox>
@@ -443,6 +466,7 @@ const MathFormulaAnswerMethod = ({ onChange, onDelete, method, value, aria_label
             <Checkbox
               checked={options.compareSides}
               onChange={e => handleChangeOptions("compareSides", e.target.checked)}
+              data-cy="answer-compare-sides"
             >
               {t("component.math.compareSides")}
             </Checkbox>
@@ -452,6 +476,7 @@ const MathFormulaAnswerMethod = ({ onChange, onDelete, method, value, aria_label
               <Checkbox
                 checked={options.allowEulersNumber}
                 onChange={e => handleChangeOptions("allowEulersNumber", e.target.checked)}
+                data-cy="answer-treat-eas-eulers-number"
               >
                 {t("component.math.treatEAsEulersNumber")}
               </Checkbox>
@@ -465,6 +490,7 @@ const MathFormulaAnswerMethod = ({ onChange, onDelete, method, value, aria_label
           <Col span={12}>
             <FlexContainer>
               <Input
+                data-cy="answer-tolerance"
                 style={{ width: "30%" }}
                 size="large"
                 value={options.tolerance}
@@ -480,6 +506,7 @@ const MathFormulaAnswerMethod = ({ onChange, onDelete, method, value, aria_label
         <StyledRow gutter={32}>
           <Col span={12}>
             <Checkbox
+              data-cy="answer-allow-thousands-separator"
               checked={options.allowThousandsSeparator}
               onChange={e => handleChangeOptions("allowThousandsSeparator", e.target.checked)}
             >
@@ -498,9 +525,10 @@ const MathFormulaAnswerMethod = ({ onChange, onDelete, method, value, aria_label
               value={options.setDecimalSeparator || decimalSeparators[0].value}
               style={{ width: "100%" }}
               onChange={val => handleChangeOptions("setDecimalSeparator", val)}
+              data-cy="answer-set-decimal-separator-dropdown"
             >
               {decimalSeparators.map(({ value: val, label }) => (
-                <Select.Option key={val} value={val}>
+                <Select.Option data-cy={`answer-set-decimal-separator-dropdown-list-${label}`} key={val} value={val}>
                   {label}
                 </Select.Option>
               ))}

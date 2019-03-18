@@ -24,6 +24,7 @@ const SortableItem = SortableElement(({ cyIndex, value, dirty, onRemove, onChang
     </div>
     <IconTrash
       style={{ cursor: "pointer" }}
+      data-cy="deleteButton"
       cIndex={cyIndex}
       onClick={onRemove}
       color={greenDark}

@@ -1,9 +1,7 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable jsx-a11y/alt-text */
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { compose } from "redux";
-import { Popconfirm, Switch, message } from "antd";
+import { Dropdown, message, Menu } from "antd";
 import moment from "moment";
 import { withNamespaces } from "@edulastic/localization";
 import Assigned from "../../Assets/assigned.svg";
@@ -16,22 +14,24 @@ import {
   StyledParaFirst,
   SpaceD,
   StyledParaSecond,
-  StyledParaThird,
   StyledPopconfirm,
-  StyledSwitch,
   StyledDiv,
   StyledTabs,
   StyledAnchor,
   StyledButton,
-  Img
+  Img,
+  MenuWrapper
 } from "./styled";
 
+import { releaseScoreAction } from "../../../src/actions/classBoard";
+import { showScoreSelector } from "../../../ClassBoard/ducks";
 class ClassHeader extends Component {
   constructor(props) {
     super(props);
     this.state = {
       visible: false,
-      condition: true // Whether meet the condition, if not show popconfirm.
+      condition: true, // Whether meet the condition, if not show popconfirm.
+      showDropdown: false
     };
   }
 
@@ -55,8 +55,6 @@ class ClassHeader extends Component {
       return;
     }
     // Determining condition before show the popconfirm.
-    // eslint-disable-next-line react/destructuring-assignment
-    // eslint-disable-next-line react/destructuring-assignment
     if (this.state.condition) {
       this.confirm(); // next step
     } else {
@@ -64,11 +62,21 @@ class ClassHeader extends Component {
     }
   };
 
+  toggleDropdown = () => {
+    this.setState(state => ({ showDropdown: !state.showDropdown }));
+  };
+
+  handleReleaseScore = () => {
+    const { classId, assignmentId, setReleaseScore, showScore } = this.props;
+    const isReleaseScore = !showScore;
+    setReleaseScore(assignmentId, classId, isReleaseScore);
+    this.toggleDropdown();
+  };
+
   render() {
-    const { t, active, assignmentId, classId, testActivityId, additionalData = {} } = this.props;
+    const { t, active, assignmentId, classId, testActivityId, additionalData = {}, showScore } = this.props;
     const endDate = additionalData.endDate;
     const dueDate = isNaN(endDate) ? new Date(endDate) : new Date(parseInt(endDate));
-
     return (
       <Container>
         <StyledTitle>
@@ -121,7 +129,21 @@ class ClassHeader extends Component {
             okText="Yes"
             cancelText="No"
           />
-          <StyledButton>... More</StyledButton>
+          <StyledButton onClick={this.toggleDropdown}>... More</StyledButton>
+          {this.state.showDropdown && (
+            <MenuWrapper>
+              <Menu>
+                <Menu.Item key={"1"}>Mark as Done</Menu.Item>
+                <Menu.Item
+                  key={"2"}
+                  onClick={this.handleReleaseScore}
+                  style={{ textDecoration: showScore ? "line-through" : "none" }}
+                >
+                  Release Score
+                </Menu.Item>
+              </Menu>
+            </MenuWrapper>
+          )}
         </StyledDiv>
       </Container>
     );
@@ -130,6 +152,15 @@ class ClassHeader extends Component {
 
 ClassHeader.propTypes = {};
 
-const enhance = compose(withNamespaces("classBoard"));
-
+const enhance = compose(
+  withNamespaces("classBoard"),
+  connect(
+    state => ({
+      showScore: showScoreSelector(state)
+    }),
+    {
+      setReleaseScore: releaseScoreAction
+    }
+  )
+);
 export default enhance(ClassHeader);

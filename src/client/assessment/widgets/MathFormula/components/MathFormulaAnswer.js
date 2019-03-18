@@ -18,11 +18,12 @@ const MathFormulaAnswer = ({ answer, onChange, onAdd, onDelete, item, t }) => {
           onDelete={() => onDelete(i)}
           key={i}
           item={item}
+          index={i}
           onChange={handleChangeMethod(i)}
           {...method}
         />
       ))}
-      <EduButton onClick={onAdd} type="primary" size="large">
+      <EduButton onClick={onAdd} type="primary" size="large" data-cy="add-new-method">
         {t("component.math.addNewMethod")}
       </EduButton>
     </Fragment>

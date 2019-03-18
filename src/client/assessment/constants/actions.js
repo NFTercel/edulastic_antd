@@ -68,3 +68,6 @@ export const FILE_UPLOAD_ERROR = "[test] upload file error";
 // scratchPad
 export const SAVE_SCRATCH_PAD = "[userWork] save scratchPad draw";
 export const LOAD_SCRATCH_PAD = "[userWork] load scratchPad data";
+
+// shuffled options
+export const SET_SHUFFLED_OPTIONS = "[shuffledOptions] set shuffled options";

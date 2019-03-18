@@ -18,7 +18,7 @@ const CorrectAnswerBox = ({ children, t }) => {
     <Wrapper>
       <div>{t("component.math.correctAnswers")}:</div>
       <Answer>
-        <div ref={answerRef} />
+        <div ref={answerRef} data-cy="correct-answer-box" />
       </Answer>
     </Wrapper>
   );

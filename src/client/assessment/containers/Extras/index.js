@@ -34,7 +34,7 @@ const Extras = ({ t, children, theme, item, setQuestionData }) => {
 
       <Row gutter={36}>
         <Col md={12}>
-          <Label>{t("component.options.acknowledgements")}</Label>
+          <Label data-cy="acknowledgements">{t("component.options.acknowledgements")}</Label>
           <CustomQuillComponent
             toolbarId="acknowledgements"
             style={inputStyle}
@@ -45,7 +45,7 @@ const Extras = ({ t, children, theme, item, setQuestionData }) => {
         </Col>
 
         <Col md={12}>
-          <Label>{t("component.options.distractorRationale")}</Label>
+          <Label data-cy="distractor_rationale">{t("component.options.distractorRationale")}</Label>
           <CustomQuillComponent
             toolbarId="distractor_rationale"
             style={inputStyle}
@@ -58,7 +58,7 @@ const Extras = ({ t, children, theme, item, setQuestionData }) => {
 
       <Row gutter={36}>
         <Col md={12}>
-          <Label>{t("component.options.rubricreference")}</Label>
+          <Label data-cy="rubric_reference">{t("component.options.rubricreference")}</Label>
           <CustomQuillComponent
             toolbarId="rubric_reference"
             style={inputStyle}
@@ -69,7 +69,7 @@ const Extras = ({ t, children, theme, item, setQuestionData }) => {
         </Col>
 
         <Col md={12}>
-          <Label>{t("component.options.stimulusreviewonly")}</Label>
+          <Label data-cy="stimulus_review">{t("component.options.stimulusreviewonly")}</Label>
           <CustomQuillComponent
             toolbarId="stimulus_review"
             style={inputStyle}
@@ -82,7 +82,7 @@ const Extras = ({ t, children, theme, item, setQuestionData }) => {
 
       <Row gutter={36}>
         <Col md={12}>
-          <Label>{t("component.options.instructorStimulus")}</Label>
+          <Label data-cy="instructor_stimulus">{t("component.options.instructorStimulus")}</Label>
           <CustomQuillComponent
             toolbarId="instructor_stimulus"
             style={inputStyle}
@@ -93,7 +93,7 @@ const Extras = ({ t, children, theme, item, setQuestionData }) => {
         </Col>
 
         <Col md={12}>
-          <Label>{t("component.options.sampleAnswer")}</Label>
+          <Label data-cy="sample_answer">{t("component.options.sampleAnswer")}</Label>
           <CustomQuillComponent
             toolbarId="sample_answer"
             style={inputStyle}

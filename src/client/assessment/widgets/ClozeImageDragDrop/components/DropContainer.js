@@ -21,9 +21,10 @@ function collectTarget(connector, monitor) {
   };
 }
 
-const DropContainer = ({ connectDropTarget, style, children, className }) =>
+const DropContainer = ({ connectDropTarget, index, style, children, className }) =>
   connectDropTarget(
     <div
+      id={`answerboard-dragdropbox-${index}`}
       style={{
         ...style
       }}
@@ -38,7 +39,8 @@ DropContainer.propTypes = {
   isOver: PropTypes.bool.isRequired,
   style: PropTypes.object,
   children: PropTypes.node,
-  drop: PropTypes.func.isRequired
+  drop: PropTypes.func.isRequired,
+  index: PropTypes.number.isRequired
 };
 
 DropContainer.defaultProps = {

@@ -45,7 +45,7 @@ class WidgetOptions extends Component {
 
     return (
       <Paper style={outerStyle}>
-        <Header onClick={this.handleToggle}>
+        <Header data-cy="toggleAdvancedOptionsButton" onClick={this.handleToggle}>
           <Title>{title}</Title>
           <Toggler isOpen={show} />
         </Header>

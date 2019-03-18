@@ -46,6 +46,7 @@ export const StyledClassID = styled.div`
 `;
 
 export const StyledSelect = styled(Select)`
+  width: 120px;
   display:inline-block @media (max-width: 550px) {
     display: none;
   }

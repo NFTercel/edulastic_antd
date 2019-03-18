@@ -22,7 +22,8 @@ const ItemDetail = lazy(() => import("../ItemDetail"));
 const ItemAdd = lazy(() => import("../ItemAdd"));
 const PickUpQuestionType = lazy(() => import("../PickUpQuestionType"));
 const CurriculumContainer = lazy(() => import("../CurriculumSequence"));
-const ResponseFrequency = lazy(() => import("../ResponseFrequency"));
+const Reports = lazy(() => import("../Reports"));
+const ResponseFrequency = lazy(() => import("../Reports/subPages/ResponseFrequency"));
 const StandardsBasedReport = lazy(() => import("../StandardsBasedReport"));
 
 // eslint-disable-next-line react/prop-types
@@ -94,7 +95,8 @@ const Author = ({ match, history, isSidebarCollapsed }) => {
               <Route exact path="/author/items/:id/pickup-questiontype" component={PickUpQuestionType} />
               <Route exact path="/author/questions/create" component={QuestionEditor} />
               <Route exact path="/author/questions/edit" component={QuestionEditor} />
-              <Route exact path="/author/response-frequency/test/:testId" component={ResponseFrequency} />
+              <Route exact path="/author/reports/" component={Reports} />
+              <Route exact path="/author/reports/response-frequency/test/:testId" component={ResponseFrequency} />
             </Switch>
           </Suspense>
         </Wrapper>

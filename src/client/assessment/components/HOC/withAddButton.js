@@ -8,7 +8,7 @@ const withAddButton = WrappedComponent => {
   const withAddButtonHocComponent = ({ buttonText, onAdd, t, ...props }) => (
     <Fragment>
       <WrappedComponent {...props} />
-      <EduButton onClick={onAdd} type="primary">
+      <EduButton data-cy="addButton" onClick={onAdd} type="primary">
         {buttonText || t("component.options.addNewChoice")}
       </EduButton>
     </Fragment>

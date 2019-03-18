@@ -35,107 +35,6 @@ describe('Author - "Label Image with Drag & Drop" type question', () => {
       editItem.addNew().chooseQuestion(queData.group, queData.queType);
     });
 
-    context("[Tc_369]:Tc_1 => Enter question text in Compose Question text box", () => {
-      it("Write text in textbox", () => {
-        question
-          .getQuestionEditor()
-          .clear()
-          .type(queData.queText)
-          .should("contain", queData.queText);
-      });
-
-      it("Upload image in the the textbox", () => {
-        cy.fixture("testImages/sample.jpg").then(logo => {
-          question.getQuestionEditor().clear();
-          question.addImageOnEditor(logo);
-          question.checkImageOnEditor();
-        });
-      });
-
-      it("Give external link", () => {
-        question
-          .getQuestionEditor()
-          .clear()
-          .type(queData.formattext);
-
-        question
-          .getQuestionEditor()
-          .find("p")
-          .makeSelection();
-
-        question.editToolBar.link().click();
-
-        cy.focused()
-          .clear()
-          .type(queData.extlink)
-          .type("{enter}");
-
-        question
-          .getQuestionEditor()
-          .contains(queData.formattext)
-          .should("have.attr", "href", queData.extlink);
-      });
-
-      it("Apply formating", () => {
-        question
-          .getQuestionEditor()
-          .clear()
-          .type(queData.formattext);
-
-        question.formates.forEach(formate => {
-          const { sel, tag } = formate;
-
-          question
-            .getQuestionEditor()
-            .find("p")
-            .makeSelection();
-
-          question.editToolBar
-            .stimulus()
-            .find(sel)
-            .click();
-
-          question
-            .getQuestionEditor()
-            .contains(tag, text)
-            .should("have.length", 1);
-
-          question.editToolBar
-            .stimulus()
-            .find(sel)
-            .click();
-
-          question
-            .getQuestionEditor()
-            .find(tag)
-            .should("not.be.exist");
-        });
-      });
-
-      it("Insert formula", () => {
-        question
-          .getQuestionEditor()
-          .clear()
-          .type(queData.formula);
-
-        question
-          .getQuestionEditor()
-          .find("p")
-          .makeSelection();
-
-        question.editToolBar.formula().click();
-
-        cy.focused()
-          .type(queData.formula)
-          .type("{enter}");
-
-        question
-          .getQuestionEditor()
-          .find(".ql-formula")
-          .should("have.attr", "data-value", queData.formula);
-      });
-    });
-
     context("[Tc_370]:Tc_2 => Upload image", () => {
       it("Upload image to server", () => {
         cy.fixture("testImages/sample.jpg").then(logo => {
@@ -160,12 +59,7 @@ describe('Author - "Label Image with Drag & Drop" type question', () => {
         // cy.window()
         //   .its('store')
         //   .invoke('dispatch', { type: '[author questions] update questions', payload: currentQuestion });
-        // const img = Cypress.$('<img />', { src: testImageUrl });
-        // cy.get('[data-cy="drag-drop-image-panel"]').then(($div) => {
-        //   // append the image
-        //   $div.append(img);
-        // });
-        // cy.get('[data-cy="drag-drop-image-panel"] img').click().should('have.attr', 'src', testImageUrl);
+        // cy.get('[data-cy="drag-drop-image-panel"] img').should('have.attr', 'src', testImageUrl);
       });
 
       it("Width(px)", () => {
@@ -240,6 +134,16 @@ describe('Author - "Label Image with Drag & Drop" type question', () => {
     });
 
     context("[Tc_371]:Tc_3 => Possible responses block", () => {
+      it("Delete Choices", () => {
+        question
+          .getAllChoices()
+          .each(($el, index, $list) => {
+            const cusIndex = $list.length - (index + 1);
+            question.deleteChoiceByIndex(cusIndex);
+          })
+          .should("have.length", 0);
+      });
+
       it("Add new choices", () => {
         queData.choices.forEach((ch, index) => {
           question
@@ -255,33 +159,13 @@ describe('Author - "Label Image with Drag & Drop" type question', () => {
         });
       });
 
-      it("Delete Choices", () => {
-        question
-          .getAllChoices()
-          .each(($el, index, $list) => {
-            const cusIndex = $list.length - (index + 1);
-            question.deleteChoiceByIndex(cusIndex);
-          })
-          .should("have.length", 0);
-      });
-
       it("Edit the default text", () => {
         question.addNewChoice();
         question
-          .getChoiceByIndex(0)
+          .getChoiceByIndex(queData.choices.length)
           .click()
           .should("have.value", "");
-      });
-
-      it("Add Sample data for test", () => {
-        question.deleteChoiceByIndex(0);
-        queData.choices.forEach((ch, index) => {
-          question
-            .addNewChoice()
-            .getChoiceByIndex(index)
-            .clear()
-            .type(ch);
-        });
+        question.deleteChoiceByIndex(queData.choices.length);
       });
     });
 
@@ -294,7 +178,8 @@ describe('Author - "Label Image with Drag & Drop" type question', () => {
           .should("have.value", queData.points)
           .type("{uparrow}")
           .type("{uparrow}")
-          .should("have.value", `${Number(queData.points) + 1}`);
+          .should("have.value", `${Number(queData.points) + 1}`)
+          .blur();
       });
 
       it("Add/Delete alternatives", () => {
@@ -304,8 +189,8 @@ describe('Author - "Label Image with Drag & Drop" type question', () => {
 
       it("Drag and drop the responses", () => {
         // box to board
-        question.dragAndDropResponseToBoard();
-        question.dragAndDropBoardToBoard();
+        question.dragAndDropResponseToBoard(0);
+        question.dragAndDropBoardToBoard(0, 1);
         // board to board
       });
 
@@ -321,7 +206,7 @@ describe('Author - "Label Image with Drag & Drop" type question', () => {
           .first()
           .invoke("text")
           .then(res => {
-            question.dragAndDropResponseToBoard();
+            question.dragAndDropResponseToBoard(0);
             question
               .getResponsesBox()
               .first()
@@ -335,6 +220,11 @@ describe('Author - "Label Image with Drag & Drop" type question', () => {
               .getResponsesBox()
               .first()
               .should("not.have.text", res);
+            question
+              .getResponsesBoard()
+              .first()
+              .contains(queData.choices[0])
+              .should("not.exist");
           });
       });
 
@@ -411,13 +301,14 @@ describe('Author - "Label Image with Drag & Drop" type question', () => {
     context("[Tc_374]:Tc_6 => Preview items", () => {
       it("Click on Preview, CheckAnswer", () => {
         const preview = editItem.header.preview();
+        question.dragAndDropResponseToBoard(1);
         preview
           .getCheckAnswer()
           .click()
           .then(() => {
             cy.get("body")
               .children()
-              .should("contain", "score");
+              .should("contain", "score: 3/3");
           });
       });
 
@@ -425,12 +316,28 @@ describe('Author - "Label Image with Drag & Drop" type question', () => {
         const preview = editItem.header.preview();
         preview.getClear().click();
 
-        preview.getShowAnswer().click();
+        preview
+          .getShowAnswer()
+          .click()
+          .then(() => {
+            cy.get(".correctanswer-box")
+              .contains(queData.choices[0])
+              .should("be.visible");
+          });
       });
 
       it("Click on Clear, Edit", () => {
         const preview = editItem.header.preview();
-        preview.getClear().click();
+        preview
+          .getClear()
+          .click()
+          .then(() => {
+            cy.get(".correctanswer-box").should("not.exist");
+            question
+              .getResponsesBoard()
+              .children()
+              .should("have.length", 0);
+          });
 
         preview.header.edit();
       });
@@ -449,109 +356,23 @@ describe('Author - "Label Image with Drag & Drop" type question', () => {
       editItem.getEditButton().click();
     });
 
-    context("[Tc_375]:Tc_1 => Enter question text in Compose Question text box", () => {
-      it("Write text in textbox", () => {
-        question
-          .getQuestionEditor()
-          .clear()
-          .type(queData.queText)
-          .should("contain", queData.queText);
-      });
-
-      it("Upload image in the the textbox", () => {
-        cy.fixture("testImages/sample.jpg").then(logo => {
-          question.getQuestionEditor().clear();
-          question.addImageOnEditor(logo);
-          question.checkImageOnEditor();
-        });
-      });
-
-      it("Give external link", () => {
-        question
-          .getQuestionEditor()
-          .clear()
-          .type(queData.formattext);
-
-        question
-          .getQuestionEditor()
-          .find("p")
-          .makeSelection();
-
-        question.editToolBar.link().click();
-
-        cy.focused()
-          .clear()
-          .type(queData.extlink)
-          .type("{enter}");
-
-        question
-          .getQuestionEditor()
-          .contains(queData.formattext)
-          .should("have.attr", "href", queData.extlink);
-      });
-
-      it("Apply formating", () => {
-        question
-          .getQuestionEditor()
-          .clear()
-          .type(queData.formattext);
-
-        question.formates.forEach(formate => {
-          const { sel, tag } = formate;
-
-          question
-            .getQuestionEditor()
-            .find("p")
-            .makeSelection();
-
-          question.editToolBar
-            .stimulus()
-            .find(sel)
-            .click();
-
-          question
-            .getQuestionEditor()
-            .contains(tag, text)
-            .should("have.length", 1);
-
-          question.editToolBar
-            .stimulus()
-            .find(sel)
-            .click();
-
-          question
-            .getQuestionEditor()
-            .find(tag)
-            .should("not.be.exist");
-        });
-      });
-
-      it("Insert formula", () => {
-        question
-          .getQuestionEditor()
-          .clear()
-          .type(queData.formula);
-
-        question
-          .getQuestionEditor()
-          .find("p")
-          .makeSelection();
-
-        question.editToolBar.formula().click();
-
-        cy.focused()
-          .type(queData.formula)
-          .type("{enter}");
-
-        question
-          .getQuestionEditor()
-          .find(".ql-formula")
-          .should("have.attr", "data-value", queData.formula);
-      });
-    });
-
     context("[Tc_376]:Tc_2 => Upload image", () => {
       it("Upload image to server", () => {
+        cy.fixture("testImages/sample.jpg").then(logo => {
+          Cypress.Blob.base64StringToBlob(logo, "image/jpg").then(blob => {
+            cy.uploadImage(blob).then(result => {
+              // update uploaded image link to store
+              const imageUrl = result.response.body.result.fileUri;
+              const currentQuestion = question.getCurrentStoreQuestion();
+              currentQuestion.imageUrl = imageUrl;
+              cy.window()
+                .its("store")
+                .invoke("dispatch", { type: "[author questions] update questions", payload: currentQuestion });
+              cy.get('[data-cy="drag-drop-image-panel"] img').should("have.attr", "src", imageUrl);
+            });
+          });
+        });
+
         // test with local image
         // const testImageUrl = 'https://edureact-dev.s3.amazonaws.com/1551154644960_blob';
         // const currentQuestion = question.getCurrentStoreQuestion()
@@ -559,12 +380,7 @@ describe('Author - "Label Image with Drag & Drop" type question', () => {
         // cy.window()
         //   .its('store')
         //   .invoke('dispatch', { type: '[author questions] update questions', payload: currentQuestion });
-        // const img = Cypress.$('<img />', { src: testImageUrl });
-        // cy.get('[data-cy="drag-drop-image-panel"]').then(($div) => {
-        //   // append the image
-        //   $div.append(img);
-        // });
-        // cy.get('[data-cy="drag-drop-image-panel"] img').click().should('have.attr', 'src', testImageUrl);
+        // cy.get('[data-cy="drag-drop-image-panel"] img').should('have.attr', 'src', testImageUrl);
       });
 
       it("Width(px)", () => {
@@ -639,6 +455,16 @@ describe('Author - "Label Image with Drag & Drop" type question', () => {
     });
 
     context("[Tc_377]:Tc_3 => Possible responses block", () => {
+      it("Delete Choices", () => {
+        question
+          .getAllChoices()
+          .each(($el, index, $list) => {
+            const cusIndex = $list.length - (index + 1);
+            question.deleteChoiceByIndex(cusIndex);
+          })
+          .should("have.length", 0);
+      });
+
       it("Add new choices", () => {
         queData.choices.forEach((ch, index) => {
           question
@@ -654,36 +480,13 @@ describe('Author - "Label Image with Drag & Drop" type question', () => {
         });
       });
 
-      it("Delete Choices", () => {
+      it("Edit the default text", () => {
+        question.addNewChoice();
         question
-          .getAllChoices()
-          .each(($el, index, $list) => {
-            const cusIndex = $list.length - (index + 1);
-            question.deleteChoiceByIndex(cusIndex);
-          })
-          .should("have.length", 0);
-      });
-
-      it("Edit choice", () => {
-        queData.choices.forEach((ch, index) => {
-          question
-            .addNewChoice()
-            .getChoiceByIndex(index)
-            .clear()
-            .type(ch)
-            .should("have.value", ch);
-
-          // check added answers
-
-          question.checkAddedAnswers(ch);
-        });
-
-        queData.choices.forEach((ch, index) => {
-          question
-            .getChoiceByIndex(index)
-            .click()
-            .should("have.value", ch);
-        });
+          .getChoiceByIndex(queData.choices.length)
+          .click()
+          .should("have.value", "");
+        question.deleteChoiceByIndex(queData.choices.length);
       });
     });
 
@@ -696,7 +499,8 @@ describe('Author - "Label Image with Drag & Drop" type question', () => {
           .should("have.value", queData.points)
           .type("{uparrow}")
           .type("{uparrow}")
-          .should("have.value", `${Number(queData.points) + 1}`);
+          .should("have.value", `${Number(queData.points) + 1}`)
+          .blur();
       });
 
       it("Add/Delete alternatives", () => {
@@ -706,8 +510,8 @@ describe('Author - "Label Image with Drag & Drop" type question', () => {
 
       it("Drag and drop the responses", () => {
         // box to board
-        question.dragAndDropResponseToBoard();
-        question.dragAndDropBoardToBoard();
+        question.dragAndDropResponseToBoard(0);
+        question.dragAndDropBoardToBoard(0, 1);
         // board to board
       });
 
@@ -723,7 +527,7 @@ describe('Author - "Label Image with Drag & Drop" type question', () => {
           .first()
           .invoke("text")
           .then(res => {
-            question.dragAndDropResponseToBoard();
+            question.dragAndDropResponseToBoard(0);
             question
               .getResponsesBox()
               .first()
@@ -737,6 +541,11 @@ describe('Author - "Label Image with Drag & Drop" type question', () => {
               .getResponsesBox()
               .first()
               .should("not.have.text", res);
+            question
+              .getResponsesBoard()
+              .first()
+              .contains(queData.choices[0])
+              .should("not.exist");
           });
       });
 
@@ -813,13 +622,14 @@ describe('Author - "Label Image with Drag & Drop" type question', () => {
     context("[Tc_380]:Tc_6 => Preview items", () => {
       it("Click on Preview, CheckAnswer", () => {
         const preview = editItem.header.preview();
+        question.dragAndDropResponseToBoard(1);
         preview
           .getCheckAnswer()
           .click()
           .then(() => {
             cy.get("body")
               .children()
-              .should("contain", "score");
+              .should("contain", "score: 3/3");
           });
       });
 
@@ -827,12 +637,28 @@ describe('Author - "Label Image with Drag & Drop" type question', () => {
         const preview = editItem.header.preview();
         preview.getClear().click();
 
-        preview.getShowAnswer().click();
+        preview
+          .getShowAnswer()
+          .click()
+          .then(() => {
+            cy.get(".correctanswer-box")
+              .contains(queData.choices[0])
+              .should("be.visible");
+          });
       });
 
       it("Click on Clear, Edit", () => {
         const preview = editItem.header.preview();
-        preview.getClear().click();
+        preview
+          .getClear()
+          .click()
+          .then(() => {
+            cy.get(".correctanswer-box").should("not.exist");
+            question
+              .getResponsesBoard()
+              .children()
+              .should("have.length", 0);
+          });
 
         preview.header.edit();
       });
@@ -848,12 +674,6 @@ describe('Author - "Label Image with Drag & Drop" type question', () => {
           .click()
           .should("have.length", 0);
       });
-    });
-  });
-
-  context("Student attempt", () => {
-    context("[Tc_382]:Tc_1 => Take test", () => {
-      it("Select the question from the drop down", () => {});
     });
   });
 });

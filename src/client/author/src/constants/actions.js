@@ -125,6 +125,9 @@ export const RECEIVE_FEEDBACK_RESPONSE_ERROR = "[feedbackResponse] receive list 
 export const RECEIVE_GRADEBOOK_REQUEST = "[gradebook] receive list request";
 export const RECEIVE_GRADEBOOK_SUCCESS = "[gradebook] receive list success";
 export const RECEIVE_GRADEBOOK_ERROR = "[gradebook] receive list error";
+export const UPDATE_RELEASE_SCORE = "[gradebook] release score";
+export const SET_SHOW_SCORE = "[gradebook] set show score";
+
 export const RECEIVE_TESTACTIVITY_REQUEST = "[testActivity] receive list request";
 export const RECEIVE_TESTACTIVITY_SUCCESS = "[testActivity] receive list success";
 export const RECEIVE_TESTACTIVITY_ERROR = "[testActivity] receive list error";
@@ -133,6 +136,19 @@ export const RECEIVE_TESTACTIVITY_ERROR = "[testActivity] receive list error";
 export const RECEIVE_ASSIGNMENTS_REQUEST = "[assignments] receive list request";
 export const RECEIVE_ASSIGNMENTS_SUCCESS = "[assignments] receive list success";
 export const RECEIVE_ASSIGNMENTS_ERROR = "[assignments] receive list error";
+
+export const FETCH_CURRENT_EDITING_ASSIGNMENT = "[assignments] fetch assignment data";
+export const UPDATE_CURRENT_EDITING_ASSIGNMENT = "[assignments] save current assignment";
+export const UPDATE_RELEASE_SCORE_SETTINGS = "[assignments] update assignment settings";
+export const TOGGLE_RELEASE_GRADE_SETTINGS = "[assignments show release grade settings]";
+
+export const RECEIVE_CLASS_QUESTION_REQUEST = "[answers] receive list request";
+export const RECEIVE_CLASS_QUESTION_SUCCESS = "[answers] receive list success";
+export const RECEIVE_CLASS_QUESTION_ERROR = "[answers] receive list error";
+
+export const RECEIVE_STUDENT_QUESTION_REQUEST = "[answer] receive list request";
+export const RECEIVE_STUDENT_QUESTION_SUCCESS = "[answer] receive list success";
+export const RECEIVE_STUDENT_QUESTION_ERROR = "[answer] receive list success";
 
 // answers
 export const CLEAR_ANSWERS = "[answers] clear answers";

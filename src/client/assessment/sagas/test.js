@@ -2,6 +2,7 @@ import { testActivityApi, testsApi } from "@edulastic/api";
 import { takeEvery, call, all, put, select } from "redux-saga/effects";
 import { push } from "react-router-redux";
 import { keyBy as _keyBy } from "lodash";
+import { ShuffleChoices } from "../utils/test";
 import { getCurrentGroup } from "../../student/Login/ducks";
 import {
   LOAD_TEST,
@@ -14,6 +15,7 @@ import {
   LOAD_SCRATCH_PAD
 } from "../constants/actions";
 import { loadQuestionsAction } from "../actions/questions";
+import { setShuffledOptions } from "../actions/shuffledOptions";
 import { SET_RESUME_STATUS } from "../../student/Assignments/ducks";
 
 const getQuestions = (testItems = []) => {
@@ -37,8 +39,9 @@ function* loadTest({ payload }) {
       }
     });
 
+    const groupId = yield select(getCurrentGroup);
     // if testActivityId is passed, need to load previous responses as well!
-    const getTestActivity = testActivityId ? call(testActivityApi.getById, testActivityId) : false;
+    const getTestActivity = testActivityId ? call(testActivityApi.getById, testActivityId, groupId) : false;
     const [test, testActivity] = yield all([
       call(testsApi.getById, testId, {
         validation: true,
@@ -49,10 +52,26 @@ function* loadTest({ payload }) {
 
     const questions = getQuestions(test.testItems);
     yield put(loadQuestionsAction(_keyBy(questions, "id")));
+
+    let { testItems } = test;
+
+    const { testActivity: activity, questionActivities } = testActivity;
+    // if questions are shuffled !!!
+    if (activity.shuffleQuestions) {
+      const itemsByKey = _keyBy(testItems, "_id");
+      testItems = (activity.shuffledTestItems || []).map(id => itemsByKey[id]).filter(item => !!item);
+    }
+
+    let shuffles;
+    if (activity.shuffledTestItems) {
+      [testItems, shuffles] = ShuffleChoices(testItems, questionActivities);
+      yield put(setShuffledOptions(shuffles));
+    }
+
     yield put({
       type: LOAD_TEST_ITEMS,
       payload: {
-        items: test.testItems,
+        items: testItems,
         title: test.title
       }
     });
@@ -67,7 +86,6 @@ function* loadTest({ payload }) {
         payload: { testActivityId }
       });
 
-      const { questionActivities } = testActivity;
       let lastAttemptedQuestion = questionActivities[0];
 
       questionActivities.forEach(item => {
@@ -137,7 +155,6 @@ function* submitTest() {
     const testActivityId = yield select(state => state.test && state.test.testActivityId);
     const groupId = yield select(getCurrentGroup);
     if (testActivityId === "test") {
-      console.log("practice test");
       return;
     }
     yield testActivityApi.submit(testActivityId, groupId);

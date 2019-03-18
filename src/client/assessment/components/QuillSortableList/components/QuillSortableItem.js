@@ -14,7 +14,7 @@ const QuillSortableItem = SortableElement(
     <SortableItemContainer fontSize={fontSize} columns={columns}>
       {label && <Label>{label}</Label>}
       <FlexContainer style={{ flex: 1 }}>
-        <div className="main">
+        <div className="main" data-cy="quillSortableItem">
           <DragHandle index={indx} />
           <CustomQuillComponent
             readOnly={rOnly}
@@ -26,7 +26,7 @@ const QuillSortableItem = SortableElement(
             style={{ minHeight: "auto", padding: 10 }}
           />
         </div>
-        {onRemove && <IconTrash data-cy={`delete${indx}`} onClick={onRemove} />}
+        {onRemove && <IconTrash data-cypress="deleteButton" data-cy={`delete${indx}`} onClick={onRemove} />}
       </FlexContainer>
     </SortableItemContainer>
   )

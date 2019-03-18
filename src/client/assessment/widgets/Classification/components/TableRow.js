@@ -42,7 +42,7 @@ const TableRow = ({
   for (let index = startIndex; index < startIndex + colCount; index++) {
     if (arrayOfRows.has(index) && rowTitles.length > 0) {
       cols.push(
-        <RowTitleCol key={index} colCount={colCount}>
+        <RowTitleCol key={index + startIndex + colCount} colCount={colCount}>
           <CenteredText style={{ wordWrap: "break-word", textAlign: "left" }}>
             <MathFormulaDisplay dangerouslySetInnerHTML={{ __html: rowTitles[index / colCount] }} />
           </CenteredText>

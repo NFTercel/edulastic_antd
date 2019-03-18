@@ -141,7 +141,10 @@ export class ResponseFrequencyTable extends Component {
   }
 
   sortCorrectColumn(key, a, b) {
-    return a[key] - b[key];
+    let _a = a[key] || 0;
+    let _b = b[key] || 0;
+
+    return _a - _b;
   }
 
   sortQuestionColumn(key, a, b) {

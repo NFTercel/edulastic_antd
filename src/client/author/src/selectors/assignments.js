@@ -1,5 +1,4 @@
 import { createSelector } from "reselect";
-import { get, groupBy, forEach } from "lodash";
 
 export const stateSelector = state => state.author_assignments;
 
@@ -11,4 +10,14 @@ export const getAssignmentsSelector = createSelector(
 export const getAssignmentsLoadingSelector = createSelector(
   stateSelector,
   state => state.loading
+);
+
+export const getCurrentAssignmentSelector = createSelector(
+  stateSelector,
+  state => state.currentAssignment
+);
+
+export const getToggleReleaseGradeStateSelector = createSelector(
+  stateSelector,
+  state => state.toggleReleaseGradeSettings
 );

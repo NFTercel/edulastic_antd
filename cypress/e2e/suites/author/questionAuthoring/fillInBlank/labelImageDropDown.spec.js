@@ -14,7 +14,11 @@ describe('Author - "Label Image with Drop Down" type question', () => {
     extlink: "www.testdomain.com",
     formattext: "formattedtext",
     formula: "s=ar^2",
-    points: "2"
+    points: "2",
+    imageWidth: "500",
+    imageAlternate: "Background",
+    testColor: "#d49c9c",
+    maxRes: "1"
   };
 
   const question = new DropDownPage();
@@ -30,108 +34,6 @@ describe('Author - "Label Image with Drop Down" type question', () => {
       editItem.deleteAllQuestion();
       // create new que and select type
       editItem.addNew().chooseQuestion(queData.group, queData.queType);
-    });
-
-    context("[Tc_383]:Tc_1 => Enter question text in Compose Question text box", () => {
-      it("Write text in textbox", () => {
-        question
-          .getQuestionEditor()
-          .clear()
-          .type(queData.queText)
-          .should("contain", queData.queText);
-      });
-
-      it("Upload image in the the textbox", () => {
-        cy.fixture("testImages/sample.jpg").then(logo => {
-          question.getQuestionEditor().clear();
-          question.addImageOnEditor(logo);
-          question.checkImageOnEditor();
-        });
-      });
-
-      it("Give external link", () => {
-        question
-          .getQuestionEditor()
-          .clear()
-          .type(queData.formattext);
-
-        question
-          .getQuestionEditor()
-          .find("p")
-          .makeSelection();
-
-        question.editToolBar.link().click();
-
-        cy.focused()
-          .clear()
-          .type(queData.extlink)
-          .type("{enter}");
-
-        question
-          .getQuestionEditor()
-          .contains(queData.formattext)
-          .should("have.attr", "href", queData.extlink);
-      });
-
-      it("Apply formating", () => {
-        question
-          .getQuestionEditor()
-          .clear()
-          .type(queData.formattext);
-
-        question.formates.forEach(formate => {
-          const text = queData.formattext;
-          const { sel, tag } = formate;
-
-          question
-            .getQuestionEditor()
-            .find("p")
-            .makeSelection();
-
-          question.editToolBar
-            .stimulus()
-            .find(sel)
-            .click();
-
-          question
-            .getQuestionEditor()
-            .contains(tag, text)
-            .should("have.length", 1);
-
-          question.editToolBar
-            .stimulus()
-            .find(sel)
-            .click();
-
-          question
-            .getQuestionEditor()
-            .find(tag)
-            .should("not.be.exist");
-        });
-      });
-
-      it("Insert formula", () => {
-        question
-          .getQuestionEditor()
-          .clear()
-          .type(queData.formula);
-
-        question
-          .getQuestionEditor()
-          .find("p")
-          .makeSelection();
-
-        question.editToolBar.formula().click();
-
-        cy.focused()
-          .type(queData.formula)
-          .type("{enter}");
-
-        question
-          .getQuestionEditor()
-          .find(".ql-formula")
-          .should("have.attr", "data-value", queData.formula);
-      });
     });
 
     context("[Tc_384]:Tc_2 => Upload image", () => {
@@ -158,12 +60,7 @@ describe('Author - "Label Image with Drop Down" type question', () => {
         // cy.window()
         //   .its('store')
         //   .invoke('dispatch', { type: '[author questions] update questions', payload: currentQuestion });
-        // const img = Cypress.$('<img />', { src: testImageUrl });
-        // cy.get('[data-cy="drag-drop-image-panel"]').then(($div) => {
-        //   // append the image
-        //   $div.append(img);
-        // });
-        // cy.get('[data-cy="drag-drop-image-panel"] img').click().should('have.attr', 'src', testImageUrl);
+        // cy.get('[data-cy="drag-drop-image-panel"] img').should('have.attr', 'src', testImageUrl);
       });
 
       it("Width(px)", () => {
@@ -216,21 +113,16 @@ describe('Author - "Label Image with Drop Down" type question', () => {
     });
 
     context("[Tc_385]:Tc_3 => Response", () => {
+      it("Edit default text", () => {
+        question
+          .addNewChoiceOnResponse(0)
+          .getChoiceByIndexRes(0, 2)
+          .click()
+          .should("have.value", "");
+      });
+
       for (let i = 0; i < 3; i++) {
         context(`Response ${i + 1}`, () => {
-          it("Add new choices", () => {
-            queData.choices.forEach((ch, index) => {
-              question
-                .addNewChoiceOnResponse(i)
-                .getChoiceByIndexRes(i, index)
-                .clear()
-                .type(ch)
-                .should("have.value", ch);
-              // check added answers
-              question.checkAddedAnswersRes(i, ch);
-            });
-          });
-
           it("Delete Choices", () => {
             question
               .getAllChoicesRes(i)
@@ -241,7 +133,7 @@ describe('Author - "Label Image with Drop Down" type question', () => {
               .should("have.length", 0);
           });
 
-          it("Add Sample test choices", () => {
+          it("Add new choices", () => {
             queData.choices.forEach((ch, index) => {
               question
                 .addNewChoiceOnResponse(i)
@@ -255,14 +147,6 @@ describe('Author - "Label Image with Drop Down" type question', () => {
           });
         });
       }
-
-      it("Edit default text", () => {
-        question
-          .addNewChoiceOnResponse(0)
-          .getChoiceByIndexRes(0, 0)
-          .click()
-          .should("have.value", "");
-      });
     });
 
     context("[Tc_386]:Tc_4 => Set Correct Answer(s)", () => {
@@ -274,7 +158,8 @@ describe('Author - "Label Image with Drop Down" type question', () => {
           .should("have.value", queData.points)
           .type("{uparrow}")
           .type("{uparrow}")
-          .should("have.value", `${Number(queData.points) + 1}`);
+          .should("have.value", `${Number(queData.points) + 1}`)
+          .blur();
       });
 
       it("Select the responses from drop down", () => {
@@ -340,7 +225,16 @@ describe('Author - "Label Image with Drop Down" type question', () => {
         const preview = editItem.header.preview();
         preview.getClear().click();
 
-        preview.getShowAnswer().click();
+        preview
+          .getShowAnswer()
+          .click()
+          .then(() => {
+            cy.contains("h2", "Correct Answer")
+              .should("be.visible")
+              .next()
+              .contains("span", queData.choices[0])
+              .should("be.visible");
+          });
       });
 
       it("Click on Clear, Edit", () => {
@@ -364,112 +258,23 @@ describe('Author - "Label Image with Drop Down" type question', () => {
       editItem.getEditButton().click();
     });
 
-    context("[Tc_389]:Tc_1 => Enter question text in Compose Question text box", () => {
-      it("Write text in textbox", () => {
-        question
-          .getQuestionEditor()
-          .clear()
-          .type(queData.queText)
-          .should("contain", queData.queText);
-      });
-
-      it("Upload image in the the textbox", () => {
-        it("Upload image in the the textbox", () => {
-          cy.fixture("testImages/sample.jpg").then(logo => {
-            question.getQuestionEditor().clear();
-            question.addImageOnEditor(logo);
-            question.checkImageOnEditor();
-          });
-        });
-      });
-
-      it("Give external link", () => {
-        question
-          .getQuestionEditor()
-          .clear()
-          .type(queData.formattext);
-
-        question
-          .getQuestionEditor()
-          .find("p")
-          .makeSelection();
-
-        question.editToolBar.link().click();
-
-        cy.focused()
-          .clear()
-          .type(queData.extlink)
-          .type("{enter}");
-
-        question
-          .getQuestionEditor()
-          .contains(queData.formattext)
-          .should("have.attr", "href", queData.extlink);
-      });
-
-      it("Apply formating", () => {
-        question
-          .getQuestionEditor()
-          .clear()
-          .type(queData.formattext);
-
-        question.formates.forEach(formate => {
-          const text = queData.formattext;
-          const { sel, tag } = formate;
-
-          question
-            .getQuestionEditor()
-            .find("p")
-            .makeSelection();
-
-          question.editToolBar
-            .stimulus()
-            .find(sel)
-            .click();
-
-          question
-            .getQuestionEditor()
-            .contains(tag, text)
-            .should("have.length", 1);
-
-          question.editToolBar
-            .stimulus()
-            .find(sel)
-            .click();
-
-          question
-            .getQuestionEditor()
-            .find(tag)
-            .should("not.be.exist");
-        });
-      });
-
-      it("Insert formula", () => {
-        question
-          .getQuestionEditor()
-          .clear()
-          .type(queData.formula);
-
-        question
-          .getQuestionEditor()
-          .find("p")
-          .makeSelection();
-
-        question.editToolBar.formula().click();
-
-        cy.focused()
-          .type(queData.formula)
-          .type("{enter}");
-
-        question
-          .getQuestionEditor()
-          .find(".ql-formula")
-          .should("have.attr", "data-value", queData.formula);
-      });
-    });
-
     context("[Tc_390]:Tc_2 => Upload image", () => {
       it("Upload image to server", () => {
+        cy.fixture("testImages/sample.jpg").then(logo => {
+          Cypress.Blob.base64StringToBlob(logo, "image/jpg").then(blob => {
+            cy.uploadImage(blob).then(result => {
+              // update uploaded image link to store
+              const imageUrl = result.response.body.result.fileUri;
+              const currentQuestion = question.getCurrentStoreQuestion();
+              currentQuestion.imageUrl = imageUrl;
+              cy.window()
+                .its("store")
+                .invoke("dispatch", { type: "[author questions] update questions", payload: currentQuestion });
+              cy.get('[data-cy="drag-drop-image-panel"] img').should("have.attr", "src", imageUrl);
+            });
+          });
+        });
+
         // test with local image
         // const testImageUrl = 'https://edureact-dev.s3.amazonaws.com/1551154644960_blob';
         // const currentQuestion = question.getCurrentStoreQuestion()
@@ -477,12 +282,7 @@ describe('Author - "Label Image with Drop Down" type question', () => {
         // cy.window()
         //   .its('store')
         //   .invoke('dispatch', { type: '[author questions] update questions', payload: currentQuestion });
-        // const img = Cypress.$('<img />', { src: testImageUrl });
-        // cy.get('[data-cy="drag-drop-image-panel"]').then(($div) => {
-        //   // append the image
-        //   $div.append(img);
-        // });
-        // cy.get('[data-cy="drag-drop-image-panel"] img').click().should('have.attr', 'src', testImageUrl);
+        // cy.get('[data-cy="drag-drop-image-panel"] img').should('have.attr', 'src', testImageUrl);
       });
 
       it("Width(px)", () => {
@@ -535,21 +335,16 @@ describe('Author - "Label Image with Drop Down" type question', () => {
     });
 
     context("[Tc_391]:Tc_3 => Edit Response", () => {
+      it("Edit default text", () => {
+        question
+          .addNewChoiceOnResponse(0)
+          .getChoiceByIndexRes(0, 2)
+          .click()
+          .should("have.value", "");
+      });
+
       for (let i = 0; i < 3; i++) {
         context(`Response ${i + 1}`, () => {
-          it("Add new choices", () => {
-            queData.choices.forEach((ch, index) => {
-              question
-                .addNewChoiceOnResponse(i)
-                .getChoiceByIndexRes(i, index)
-                .clear()
-                .type(ch)
-                .should("have.value", ch);
-              // check added answers
-              question.checkAddedAnswersRes(i, ch);
-            });
-          });
-
           it("Delete Choices", () => {
             question
               .getAllChoicesRes(i)
@@ -560,7 +355,7 @@ describe('Author - "Label Image with Drop Down" type question', () => {
               .should("have.length", 0);
           });
 
-          it("Add Sample test choices", () => {
+          it("Add new choices", () => {
             queData.choices.forEach((ch, index) => {
               question
                 .addNewChoiceOnResponse(i)
@@ -574,14 +369,6 @@ describe('Author - "Label Image with Drop Down" type question', () => {
           });
         });
       }
-
-      it("Edit default text", () => {
-        question
-          .addNewChoiceOnResponse(0)
-          .getChoiceByIndexRes(0, 0)
-          .click()
-          .should("have.value", "");
-      });
     });
 
     context("[Tc_392]:Tc_4 => Set Correct Answer(s)", () => {
@@ -593,7 +380,8 @@ describe('Author - "Label Image with Drop Down" type question', () => {
           .should("have.value", queData.points)
           .type("{uparrow}")
           .type("{uparrow}")
-          .should("have.value", `${Number(queData.points) + 1}`);
+          .should("have.value", `${Number(queData.points) + 1}`)
+          .blur();
       });
 
       it("Select the responses from drop down", () => {
@@ -605,6 +393,28 @@ describe('Author - "Label Image with Drop Down" type question', () => {
       it("Add/Delete alternatives", () => {
         question.addAlternate();
         question.checkAndDeleteAlternates();
+      });
+
+      it("Check/uncheck Shuffle Possible responses", () => {
+        question
+          .getShuffleDropDown()
+          .click()
+          .find("input")
+          .should("be.checked");
+
+        question.getDropDownByRes(0).click();
+
+        queData.choices.forEach(ch => {
+          question.checkShuffled(0, ch);
+        });
+
+        question.getDropDownByRes(0).click();
+
+        question
+          .getShuffleDropDown()
+          .click()
+          .find("input")
+          .should("not.be.checked");
       });
     });
 
@@ -637,7 +447,16 @@ describe('Author - "Label Image with Drop Down" type question', () => {
         const preview = editItem.header.preview();
         preview.getClear().click();
 
-        preview.getShowAnswer().click();
+        preview
+          .getShowAnswer()
+          .click()
+          .then(() => {
+            cy.contains("h2", "Correct Answer")
+              .should("be.visible")
+              .next()
+              .contains("span", queData.choices[0])
+              .should("be.visible");
+          });
       });
 
       it("Click on Clear, Edit", () => {

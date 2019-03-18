@@ -37,11 +37,12 @@ const previousResponses = testActivityId =>
     })
     .then(result => result.data.result);
 
-const getById = testActivityId =>
+const getById = (testActivityId, groupId) =>
   api
     .callApi({
       url: `${prefix}/${testActivityId}`,
-      method: "get"
+      method: "get",
+      params: { groupId }
     })
     .then(result => result.data.result);
 

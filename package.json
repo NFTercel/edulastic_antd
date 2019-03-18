@@ -28,6 +28,8 @@
     "test:watch": "jest --watch",
     "test:automation-open": "cypress open",
     "test:automation-run": "cypress run",
+    "test:automation-open-dev": "cypress open --env configFile=development",
+    "test:automation-run-dev": "cypress run --env configFile=development",
     "publish-evaluators": "git subtree push --prefix packages/evaluators git@github.com:snapwiz/edu-eval.git master",
     "publish-constants": "git subtree push --prefix packages/constants git@github.com:snapwiz/edur.git master"
   },
@@ -160,6 +162,9 @@
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
     "lint-staged": "^8.0.4",
+    "mocha": "5.2.0",
+    "mochawesome": "^3.1.1",
+    "mochawesome-merge": "^1.0.7",
     "moment-locales-webpack-plugin": "^1.0.7",
     "node-sass": "^4.10.0",
     "nodemon": "^1.18.7",

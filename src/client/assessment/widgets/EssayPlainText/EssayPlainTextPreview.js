@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Input } from "antd";
 import { compose } from "redux";
@@ -27,6 +27,14 @@ const EssayPlainTextPreview = ({ view, saveAnswer, t, item, smallSize, userAnswe
   const [buffer, setBuffer] = useState("");
 
   let node;
+
+  useEffect(() => {
+    if (Array.isArray(userAnswer)) {
+      setText("");
+      saveAnswer("");
+      setWordCount(0);
+    }
+  }, [userAnswer]);
 
   const handleTextChange = e => {
     const val = e.target.value;

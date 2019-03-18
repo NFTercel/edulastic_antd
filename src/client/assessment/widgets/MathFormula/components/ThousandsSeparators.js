@@ -30,19 +30,22 @@ const ThousandsSeparators = ({ separators, onChange, onAdd, onDelete, t }) => {
                   value={separator}
                   style={{ width: "100%" }}
                   onChange={val => onChange({ val, index: i })}
+                  data-cy="thousands-separator-dropdown"
                 >
                   {thousandsSeparators.map(({ value: val, label }) => (
-                    <Select.Option key={val} value={val}>
+                    <Select.Option data-cy={`thousands-separator-dropdown-list-${label}`} key={val} value={val}>
                       {label}
                     </Select.Option>
                   ))}
                 </Select>
-                {onDelete && <IconTrash onClick={() => onDelete(i)} width={22} height={22} />}
+                {onDelete && (
+                  <IconTrash data-cy="remove-thousands-separator" onClick={() => onDelete(i)} width={22} height={22} />
+                )}
               </FlexContainer>
             </Col>
           </Row>
         ))}
-      <EduButton onClick={onAdd} size="small" type="primary">
+      <EduButton data-cy="add-new-thousands-separator" onClick={onAdd} size="small" type="primary">
         {t("component.math.add")}
       </EduButton>
     </Col>

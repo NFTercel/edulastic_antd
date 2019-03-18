@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { compose } from "redux";
 import { withTheme } from "styled-components";
@@ -32,6 +32,14 @@ const EssayRichTextPreview = ({ view, saveAnswer, t, item, smallSize, userAnswer
     Array.isArray(userAnswer) ? 0 : userAnswer.split(" ").filter(i => !!i.trim()).length
   );
 
+  useEffect(() => {
+    if (Array.isArray(userAnswer)) {
+      setText("");
+      saveAnswer("");
+      setWordCount(0);
+    }
+  }, [userAnswer]);
+
   const handleTextChange = (val, a, b, editor) => {
     setWordCount(
       editor
@@ -39,6 +47,7 @@ const EssayRichTextPreview = ({ view, saveAnswer, t, item, smallSize, userAnswer
         .split(" ")
         .filter(i => !!i.trim()).length
     );
+
     setText(val);
     saveAnswer(val);
   };
@@ -94,26 +103,28 @@ const EssayRichTextPreview = ({ view, saveAnswer, t, item, smallSize, userAnswer
             />
           )}
         </div>
-        <ReactQuillWrapper
-          id="mainQuill"
-          minHeight={minHeight}
-          maxHeight={maxHeight}
-          fontSize={fontSize}
-          placeholder={placeholder}
-          onChangeSelection={handleSelect}
-          style={{
-            background:
-              item.max_word < wordCount
-                ? theme.widgets.essayRichText.quillLimitedBgColor
-                : theme.widgets.essayRichText.quillBgColor
-          }}
-          defaultValue={
-            smallSize ? t("component.essayText.rich.templateText") : Array.isArray(userAnswer) ? "" : userAnswer
-          }
-          onChange={handleTextChange}
-          modules={EssayRichTextPreview.modules(item.formatting_options)}
-          {...getSpellCheckAttributes(item.spellcheck)}
-        />
+        {!Array.isArray(userAnswer) && (
+          <ReactQuillWrapper
+            id="mainQuill"
+            minHeight={minHeight}
+            maxHeight={maxHeight}
+            fontSize={fontSize}
+            placeholder={placeholder}
+            onChangeSelection={handleSelect}
+            style={{
+              background:
+                item.max_word < wordCount
+                  ? theme.widgets.essayRichText.quillLimitedBgColor
+                  : theme.widgets.essayRichText.quillBgColor
+            }}
+            defaultValue={
+              smallSize ? t("component.essayText.rich.templateText") : Array.isArray(userAnswer) ? "" : userAnswer
+            }
+            onChange={handleTextChange}
+            modules={EssayRichTextPreview.modules(item.formatting_options)}
+            {...getSpellCheckAttributes(item.spellcheck)}
+          />
+        )}
 
         {item.show_word_count && (
           <Toolbar borderRadiusOnlyBottom>
@@ -132,12 +143,13 @@ EssayRichTextPreview.propTypes = {
   item: PropTypes.object.isRequired,
   saveAnswer: PropTypes.func.isRequired,
   view: PropTypes.string.isRequired,
-  userAnswer: PropTypes.any.isRequired,
+  userAnswer: PropTypes.any,
   theme: PropTypes.object.isRequired
 };
 
 EssayRichTextPreview.defaultProps = {
-  smallSize: false
+  smallSize: false,
+  userAnswer: ""
 };
 
 const toolbarOptions = options => {

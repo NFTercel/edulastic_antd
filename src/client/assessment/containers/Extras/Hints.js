@@ -28,13 +28,13 @@ const Hints = ({ t, item, setQuestionData }) => {
         <Col md={24}>{t("component.options.hint")}</Col>
       </StyledRow>
       <StyledRow gutter={36}>
-        <Col md={24}>
+        <Col data-cy="hintsList" md={24}>
           <SortableListWithAddButton
             buttonText={t("component.options.add")}
             useDragHandle
             items={get(item, `metadata.${prop}`, [])}
             onSortEnd={_sort}
-            prefix="distractors"
+            prefix="hints"
             onAdd={_add}
             onRemove={_remove}
             onChange={(index, value) => _change(`metadata.${prop}[${index}]`, value)}

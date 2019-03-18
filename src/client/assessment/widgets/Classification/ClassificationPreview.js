@@ -128,7 +128,7 @@ const ClassificationPreview = ({
     const dItems = cloneDeep(dragItems);
     const ansArrays = cloneDeep(answers);
 
-    if (ansArrays[itemTo.index].length >= columnCount) {
+    if (ansArrays[itemTo.index] && ansArrays[itemTo.index].length >= columnCount) {
       return;
     }
 

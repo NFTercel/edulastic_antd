@@ -186,16 +186,46 @@ const EditClassification = ({ item, setQuestionData, setFirstMount, theme, t }) 
         newItem.ui_style[prop].push("");
         if (prop === "column_titles") {
           newItem.ui_style.column_count += 1;
+          Array.from({ length: newItem.ui_style.row_count }).forEach(() => {
+            newItem.validation.valid_response.value.push([]);
+          });
+
+          newItem.validation.alt_responses.forEach(valid => {
+            Array.from({ length: newItem.ui_style.row_count }).forEach(() => {
+              valid.value.push([]);
+            });
+          });
         } else if (prop === "row_titles") {
           newItem.ui_style.row_count += 1;
+          Array.from({ length: newItem.ui_style.column_count }).forEach(() => {
+            newItem.validation.valid_response.value.push([]);
+          });
+
+          newItem.validation.alt_responses.forEach(valid => {
+            Array.from({ length: newItem.ui_style.column_count }).forEach(() => {
+              valid.value.push([]);
+            });
+          });
         }
         break;
 
       case actions.REMOVE:
         newItem.ui_style[prop].splice(restProp, 1);
         if (prop === "column_titles" && newItem.ui_style.column_count !== 1) {
+          newItem.validation.valid_response.value.forEach(array => {
+            array.splice(-1, newItem.ui_style.row_count);
+          });
+          newItem.validation.alt_responses.forEach(valid => {
+            valid.value.forEach(array => {
+              array.splice(-1, newItem.ui_style.row_count);
+            });
+          });
           newItem.ui_style.column_count -= 1;
         } else if (prop === "row_titles" && newItem.ui_style.row_count !== 1) {
+          newItem.validation.valid_response.value.splice(-1, newItem.ui_style.column_titles);
+          newItem.validation.alt_responses.forEach(valid => {
+            valid.value.splice(-1, newItem.ui_style.column_titles);
+          });
           newItem.ui_style.row_count -= 1;
         }
         break;
@@ -367,7 +397,7 @@ const EditClassification = ({ item, setQuestionData, setFirstMount, theme, t }) 
             <List
               prefix="columns"
               buttonText={t("component.classification.addNewColumn")}
-              items={item.ui_style.column_titles.map(ite => ite)}
+              items={item.ui_style.column_titles}
               onAdd={handleMain(actions.ADD, "column_titles")}
               onSortEnd={handleMain(actions.SORTEND, "column_titles")}
               onChange={handleChange("column_titles")}
@@ -413,7 +443,7 @@ const EditClassification = ({ item, setQuestionData, setFirstMount, theme, t }) 
               prefix="rows"
               firstFocus={firstMount}
               buttonText={t("component.classification.addNewRow")}
-              items={item.ui_style.row_titles.map(ite => ite)}
+              items={item.ui_style.row_titles}
               onAdd={handleMain(actions.ADD, "row_titles")}
               onSortEnd={handleMain(actions.SORTEND, "row_titles")}
               onChange={handleChange("row_titles")}

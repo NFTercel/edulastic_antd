@@ -44,7 +44,7 @@ const convertTableData = data => ({
   graded: "1",
   action: "",
   classId: data[0].classId,
-  currentAssignment: data
+  currentAssignment: data[0]
 });
 const convertExpandTableData = (data, totalNumber) => ({
   name: "",
@@ -186,6 +186,8 @@ class TableList extends Component {
   };
 
   render() {
+    const { assignments, onOpenReleaseScoreSettings } = this.props;
+    const { details } = this.state;
     const columns = [
       {
         title: "Assignment Name",
@@ -263,7 +265,7 @@ class TableList extends Component {
         render: (text, row) => (
           <ActionDiv>
             <Dropdown
-              overlay={ActionMenu(this.props.onOpenReleaseScoreSettings, row.currentAssignment)}
+              overlay={ActionMenu(onOpenReleaseScoreSettings, row.currentAssignment)}
               placement="bottomCenter"
               trigger={["click"]}
             >
@@ -273,9 +275,6 @@ class TableList extends Component {
         )
       }
     ];
-
-    const { assignments } = this.props;
-    const { details } = this.state;
     return (
       <Container>
         <TableData

@@ -68,6 +68,7 @@ export class SimpleBarChart extends PureComponent {
       tmp.incorrect = 100 - tmp.correct;
       tmp.fill = colorRange1[Math.floor(tmp.correct / 25)];
       tmp.assessment = nextProps.assessment.testName;
+      console.log(tmp);
       return tmp;
     });
     return arr;
@@ -109,10 +110,6 @@ export class SimpleBarChart extends PureComponent {
     }
   };
 
-  getDataByIndex = index => {
-    return this.state.data[index];
-  };
-
   render() {
     return (
       <StyledSimpleBarChart className="chart-simple-bar-chart">
@@ -144,7 +141,7 @@ export class SimpleBarChart extends PureComponent {
         <ResponsiveContainer width={"100%"} height={400}>
           <BarChart width={730} height={400} data={this.state.data}>
             <CartesianGrid vertical={false} strokeWidth={0.5} />
-            <XAxis dataKey="name" tick={<CustomChartXTick getDataByIndex={this.getDataByIndex} />} interval={0} />
+            <XAxis dataKey="name" tick={<CustomChartXTick data={this.state.data} />} interval={0} />
             <YAxis
               type={"number"}
               domain={[0, 110]}

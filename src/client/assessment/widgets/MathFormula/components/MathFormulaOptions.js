@@ -7,7 +7,7 @@ import { withTheme } from "styled-components";
 
 import { withNamespaces } from "@edulastic/localization";
 import { evaluationType, math } from "@edulastic/constants";
-import { FlexContainer, CustomQuillComponent } from "@edulastic/common";
+import { FlexContainer } from "@edulastic/common";
 
 import KeyPadOptions from "../../../components/KeyPadOptions";
 
@@ -21,37 +21,12 @@ import FontSizeSelect from "../../../components/FontSizeSelect";
 
 import ResponseContainers from "./ResponseContainers";
 import TextBlocks from "./TextBlocks";
+import Extras from "../../../containers/Extras";
 
-function MathFormulaOptions({
-  onChange,
-  uiStyle,
-  t,
-  responseContainers,
-  textBlocks,
-  stimulusReview,
-  instructorStimulus,
-  metadata,
-  item,
-  theme
-}) {
-  const quillStyle = {
-    minHeight: 40,
-    borderRadius: 5,
-    padding: "0 10px",
-    border: `1px solid ${theme.widgets.mathFormula.quillBorderColor}`,
-    width: "80%"
-  };
-
+function MathFormulaOptions({ onChange, uiStyle, t, responseContainers, textBlocks, item }) {
   const changeUiStyle = (prop, value) => {
     onChange("ui_style", {
       ...uiStyle,
-      [prop]: value
-    });
-  };
-
-  const changeMetadata = (prop, value) => {
-    onChange("metadata", {
-      ...metadata,
       [prop]: value
     });
   };
@@ -156,80 +131,10 @@ function MathFormulaOptions({
 
       <TextBlocks blocks={textBlocks} onChange={changeTextBlock} onAdd={addTextBlock} onDelete={deleteTextBlock} />
 
-      <Block>
-        <Heading>{t("component.options.additionalOptions")}</Heading>
-
-        <Row>
-          <Col md={6}>
-            <Label>{t("component.options.stimulusReviewOnly")}</Label>
-            <CustomQuillComponent
-              style={quillStyle}
-              toolbarId="stimulus_review"
-              onChange={value => onChange("stimulus_review", value)}
-              showResponseBtn={false}
-              value={stimulusReview}
-            />
-          </Col>
-          <Col md={6}>
-            <Label>{t("component.options.instructorStimulus")}</Label>
-            <CustomQuillComponent
-              style={quillStyle}
-              toolbarId="instructor_stimulus"
-              onChange={value => onChange("instructor_stimulus", value)}
-              showResponseBtn={false}
-              value={instructorStimulus}
-            />
-          </Col>
-        </Row>
-
-        <Row>
-          <Col md={6}>
-            <Label>{t("component.options.rubricReference")}</Label>
-            <Input
-              value={metadata.rubric_reference}
-              size="large"
-              style={{ width: "80%" }}
-              onChange={e => changeMetadata("rubric_reference", e.target.value)}
-            />
-          </Col>
-        </Row>
-
-        <Row>
-          <Col md={12}>
-            <Label>{t("component.options.sampleAnswer")}</Label>
-            <CustomQuillComponent
-              toolbarId="sample_answer"
-              onChange={value => changeMetadata("sample_answer", value)}
-              showResponseBtn={false}
-              value={metadata.sample_answer}
-            />
-          </Col>
-        </Row>
-
-        <Row>
-          <Col md={12}>
-            <Label>{t("component.options.distractorRationale")}</Label>
-            <CustomQuillComponent
-              style={{ ...quillStyle, width: "100%" }}
-              toolbarId="distractor_rationale"
-              onChange={value => changeMetadata("distractor_rationale", value)}
-              showResponseBtn={false}
-              value={metadata.distractor_rationale}
-            />
-          </Col>
-        </Row>
-
-        <Row>
-          <Col md={6}>
-            <Checkbox
-              checked={metadata.distractor_rationale_per_response}
-              onChange={e => changeMetadata("distractor_rationale_per_response", e.target.checked)}
-            >
-              {t("component.options.distractorRationalePerResponse")}
-            </Checkbox>
-          </Col>
-        </Row>
-      </Block>
+      <Extras>
+        <Extras.Distractors />
+        <Extras.Hints />
+      </Extras>
     </WidgetOptions>
   );
 }
@@ -237,27 +142,15 @@ function MathFormulaOptions({
 MathFormulaOptions.propTypes = {
   onChange: PropTypes.func.isRequired,
   item: PropTypes.object.isRequired,
-  stimulusReview: PropTypes.string,
-  instructorStimulus: PropTypes.string,
-  metadata: PropTypes.object,
   responseContainers: PropTypes.array,
   t: PropTypes.func.isRequired,
   textBlocks: PropTypes.array,
-  uiStyle: PropTypes.object,
-  theme: PropTypes.object.isRequired
+  uiStyle: PropTypes.object
 };
 
 MathFormulaOptions.defaultProps = {
   responseContainers: [],
   textBlocks: [],
-  stimulusReview: "",
-  instructorStimulus: "",
-  metadata: {
-    rubric_reference: "",
-    sample_answer: "",
-    distractor_rationale: "",
-    distractor_rationale_per_response: false
-  },
   uiStyle: {
     type: "standard",
     fontsize: "normal",
