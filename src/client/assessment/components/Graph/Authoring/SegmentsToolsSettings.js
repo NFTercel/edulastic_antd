@@ -18,15 +18,15 @@ import DeleteButton from "../common/DeleteButton";
 
 class SegmentsToolsSettings extends Component {
   controls = [
-    { value: "segmentsPoint", label: "Point" },
-    { value: "bothIncludedSegment", label: "Segment" },
-    { value: "bothNotIncludedSegment", label: "Segment with both hollow points" },
-    { value: "onlyRightIncludedSegment", label: "Segment with left hollow point" },
-    { value: "onlyLeftIncludedSegment", label: "Segment with right hollow point" },
-    { value: "infinityToIncludedSegment", label: "Left ray" },
-    { value: "includedToInfinitySegment", label: "Right ray" },
-    { value: "infinityToNotIncludedSegment", label: "Left ray with hollow point" },
-    { value: "notIncludedToInfinitySegment", label: "Right ray with hollow point" }
+    { value: "segments_point", label: "Point" },
+    { value: "segment_both_point_included", label: "Segment" },
+    { value: "segment_both_points_hollow", label: "Segment with both hollow points" },
+    { value: "segment_left_point_hollow", label: "Segment with left hollow point" },
+    { value: "segment_right_point_hollow", label: "Segment with right hollow point" },
+    { value: "ray_left_direction", label: "Left ray" },
+    { value: "ray_right_direction", label: "Right ray" },
+    { value: "ray_left_direction_right_hollow", label: "Left ray with hollow point" },
+    { value: "ray_right_direction_left_hollow", label: "Right ray with hollow point" }
   ];
 
   addTool = groupIndex => {
@@ -137,7 +137,7 @@ class SegmentsToolsSettings extends Component {
     return (
       <Fragment>
         <MoreOptionsContainer>
-          <MoreOptionsSubHeading>{t("Toolbar")}</MoreOptionsSubHeading>
+          <MoreOptionsSubHeading>Toolbar</MoreOptionsSubHeading>
 
           <MoreOptionsRow>
             <GraphToolsParamsWrapper>{this.renderSingleToolsInDefaultGroup()}</GraphToolsParamsWrapper>

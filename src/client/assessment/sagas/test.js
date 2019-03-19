@@ -12,7 +12,8 @@ import {
   LOAD_PREVIOUS_RESPONSES,
   LOAD_ANSWERS,
   SET_TEST_ACTIVITY_ID,
-  LOAD_SCRATCH_PAD
+  LOAD_SCRATCH_PAD,
+  SET_TEST_LOADING_STATUS
 } from "../constants/actions";
 import { loadQuestionsAction } from "../actions/questions";
 import { setShuffledOptions } from "../actions/shuffledOptions";
@@ -31,6 +32,11 @@ const getQuestions = (testItems = []) => {
 
 function* loadTest({ payload }) {
   try {
+    yield put({
+      type: SET_TEST_LOADING_STATUS,
+      payload: true
+    });
+
     const { testActivityId, testId } = payload;
     yield put({
       type: SET_TEST_ID,
@@ -55,7 +61,7 @@ function* loadTest({ payload }) {
 
     let { testItems } = test;
 
-    const { testActivity: activity, questionActivities } = testActivity;
+    const { testActivity: activity, questionActivities = [] } = testActivity;
     // if questions are shuffled !!!
     if (activity.shuffleQuestions) {
       const itemsByKey = _keyBy(testItems, "_id");
@@ -72,7 +78,9 @@ function* loadTest({ payload }) {
       type: LOAD_TEST_ITEMS,
       payload: {
         items: testItems,
-        title: test.title
+        title: test.title,
+        annotations: test.annotations,
+        docUrl: test.docUrl
       }
     });
 
@@ -87,7 +95,6 @@ function* loadTest({ payload }) {
       });
 
       let lastAttemptedQuestion = questionActivities[0] || {};
-      const { questionActivities } = testActivity;
 
       questionActivities.forEach(item => {
         allAnswers = {
@@ -101,7 +108,7 @@ function* loadTest({ payload }) {
 
       // get currentItem index;
       let lastAttendedQuestion = 0;
-      if (lastAttemptedQuestion.testItemId) {
+      if (lastAttemptedQuestion && lastAttemptedQuestion.testItemId) {
         test.testItems.forEach((item, index) => {
           if (item._id === lastAttemptedQuestion.testItemId) {
             lastAttendedQuestion = index;
@@ -132,6 +139,11 @@ function* loadTest({ payload }) {
         });
       }
     }
+
+    yield put({
+      type: SET_TEST_LOADING_STATUS,
+      payload: false
+    });
   } catch (err) {
     console.error(err);
   }

@@ -278,6 +278,9 @@ export function tickLabel(axe, withComma = true, distance = 0) {
       // offset fix for zero label
       return "0&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;";
     }
+    if (axe === "y" && label === 0) {
+      return "";
+    }
     return withComma ? numberWithCommas(label.toFixed(distance)) : label;
   };
 }

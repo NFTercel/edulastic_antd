@@ -13,7 +13,8 @@ const AxisLabelsOptions = ({
   setCanvas,
   fillSections,
   cleanSections,
-  setValidation
+  setValidation,
+  setExtras
 }) => {
   const fontSizeList = [
     {
@@ -83,6 +84,7 @@ const AxisLabelsOptions = ({
     <Fragment>
       <AxisLabelsMoreOptions
         t={t}
+        setExtras={setExtras}
         setCanvas={setCanvas}
         graphData={graphData}
         setOptions={setOptions}

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import { withNamespaces } from "@edulastic/localization";
@@ -14,15 +14,31 @@ import AssessmentDetails from "./AssessmentDetail";
 import StartButton from "../Assignments/components/StartButton";
 import ReviewButton from "../Reports/components/ReviewButton";
 import Attempt from "./Attempt";
+import { Button } from "antd";
 
 // actions
 import { startAssignmentAction, resumeAssignmentAction } from "../Assignments/ducks";
+
+const SafeBrowserButton = ({ testId, testType, assignmentId, testActivityId }) => {
+  const token = window.localStorage.access_token;
+  let url = `${process.env.POI_APP_API_URI.replace("http", "seb").replace(
+    "https",
+    "seb"
+  )}/test-activity/seb/test/${testId}/type/${testType}/assignment/${assignmentId}`;
+  if (testActivityId) {
+    url += `/testActivity/${testActivityId}`;
+  }
+
+  url += `/token/${token}/settings.seb`;
+  return <Button href={url}>Open in Seb</Button>;
+};
 
 const AssignmentCard = ({ startAssignment, resumeAssignment, data, theme, t, type }) => {
   const [showAttempts, setShowAttempts] = useState(false);
 
   const toggleAttemptsView = () => setShowAttempts(prev => !prev);
   const { releaseGradeLabels } = testConstants;
+
   const {
     test = {},
     reports = [],
@@ -30,6 +46,7 @@ const AssignmentCard = ({ startAssignment, resumeAssignment, data, theme, t, typ
     testId,
     startDate,
     _id: assignmentId,
+    safeBrowser,
     shuffleQuestions = false,
     shuffleAnswers = false
   } = data;
@@ -108,14 +125,24 @@ const AssignmentCard = ({ startAssignment, resumeAssignment, data, theme, t, typ
             </AttemptDetails>
           )}
           {type === "assignment" ? (
-            <StartButton
-              data-cy="start"
-              startDate={startDate}
-              t={t}
-              startTest={startTest}
-              attempted={attempted}
-              resume={resume}
-            />
+            safeBrowser ? (
+              <SafeBrowserButton
+                testId={testId}
+                testType={testType}
+                testActivityId={lastAttempt._id}
+                assignmentId={assignmentId}
+              />
+            ) : (
+              <StartButton
+                data-cy="start"
+                safeBrowser={safeBrowser}
+                startDate={startDate}
+                t={t}
+                startTest={startTest}
+                attempted={attempted}
+                resume={resume}
+              />
+            )
           ) : (
             showReviewButton && (
               <ReviewButton

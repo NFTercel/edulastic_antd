@@ -64,6 +64,7 @@ function* saveUserResponse({ payload }) {
     const userTestActivityId = yield select(state => state.test && state.test.testActivityId);
     const shuffledOptions = yield select(state => state.shuffledOptions);
     const currentItem = items.length && items[itemIndex];
+    console.log(currentItem);
     const questions = getQuestionIds(currentItem);
     const itemAnswers = {};
     const shuffles = {};

@@ -15,13 +15,22 @@ import {
   MoreOptionsSubHeading
 } from "../../common/styled_components";
 import { GraphDisplay } from "../../Display";
-import { AnnotationSettings, ControlsSettings, QuestionSection, ScoreSettings } from "..";
+import { AnnotationSettings, AdditionalSettings, ControlsSettings, QuestionSection, ScoreSettings } from "..";
 
 class QuadrantsMoreOptions extends Component {
   handleCheckbox = (name, checked) => {
     const { graphData, setOptions } = this.props;
     const { ui_style } = graphData;
     setOptions({ ...ui_style, [name]: !checked });
+  };
+
+  handleExtraOptionsChange = event => {
+    const {
+      target: { name, value }
+    } = event;
+    const { graphData, setExtras } = this.props;
+    const { extra_options } = graphData;
+    setExtras({ ...extra_options, [name]: value });
   };
 
   handleInputChange = event => {
@@ -68,7 +77,7 @@ class QuadrantsMoreOptions extends Component {
       setValidation
     } = this.props;
 
-    const { ui_style, background_image, controlbar, annotation } = graphData;
+    const { ui_style, background_image, controlbar, annotation, extra_options } = graphData;
 
     const {
       drawLabelZero,
@@ -490,7 +499,6 @@ class QuadrantsMoreOptions extends Component {
           label="BACKGROUND SHAPES"
           cleanSections={cleanSections}
           fillSections={fillSections}
-          marginLast="0"
         >
           <MoreOptionsContainer>
             <MoreOptionsSubHeading>{t("component.graphing.background_shapes")}</MoreOptionsSubHeading>
@@ -505,6 +513,15 @@ class QuadrantsMoreOptions extends Component {
             </MoreOptionsRow>
           </MoreOptionsContainer>
         </QuestionSection>
+        <QuestionSection
+          section="advanced"
+          label="ADDITIONAL OPTIONS"
+          cleanSections={cleanSections}
+          fillSections={fillSections}
+          marginLast="0"
+        >
+          <AdditionalSettings handleChange={this.handleExtraOptionsChange} {...extra_options} />
+        </QuestionSection>
       </Fragment>
     );
   }
@@ -517,6 +534,7 @@ QuadrantsMoreOptions.propTypes = {
   graphData: PropTypes.object.isRequired,
   stemNumerationList: PropTypes.array.isRequired,
   fontSizeList: PropTypes.array.isRequired,
+  setExtras: PropTypes.func.isRequired,
   setOptions: PropTypes.func.isRequired,
   setBgImg: PropTypes.func.isRequired,
   setBgShapes: PropTypes.func.isRequired,

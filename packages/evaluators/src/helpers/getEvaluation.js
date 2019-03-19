@@ -1,4 +1,4 @@
-import { isEqual, includes, difference } from "lodash";
+import { isEqual, includes, difference, isBoolean } from "lodash";
 import { evaluatorTypes } from "@edulastic/constants";
 
 const getEvaluation = (response, answers, rightIndex, compareFunction) => {
@@ -24,7 +24,7 @@ const getEvaluation = (response, answers, rightIndex, compareFunction) => {
     }
   });
 
-  return evaluation;
+  return evaluation.filter(item => isBoolean(item));
 };
 
 export default getEvaluation;

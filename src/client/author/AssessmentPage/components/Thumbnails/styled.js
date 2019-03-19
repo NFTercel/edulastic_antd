@@ -1,14 +1,19 @@
 import styled from "styled-components";
 import { Button } from "antd";
 
+import { white, green } from "@edulastic/colors";
+
 export const ThumbnailsWrapper = styled.div`
   position: relative;
-  width: 213px;
+  width: ${({ review }) => (review ? "243px" : "213px")};
   height: calc(100vh - 62px);
   overflow-y: scroll;
   padding: 30px 28px;
+  padding-right: ${({ review }) => (review ? "60px" : "28px")};
   padding-bottom: 0;
   background: #ebebeb;
+  margin-left: ${({ minimized }) => (minimized ? "-183px" : 0)};
+  transition: margin-left 300ms ease-in-out;
 `;
 
 export const ThumbnailsList = styled.div`
@@ -32,4 +37,29 @@ export const ReuploadButton = styled(Button)`
   text-transform: uppercase;
   border-radius: 5px;
   background: #ebebeb;
+`;
+
+export const MinimizeButton = styled.div`
+  position: fixed;
+  top: 100px;
+  left: ${({ minimized }) => (minimized ? "43px" : "198px")};
+  width: 32px;
+  height: 32px;
+  padding: 9px;
+  background: ${white};
+  border-radius: 5px;
+  cursor: pointer;
+  transition: left 300ms ease-in-out;
+
+  svg {
+    fill: ${green};
+    transform: rotate(${({ minimized }) => (minimized ? 0 : "-180deg")});
+    transition: transform 300ms ease-in-out;
+
+    &:hover,
+    &:active,
+    &:focus {
+      fill: ${green};
+    }
+  }
 `;

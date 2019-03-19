@@ -116,6 +116,7 @@ class Container extends Component {
     const { previewTab, showModal } = this.state;
     const itemId = question === null ? "" : question._id;
     const { checkAnswerButton = false, checkAttempts = 1 } = question.validation || {};
+
     return (
       <div>
         {showModal && (

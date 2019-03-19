@@ -11,12 +11,7 @@ import { getPreviewSelector, getViewSelector } from "../../../src/selectors/view
 import { checkAnswerAction } from "../../../src/actions/testItem";
 import { changePreviewAction } from "../../../src/actions/view";
 import { EXACT_MATCH } from "../../../../assessment/constants/constantsForQuestions";
-import {
-  addQuestionAction,
-  updateQuestionAction,
-  getQuestionsArraySelector,
-  getQuestionsSelector
-} from "../../../sharedDucks/questions";
+import { addQuestionAction, updateQuestionAction } from "../../../sharedDucks/questions";
 import AddQuestion from "../AddQuestion/AddQuestion";
 import QuestionItem from "../QuestionItem/QuestionItem";
 import QuestionEditModal from "../QuestionEditModal/QuestionEditModal";
@@ -72,7 +67,12 @@ const mathData = {
     "Backspace",
     "="
   ],
-  symbols: ["units_si", "units_us", "qwerty"]
+  symbols: ["units_si", "units_us", "qwerty"],
+  template: ""
+};
+
+const multipleChoiceData = {
+  ui_style: { type: "horizontal" }
 };
 
 const createQuestion = type => ({
@@ -89,6 +89,9 @@ const createQuestion = type => ({
     alt_responses: []
   },
   multiple_responses: false,
+  stimulus: "",
+  smallSize: true,
+  ...(type === MULTIPLE_CHOICE ? multipleChoiceData : {}),
   ...(type === MATH ? mathData : {})
 });
 
@@ -141,12 +144,18 @@ class Questions extends React.Component {
     checkAnswer: PropTypes.func.isRequired,
     changePreview: PropTypes.func.isRequired,
     previewMode: PropTypes.string.isRequired,
-    viewMode: PropTypes.string.isRequired
+    viewMode: PropTypes.string.isRequired,
+    noCheck: PropTypes.bool,
+    answersById: PropTypes.object,
+    centered: PropTypes.bool
   };
 
   static defaultProps = {
     list: [],
-    questionsById: {}
+    questionsById: {},
+    noCheck: false,
+    answersById: {},
+    centered: false
   };
 
   state = {
@@ -219,13 +228,13 @@ class Questions extends React.Component {
 
   render() {
     const { currentEditQuestionIndex } = this.state;
-    const { list, previewMode, viewMode } = this.props;
+    const { list, previewMode, viewMode, noCheck, answersById, centered } = this.props;
 
     const review = viewMode === "review";
 
     return (
       <>
-        <QuestionsWrapper>
+        <QuestionsWrapper centered={centered}>
           <div>
             {list.map((question, i) => (
               <QuestionItem
@@ -236,11 +245,13 @@ class Questions extends React.Component {
                 onOpenEdit={this.handleOpenEditModal(i)}
                 previewMode={previewMode}
                 viewMode={viewMode}
+                answer={answersById[question.id]}
+                centered={centered}
               />
             ))}
           </div>
           {!review && <AddQuestion onAdd={this.handleAddQuestion} />}
-          {review && (
+          {review && !noCheck && (
             <AnswerActionsWrapper>
               <AnswerAction active={previewMode === "check"} onClick={this.handleCheckAnswer}>
                 Check Answer
@@ -267,8 +278,6 @@ class Questions extends React.Component {
 const enhance = compose(
   connect(
     state => ({
-      list: getQuestionsArraySelector(state),
-      questionsById: getQuestionsSelector(state),
       previewMode: getPreviewSelector(state),
       viewMode: getViewSelector(state)
     }),

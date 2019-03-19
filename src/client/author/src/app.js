@@ -9,6 +9,7 @@ import { tabletWidth } from "@edulastic/colors";
 import Sidebar from "./Sidebar/SideMenu";
 /* lazy load routes */
 const Assignments = lazy(() => import("../Assignments"));
+const Regrade = lazy(() => import("../Regrade"));
 const AssessmentCreate = lazy(() => import("../AssessmentCreate"));
 const AssessmentPage = lazy(() => import("../AssessmentPage"));
 const ClassBoard = lazy(() => import("../ClassBoard"));
@@ -25,7 +26,7 @@ const CurriculumContainer = lazy(() => import("../CurriculumSequence"));
 const Reports = lazy(() => import("../Reports"));
 const ResponseFrequency = lazy(() => import("../Reports/subPages/ResponseFrequency"));
 const StandardsBasedReport = lazy(() => import("../StandardsBasedReport"));
-
+const ManageClass = lazy(() => import("../ManageClass"));
 // eslint-disable-next-line react/prop-types
 const Author = ({ match, history, isSidebarCollapsed }) => {
   const isPickQuestion = !!history.location.pathname.includes("pickup-questiontype");
@@ -38,10 +39,16 @@ const Author = ({ match, history, isSidebarCollapsed }) => {
           <Suspense fallback={<Progress />}>
             <Switch>
               <Route exact path={`${match.url}/assignments`} component={Assignments} />
+              <Route
+                exact
+                path={`${match.url}/assignments/regrade/new/:newTestId/old/:oldTestId`}
+                component={Regrade}
+              />
               <Route exact path={`${match.url}/assessments/create`} component={AssessmentCreate} />
               <Route exact path={`${match.url}/assessments/:assessmentId`} component={AssessmentPage} />
               <Route exact path={`${match.url}/classboard/:assignmentId/:classId`} component={ClassBoard} />
               <Route exact path={`${match.url}/classresponses/:testActivityId`} component={ClassResponses} />
+              <Route exact path={`${match.url}/manageClass`} component={ManageClass} />
               <Route
                 exact
                 path={`${match.url}/expressgrader/:assignmentId/:classId/:testActivityId`}

@@ -6,13 +6,34 @@ class GraphingStandardPage {
       "Compare by points": "strict"
     };
 
+    this.stemNumerationOption = {
+      Numerical: "numerical",
+      "Uppercase alphabet": "uppercase_alphabet",
+      "Lowercase alphabet": "lowercase_alphabet"
+    };
+
+    this.fontSizeOption = {
+      Small: "small",
+      Normal: "normal",
+      Large: "large",
+      "Extra Large": "extra_large",
+      Huge: "huge"
+    };
+
+    this.controls = {
+      Undo: "undo",
+      Redo: "redo",
+      Reset: "reset"
+    };
+
     this.svgWidth = svgWidth;
     this.svgHeight = svgHeight;
   }
 
+  // boardIndex - board number on page, start with 0
   // xK - percentage of graph width
   // yK - percentage of graph height
-  invokeBoardTrigger(xK, yK) {
+  invokeBoardTrigger(boardIndex, xK, yK) {
     const self = this;
     function CreateEvent(eventName, pos, offset) {
       const ev = new Event(eventName);
@@ -30,30 +51,28 @@ class GraphingStandardPage {
       return CreateEvent("pointerup", [xPer, yPer], [offsetX, offsetY]);
     }
 
-    return this.getBoard().then(board => {
-      cy.window().then(window => {
-        console.log(board);
+    return this.getBoards()
+      .eq(boardIndex)
+      .then(board => {
+        cy.window().then(window => {
+          const boardRect = board[0].getBoundingClientRect();
 
-        const boardRect = board[0].getBoundingClientRect();
+          const left = boardRect.left + window.pageXOffset;
+          const { top } = boardRect;
+          const downEvent = CreatePointerDown(xK, yK, left, top);
+          const upEvent = CreatePointerUp(xK, yK, left, top);
 
-        const left = boardRect.left + window.pageXOffset;
-        const { top } = boardRect;
-        const downEvent = CreatePointerDown(xK, yK, left, top);
-        const upEvent = CreatePointerUp(xK, yK, left, top);
+          let result = true;
+          try {
+            board[0].dispatchEvent(downEvent);
+            window.document.dispatchEvent(upEvent);
+          } catch (e) {
+            result = false;
+          }
 
-        let result = true;
-        console.log(downEvent);
-        console.log(upEvent);
-        try {
-          board[0].dispatchEvent(downEvent);
-          window.document.dispatchEvent(upEvent);
-        } catch (e) {
-          result = false;
-        }
-
-        return result;
+          return result;
+        });
       });
-    });
   }
 
   // elements ---------------------------------------------------------------
@@ -68,6 +87,14 @@ class GraphingStandardPage {
 
   getToolsContainer() {
     return cy.contains("section", "Tools");
+  }
+
+  getGridContainer() {
+    return cy.contains("section", "Grid");
+  }
+
+  getAnnotationContainer() {
+    return cy.contains("section", "Annotation");
   }
 
   getQuestionEditor() {
@@ -99,13 +126,35 @@ class GraphingStandardPage {
   }
 
   getGroups() {
-    return this.getToolsContainer().contains("div", "Group");
+    return this.getToolsContainer().find('[data-cy="toolSubTitle"]');
   }
 
   getGroupTools(groupName) {
     return this.getToolsContainer()
       .contains("div", groupName)
       .find('[data-cy="selectStyle"]');
+  }
+
+  getGroupDeleteButton(groupName) {
+    return this.getToolsContainer()
+      .contains("span", groupName)
+      .find("svg");
+  }
+
+  getToolDeleteButton(groupName, index) {
+    return this.getToolsContainer()
+      .contains("div", groupName)
+      .find('[data-cy="selectStyle"]')
+      .eq(index)
+      .parent()
+      .next();
+  }
+
+  getToolSelect(groupName, index) {
+    return this.getToolsContainer()
+      .contains("div", groupName)
+      .find('select[data-cy="selectStyle"]')
+      .eq(index);
   }
 
   getLayoutWidth() {
@@ -125,14 +174,14 @@ class GraphingStandardPage {
   }
 
   getAxisXSettingsContainer() {
-    return cy
+    return this.getGridContainer()
       .contains("Axis X")
       .parent()
       .parent();
   }
 
   getAxisYSettingsContainer() {
-    return cy
+    return this.getGridContainer()
       .contains("Axis Y")
       .parent()
       .parent();
@@ -154,10 +203,6 @@ class GraphingStandardPage {
     return cy.get('input[name="yTickDistance"]');
   }
 
-  getPointsParameter() {
-    return this.getCorrectAnswersContainer().find('input[type="number"]');
-  }
-
   getXAxisLabel() {
     return cy.get('input[name="xAxisLabel"]');
   }
@@ -166,7 +211,7 @@ class GraphingStandardPage {
     return cy.get('input[name="yAxisLabel"]');
   }
 
-  getBgImageSrc() {
+  getBgImageUrl() {
     return cy.get('input[name="src"]');
   }
 
@@ -190,19 +235,153 @@ class GraphingStandardPage {
     return cy.get('input[name="opacity"]');
   }
 
-  getBgShapesImage() {
-    return cy
-      .contains("Background shapes")
-      .siblings()
-      .find("svg image");
+  getBgImageOnBoard(index) {
+    return this.getBoards(index).find("svg image");
   }
 
   getBoards() {
     return cy.get('[data-cy="axis-quadrants-container"] [data-cy="jxgbox"]');
   }
 
-  getVisibleTickLabelsOnBoard(board) {
-    return cy.wrap(board).find("text.JXGtext:visible");
+  getGraphContainers() {
+    return cy.get('[data-cy="axis-quadrants-container"]');
+  }
+
+  getCorrectAnswerGraphContainer() {
+    return this.getGraphContainers().first();
+  }
+
+  getBgShapesGraphContainer() {
+    return this.getGraphContainers().last();
+  }
+
+  getGraphTools() {
+    return cy.get('[data-cy="graphTools"]');
+  }
+
+  getGraphToolsMainShapes() {
+    return cy.get("ul:first > li");
+  }
+
+  getGraphControls() {
+    return cy.get("ul:last > li");
+  }
+
+  getGraphControlByName(name) {
+    return cy.get("ul:last > li").contains(name);
+  }
+
+  getGraphToolsGroupShapes() {
+    return cy.get("ul > li");
+  }
+
+  getLabelsOnGraphTool(index) {
+    return this.getGraphTools()
+      .eq(index)
+      .find("span");
+  }
+
+  getVisibleTickLabelsOnBoard(index, containText = null) {
+    if (containText !== null) {
+      return this.getBoards()
+        .eq(index)
+        .find("text.JXGtext:not(:empty)")
+        .filter(":visible")
+        .filter(`:contains('${containText}')`);
+    }
+    return this.getBoards()
+      .eq(index)
+      .find("text.JXGtext:not(:empty)")
+      .filter(":visible");
+  }
+
+  getAxisLabelByNameOnBoard(index, name) {
+    return this.getBoards()
+      .eq(index)
+      .contains("div.JXGtext", name);
+  }
+
+  getPointsParameter() {
+    return this.getCorrectAnswersContainer().find('input[type="number"]');
+  }
+
+  getGraphBgShapesPoints() {
+    return cy.get('ellipse[fill="#ccc"]').filter(":visible");
+  }
+
+  getAnnotationTitle() {
+    return this.getAnnotationContainer()
+      .contains("Title")
+      .next()
+      .find(".ql-editor");
+  }
+
+  getAnnotationLabelTop() {
+    return this.getAnnotationContainer()
+      .contains("Label top")
+      .next()
+      .find(".ql-editor");
+  }
+
+  getAnnotationLabelLeft() {
+    return this.getAnnotationContainer()
+      .contains("Label left")
+      .next()
+      .find(".ql-editor");
+  }
+
+  getAnnotationLabelRight() {
+    return this.getAnnotationContainer()
+      .contains("Label right")
+      .next()
+      .find(".ql-editor");
+  }
+
+  getAnnotationLabelBottom() {
+    return this.getAnnotationContainer()
+      .contains("Label bottom")
+      .next()
+      .find(".ql-editor");
+  }
+
+  getGraphPoints() {
+    return cy.get('ellipse[fill="#00b2ff"][stroke="#00b2ff"]').filter(":visible");
+  }
+
+  getGraphCorrectAnswerPoints() {
+    return cy.get('ellipse[fill="#ffcb00"][stroke="#ffcb00"]').filter(":visible");
+  }
+
+  getGraphIncorrectPoints() {
+    return cy.get('ellipse[fill="#ee1658"][stroke="#ee1658"]').filter(":visible");
+  }
+
+  getGraphCorrectPoints() {
+    return cy.get('ellipse[fill="#1fe3a1"][stroke="#1fe3a1"]').filter(":visible");
+  }
+
+  getGraphCircles() {
+    return cy.get('ellipse[fill="transparent"][stroke="#00b2ff"]').filter(":visible");
+  }
+
+  getGraphLines() {
+    return cy.get('line[stroke="#00b2ff"]').filter(":visible");
+  }
+
+  getGraphParabolas() {
+    return cy.get('path[stroke="#00b2ff"]').filter(":visible");
+  }
+
+  getGraphSines() {
+    return cy.get('path[stroke="#00b2ff"]').filter(":visible");
+  }
+
+  getGraphPolygon() {
+    return cy.get('polygon[fill="#00b2ff"]').filter(":visible");
+  }
+
+  getTabsContainer() {
+    return cy.get('[data-cy="tabs"]');
   }
 
   // actions------------------------------------------------------
@@ -214,23 +393,12 @@ class GraphingStandardPage {
   }
 
   clickOnToolDeleteButton(groupName, index) {
-    // todo: needed fix, click on delete icon not worked
-    this.getToolsContainer()
-      .contains("div", groupName)
-      .find('[data-cy="selectStyle"]')
-      .eq(index - 1)
-      .parent()
-      .parent()
-      .find("svg")
-      .click();
+    this.getToolDeleteButton(groupName, index).trigger("click"); // because .click() not worked
     return this;
   }
 
-  selectTool(index, option) {
-    this.getToolsContainer()
-      .find('select[data-cy="selectStyle"]')
-      .eq(index - 1)
-      .select(option);
+  selectTool(groupName, index, option) {
+    this.getToolSelect(groupName, index).select(option);
     return this;
   }
 
@@ -251,10 +419,8 @@ class GraphingStandardPage {
     return this;
   }
 
-  clickOnDeleteGroupButton(groupName) {
-    cy.contains("span", groupName)
-      .find("svg")
-      .click();
+  clickOnGroupDeleteButton(groupName) {
+    this.getGroupDeleteButton(groupName).click();
     return this;
   }
 
@@ -326,9 +492,19 @@ class GraphingStandardPage {
     return this;
   }
 
-  selectLastControlOption(option) {
+  clickOnControlDeleteButton(index) {
     cy.get('[data-cy="selectStyle"]')
-      .last()
+      .eq(index)
+      .parent()
+      .next()
+      // .click();
+      .trigger("click"); // because .click() not worked
+    return this;
+  }
+
+  selectControlOption(index, option) {
+    cy.get('[data-cy="selectStyle"]')
+      .eq(index)
       .select(option);
     return this;
   }
@@ -336,6 +512,31 @@ class GraphingStandardPage {
   clickOnResetButton() {
     cy.contains("Reset")
       .eq(0)
+      .click();
+    return this;
+  }
+
+  clickOnTabsPlusButton() {
+    this.getTabsContainer()
+      .find("button")
+      .click();
+    return this;
+  }
+
+  clickOnTab(index) {
+    this.getTabsContainer()
+      .find("> div")
+      .eq(index)
+      .click();
+    return this;
+  }
+
+  clickOnAlternateAnswerDeleteButton(index) {
+    this.getTabsContainer()
+      .contains("Alternate")
+      .eq(index)
+      .parent()
+      .find("svg")
       .click();
     return this;
   }

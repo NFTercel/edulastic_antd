@@ -1,12 +1,13 @@
 import styled from "styled-components";
 import { Button } from "antd";
 
-import { mainBlueColor, mainBgColor, white } from "@edulastic/colors";
+import { mainBlueColor, white } from "@edulastic/colors";
 
 export const QuestionsWrapper = styled.div`
   position: relative;
   width: 288px;
   height: calc(100vh - 62px);
+  margin: ${({ centered }) => (centered ? "0 auto" : "unset")};
   padding: 30px 0;
   padding-bottom: 155px;
   display: flex;

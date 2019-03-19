@@ -201,7 +201,7 @@ const onHandler = (board, xMin, xMax, settings, lineSettings) => {
 
   if (!showLabels) {
     newAxis.ticks[1].labels.forEach((label, index) => {
-      if (parseInt(label.htmlStr, 10) === 0) {
+      if (parseInt(label.htmlStr, 10) === 0 && index !== 0) {
         board.$board.removeObject(newAxis.ticks[1].labels[index]);
       }
     });

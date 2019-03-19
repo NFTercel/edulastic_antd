@@ -1,11 +1,12 @@
 import styled from "styled-components";
 
-import { white, secondaryTextColor, greenDark, mainBlueColor, green, red } from "@edulastic/colors";
+import { white, secondaryTextColor, greenDark, green, red } from "@edulastic/colors";
 
 export const QuestionItemWrapper = styled.div`
   margin-bottom: 10px;
   padding: 19px 0 18px 13px;
   background: ${white};
+  border-radius: ${({ centered }) => (centered ? "10px" : "unset")};
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
 `;

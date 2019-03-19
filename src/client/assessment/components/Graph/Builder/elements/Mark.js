@@ -54,7 +54,6 @@ const snapMark = (
     } else {
       mark.setAttribute({ cssClass: "mark", highlightCssClass: "mark" });
     }
-    console.log(x);
     point.setPosition(setCoords, [x, y]);
     setValue();
   });

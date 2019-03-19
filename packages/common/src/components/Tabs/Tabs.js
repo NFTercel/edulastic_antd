@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import Tab from './Tab';
-import TabContainer from './TabContainer';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components";
+import Tab from "./Tab";
+import TabContainer from "./TabContainer";
 
 class Tabs extends Component {
   static Tab = Tab;
@@ -13,7 +13,7 @@ class Tabs extends Component {
     const { children, onChange, value, extra, style } = this.props;
 
     return (
-      <Container style={style}>
+      <Container style={style} data-cy="tabs">
         {React.Children.map(children, (child, index) => {
           if (!child) return null;
           return React.cloneElement(child, {

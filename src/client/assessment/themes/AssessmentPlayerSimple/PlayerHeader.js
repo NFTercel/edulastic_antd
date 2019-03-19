@@ -2,14 +2,25 @@ import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Header, FlexContainer, HeaderLeftMenu, MobileMainMenu as Mobile, HeaderMainMenu } from "../common";
-import { IconLogoCompact, IconSave, IconPause, IconLogout } from "@edulastic/icons";
+import { IconLogoCompact, IconSave, IconPause, IconLogout, IconSend } from "@edulastic/icons";
 import { IPAD_PORTRAIT_WIDTH } from "../../constants/others";
 import { boxShadowDefault } from "@edulastic/colors";
 import QuestionSelectDropdown from "../common/QuestionSelectDropdown";
 
 import ProgressContainer from "./ProgressContainer";
 
-const PlayerHeader = ({ title, dropdownOptions, currentItem, onOpenExitPopup, theme, gotoQuestion }) => {
+const PlayerHeader = ({
+  title,
+  dropdownOptions,
+  currentItem,
+  onOpenExitPopup,
+  theme,
+  gotoQuestion,
+  onPause,
+  onSaveProgress,
+  showSubmit,
+  onSubmit
+}) => {
   return (
     <Fragment>
       <HeaderPracticePlayer>
@@ -22,12 +33,24 @@ const PlayerHeader = ({ title, dropdownOptions, currentItem, onOpenExitPopup, th
             <ProgressContainer questions={dropdownOptions} current={currentItem + 1} desktop={"true"} />
             <ContainerRight>
               <FlexDisplay>
-                <Save>
+                {showSubmit && (
+                  <Save onClick={onSubmit}>
+                    <IconSend color={theme.headerIconColor} />
+                  </Save>
+                )}
+                <Save onClick={onSaveProgress}>
                   <IconSave color={theme.headerIconColor} />
                 </Save>
-                <StyledLink to="/home/assignments">
-                  <IconPause color={theme.headerIconColor} />
-                </StyledLink>
+                {onPause && (
+                  <Save onClick={onPause}>
+                    <IconPause color={theme.headerIconColor} />
+                  </Save>
+                )}
+                {!onPause && (
+                  <StyledLink to="/home/assignments">
+                    <IconPause color={theme.headerIconColor} />
+                  </StyledLink>
+                )}
                 <Save onClick={onOpenExitPopup}>
                   <IconLogout color={theme.headerIconColor} />
                 </Save>
@@ -50,6 +73,10 @@ const PlayerHeader = ({ title, dropdownOptions, currentItem, onOpenExitPopup, th
       </Mobile>
     </Fragment>
   );
+};
+
+PlayerHeader.defaultProps = {
+  onSaveProgress: () => {}
 };
 
 export default PlayerHeader;
@@ -116,6 +143,7 @@ const HeaderPracticePlayer = styled(Header)`
   background: ${props => props.theme.headerBg};
   box-shadow: ${boxShadowDefault};
   height: 70px;
+  z-index: 1;
   @media (max-width: ${IPAD_PORTRAIT_WIDTH}px) {
     height: 104px;
   }

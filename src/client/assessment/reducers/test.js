@@ -4,7 +4,8 @@ import {
   SET_TEST_ACTIVITY_ID,
   SET_TEST_ID,
   RESET_CURRENT_TEST_ITEM,
-  SET_RESUME_STATUS
+  SET_RESUME_STATUS,
+  SET_TEST_LOADING_STATUS
 } from "../constants/actions";
 
 const initialState = {
@@ -12,7 +13,8 @@ const initialState = {
   resume: false, // resume from last attempted?
   items: [],
   currentItem: 0,
-  title: ""
+  title: "",
+  loading: true
 };
 
 const test = (state = initialState, { payload, type }) => {
@@ -21,7 +23,9 @@ const test = (state = initialState, { payload, type }) => {
       return {
         ...state,
         items: payload.items,
-        title: payload.title
+        title: payload.title,
+        annotations: payload.annotations,
+        docUrl: payload.docUrl
       };
 
     case GOTO_ITEM:
@@ -50,6 +54,11 @@ const test = (state = initialState, { payload, type }) => {
       return {
         ...state,
         resume: payload
+      };
+    case SET_TEST_LOADING_STATUS:
+      return {
+        ...state,
+        loading: payload
       };
     default:
       return state;

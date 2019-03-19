@@ -274,43 +274,43 @@ const onHandler = (type, stackResponses, stackResponsesSpacing) => (board, coord
 
 const determineVectorType = (type, board, coords, stackResponses, stackResponsesSpacing) => {
   switch (type) {
-    case CONSTANT.TOOLS.INFINITY_TO_INCLUDED_SEGMENT:
+    case CONSTANT.TOOLS.RAY_LEFT_DIRECTION:
       return drawVector(
         board,
         coords,
         true,
         false,
-        CONSTANT.TOOLS.INFINITY_TO_INCLUDED_SEGMENT,
+        CONSTANT.TOOLS.RAY_LEFT_DIRECTION,
         stackResponses,
         stackResponsesSpacing
       );
-    case CONSTANT.TOOLS.INFINITY_TO_NOT_INCLUDED_SEGMENT:
+    case CONSTANT.TOOLS.RAY_LEFT_DIRECTION_RIGHT_HOLLOW:
       return drawVector(
         board,
         coords,
         false,
         false,
-        CONSTANT.TOOLS.INFINITY_TO_NOT_INCLUDED_SEGMENT,
+        CONSTANT.TOOLS.RAY_LEFT_DIRECTION_RIGHT_HOLLOW,
         stackResponses,
         stackResponsesSpacing
       );
-    case CONSTANT.TOOLS.INCLUDED_TO_INFINITY_SEGMENT:
+    case CONSTANT.TOOLS.RAY_RIGHT_DIRECTION:
       return drawVector(
         board,
         coords,
         true,
         true,
-        CONSTANT.TOOLS.INCLUDED_TO_INFINITY_SEGMENT,
+        CONSTANT.TOOLS.RAY_RIGHT_DIRECTION,
         stackResponses,
         stackResponsesSpacing
       );
-    case CONSTANT.TOOLS.NOT_INCLUDED_TO_INFINITY_SEGMENT:
+    case CONSTANT.TOOLS.RAY_RIGHT_DIRECTION_LEFT_HOLLOW:
       return drawVector(
         board,
         coords,
         false,
         true,
-        CONSTANT.TOOLS.NOT_INCLUDED_TO_INFINITY_SEGMENT,
+        CONSTANT.TOOLS.RAY_RIGHT_DIRECTION_LEFT_HOLLOW,
         stackResponses,
         stackResponsesSpacing
       );
@@ -321,13 +321,13 @@ const determineVectorType = (type, board, coords, stackResponses, stackResponses
 
 const determineAnswerType = (board, config) => {
   switch (config.type) {
-    case CONSTANT.TOOLS.INFINITY_TO_INCLUDED_SEGMENT:
+    case CONSTANT.TOOLS.RAY_LEFT_DIRECTION:
       return renderAnswer(board, config, true, false);
-    case CONSTANT.TOOLS.INFINITY_TO_NOT_INCLUDED_SEGMENT:
+    case CONSTANT.TOOLS.RAY_LEFT_DIRECTION_RIGHT_HOLLOW:
       return renderAnswer(board, config, false, false);
-    case CONSTANT.TOOLS.INCLUDED_TO_INFINITY_SEGMENT:
+    case CONSTANT.TOOLS.RAY_RIGHT_DIRECTION:
       return renderAnswer(board, config, true, true);
-    case CONSTANT.TOOLS.NOT_INCLUDED_TO_INFINITY_SEGMENT:
+    case CONSTANT.TOOLS.RAY_RIGHT_DIRECTION_LEFT_HOLLOW:
       return renderAnswer(board, config, false, true);
     default:
       throw new Error("Unknown tool:");

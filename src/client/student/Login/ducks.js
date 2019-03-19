@@ -71,7 +71,7 @@ function* signup({ payload }) {
   }
 }
 
-function* fetchUser() {
+export function* fetchUser() {
   try {
     // TODO: handle the case of invalid token
     if (!localStorage.access_token) {
@@ -80,9 +80,7 @@ function* fetchUser() {
     const user = yield call(userApi.getUser);
     yield put({
       type: SET_USER,
-      payload: {
-        user
-      }
+      payload: user
     });
   } catch (e) {
     console.log(e);

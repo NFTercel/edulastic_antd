@@ -65,6 +65,17 @@ class GraphAxisLabels extends Component {
     setQuestionData({ ...graphData, canvas });
   };
 
+  handleCanvasBlur = (event, defaultValue) => {
+    const { value, name } = event.target;
+    const { graphData, setQuestionData } = this.props;
+    const { canvas } = graphData;
+
+    if (!value) {
+      canvas[name] = defaultValue;
+      setQuestionData({ ...graphData, canvas });
+    }
+  };
+
   render() {
     const { t, graphData, cleanSections, fillSections } = this.props;
     const { canvas, stimulus } = graphData;
@@ -95,6 +106,7 @@ class GraphAxisLabels extends Component {
                 value={canvas.x_min}
                 name="x_min"
                 onChange={this.handleCanvasChange}
+                onBlur={event => this.handleCanvasBlur(event, 0)}
                 step={1}
                 disabled={false}
               />
@@ -106,6 +118,7 @@ class GraphAxisLabels extends Component {
                 value={canvas.x_max}
                 name="x_max"
                 onChange={this.handleCanvasChange}
+                onBlur={event => this.handleCanvasBlur(event, 10)}
                 step={1}
                 disabled={false}
               />

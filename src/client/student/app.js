@@ -9,12 +9,13 @@ import { themes } from "./themes";
 import Sidebar from "./Sidebar/SideMenu";
 import { Assignment } from "./Assignments";
 import { Report } from "./Reports";
-//TODO
+//TODOSidebar
 import { ReportList } from "./TestAcitivityReport";
 import { Profile } from "./Profile";
 
 import { ManageClass } from "./ManageClass";
 import SkillReportContainer from "./SkillReport";
+import DeepLink from "./DeeplinkAssessment";
 
 const StudentApp = ({ match, isSidebarCollapsed }) => (
   <ThemeProvider theme={themes.default}>
@@ -24,6 +25,16 @@ const StudentApp = ({ match, isSidebarCollapsed }) => (
         <Wrapper>
           <Switch>
             <Route path={`${match.url}/assignments`} component={Assignment} />
+            <Route
+              path={`${
+                match.url
+              }/seb/test/:testId/type/:testType/assignment/:assignmentId/testActivity/:testActivityId`}
+              component={DeepLink}
+            />
+            <Route
+              path={`${match.url}/seb/test/:testId/type/:testType/assignment/:assignmentId`}
+              component={DeepLink}
+            />
             <Route path={`${match.url}/reports`} component={Report} />
             <Route path={`${match.url}/skill-report`} component={SkillReportContainer} />
             <Route path={`${match.url}/manage`} component={ManageClass} />

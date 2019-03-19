@@ -13,15 +13,15 @@ const SegmentsTools = ({
   toolbar
 }) => {
   const segmentsTools = [
-    "segmentsPoint",
-    "bothIncludedSegment",
-    "bothNotIncludedSegment",
-    "onlyRightIncludedSegment",
-    "onlyLeftIncludedSegment",
-    "infinityToIncludedSegment",
-    "includedToInfinitySegment",
-    "infinityToNotIncludedSegment",
-    "notIncludedToInfinitySegment"
+    "segments_point",
+    "segment_both_point_included",
+    "segment_both_points_hollow",
+    "segment_left_point_hollow",
+    "segment_right_point_hollow",
+    "ray_left_direction",
+    "ray_right_direction",
+    "ray_left_direction_right_hollow",
+    "ray_right_direction_left_hollow"
   ];
 
   const uiTools =

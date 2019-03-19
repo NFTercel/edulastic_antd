@@ -51,38 +51,36 @@ class QuestionViewContainer extends Component {
     return (
       <React.Fragment>
         <StyledCard bordered={false} width="100%">
-          <ResponsiveContainer width="100%" height={240}>
-            <ComposedChart barGap={1} barSize={36} data={data} margin={{ top: 20, right: 60, bottom: 0, left: 20 }}>
-              <XAxis dataKey="name" axisLine={false} tickSize={0} />
-              <YAxis
-                dataKey="score"
-                yAxisId={0}
-                tickCount={4}
-                allowDecimals={false}
-                tick={{ strokeWidth: 0, fill: "#999" }}
-                tickSize={6}
-                label={{ value: "PERFORMANCE", angle: -90, fill: "#999" }}
-                stroke="#999"
-              />
-              <YAxis
-                dataKey="time"
-                yAxisId={1}
-                tickCount={4}
-                allowDecimals={false}
-                tick={{ strokeWidth: 0, fill: "#999" }}
-                tickSize={6}
-                label={{
-                  value: "AVG TIME (SECONDS)",
-                  angle: -90,
-                  fill: "#999"
-                }}
-                orientation="right"
-                stroke="#999"
-              />
-              <Bar stackId="a" dataKey="score" fill="#1fe3a0" onClick={this.onClickChart} />
-              <Bar stackId="a" dataKey="time" fill="#ee1b82" onClick={this.onClickChart} />
-            </ComposedChart>
-          </ResponsiveContainer>
+          <ComposedChart barGap={1} barSize={36} data={data} width={1200} height={250}>
+            <XAxis dataKey="name" axisLine={false} tickSize={0} />
+            <YAxis
+              dataKey="score"
+              yAxisId={0}
+              tickCount={4}
+              allowDecimals={false}
+              tick={{ strokeWidth: 0, fill: "#999" }}
+              tickSize={6}
+              label={{ value: "PERFORMANCE", angle: -90, fill: "#999" }}
+              stroke="#999"
+            />
+            <YAxis
+              dataKey="time"
+              yAxisId={1}
+              tickCount={4}
+              allowDecimals={false}
+              tick={{ strokeWidth: 0, fill: "#999" }}
+              tickSize={6}
+              label={{
+                value: "AVG TIME (SECONDS)",
+                angle: -90,
+                fill: "#999"
+              }}
+              orientation="right"
+              stroke="#999"
+            />
+            <Bar stackId="a" dataKey="score" fill="#1fe3a0" onClick={this.onClickChart} />
+            <Bar stackId="a" dataKey="time" fill="#ee1b82" onClick={this.onClickChart} />
+          </ComposedChart>
         </StyledCard>
         <StudentResponse testActivity={testActivity} />
         {testActivity &&

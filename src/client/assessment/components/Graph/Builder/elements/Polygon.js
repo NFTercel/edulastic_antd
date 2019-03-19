@@ -28,7 +28,6 @@ function onHandler() {
     if (points.length >= 3) {
       // wait 3 points
       // handle closing polygon
-      console.log(points.length);
       const coords = board.getCoords(event);
       if (isStart(points[0], coords.usrCoords)) {
         lines.map(board.$board.removeObject.bind(board.$board));

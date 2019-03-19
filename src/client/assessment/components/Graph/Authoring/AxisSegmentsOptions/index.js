@@ -15,6 +15,7 @@ const AxisSegmentsOptions = ({
   graphData,
   setValidation,
   setControls,
+  setExtras,
   toolbar
 }) => {
   const getFontSizeList = () => [
@@ -68,11 +69,13 @@ const AxisSegmentsOptions = ({
     }
   ];
 
-  const { canvas, ui_style, numberlineAxis } = graphData;
+  const { canvas, ui_style, numberlineAxis, extra_options } = graphData;
 
   return (
     <Fragment>
       <AxisSegmentsMoreOptions
+        extra_options={extra_options}
+        setExtras={setExtras}
         options={ui_style}
         setCanvas={setCanvas}
         canvasConfig={canvas}

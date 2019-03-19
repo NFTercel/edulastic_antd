@@ -1,7 +1,7 @@
-import API from './utils/API';
+import API from "./utils/API";
 
 const api = new API();
-const prefix = '/user';
+const prefix = "/user/me";
 
 /*
  * api for fetching logged in users details
@@ -10,7 +10,7 @@ const getUser = () =>
   api
     .callApi({
       url: prefix,
-      method: 'get'
+      method: "get"
     })
     .then(result => result.data.result);
 

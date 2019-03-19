@@ -15,12 +15,21 @@ import {
 import FontSizeDropdown from "./FontSizeDropdown";
 import FractionsFormatDropdown from "./FractionsFormatDropdown";
 import RenderingBaseDropdown from "./RenderingBaseDropdown";
-import { QuestionSection, ScoreSettings } from "..";
+import { AdditionalSettings, QuestionSection, ScoreSettings } from "..";
 
 class AxisLabelsMoreOptions extends Component {
   state = {
     currentFractionItem: {},
     currentRenderingBaseItem: {}
+  };
+
+  handleExtraOptionsChange = event => {
+    const {
+      target: { name, value }
+    } = event;
+    const { graphData, setExtras } = this.props;
+    const { extra_options } = graphData;
+    setExtras({ ...extra_options, [name]: value });
   };
 
   handleNumberlineCheckboxChange = (name, checked) => {
@@ -67,6 +76,15 @@ class AxisLabelsMoreOptions extends Component {
     } else {
       setOptions({ ...ui_style, [name]: parseInt(value, 10) });
     }
+  };
+
+  handleInputChange = event => {
+    const {
+      target: { name, value }
+    } = event;
+    const { graphData, setOptions } = this.props;
+    const { ui_style } = graphData;
+    setOptions({ ...ui_style, [name]: value });
   };
 
   getFontSizeItem = () => {
@@ -133,7 +151,7 @@ class AxisLabelsMoreOptions extends Component {
       setValidation
     } = this.props;
 
-    const { canvas, ui_style, numberlineAxis } = graphData;
+    const { canvas, ui_style, numberlineAxis, extra_options } = graphData;
 
     return (
       <Fragment>
@@ -152,9 +170,9 @@ class AxisLabelsMoreOptions extends Component {
                   <MoreOptionsInput
                     type="text"
                     name="layout_width"
-                    defaultValue="550"
-                    value={ui_style.layout_width}
-                    onChange={this.handleOptionsInputChange}
+                    placeholder="0"
+                    value={ui_style.layout_width === 0 ? null : ui_style.layout_width}
+                    onChange={this.handleInputChange}
                   />
                 </MoreOptionsRow>
 
@@ -163,8 +181,8 @@ class AxisLabelsMoreOptions extends Component {
                   <MoreOptionsInput
                     type="text"
                     name="margin"
-                    defaultValue="15"
-                    value={canvas.margin}
+                    placeholder="0"
+                    value={canvas.margin === 0 ? null : canvas.margin}
                     onChange={this.handleCanvasInputChange}
                   />
                 </MoreOptionsRow>
@@ -174,8 +192,8 @@ class AxisLabelsMoreOptions extends Component {
                   <MoreOptionsInput
                     type="text"
                     name="title_position"
-                    defaultValue="50"
-                    value={ui_style.title_position}
+                    placeholder="0"
+                    value={ui_style.title_position === 0 ? null : ui_style.title_position}
                     onChange={this.handleOptionsInputChange}
                   />
                 </MoreOptionsRow>
@@ -185,8 +203,8 @@ class AxisLabelsMoreOptions extends Component {
                   <MoreOptionsInput
                     type="text"
                     name="separationDistanceX"
-                    defaultValue="10"
-                    value={numberlineAxis.separationDistanceX}
+                    placeholder="0"
+                    value={numberlineAxis.separationDistanceX === 0 ? null : numberlineAxis.separationDistanceX}
                     onChange={this.handleNumberlineInputChange}
                   />
                 </MoreOptionsRow>
@@ -201,6 +219,7 @@ class AxisLabelsMoreOptions extends Component {
                 </MoreOptionsRow>
 
                 <MoreOptionsRow>
+                  <MoreOptionsLabel>{t("component.graphing.layoutoptions.fontSize")}</MoreOptionsLabel>
                   <FontSizeDropdown
                     t={t}
                     fontSizeList={fontSizeList}
@@ -216,7 +235,6 @@ class AxisLabelsMoreOptions extends Component {
                   <MoreOptionsInput
                     type="text"
                     name="layout_height"
-                    defaultValue="auto"
                     value={ui_style.layout_height}
                     onChange={this.handleOptionsInputChange}
                   />
@@ -226,9 +244,9 @@ class AxisLabelsMoreOptions extends Component {
                   <MoreOptionsLabel>{t("component.graphing.layoutoptions.lineposition")}</MoreOptionsLabel>
                   <MoreOptionsInput
                     type="text"
-                    defaultValue="35"
                     name="line_position"
-                    value={ui_style.line_position}
+                    placeholder="0"
+                    value={ui_style.line_position === 0 ? null : ui_style.line_position}
                     onChange={this.handleOptionsInputChange}
                   />
                 </MoreOptionsRow>
@@ -237,9 +255,9 @@ class AxisLabelsMoreOptions extends Component {
                   <MoreOptionsLabel>{t("component.graphing.layoutoptions.pointboxposition")}</MoreOptionsLabel>
                   <MoreOptionsInput
                     type="text"
-                    defaultValue="60"
                     name="point_box_position"
-                    value={ui_style.point_box_position}
+                    placeholder="0"
+                    value={ui_style.point_box_position === 0 ? null : ui_style.point_box_position}
                     onChange={this.handleOptionsInputChange}
                   />
                 </MoreOptionsRow>
@@ -248,9 +266,9 @@ class AxisLabelsMoreOptions extends Component {
                   <MoreOptionsLabel>{t("component.graphing.layoutoptions.separationdistancey")}</MoreOptionsLabel>
                   <MoreOptionsInput
                     type="text"
-                    defaultValue="20"
+                    placeholder="0"
                     name="separationDistanceY"
-                    value={numberlineAxis.separationDistanceY}
+                    value={numberlineAxis.separationDistanceY === 0 ? null : numberlineAxis.separationDistanceY}
                     onChange={this.handleNumberlineInputChange}
                   />
                 </MoreOptionsRow>
@@ -307,7 +325,6 @@ class AxisLabelsMoreOptions extends Component {
                   <MoreOptionsLabel>{t("component.graphing.ticksoptions.tickdistance")}</MoreOptionsLabel>
                   <MoreOptionsInput
                     type="number"
-                    defaultValue="1"
                     name="ticksDistance"
                     onChange={this.handleNumberlineInputChange}
                     value={numberlineAxis.ticksDistance}
@@ -353,7 +370,6 @@ class AxisLabelsMoreOptions extends Component {
                   <MoreOptionsLabel>{t("component.graphing.labelsoptions.displayspecificpoints")}</MoreOptionsLabel>
                   <MoreOptionsInput
                     type="text"
-                    defaultValue=""
                     name="specificPoints"
                     onChange={this.handleNumberlineInputChange}
                     value={numberlineAxis.specificPoints}
@@ -370,6 +386,15 @@ class AxisLabelsMoreOptions extends Component {
             </MoreOptionsColumnContainer>
           </MoreOptionsContainer>
         </QuestionSection>
+        <QuestionSection
+          section="advanced"
+          label="ADDITIONAL OPTIONS"
+          cleanSections={cleanSections}
+          fillSections={fillSections}
+          marginLast={0}
+        >
+          <AdditionalSettings handleChange={this.handleExtraOptionsChange} {...extra_options} />
+        </QuestionSection>
       </Fragment>
     );
   }
@@ -384,6 +409,7 @@ AxisLabelsMoreOptions.propTypes = {
   fractionsFormatList: PropTypes.array.isRequired,
   renderingBaseList: PropTypes.array.isRequired,
   setOptions: PropTypes.func.isRequired,
+  setExtras: PropTypes.func.isRequired,
   setNumberline: PropTypes.func.isRequired,
   setCanvas: PropTypes.func.isRequired,
   setValidation: PropTypes.func.isRequired

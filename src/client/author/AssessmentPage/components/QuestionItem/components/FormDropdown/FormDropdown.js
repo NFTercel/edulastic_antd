@@ -9,12 +9,21 @@ export default class FormDropdown extends React.Component {
   static propTypes = {
     saveAnswer: PropTypes.func.isRequired,
     mode: PropTypes.oneOf(["edit", "review"]).isRequired,
-    question: PropTypes.object.isRequired
+    question: PropTypes.object.isRequired,
+    answer: PropTypes.string
   };
 
-  state = {
-    currentValue: ""
+  static defaultProps = {
+    answer: ""
   };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      currentValue: props.answer
+    };
+  }
 
   handleChange = value => {
     const { saveAnswer } = this.props;

@@ -54,3 +54,8 @@ export const itemQuestionsSelector = createSelector(
     return questions;
   }
 );
+
+export const testLoadingSelector = createSelector(
+  stateSelector,
+  state => state.loading
+);

@@ -11,16 +11,22 @@ export default class FormChoice extends React.Component {
     mode: PropTypes.oneOf(["edit", "review"]).isRequired,
     question: PropTypes.object.isRequired,
     onCreateOptions: PropTypes.func.isRequired,
-    evaluation: PropTypes.oneOfType([PropTypes.array, PropTypes.bool])
+    evaluation: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
+    answer: PropTypes.array
   };
 
   static defaultProps = {
-    evaluation: undefined
+    evaluation: undefined,
+    answer: []
   };
 
-  state = {
-    currentValue: []
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      currentValue: props.answer
+    };
+  }
 
   handleSelect = nextValue => () => {
     const { currentValue } = this.state;
@@ -40,6 +46,7 @@ export default class FormChoice extends React.Component {
       toggledValue.splice(valueIndex, 1);
     } else {
       toggledValue.push(nextValue);
+      toggledValue.sort();
     }
 
     this.saveValue(toggledValue);
@@ -67,7 +74,8 @@ export default class FormChoice extends React.Component {
     const { currentValue } = this.state;
     const {
       question: { options, multiple_responses: multipleResponses },
-      evaluation
+      evaluation,
+      view
     } = this.props;
 
     const getCorrect = value => {
@@ -89,7 +97,7 @@ export default class FormChoice extends React.Component {
         key={`form-${label}-${key}`}
         selected={currentValue.includes(value)}
         correct={evaluation && getCorrect(value)}
-        checked={!isUndefined(evaluation)}
+        checked={!isUndefined(evaluation) && view !== "clear"}
         onClick={this.handleSelect(value)}
         review
       >

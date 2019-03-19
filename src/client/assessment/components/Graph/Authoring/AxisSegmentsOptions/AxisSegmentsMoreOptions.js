@@ -16,7 +16,7 @@ import {
 } from "../../common/styled_components";
 import FontSizeDropdown from "../AxisLabelsLayoutSettings/FontSizeDropdown";
 import RenderingBaseDropdown from "../AxisLabelsLayoutSettings/RenderingBaseDropdown";
-import { QuestionSection, ScoreSettings, SegmentsToolsSettings } from "../";
+import { AdditionalSettings, QuestionSection, ScoreSettings, SegmentsToolsSettings } from "../";
 
 class AxisSegmentsMoreOptions extends Component {
   state = {
@@ -32,6 +32,14 @@ class AxisSegmentsMoreOptions extends Component {
     { label: "Partial match", value: "partialMatch" },
     { label: "Partial match v2", value: "partialMatchV2" }
   ];
+
+  handleExtraOptionsChange = event => {
+    const {
+      target: { name, value }
+    } = event;
+    const { extra_options, setExtras } = this.props;
+    setExtras({ ...extra_options, [name]: value });
+  };
 
   handleNumberlineCheckboxChange = (name, checked) => {
     const { numberlineAxis, setNumberline } = this.props;
@@ -141,6 +149,7 @@ class AxisSegmentsMoreOptions extends Component {
       cleanSections,
       setValidation,
       graphData,
+      extra_options,
       toolbar,
       setControls
     } = this.props;
@@ -175,7 +184,6 @@ class AxisSegmentsMoreOptions extends Component {
                         <MoreOptionsLabel>{t("component.graphing.layoutoptions.width")}</MoreOptionsLabel>
                         <MoreOptionsInput
                           type="text"
-                          defaultValue="600px"
                           name="layout_width"
                           onChange={this.handleOptionsInputChange}
                           value={options.layout_width}
@@ -194,7 +202,6 @@ class AxisSegmentsMoreOptions extends Component {
                         <MoreOptionsLabel>{t("component.graphing.layoutoptions.minWidth")}</MoreOptionsLabel>
                         <MoreOptionsInput
                           type="text"
-                          defaultValue="600px"
                           name="minWidth"
                           onChange={this.handleInputChange}
                           value={minWidth}
@@ -206,7 +213,6 @@ class AxisSegmentsMoreOptions extends Component {
                         <MoreOptionsLabel>{t("component.graphing.layoutoptions.height")}</MoreOptionsLabel>
                         <MoreOptionsInput
                           type="text"
-                          defaultValue="600px"
                           name="layout_height"
                           onChange={this.handleOptionsInputChange}
                           value={options.layout_height}
@@ -225,8 +231,8 @@ class AxisSegmentsMoreOptions extends Component {
                       <MoreOptionsInput
                         type="text"
                         name="margin"
-                        defaultValue="75"
-                        value={canvasConfig.margin}
+                        placeholder="0"
+                        value={canvasConfig.margin === 0 ? null : canvasConfig.margin}
                         onChange={this.handleCanvasInputChange}
                       />
                     </MoreOptionsRow>
@@ -254,10 +260,10 @@ class AxisSegmentsMoreOptions extends Component {
                       <MoreOptionsLabel>{t("component.graphing.layoutoptions.spacingBtwStacked")}</MoreOptionsLabel>
                       <MoreOptionsInput
                         type="text"
-                        defaultValue="30"
                         name="stackResponsesSpacing"
+                        placeholder="0"
                         onChange={this.handleNumberlineInputChange}
-                        value={numberlineAxis.stackResponsesSpacing}
+                        value={numberlineAxis.stackResponsesSpacing === 0 ? null : numberlineAxis.stackResponsesSpacing}
                       />
                     </MoreOptionsRow>
                     <MoreOptionsRow>
@@ -324,7 +330,6 @@ class AxisSegmentsMoreOptions extends Component {
                   <MoreOptionsLabel>{t("component.graphing.ticksoptions.tickdistance")}</MoreOptionsLabel>
                   <MoreOptionsInput
                     type="number"
-                    defaultValue="1"
                     name="ticksDistance"
                     onChange={this.handleNumberlineInputChange}
                     value={numberlineAxis.ticksDistance}
@@ -338,7 +343,6 @@ class AxisSegmentsMoreOptions extends Component {
                   <MoreOptionsLabel>{t("component.graphing.ticksoptions.minorTicks")}</MoreOptionsLabel>
                   <MoreOptionsInput
                     type="text"
-                    defaultValue="1"
                     name="minorTicks"
                     onChange={this.handleNumberlineInputChange}
                     value={numberlineAxis.minorTicks}
@@ -398,7 +402,6 @@ class AxisSegmentsMoreOptions extends Component {
                   <MoreOptionsLabel>{t("component.graphing.labelsoptions.displayspecificpoints")}</MoreOptionsLabel>
                   <MoreOptionsInput
                     type="text"
-                    defaultValue=""
                     name="specificPoints"
                     onChange={this.handleNumberlineInputChange}
                     value={numberlineAxis.specificPoints}
@@ -407,6 +410,15 @@ class AxisSegmentsMoreOptions extends Component {
               </MoreOptionsColumn>
             </MoreOptionsColumnContainer>
           </MoreOptionsContainer>
+        </QuestionSection>
+        <QuestionSection
+          section="advanced"
+          label="ADDITIONAL OPTIONS"
+          cleanSections={cleanSections}
+          fillSections={fillSections}
+          marginLast={0}
+        >
+          <AdditionalSettings handleChange={this.handleExtraOptionsChange} {...extra_options} />
         </QuestionSection>
       </Fragment>
     );

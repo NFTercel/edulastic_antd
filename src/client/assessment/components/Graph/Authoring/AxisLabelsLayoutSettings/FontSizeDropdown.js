@@ -14,8 +14,12 @@ class FontSizeDropdown extends Component {
     const { fontSizeList, currentItem } = this.props;
 
     return (
-      <Select style={{ width: "77%" }} value={currentItem.value} onChange={this.changeFontSize} options={fontSizeList}>
-      </Select>
+      <Select
+        style={{ width: "77%", marginTop: "11px" }}
+        value={currentItem.value}
+        onChange={this.changeFontSize}
+        options={fontSizeList}
+      />
     );
   }
 }

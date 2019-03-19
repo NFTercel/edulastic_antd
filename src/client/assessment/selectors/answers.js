@@ -1,6 +1,11 @@
 import { createSelector } from "reselect";
+import { values } from "lodash";
 
 export const getAnswersListSelector = state => state.answers;
+export const getAnswersArraySelector = createSelector(
+  getAnswersListSelector,
+  answers => values(answers)
+);
 
 export const getAnswerByQuestionIdSelector = questionId => answers => (questionId ? answers[questionId] : undefined);
 

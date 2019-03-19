@@ -114,6 +114,10 @@ class Board {
     });
   }
 
+  removeBoard(id) {
+    window.JXG.JSXGraph.removeBoard(id);
+  }
+
   /**
    * Assign element handler by const
    * Constants/Tools
@@ -164,19 +168,19 @@ class Board {
           responsesAllowed
         );
         return;
-      case CONSTANT.TOOLS.BOTH_INCLUDED_SEGMENT:
-      case CONSTANT.TOOLS.BOTH_NOT_INCLUDED_SEGMENT:
-      case CONSTANT.TOOLS.ONLY_RIGHT_INCLUDED_SEGMENT:
-      case CONSTANT.TOOLS.ONLY_LEFT_INCLUDED_SEGMENT:
+      case CONSTANT.TOOLS.SEGMENT_BOTH_POINT_INCLUDED:
+      case CONSTANT.TOOLS.SEGMENT_BOTH_POINT_HOLLOW:
+      case CONSTANT.TOOLS.SEGMENT_LEFT_POINT_HOLLOW:
+      case CONSTANT.TOOLS.SEGMENT_RIGHT_POINT_HOLLOW:
         this.setCreatingHandler(
           NumberlineSegment.onHandler(tool, this.stackResponses, this.stackResponsesSpacing, this.setAnswers),
           responsesAllowed
         );
         return;
-      case CONSTANT.TOOLS.INFINITY_TO_INCLUDED_SEGMENT:
-      case CONSTANT.TOOLS.INFINITY_TO_NOT_INCLUDED_SEGMENT:
-      case CONSTANT.TOOLS.INCLUDED_TO_INFINITY_SEGMENT:
-      case CONSTANT.TOOLS.NOT_INCLUDED_TO_INFINITY_SEGMENT:
+      case CONSTANT.TOOLS.RAY_LEFT_DIRECTION:
+      case CONSTANT.TOOLS.RAY_LEFT_DIRECTION_RIGHT_HOLLOW:
+      case CONSTANT.TOOLS.RAY_RIGHT_DIRECTION:
+      case CONSTANT.TOOLS.RAY_RIGHT_DIRECTION_LEFT_HOLLOW:
         this.setCreatingHandler(
           NumberlineVector.onHandler(tool, this.stackResponses, this.stackResponsesSpacing),
           responsesAllowed
@@ -321,22 +325,7 @@ class Board {
 
       points.forEach(p => this.removeObject(p));
       points.forEach(p => {
-        console.log("p", p);
         const newPoint = NumberlinePoint.onHandler(this.stackResponses, this.stackResponsesSpacing)(this, p.X());
-        console.log("newPoint", newPoint);
-        this.elements.push(newPoint);
-      });
-    }
-
-    if (graphType === "axisSegments") {
-      const points = this.elements.filter(element => element.elType === "point");
-      this.elements = this.elements.filter(element => element.elType !== "point");
-
-      points.forEach(p => this.removeObject(p));
-      points.forEach(p => {
-        console.log("p", p);
-        const newPoint = NumberlinePoint.onHandler(this.stackResponses, this.stackResponsesSpacing)(this, p.X());
-        console.log("newPoint", newPoint);
         this.elements.push(newPoint);
       });
     }
@@ -375,6 +364,12 @@ class Board {
         )
       );
     });
+  }
+
+  removeMarks() {
+    const marks = this.elements.filter(element => element.elType === "group");
+    this.elements = this.elements.filter(element => element.elType !== "group");
+    marks.forEach(mark => Mark.removeMark(this, mark));
   }
 
   // Marks shuffled or text edited
@@ -506,7 +501,7 @@ class Board {
       }
     });
     const flatCfg = Object.values(flatConfig(config));
-    console.log(JSON.stringify(flatCfg, null, 2));
+    // console.log(JSON.stringify(flatCfg, null, 2));
     return flatCfg;
   }
 
@@ -521,15 +516,15 @@ class Board {
         switch (element.segmentType) {
           case CONSTANT.TOOLS.SEGMENTS_POINT:
             return NumberlinePoint.getConfig(element);
-          case CONSTANT.TOOLS.BOTH_INCLUDED_SEGMENT:
-          case CONSTANT.TOOLS.BOTH_NOT_INCLUDED_SEGMENT:
-          case CONSTANT.TOOLS.ONLY_RIGHT_INCLUDED_SEGMENT:
-          case CONSTANT.TOOLS.ONLY_LEFT_INCLUDED_SEGMENT:
+          case CONSTANT.TOOLS.SEGMENT_BOTH_POINT_INCLUDED:
+          case CONSTANT.TOOLS.SEGMENT_LEFT_POINT_HOLLOW:
+          case CONSTANT.TOOLS.SEGMENT_RIGHT_POINT_HOLLOW:
+          case CONSTANT.TOOLS.SEGMENT_BOTH_POINT_HOLLOW:
             return NumberlineSegment.getConfig(element);
-          case CONSTANT.TOOLS.INFINITY_TO_INCLUDED_SEGMENT:
-          case CONSTANT.TOOLS.INFINITY_TO_NOT_INCLUDED_SEGMENT:
-          case CONSTANT.TOOLS.INCLUDED_TO_INFINITY_SEGMENT:
-          case CONSTANT.TOOLS.NOT_INCLUDED_TO_INFINITY_SEGMENT:
+          case CONSTANT.TOOLS.RAY_LEFT_DIRECTION:
+          case CONSTANT.TOOLS.RAY_RIGHT_DIRECTION:
+          case CONSTANT.TOOLS.RAY_LEFT_DIRECTION_RIGHT_HOLLOW:
+          case CONSTANT.TOOLS.RAY_RIGHT_DIRECTION_LEFT_HOLLOW:
             return NumberlineVector.getConfig(element);
           default:
             break;
@@ -674,15 +669,15 @@ class Board {
         switch (segment.type) {
           case CONSTANT.TOOLS.SEGMENTS_POINT:
             return NumberlinePoint.renderAnswer(this, segment);
-          case CONSTANT.TOOLS.BOTH_INCLUDED_SEGMENT:
-          case CONSTANT.TOOLS.BOTH_NOT_INCLUDED_SEGMENT:
-          case CONSTANT.TOOLS.ONLY_RIGHT_INCLUDED_SEGMENT:
-          case CONSTANT.TOOLS.ONLY_LEFT_INCLUDED_SEGMENT:
+          case CONSTANT.TOOLS.SEGMENT_BOTH_POINT_INCLUDED:
+          case CONSTANT.TOOLS.SEGMENT_LEFT_POINT_HOLLOW:
+          case CONSTANT.TOOLS.SEGMENT_RIGHT_POINT_HOLLOW:
+          case CONSTANT.TOOLS.SEGMENT_BOTH_POINT_HOLLOW:
             return NumberlineSegment.determineAnswerType(this, segment);
-          case CONSTANT.TOOLS.INFINITY_TO_INCLUDED_SEGMENT:
-          case CONSTANT.TOOLS.INFINITY_TO_NOT_INCLUDED_SEGMENT:
-          case CONSTANT.TOOLS.INCLUDED_TO_INFINITY_SEGMENT:
-          case CONSTANT.TOOLS.NOT_INCLUDED_TO_INFINITY_SEGMENT:
+          case CONSTANT.TOOLS.RAY_LEFT_DIRECTION:
+          case CONSTANT.TOOLS.RAY_RIGHT_DIRECTION:
+          case CONSTANT.TOOLS.RAY_LEFT_DIRECTION_RIGHT_HOLLOW:
+          case CONSTANT.TOOLS.RAY_RIGHT_DIRECTION_LEFT_HOLLOW:
             return NumberlineVector.determineAnswerType(this, segment);
           default:
             break;
@@ -738,80 +733,80 @@ class Board {
         switch (element.type) {
           case CONSTANT.TOOLS.SEGMENTS_POINT:
             return NumberlinePoint.loadPoint(this, [element.point1, element.y], this.stackResponses);
-          case CONSTANT.TOOLS.BOTH_INCLUDED_SEGMENT:
+          case CONSTANT.TOOLS.SEGMENT_BOTH_POINT_INCLUDED:
             return NumberlineSegment.loadSegment(
               this,
               [element.point1, element.point2, element.y],
               true,
               true,
-              element.type,
+              CONSTANT.TOOLS.SEGMENT_BOTH_POINT_INCLUDED,
               this.stackResponses,
               this.setAnswers
             );
-          case CONSTANT.TOOLS.BOTH_NOT_INCLUDED_SEGMENT:
+          case CONSTANT.TOOLS.SEGMENT_BOTH_POINT_HOLLOW:
             return NumberlineSegment.loadSegment(
               this,
               [element.point1, element.point2, element.y],
               false,
               false,
-              element.type,
+              CONSTANT.TOOLS.SEGMENT_BOTH_POINT_HOLLOW,
               this.stackResponses,
               this.setAnswers
             );
-          case CONSTANT.TOOLS.ONLY_RIGHT_INCLUDED_SEGMENT:
+          case CONSTANT.TOOLS.SEGMENT_LEFT_POINT_HOLLOW:
             return NumberlineSegment.loadSegment(
               this,
               [element.point1, element.point2, element.y],
               false,
               true,
-              element.type,
+              CONSTANT.TOOLS.SEGMENT_LEFT_POINT_HOLLOW,
               this.stackResponses,
               this.setAnswers
             );
-          case CONSTANT.TOOLS.ONLY_LEFT_INCLUDED_SEGMENT:
+          case CONSTANT.TOOLS.SEGMENT_RIGHT_POINT_HOLLOW:
             return NumberlineSegment.loadSegment(
               this,
               [element.point1, element.point2, element.y],
               true,
               false,
-              element.type,
+              CONSTANT.TOOLS.SEGMENT_RIGHT_POINT_HOLLOW,
               this.stackResponses,
               this.setAnswers
             );
-          case CONSTANT.TOOLS.INFINITY_TO_INCLUDED_SEGMENT:
+          case CONSTANT.TOOLS.RAY_LEFT_DIRECTION:
             return NumberlineVector.loadVector(
               this,
               [element.point2, element.y],
               true,
               false,
-              CONSTANT.TOOLS.INFINITY_TO_INCLUDED_SEGMENT,
+              CONSTANT.TOOLS.RAY_LEFT_DIRECTION,
               this.stackResponses
             );
-          case CONSTANT.TOOLS.INFINITY_TO_NOT_INCLUDED_SEGMENT:
+          case CONSTANT.TOOLS.RAY_LEFT_DIRECTION_RIGHT_HOLLOW:
             return NumberlineVector.loadVector(
               this,
               [element.point2, element.y],
               false,
               false,
-              CONSTANT.TOOLS.INFINITY_TO_NOT_INCLUDED_SEGMENT,
+              CONSTANT.TOOLS.RAY_LEFT_DIRECTION_RIGHT_HOLLOW,
               this.stackResponses
             );
-          case CONSTANT.TOOLS.INCLUDED_TO_INFINITY_SEGMENT:
+          case CONSTANT.TOOLS.RAY_RIGHT_DIRECTION:
             return NumberlineVector.loadVector(
               this,
               [element.point1, element.y],
               true,
               true,
-              CONSTANT.TOOLS.INCLUDED_TO_INFINITY_SEGMENT,
+              CONSTANT.TOOLS.RAY_RIGHT_DIRECTION,
               this.stackResponses
             );
-          case CONSTANT.TOOLS.NOT_INCLUDED_TO_INFINITY_SEGMENT:
+          case CONSTANT.TOOLS.RAY_RIGHT_DIRECTION_LEFT_HOLLOW:
             return NumberlineVector.loadVector(
               this,
               [element.point1, element.y],
               false,
               true,
-              CONSTANT.TOOLS.NOT_INCLUDED_TO_INFINITY_SEGMENT,
+              CONSTANT.TOOLS.RAY_RIGHT_DIRECTION_LEFT_HOLLOW,
               this.stackResponses
             );
           default:

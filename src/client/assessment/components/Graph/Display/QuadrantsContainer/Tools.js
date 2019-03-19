@@ -43,7 +43,7 @@ export default function Tools(props) {
   const getIconTemplate = (toolName = "point", options) => getIconByToolName(toolName.toLowerCase(), options);
 
   return (
-    <GraphToolbar fontSize={fontSize}>
+    <GraphToolbar fontSize={fontSize} data-cy="graphTools">
       <ToolbarLeft>
         {uiTools.map(
           uiTool =>

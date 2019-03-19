@@ -7,6 +7,7 @@ export const PDFPreviewWrapper = styled.div`
   height: calc(100vh - 62px);
   padding: 30px 23px 30px 24px;
   overflow-y: scroll;
+  margin: 0 auto;
 `;
 
 export const Preview = styled.div`

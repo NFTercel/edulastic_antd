@@ -3,7 +3,16 @@ import TextareaAutosize from "react-autosize-textarea";
 import { greenDark, grey, tabletWidth, greenDarkSecondary, secondaryTextColor, mobileWidth } from "@edulastic/colors";
 import { TextField, Paper } from "@edulastic/common";
 
+export const InstructorStimulus = styled.p`
+  border-radius: 3px;
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 18px;
+  background: ${grey};
+`;
+
 export const StyledTextarea = styled(TextareaAutosize)`
+  margin-top: 15px;
   resize: none;
   width: 100%;
   min-height: 134px;

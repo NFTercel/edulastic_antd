@@ -349,8 +349,6 @@ const drawSegment = (
 
   ticks = ticks.sort((a, b) => a - b);
   const nextTick = ticks[ticks.indexOf(coord) + 1];
-  console.log("coord", coord);
-  console.log("nextTick", nextTick);
 
   if (!stackResponses) {
     if (
@@ -401,46 +399,46 @@ const drawSegment = (
 
 const determineSegmentType = (type, board, coords, stackResponses, stackResponsesSpacing, setAnswers) => {
   switch (type) {
-    case CONSTANT.TOOLS.BOTH_INCLUDED_SEGMENT:
+    case CONSTANT.TOOLS.SEGMENT_BOTH_POINT_INCLUDED:
       return drawSegment(
         board,
         coords,
         true,
         true,
-        CONSTANT.TOOLS.BOTH_INCLUDED_SEGMENT,
+        CONSTANT.TOOLS.SEGMENT_BOTH_POINT_INCLUDED,
         stackResponses,
         stackResponsesSpacing,
         setAnswers
       );
-    case CONSTANT.TOOLS.BOTH_NOT_INCLUDED_SEGMENT:
+    case CONSTANT.TOOLS.SEGMENT_BOTH_POINT_HOLLOW:
       return drawSegment(
         board,
         coords,
         false,
         false,
-        CONSTANT.TOOLS.BOTH_NOT_INCLUDED_SEGMENT,
+        CONSTANT.TOOLS.SEGMENT_BOTH_POINT_HOLLOW,
         stackResponses,
         stackResponsesSpacing,
         setAnswers
       );
-    case CONSTANT.TOOLS.ONLY_RIGHT_INCLUDED_SEGMENT:
+    case CONSTANT.TOOLS.SEGMENT_LEFT_POINT_HOLLOW:
       return drawSegment(
         board,
         coords,
         false,
         true,
-        CONSTANT.TOOLS.ONLY_RIGHT_INCLUDED_SEGMENT,
+        CONSTANT.TOOLS.SEGMENT_LEFT_POINT_HOLLOW,
         stackResponses,
         stackResponsesSpacing,
         setAnswers
       );
-    case CONSTANT.TOOLS.ONLY_LEFT_INCLUDED_SEGMENT:
+    case CONSTANT.TOOLS.SEGMENT_RIGHT_POINT_HOLLOW:
       return drawSegment(
         board,
         coords,
         true,
         false,
-        CONSTANT.TOOLS.ONLY_LEFT_INCLUDED_SEGMENT,
+        CONSTANT.TOOLS.SEGMENT_RIGHT_POINT_HOLLOW,
         stackResponses,
         stackResponsesSpacing,
         setAnswers
@@ -452,13 +450,13 @@ const determineSegmentType = (type, board, coords, stackResponses, stackResponse
 
 const determineAnswerType = (board, config) => {
   switch (config.type) {
-    case CONSTANT.TOOLS.BOTH_INCLUDED_SEGMENT:
+    case CONSTANT.TOOLS.SEGMENT_BOTH_POINT_INCLUDED:
       return renderAnswer(board, config, true, true);
-    case CONSTANT.TOOLS.BOTH_NOT_INCLUDED_SEGMENT:
+    case CONSTANT.TOOLS.SEGMENT_BOTH_POINT_HOLLOW:
       return renderAnswer(board, config, false, false);
-    case CONSTANT.TOOLS.ONLY_RIGHT_INCLUDED_SEGMENT:
+    case CONSTANT.TOOLS.SEGMENT_LEFT_POINT_HOLLOW:
       return renderAnswer(board, config, false, true);
-    case CONSTANT.TOOLS.ONLY_LEFT_INCLUDED_SEGMENT:
+    case CONSTANT.TOOLS.SEGMENT_RIGHT_POINT_HOLLOW:
       return renderAnswer(board, config, true, false);
     default:
       throw new Error("Unknown tool:");

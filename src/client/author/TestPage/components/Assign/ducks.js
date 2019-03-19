@@ -152,9 +152,16 @@ function* saveAssignment({ payload }) {
   }
 }
 
-function* loadAssignments() {
+function* loadAssignments({ payload }) {
   try {
-    const { _id: testId } = yield select(getTestSelector);
+    let testId;
+    if (!payload) {
+      const { _id } = yield select(getTestSelector);
+      testId = _id;
+    } else {
+      testId = payload;
+    }
+
     const data = yield call(assignmentApi.fetchAssignments, testId);
     const assignments = data.map(formatAssignment);
     yield put(loadAssignmentsActions(assignments));

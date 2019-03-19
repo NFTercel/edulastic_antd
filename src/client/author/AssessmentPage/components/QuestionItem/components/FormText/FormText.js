@@ -9,12 +9,21 @@ export default class FormText extends React.Component {
     saveAnswer: PropTypes.func.isRequired,
     mode: PropTypes.oneOf(["edit", "review"]).isRequired,
     question: PropTypes.object.isRequired,
-    onCreateAnswer: PropTypes.func.isRequired
+    onCreateAnswer: PropTypes.func.isRequired,
+    answer: PropTypes.string
   };
 
-  state = {
-    currentValue: ""
+  static defaultProps = {
+    answer: ""
   };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      currentValue: props.answer
+    };
+  }
 
   handleChange = ({ target: { value } }) => {
     const { saveAnswer } = this.props;

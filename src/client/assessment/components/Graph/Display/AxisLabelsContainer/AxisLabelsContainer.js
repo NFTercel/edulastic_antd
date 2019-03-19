@@ -94,7 +94,6 @@ class AxisLabelsContainer extends Component {
       checkAnswer,
       validation
     } = this.props;
-
     this._graph = makeBorder(this._graphId);
 
     if (this._graph) {
@@ -184,9 +183,28 @@ class AxisLabelsContainer extends Component {
       layout,
       graphType,
       gridParams,
-      list
+      list,
+      elements
     } = this.props;
-
+    if (prevProps.elements.length > 0 && elements.length === 0) {
+      this._graph.removeMarks();
+      this._graph.renderMarks(
+        list,
+        [canvas.xMin, canvas.xMax],
+        numberlineAxis,
+        this.setMarks,
+        {
+          position: layout.linePosition,
+          yMax: canvas.yMax,
+          yMin: canvas.yMin
+        },
+        {
+          position: layout.pointBoxPosition,
+          yMax: canvas.yMax,
+          yMin: canvas.yMin
+        }
+      );
+    }
     if (this._graph) {
       if (
         canvas.xMin !== prevProps.canvas.xMin ||

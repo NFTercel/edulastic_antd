@@ -39,43 +39,43 @@ const getColoredElems = (elements, compareResult) => {
 
       switch (el.type) {
         case CONSTANT.TOOLS.SEGMENTS_POINT:
-        case CONSTANT.TOOLS.INFINITY_TO_INCLUDED_SEGMENT:
-        case CONSTANT.TOOLS.INCLUDED_TO_INFINITY_SEGMENT:
+        case CONSTANT.TOOLS.RAY_LEFT_DIRECTION:
+        case CONSTANT.TOOLS.RAY_RIGHT_DIRECTION:
           return {
             colors: detail && detail.result ? green : red,
             pointColor: detail && detail.result ? green : red,
             ...el
           };
-        case CONSTANT.TOOLS.BOTH_INCLUDED_SEGMENT:
+        case CONSTANT.TOOLS.SEGMENT_BOTH_POINT_INCLUDED:
           return {
             lineColor: detail && detail.result ? green : red,
             leftPointColor: detail && detail.result ? green : red,
             rightPointColor: detail && detail.result ? green : red,
             ...el
           };
-        case CONSTANT.TOOLS.BOTH_NOT_INCLUDED_SEGMENT:
+        case CONSTANT.TOOLS.SEGMENT_BOTH_POINT_HOLLOW:
           return {
             lineColor: detail && detail.result ? green : red,
             leftPointColor: detail && detail.result ? greenHollow : redHollow,
             rightPointColor: detail && detail.result ? greenHollow : redHollow,
             ...el
           };
-        case CONSTANT.TOOLS.ONLY_RIGHT_INCLUDED_SEGMENT:
+        case CONSTANT.TOOLS.SEGMENT_LEFT_POINT_HOLLOW:
           return {
             lineColor: detail && detail.result ? green : red,
             leftPointColor: detail && detail.result ? greenHollow : redHollow,
             rightPointColor: detail && detail.result ? green : red,
             ...el
           };
-        case CONSTANT.TOOLS.ONLY_LEFT_INCLUDED_SEGMENT:
+        case CONSTANT.TOOLS.SEGMENT_RIGHT_POINT_HOLLOW:
           return {
             lineColor: detail && detail.result ? green : red,
             leftPointColor: detail && detail.result ? green : red,
             rightPointColor: detail && detail.result ? greenHollow : redHollow,
             ...el
           };
-        case CONSTANT.TOOLS.INFINITY_TO_NOT_INCLUDED_SEGMENT:
-        case CONSTANT.TOOLS.NOT_INCLUDED_TO_INFINITY_SEGMENT:
+        case CONSTANT.TOOLS.RAY_LEFT_DIRECTION_RIGHT_HOLLOW:
+        case CONSTANT.TOOLS.RAY_RIGHT_DIRECTION_LEFT_HOLLOW:
           return {
             colors: detail && detail.result ? green : red,
             pointColor: detail && detail.result ? greenHollow : redHollow,
@@ -93,43 +93,43 @@ const getColoredAnswer = answerArr => {
     return answerArr.map(el => {
       switch (el.type) {
         case CONSTANT.TOOLS.SEGMENTS_POINT:
-        case CONSTANT.TOOLS.INFINITY_TO_INCLUDED_SEGMENT:
-        case CONSTANT.TOOLS.INCLUDED_TO_INFINITY_SEGMENT:
+        case CONSTANT.TOOLS.RAY_LEFT_DIRECTION:
+        case CONSTANT.TOOLS.RAY_RIGHT_DIRECTION:
           return {
             colors: Colors.yellow[CONSTANT.TOOLS.POINT],
             pointColor: Colors.yellow[CONSTANT.TOOLS.POINT],
             ...el
           };
-        case CONSTANT.TOOLS.BOTH_INCLUDED_SEGMENT:
+        case CONSTANT.TOOLS.SEGMENT_BOTH_POINT_INCLUDED:
           return {
             lineColor: Colors.yellow[CONSTANT.TOOLS.POINT],
             leftPointColor: Colors.yellow[CONSTANT.TOOLS.POINT],
             rightPointColor: Colors.yellow[CONSTANT.TOOLS.POINT],
             ...el
           };
-        case CONSTANT.TOOLS.BOTH_NOT_INCLUDED_SEGMENT:
+        case CONSTANT.TOOLS.SEGMENT_BOTH_POINT_HOLLOW:
           return {
             lineColor: Colors.yellow[CONSTANT.TOOLS.POINT],
             leftPointColor: Colors.yellow[CONSTANT.TOOLS.SEGMENTS_POINT],
             rightPointColor: Colors.yellow[CONSTANT.TOOLS.SEGMENTS_POINT],
             ...el
           };
-        case CONSTANT.TOOLS.ONLY_RIGHT_INCLUDED_SEGMENT:
+        case CONSTANT.TOOLS.SEGMENT_LEFT_POINT_HOLLOW:
           return {
             lineColor: Colors.yellow[CONSTANT.TOOLS.POINT],
             leftPointColor: Colors.yellow[CONSTANT.TOOLS.SEGMENTS_POINT],
             rightPointColor: Colors.yellow[CONSTANT.TOOLS.POINT],
             ...el
           };
-        case CONSTANT.TOOLS.ONLY_LEFT_INCLUDED_SEGMENT:
+        case CONSTANT.TOOLS.SEGMENT_RIGHT_POINT_HOLLOW:
           return {
             lineColor: Colors.yellow[CONSTANT.TOOLS.POINT],
             leftPointColor: Colors.yellow[CONSTANT.TOOLS.POINT],
             rightPointColor: Colors.yellow[CONSTANT.TOOLS.SEGMENTS_POINT],
             ...el
           };
-        case CONSTANT.TOOLS.INFINITY_TO_NOT_INCLUDED_SEGMENT:
-        case CONSTANT.TOOLS.NOT_INCLUDED_TO_INFINITY_SEGMENT:
+        case CONSTANT.TOOLS.RAY_LEFT_DIRECTION_RIGHT_HOLLOW:
+        case CONSTANT.TOOLS.RAY_RIGHT_DIRECTION_LEFT_HOLLOW:
           return {
             colors: Colors.yellow[CONSTANT.TOOLS.POINT],
             pointColor: Colors.yellow[CONSTANT.TOOLS.SEGMENTS_POINT],
@@ -280,7 +280,9 @@ class AxisSegmentsContainer extends Component {
       yMin: canvas.yMin
     });
 
-    this._graph.loadSegments(elements);
+    if (!showAnswer && !checkAnswer) {
+      this._graph.loadSegments(elements);
+    }
 
     this.setGraphUpdateEventHandler();
   }
@@ -350,7 +352,7 @@ class AxisSegmentsContainer extends Component {
           numberlineAxis.stackResponsesSpacing,
           canvas.responsesAllowed
         );
-        this._graph.setTool(selectedTool.name, graphType, canvas.responsesAllowed);
+        this._graph.setTool(selectedTool.name || CONSTANT.TOOLS.SEGMENTS_POINT, graphType, canvas.responsesAllowed);
       }
 
       if (
@@ -556,8 +558,8 @@ class AxisSegmentsContainer extends Component {
     const { width } = options;
 
     const iconsByToolName = {
-      segmentsPoint: () => <IconPoint {...options} />,
-      bothIncludedSegment: () => {
+      segments_point: () => <IconPoint {...options} />,
+      segment_both_point_included: () => {
         const newOptions = {
           ...options,
           width: width + 40
@@ -565,7 +567,7 @@ class AxisSegmentsContainer extends Component {
 
         return <IconBothIncludedSegment {...newOptions} />;
       },
-      bothNotIncludedSegment: () => {
+      segment_both_points_hollow: () => {
         const newOptions = {
           ...options,
           width: width + 40
@@ -573,7 +575,7 @@ class AxisSegmentsContainer extends Component {
 
         return <IconBothNotIncludedSegment {...newOptions} />;
       },
-      onlyRightIncludedSegment: () => {
+      segment_left_point_hollow: () => {
         const newOptions = {
           ...options,
           width: width + 40
@@ -581,7 +583,7 @@ class AxisSegmentsContainer extends Component {
 
         return <IconOnlyRightIncludedSegment {...newOptions} />;
       },
-      onlyLeftIncludedSegment: () => {
+      segment_right_point_hollow: () => {
         const newOptions = {
           ...options,
           width: width + 40
@@ -589,7 +591,7 @@ class AxisSegmentsContainer extends Component {
 
         return <IconOnlyLeftIncludedSegment {...newOptions} />;
       },
-      infinityToIncludedSegment: () => {
+      ray_left_direction: () => {
         const newOptions = {
           ...options,
           width: width + 40
@@ -597,7 +599,7 @@ class AxisSegmentsContainer extends Component {
 
         return <IconInfinityToIncludedSegment {...newOptions} />;
       },
-      includedToInfinitySegment: () => {
+      ray_right_direction: () => {
         const newOptions = {
           ...options,
           width: width + 40
@@ -605,7 +607,7 @@ class AxisSegmentsContainer extends Component {
 
         return <IconIncludedToInfinitySegment {...newOptions} />;
       },
-      infinityToNotIncludedSegment: () => {
+      ray_left_direction_right_hollow: () => {
         const newOptions = {
           ...options,
           width: width + 40
@@ -613,7 +615,7 @@ class AxisSegmentsContainer extends Component {
 
         return <IconInfinityToNotIncludedSegment {...newOptions} />;
       },
-      notIncludedToInfinitySegment: () => {
+      ray_right_direction_left_hollow: () => {
         const newOptions = {
           ...options,
           width: width + 40

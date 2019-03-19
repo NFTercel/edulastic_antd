@@ -19,14 +19,14 @@ var shapesAreEqual = function shapesAreEqual(shape1, shape2) {
   }
 
   switch (shape1.type) {
-    case _axisSegmentsShapeTypes.AxisSegmentsShapeTypes.POINT:
+    case _axisSegmentsShapeTypes.AxisSegmentsShapeTypes.SEGMENTS_POINT:
     case _axisSegmentsShapeTypes.AxisSegmentsShapeTypes.RAY_LEFT_DIRECTION:
     case _axisSegmentsShapeTypes.AxisSegmentsShapeTypes.RAY_RIGHT_DIRECTION:
     case _axisSegmentsShapeTypes.AxisSegmentsShapeTypes.RAY_LEFT_DIRECTION_RIGHT_HOLLOW:
     case _axisSegmentsShapeTypes.AxisSegmentsShapeTypes.RAY_RIGHT_DIRECTION_LEFT_HOLLOW:
       return shape1.point1 === shape2.point1;
 
-    case _axisSegmentsShapeTypes.AxisSegmentsShapeTypes.SEGMENT:
+    case _axisSegmentsShapeTypes.AxisSegmentsShapeTypes.SEGMENT_BOTH_POINT_INCLUDED:
     case _axisSegmentsShapeTypes.AxisSegmentsShapeTypes.SEGMENT_LEFT_POINT_HOLLOW:
     case _axisSegmentsShapeTypes.AxisSegmentsShapeTypes.SEGMENT_RIGHT_POINT_HOLLOW:
     case _axisSegmentsShapeTypes.AxisSegmentsShapeTypes.SEGMENT_BOTH_POINT_HOLLOW:
@@ -40,22 +40,24 @@ var shapesAreEqual = function shapesAreEqual(shape1, shape2) {
 var checkAnswer = function checkAnswer(answer, userResponse) {
   var result = [];
   var trueAnswerValue = answer.value;
-  userResponse.forEach(function(testShape) {
-    var resultForShape = {
-      shape: testShape,
-      result: false
-    };
+  answer, userResponse;
+  userResponse &&
+    userResponse.forEach(function(testShape) {
+      var resultForShape = {
+        shape: testShape,
+        result: false
+      };
 
-    if (
-      trueAnswerValue.findIndex(function(item) {
-        return shapesAreEqual(item, testShape);
-      }) > -1
-    ) {
-      resultForShape.result = true;
-    }
+      if (
+        trueAnswerValue.findIndex(function(item) {
+          return shapesAreEqual(item, testShape);
+        }) > -1
+      ) {
+        resultForShape.result = true;
+      }
 
-    result.push(resultForShape);
-  });
+      result.push(resultForShape);
+    });
   return result;
 };
 

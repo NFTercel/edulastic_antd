@@ -386,7 +386,7 @@ const enhance = compose(
   withWindowSizes,
   connect(
     (state, ownProps) => ({
-      evaluation: state.evluation,
+      evaluation: state.evaluation,
       preview: state.view.preview,
       questions: state.assessmentplayerQuestions.byId,
       scratchPad: ownProps.items[ownProps.currentItem]

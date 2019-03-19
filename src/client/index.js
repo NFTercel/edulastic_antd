@@ -27,7 +27,6 @@ const RootComp = () => (
   </I18nextProvider>
 );
 ReactDOM.render(<RootComp />, document.getElementById("react-app"));
-
 // hmr
 if (module.hot) {
   module.hot.accept("./App", () => {

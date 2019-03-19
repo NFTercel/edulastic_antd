@@ -6,7 +6,7 @@ import { normalize } from "normalizr";
 import { push } from "react-router-redux";
 import { test } from "@edulastic/constants";
 import { assignmentApi, reportsApi, testActivityApi } from "@edulastic/api";
-import { getCurrentGroup, getCurrentSchool } from "../Login/ducks";
+import { getCurrentGroup, getCurrentSchool, fetchUserAction, fetchUser } from "../Login/ducks";
 
 // external actions
 import {
@@ -31,6 +31,7 @@ export const START_ASSIGNMENT = "[studentAssignments] start assignments";
 export const SET_TEST_ACTIVITY_ID = "[test] add test activity id";
 export const SET_RESUME_STATUS = "[test] set resume status";
 export const RESUME_ASSIGNMENT = "[studentAssignments] resume assignments";
+export const BOOTSTRAP_ASSESSMENT = "[assessment] bootstrap";
 
 // actions
 export const fetchAssignmentsAction = createAction(FETCH_ASSIGNMENTS_DATA);
@@ -38,6 +39,7 @@ export const startAssignmentAction = createAction(START_ASSIGNMENT);
 export const setTestActivityAction = createAction(SET_TEST_ACTIVITY_ID);
 export const setResumeAssignment = createAction(SET_RESUME_STATUS);
 export const resumeAssignmentAction = createAction(RESUME_ASSIGNMENT);
+export const bootstrapAssessmentAction = createAction(BOOTSTRAP_ASSESSMENT);
 
 // sagas
 // fetch and load assignments and reports for the student
@@ -80,6 +82,7 @@ function* startAssignment({ payload }) {
 
     yield put(setActiveAssignmentAction(assignmentId));
     const groupId = yield select(getCurrentGroup);
+    console.log("got group id", groupId);
     const institutionId = yield select(getCurrentSchool);
     const groupType = "class";
     const { _id: testActivityId } = yield testActivityApi.create({
@@ -116,12 +119,31 @@ function* resumeAssignment({ payload }) {
   }
 }
 
+/**
+ * for loading deeplinking assessment created for SEB. But can be used for others
+ * @param {{payload: {assignmentId: string, testActivityId?: string, testId:string}}} param
+ */
+function* bootstrapAssesment({ payload }) {
+  try {
+    const { testType, assignmentId, testActivityId, testId } = payload;
+    yield fetchUser();
+    if (testActivityId) {
+      yield put(resumeAssignmentAction({ testType, assignmentId, testActivityId, testId }));
+    } else {
+      yield put(startAssignmentAction({ testType, assignmentId, testId }));
+    }
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 // set actions watcherss
 export function* watcherSaga() {
   yield all([
     yield takeLatest(FETCH_ASSIGNMENTS_DATA, fetchAssignments),
     yield takeLatest(START_ASSIGNMENT, startAssignment),
-    yield takeLatest(RESUME_ASSIGNMENT, resumeAssignment)
+    yield takeLatest(RESUME_ASSIGNMENT, resumeAssignment),
+    yield takeLatest(BOOTSTRAP_ASSESSMENT, bootstrapAssesment)
   ]);
 }
 

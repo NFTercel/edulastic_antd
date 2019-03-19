@@ -15,7 +15,7 @@ import {
   setTestDataAction,
   updateTestAction
 } from "../../../TestPage/ducks";
-import { getQuestionsArraySelector } from "../../../sharedDucks/questions";
+import { getQuestionsArraySelector, getQuestionsSelector } from "../../../sharedDucks/questions";
 import { getItemDetailByIdAction, updateItemDetailByIdAction } from "../../../src/actions/itemDetail";
 import { changeViewAction } from "../../../src/actions/view";
 import { getItemDetailSelector } from "../../../src/selectors/itemDetail";
@@ -53,6 +53,14 @@ const buttons = [
   }
 ];
 
+const createWidget = ({ id, type, title }) => ({
+  widgetType: "question",
+  type,
+  title,
+  reference: id,
+  tabIndex: 0
+});
+
 class Container extends React.Component {
   static propTypes = {
     receiveTestById: PropTypes.func.isRequired,
@@ -61,6 +69,7 @@ class Container extends React.Component {
     loading: PropTypes.bool.isRequired,
     match: PropTypes.object.isRequired,
     questions: PropTypes.array.isRequired,
+    questionsById: PropTypes.object.isRequired,
     updateItemDetailById: PropTypes.func.isRequired,
     currentTestItem: PropTypes.object.isRequired,
     updateTest: PropTypes.func.isRequired,
@@ -97,7 +106,14 @@ class Container extends React.Component {
       data: {
         ...currentTestItem.data,
         questions
-      }
+      },
+      rows: [
+        {
+          tabs: [],
+          dimension: "100%",
+          widgets: questions.map(createWidget)
+        }
+      ]
     };
 
     const newAssessment = {
@@ -110,13 +126,25 @@ class Container extends React.Component {
   };
 
   renderContent() {
-    const { currentTab } = this.props;
+    const {
+      currentTab,
+      assessment: { docUrl, annotations },
+      questions,
+      questionsById
+    } = this.props;
+
+    const props = {
+      docUrl,
+      annotations,
+      questions,
+      questionsById
+    };
 
     switch (currentTab) {
       case tabs.WORKSHEET:
-        return <Worksheet key="worksheet" />;
+        return <Worksheet key="worksheet" {...props} />;
       case tabs.REVIEW:
-        return <Worksheet key="review" review />;
+        return <Worksheet key="review" review {...props} />;
       default:
         return null;
     }
@@ -156,6 +184,7 @@ const enhance = compose(
       assessment: getTestEntitySelector(state),
       loading: getTestsLoadingSelector(state),
       questions: getQuestionsArraySelector(state),
+      questionsById: getQuestionsSelector(state),
       currentTestItem: getItemDetailSelector(state),
       currentTab: getViewSelector(state)
     }),

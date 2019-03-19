@@ -1,5 +1,6 @@
 import { takeEvery, call, put, all, select } from "redux-saga/effects";
 import { message } from "antd";
+import { isArray, isNull, isBoolean } from "lodash";
 import { testItemsApi } from "@edulastic/api";
 import { evaluateItem } from "../utils/evalution";
 import createShowAnswerData from "../utils/showAnswer";
@@ -61,6 +62,7 @@ function* evaluateAnswers() {
     const answers = yield select(state => state.answers);
     const validations = yield select(getQuestionsSelector);
     const { evaluation, score, maxScore } = yield evaluateItem(answers, validations);
+
     yield put({
       type: ADD_ITEM_EVALUATION,
       payload: {

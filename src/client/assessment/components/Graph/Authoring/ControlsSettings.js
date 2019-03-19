@@ -127,7 +127,7 @@ class ControlsSettings extends Component {
     return (
       <Fragment>
         <MoreOptionsContainer>
-          <MoreOptionsSubHeading>{t("Controls")}</MoreOptionsSubHeading>
+          <MoreOptionsSubHeading>Controls</MoreOptionsSubHeading>
 
           <MoreOptionsRow>
             <GraphToolsParamsWrapper>{this.renderSingleToolsInDefaultGroup()}</GraphToolsParamsWrapper>
@@ -150,9 +150,9 @@ export default enhance(ControlsSettings);
 
 const Tool = props => {
   const {
-    countOfSingleTools,
+    // countOfSingleTools,
     options,
-    isGroup,
+    // isGroup,
     groupIndex,
     value,
     onChange,
@@ -162,7 +162,7 @@ const Tool = props => {
     deleteToolStyles
   } = props;
 
-  const isNeedToShowDeleteButton = () => countOfSingleTools > 1 || isGroup;
+  // const isNeedToShowDeleteButton = () => countOfSingleTools > 1 || isGroup;
 
   const onSelectChange = val => {
     onChange(index, val, groupIndex);
@@ -173,23 +173,23 @@ const Tool = props => {
       <SelectWrapper>
         <Select style={{ width: selectWidth || "70%" }} onChange={onSelectChange} options={options} value={value} />
 
-        {isNeedToShowDeleteButton() && (
-          <DeleteButton
-            onDelete={() => {
-              onDelete(index, groupIndex);
-            }}
-            deleteToolStyles={deleteToolStyles}
-          />
-        )}
+        {/* {isNeedToShowDeleteButton() && ( */}
+        <DeleteButton
+          onDelete={() => {
+            onDelete(index, groupIndex);
+          }}
+          deleteToolStyles={deleteToolStyles}
+        />
+        {/* )} */}
       </SelectWrapper>
     </React.Fragment>
   );
 };
 
 Tool.propTypes = {
-  countOfSingleTools: PropTypes.number.isRequired,
+  // countOfSingleTools: PropTypes.number.isRequired,
   options: PropTypes.array.isRequired,
-  isGroup: PropTypes.bool,
+  // isGroup: PropTypes.bool,
   groupIndex: PropTypes.number,
   value: PropTypes.any.isRequired,
   onChange: PropTypes.func.isRequired,
@@ -201,6 +201,6 @@ Tool.propTypes = {
 
 Tool.defaultProps = {
   deleteToolStyles: {},
-  groupIndex: undefined,
-  isGroup: false
+  groupIndex: undefined
+  // isGroup: false
 };

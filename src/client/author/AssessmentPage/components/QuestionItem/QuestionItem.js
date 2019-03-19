@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Draggable } from "react-drag-and-drop";
-import { isArray, isUndefined } from "lodash";
+import { isArray, isUndefined, isNull } from "lodash";
 
 import { SHORT_TEXT, MULTIPLE_CHOICE, CLOZE_DROP_DOWN, MATH } from "@edulastic/constants/const/questionType";
 import { IconPencilEdit, IconCheck, IconClose } from "@edulastic/icons";
@@ -33,12 +33,16 @@ class QuestionItem extends React.Component {
     evaluation: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
     userAnswer: PropTypes.any,
     previewMode: PropTypes.string.isRequired,
-    viewMode: PropTypes.string.isRequired
+    viewMode: PropTypes.string.isRequired,
+    answer: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
+    centered: PropTypes.bool
   };
 
   static defaultProps = {
     evaluation: undefined,
-    userAnswer: undefined
+    userAnswer: undefined,
+    answer: undefined,
+    centered: false
   };
 
   state = {
@@ -79,7 +83,7 @@ class QuestionItem extends React.Component {
       evaluation
     } = this.props;
 
-    const allCorrect = isArray(evaluation) ? evaluation.every(v => v) : evaluation;
+    const allCorrect = isArray(evaluation) ? evaluation.filter(v => !isNull(v)).every(v => v) : evaluation;
 
     if (allCorrect) return null;
 
@@ -111,12 +115,14 @@ class QuestionItem extends React.Component {
   };
 
   renderContent = () => {
-    const { data, saveAnswer, viewMode, onCreateOptions, evaluation } = this.props;
+    const { data, saveAnswer, viewMode, onCreateOptions, evaluation, answer, previewMode } = this.props;
 
     const props = {
       saveAnswer,
+      answer,
       question: data,
-      mode: viewMode
+      mode: viewMode,
+      view: previewMode
     };
 
     switch (data.type) {
@@ -160,13 +166,14 @@ class QuestionItem extends React.Component {
       data: { id },
       index,
       viewMode,
-      previewMode
+      previewMode,
+      centered
     } = this.props;
 
     const review = viewMode === "review";
 
     return (
-      <QuestionItemWrapper>
+      <QuestionItemWrapper centered={centered}>
         <AnswerForm>
           <Draggable
             type="question"
@@ -179,7 +186,7 @@ class QuestionItem extends React.Component {
           </Draggable>
           <QuestionForm>{this.renderContent()}</QuestionForm>
           {!review && this.renderEditButton()}
-          {review && this.renderAnswerIndicator()}
+          {review && previewMode !== "clear" && this.renderAnswerIndicator()}
         </AnswerForm>
         {review && previewMode === "show" && this.renderCorrectAnswer()}
       </QuestionItemWrapper>

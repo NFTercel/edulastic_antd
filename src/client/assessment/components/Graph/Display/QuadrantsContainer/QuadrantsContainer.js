@@ -595,7 +595,7 @@ class GraphContainer extends Component {
             style={{
               position: "relative",
               overflow: "auto",
-              width: layout.width + 40 + "px"
+              width: `${+layout.width + 40}px`
             }}
           >
             {annotation && annotation.labelTop && (

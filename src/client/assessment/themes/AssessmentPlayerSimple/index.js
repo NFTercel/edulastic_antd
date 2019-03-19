@@ -99,7 +99,7 @@ class AssessmentPlayerSimple extends React.Component {
 
 export default connect(
   state => ({
-    evaluation: state.evluation,
+    evaluation: state.evaluation,
     preview: state.view.preview,
     questions: state.assessmentplayerQuestions.byId
   }),

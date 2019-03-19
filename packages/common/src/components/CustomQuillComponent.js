@@ -162,7 +162,7 @@ const CustomToolbar = ({ showResponseBtn, active, id, maxWidth }) => {
 };
 
 CustomToolbar.propTypes = {
-  maxWidth: PropTypes.any.isRequired,
+  maxWidth: PropTypes.any,
   showResponseBtn: PropTypes.bool,
   active: PropTypes.bool,
   id: PropTypes.string

@@ -25,6 +25,17 @@ class GraphQuadrants extends Component {
     setQuestionData({ ...graphData, canvas });
   };
 
+  handleCanvasBlur = (event, defaultValue) => {
+    const { value, name } = event.target;
+    const { graphData, setQuestionData } = this.props;
+    const { canvas } = graphData;
+
+    if (!value) {
+      canvas[name] = defaultValue;
+      setQuestionData({ ...graphData, canvas });
+    }
+  };
+
   handleToolsChange = toolbar => {
     const { graphData, setQuestionData } = this.props;
     setQuestionData({ ...graphData, toolbar });
@@ -79,7 +90,7 @@ class GraphQuadrants extends Component {
                   name="x_min"
                   value={canvas.x_min}
                   onChange={this.handleCanvasChange}
-                  onBlur={this.handleCanvasChange}
+                  onBlur={event => this.handleCanvasBlur(event, -10)}
                   disabled={false}
                   step={0.1}
                 />
@@ -91,7 +102,7 @@ class GraphQuadrants extends Component {
                   name="x_max"
                   value={canvas.x_max}
                   onChange={this.handleCanvasChange}
-                  onBlur={this.handleCanvasChange}
+                  onBlur={event => this.handleCanvasBlur(event, 10)}
                   disabled={false}
                   step={0.1}
                 />
@@ -105,7 +116,7 @@ class GraphQuadrants extends Component {
                     name="y_min"
                     value={canvas.y_min}
                     onChange={this.handleCanvasChange}
-                    onBlur={this.handleCanvasChange}
+                    onBlur={event => this.handleCanvasBlur(event, -10)}
                     disabled={false}
                     step={0.1}
                   />
@@ -119,7 +130,7 @@ class GraphQuadrants extends Component {
                     name="y_max"
                     value={canvas.y_max}
                     onChange={this.handleCanvasChange}
-                    onBlur={this.handleCanvasChange}
+                    onBlur={event => this.handleCanvasBlur(event, 10)}
                     disabled={false}
                     step={0.1}
                   />

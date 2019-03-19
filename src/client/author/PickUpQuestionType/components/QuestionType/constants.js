@@ -727,6 +727,12 @@ export const getCards = onSelectQuestionType => {
           checkAnswerButton: true,
           alt_responses: []
         },
+        extra_options: {
+          rubric_reference: "",
+          sample_answer: "",
+          stimulus_review: "",
+          instructor_stimulus: ""
+        },
         ui_style: {
           drawLabelZero: false,
           displayPositionOnHover: false,
@@ -804,6 +810,12 @@ export const getCards = onSelectQuestionType => {
           checkAnswerButton: true,
           alt_responses: []
         },
+        extra_options: {
+          rubric_reference: "",
+          sample_answer: "",
+          stimulus_review: "",
+          instructor_stimulus: ""
+        },
         ui_style: {
           drawLabelZero: false,
           displayPositionOnHover: false,
@@ -862,7 +874,7 @@ export const getCards = onSelectQuestionType => {
           numberline: true,
           margin: 75,
           responsesAllowed: 2,
-          title: "Text"
+          title: ""
         },
         controlbar: {
           controls: ["undo", "redo", "reset"],
@@ -871,6 +883,12 @@ export const getCards = onSelectQuestionType => {
         toolbar: {
           tools: [],
           default_tool: null
+        },
+        extra_options: {
+          rubric_reference: "",
+          sample_answer: "",
+          stimulus_review: "",
+          instructor_stimulus: ""
         },
         numberlineAxis: {
           leftArrow: false,
@@ -991,6 +1009,12 @@ export const getCards = onSelectQuestionType => {
           controls: [],
           default_control: ""
         },
+        extra_options: {
+          rubric_reference: "",
+          sample_answer: "",
+          stimulus_review: "",
+          instructor_stimulus: ""
+        },
         stimulus: "[This is the stem. axisLabels]",
         validation: {
           graphType: "axisLabels",
@@ -1013,7 +1037,7 @@ export const getCards = onSelectQuestionType => {
           y_min: -1.75,
           numberline: true,
           margin: 75,
-          title: "Text"
+          title: ""
         },
         numberlineAxis: {
           leftArrow: false,

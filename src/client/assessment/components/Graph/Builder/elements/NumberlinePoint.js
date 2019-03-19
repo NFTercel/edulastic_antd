@@ -111,14 +111,14 @@ const loadPoint = (board, coords, stackResponses) => {
 
   if (!stackResponses) {
     const point = drawPoint(board, coords[0], false, null);
-    point.segmentType = "segmentsPoint";
+    point.segmentType = "segments_point";
     previousPointsPositions.push({ id: point.id, position: point.X() });
     handlePointDrag(point, board, ticksDistance, numberlineAxis[0]);
 
     return point;
   } else {
     const point = drawPoint(board, coords[0], false, null, coords[1]);
-    point.segmentType = "segmentsPoint";
+    point.segmentType = "segments_point";
 
     point.setAttribute({ snapSizeY: 0.05 });
     point.setPosition(window.JXG.COORDS_BY_USER, [point.X(), coords[1]]);
@@ -148,7 +148,7 @@ const onHandler = (stackResponses, stackResponsesSpacing) => (board, coord) => {
       checkForElementsOnPoint(segments, roundedCoord)
     ) {
       const point = drawPoint(board, roundedCoord, false, null);
-      point.segmentType = "segmentsPoint";
+      point.segmentType = "segments_point";
       previousPointsPositions.push({ id: point.id, position: point.X() });
       handlePointDrag(point, board, ticksDistance, numberlineAxis[0]);
 
@@ -160,7 +160,7 @@ const onHandler = (stackResponses, stackResponsesSpacing) => (board, coord) => {
     const calcedYPosition = findAvailableStackedSegmentPosition(board, segments, stackResponsesSpacing);
 
     const point = drawPoint(board, roundedCoord, false, null, calcedYPosition);
-    point.segmentType = "segmentsPoint";
+    point.segmentType = "segments_point";
 
     point.setAttribute({ snapSizeY: 0.05 });
     point.setPosition(window.JXG.COORDS_BY_USER, [point.X(), calcedYPosition]);

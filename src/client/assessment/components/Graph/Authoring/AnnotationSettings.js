@@ -28,12 +28,12 @@ class AnnotationSettings extends Component {
     return (
       <Fragment>
         <MoreOptionsContainer>
-          <MoreOptionsSubHeading>{t("Annotation")}</MoreOptionsSubHeading>
+          <MoreOptionsSubHeading>Annotation</MoreOptionsSubHeading>
 
           <MoreOptionsColumnContainer>
             <MoreOptionsColumn style={{ padding: "0 30px 0 0" }}>
               <MoreOptionsRow>
-                <MoreOptionsLabel>{t("Title")}</MoreOptionsLabel>
+                <MoreOptionsLabel>Title</MoreOptionsLabel>
 
                 <QuillInput
                   value={title}
@@ -43,7 +43,7 @@ class AnnotationSettings extends Component {
               </MoreOptionsRow>
 
               <MoreOptionsRow>
-                <MoreOptionsLabel>{t("Label left")}</MoreOptionsLabel>
+                <MoreOptionsLabel>Label left</MoreOptionsLabel>
 
                 <QuillInput
                   value={labelLeft}
@@ -53,7 +53,7 @@ class AnnotationSettings extends Component {
               </MoreOptionsRow>
 
               <MoreOptionsRow>
-                <MoreOptionsLabel>{t("Label bottom")}</MoreOptionsLabel>
+                <MoreOptionsLabel>Label bottom</MoreOptionsLabel>
 
                 <QuillInput
                   value={labelBottom}
@@ -65,7 +65,7 @@ class AnnotationSettings extends Component {
 
             <MoreOptionsColumn style={{ padding: "0 0 0 30px" }}>
               <MoreOptionsRow>
-                <MoreOptionsLabel>{t("Label top")}</MoreOptionsLabel>
+                <MoreOptionsLabel>Label top</MoreOptionsLabel>
 
                 <QuillInput
                   value={labelTop}
@@ -75,7 +75,7 @@ class AnnotationSettings extends Component {
               </MoreOptionsRow>
 
               <MoreOptionsRow>
-                <MoreOptionsLabel>{t("Label right")}</MoreOptionsLabel>
+                <MoreOptionsLabel>Label right</MoreOptionsLabel>
 
                 <QuillInput
                   value={labelRight}

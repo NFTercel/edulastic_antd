@@ -24,6 +24,17 @@ class AxisSegments extends Component {
     setQuestionData({ ...graphData, canvas });
   };
 
+  handleCanvasBlur = (event, defaultValue) => {
+    const { value, name } = event.target;
+    const { graphData, setQuestionData } = this.props;
+    const { canvas } = graphData;
+
+    if (!value) {
+      canvas[name] = defaultValue;
+      setQuestionData({ ...graphData, canvas });
+    }
+  };
+
   handleInputChange = event => {
     const {
       target: { type, checked, value: targetValue, name }
@@ -62,6 +73,7 @@ class AxisSegments extends Component {
                 name="x_min"
                 value={canvas.x_min}
                 onChange={this.handleCanvasChange}
+                onBlur={event => this.handleCanvasBlur(event, 0)}
                 disabled={false}
                 step={1}
               />
@@ -86,6 +98,7 @@ class AxisSegments extends Component {
                   name="x_max"
                   value={canvas.x_max}
                   onChange={this.handleCanvasChange}
+                  onBlur={event => this.handleCanvasBlur(event, 10)}
                   disabled={false}
                   step={1}
                 />
