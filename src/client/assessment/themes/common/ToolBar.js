@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Button } from "antd";
 import { white } from "@edulastic/colors";
+import CalculatorMenu from "./CalculatorMenu";
+
 import { IconCursor, IconInRuler, IconCalculator, IconClose, IconProtactor, IconScratchPad } from "@edulastic/icons";
 
 class ToolBar extends Component {
@@ -11,6 +13,9 @@ class ToolBar extends Component {
     this.state = {
       select: 0
     };
+
+    this.toolbarHandler = this.toolbarHandler.bind(this);
+    this.handleCalculateMode = this.handleCalculateMode.bind(this);
   }
 
   toolbarHandler = value => {
@@ -18,14 +23,24 @@ class ToolBar extends Component {
 
     this.setState({ select: value });
     if (value === 5) {
-      changeMode(true);
+      changeMode(true, value);
     } else {
-      changeMode(false);
+      changeMode(false, value);
     }
   };
 
+  handleCalculateMode = value => {
+    this.setState({ select: 2 });
+
+    const { changeCaculateMode } = this.props;
+    changeCaculateMode(value);
+  };
+
+  componentDidMount() {}
+
   render() {
     const { select } = this.state;
+
     return (
       <Container>
         <StyledButton enable={select === 0 && true} onClick={() => this.toolbarHandler(0)}>
@@ -38,6 +53,7 @@ class ToolBar extends Component {
 
         <StyledButton enable={select === 2 && true} onClick={() => this.toolbarHandler(2)}>
           <CaculatorIcon />
+          {select == 2 && <CalculatorMenu changeCaculateMode={this.handleCalculateMode} />}
         </StyledButton>
 
         <StyledButton enable={select === 3 && true} onClick={() => this.toolbarHandler(3)}>
@@ -56,7 +72,8 @@ class ToolBar extends Component {
 }
 
 ToolBar.propTypes = {
-  changeMode: PropTypes.func.isRequired
+  changeMode: PropTypes.func.isRequired,
+  changeCaculateMode: PropTypes.func.isRequired
 };
 
 export default ToolBar;
