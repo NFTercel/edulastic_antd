@@ -82,6 +82,7 @@
     "react-dom": "16.8",
     "react-drag-and-drop": "^2.4.0",
     "react-dropzone": "^8.0.0",
+    "react-google-login": "^5.0.2",
     "react-icons": "^3.1.0",
     "react-notifications": "^1.4.3",
     "react-pdf": "^4.0.4",

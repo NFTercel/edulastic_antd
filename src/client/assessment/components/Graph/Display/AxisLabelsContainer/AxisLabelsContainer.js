@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { graph as checkAnswerMethod } from "@edulastic/evaluators";
-import { cloneDeep } from "lodash";
 import { GraphWrapper, JSXBox } from "./styled";
 import {
   defaultAxesParameters,
@@ -12,28 +11,24 @@ import {
 import { makeBorder } from "../../Builder";
 
 const getColoredElems = (elements, compareResult) => {
-  if (compareResult && compareResult.details && compareResult.details.length > 0) {
-    let newElems = cloneDeep(elements);
+  const { details } = compareResult;
+  return elements.map(el => {
+    const detail = details && details.find(det => det.label.id === el.id);
+    let newEl = {};
 
-    newElems = newElems.map(el => {
-      const detail = compareResult.details.find(det => det.id === el.id);
-      let newEl = {};
-
-      if (detail && detail.result) {
-        newEl = {
-          className: "correct",
-          ...el
-        };
-      } else {
-        newEl = {
-          className: "incorrect",
-          ...el
-        };
-      }
-      return newEl;
-    });
-    return newElems;
-  }
+    if (detail && detail.result) {
+      newEl = {
+        className: "correct",
+        ...el
+      };
+    } else {
+      newEl = {
+        className: "incorrect",
+        ...el
+      };
+    }
+    return newEl;
+  });
 };
 
 const getColoredAnswer = answerArr => {
@@ -92,7 +87,8 @@ class AxisLabelsContainer extends Component {
       list,
       showAnswer,
       checkAnswer,
-      validation
+      validation,
+      elements
     } = this.props;
     this._graph = makeBorder(this._graphId);
 
@@ -157,7 +153,8 @@ class AxisLabelsContainer extends Component {
             position: layout.pointBoxPosition,
             yMax: canvas.yMax,
             yMin: canvas.yMin
-          }
+          },
+          elements.length > 0 ? elements : null
         );
       }
 
@@ -166,7 +163,7 @@ class AxisLabelsContainer extends Component {
       } else {
         this._graph.removeAnswers();
       }
-
+      console.log(elements);
       if (checkAnswer) {
         this.mapElementsToGraph();
       }

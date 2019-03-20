@@ -1,9 +1,12 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { connect } from "react-redux";
+import { message } from "antd";
 
 import { fetchAssignmentsAction } from "../TestPage/components/Assign/ducks";
+import { setRegradeSettingsDataAction } from "../TestPage/ducks";
 import Header from "./Header";
 import MainContent from "./MainContent";
+import { get } from "lodash";
 
 const RegradeTypes = {
   ALL: "All your assignments",
@@ -12,28 +15,66 @@ const RegradeTypes = {
 };
 const RegradeKeys = ["ALL", "SCHOOL_YEAR", "SPECIFIC"];
 
-const Regrade = ({ assignments, getAssignmentsByTestId }) => {
-  const [regradeType, regradeTypeChange] = useState(RegradeKeys[0]);
-
+const Regrade = ({ assignments, getAssignmentsByTestId, match, setRegradeSettings, districtId }) => {
   useEffect(() => {
-    getAssignmentsByTestId("5c8f400104485461e6ef14b8");
-    //TODO need to pass test ID from match params
+    const oldTestId = match.params.oldTestId;
+    getAssignmentsByTestId(oldTestId);
   }, []);
 
-  const handleRegradeTypeSelect = () => {
-    const selectedType = event.target.value;
-    regradeTypeChange(selectedType);
+  const settings = {
+    newTestId: match.params.newTestId,
+    assignmentList: [],
+    districtId,
+    options: {
+      removedQuestion: "DISCARD",
+      addedQuestion: "SKIP",
+      correctAnsChanged: "SKIP",
+      choicesChanged: "SKIP"
+    }
   };
 
+  const [regradeSettings, regradeSettingsChange] = useState(settings);
+  const [assigmentOptions, setAssignmentOptions] = useState(RegradeKeys[0]);
+
+  const onUpdateSettings = (key, value) => {
+    const newState = {
+      ...regradeSettings,
+      options: {
+        ...regradeSettings.options,
+        [key]: value
+      }
+    };
+    regradeSettingsChange(newState);
+  };
+
+  const handleSettingsChange = (key, value) => {
+    const newState = {
+      ...regradeSettings,
+      [key]: value
+    };
+    regradeSettingsChange(newState);
+  };
+
+  const onApplySettings = () => {
+    if (regradeSettings.assignmentList.length > 0) {
+      setRegradeSettings(regradeSettings);
+    } else {
+      message.error("Assignment must contain at least 1 items");
+    }
+  };
   return (
     <Fragment>
-      <Header />
+      <Header onApplySettings={onApplySettings} />
       <MainContent
         assignments={assignments}
         RegradeTypes={RegradeTypes}
         RegradeKeys={RegradeKeys}
-        regradeType={regradeType}
-        handleRegradeTypeSelect={handleRegradeTypeSelect}
+        onUpdateSettings={onUpdateSettings}
+        regradeSettings={regradeSettings}
+        handleSettingsChange={handleSettingsChange}
+        setAssignmentOptions={setAssignmentOptions}
+        assigmentOptions={assigmentOptions}
+        regradeSettingsChange={regradeSettingsChange}
       />
     </Fragment>
   );
@@ -41,9 +82,11 @@ const Regrade = ({ assignments, getAssignmentsByTestId }) => {
 
 export default connect(
   state => ({
-    assignments: state.authorTestAssignments.assignments
+    assignments: state.authorTestAssignments.assignments,
+    districtId: get(state, ["user", "user", "orgData", "districtId"])
   }),
   {
-    getAssignmentsByTestId: fetchAssignmentsAction
+    getAssignmentsByTestId: fetchAssignmentsAction,
+    setRegradeSettings: setRegradeSettingsDataAction
   }
 )(Regrade);

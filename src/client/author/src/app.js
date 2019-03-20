@@ -92,6 +92,15 @@ const Author = ({ match, history, isSidebarCollapsed }) => {
               />
               <Route
                 exact
+                path="/author/tests/:id/editAssigned"
+                render={props => (
+                  <Suspense fallback={<Progress />}>
+                    <TestPage {...props} editAssigned />
+                  </Suspense>
+                )}
+              />
+              <Route
+                exact
                 path="/author/tests/limit/:limit/page/:page/:filter?"
                 render={props => (
                   <Suspense fallback={<Progress />}>

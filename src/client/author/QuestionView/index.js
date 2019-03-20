@@ -124,5 +124,5 @@ QuestionViewContainer.propTypes = {
 };
 QuestionViewContainer.defaultProps = {
   classQuestion: [],
-  loadClassQuestionResponses: () => { }
+  loadClassQuestionResponses: () => {}
 };

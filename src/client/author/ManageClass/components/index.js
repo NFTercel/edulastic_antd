@@ -3,20 +3,31 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 // actions
 import { fetchGroupsAction, getGroupsSelector } from "../../sharedDucks/groups";
-
+import { setModalAction, syncClassAction } from "../ducks";
 // components
 import Header from "./Header";
 import ClassSelector from "./ClassSelector";
 import ClassList from "./ClassList";
+import ClassSelectModal from "./ClassSelectModal";
 
-const ManageClass = ({ fetchGroups, groups }) => {
+const ManageClass = ({ fetchGroups, setModal, groups, isModalVisible, googleCourseList, syncClass }) => {
   useEffect(() => {
     fetchGroups();
   }, []);
 
+  const closeModal = () => setModal(false);
+  const selectedGroups = groups.filter(i => !!i.code).map(i => i.code);
+
   return (
     <React.Fragment>
       <Header />
+      <ClassSelectModal
+        visible={isModalVisible}
+        close={closeModal}
+        groups={googleCourseList}
+        syncClass={syncClass}
+        selectedGroups={selectedGroups}
+      />
       <ClassSelector />
       <ClassList groups={groups} />
     </React.Fragment>
@@ -25,14 +36,22 @@ const ManageClass = ({ fetchGroups, groups }) => {
 
 ManageClass.propTypes = {
   fetchGroups: PropTypes.func.isRequired,
-  groups: PropTypes.array.isRequired
+  setModal: PropTypes.func.isRequired,
+  syncClass: PropTypes.func.isRequired,
+  groups: PropTypes.array.isRequired,
+  isModalVisible: PropTypes.func.isRequired,
+  googleCourseList: PropTypes.array.isRequired
 };
 
 export default connect(
   state => ({
-    groups: getGroupsSelector(state)
+    groups: getGroupsSelector(state),
+    isModalVisible: state.manageClass.showModal,
+    googleCourseList: state.manageClass.googleCourseList
   }),
   {
-    fetchGroups: fetchGroupsAction
+    fetchGroups: fetchGroupsAction,
+    setModal: setModalAction,
+    syncClass: syncClassAction
   }
 )(ManageClass);

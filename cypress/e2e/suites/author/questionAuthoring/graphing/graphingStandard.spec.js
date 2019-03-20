@@ -20,8 +20,8 @@ describe("Author - Graphing - Standard quadrants type question", () => {
       groupName2: "Group 2"
     },
     layout: {
-      width: "500",
-      height: "500",
+      width: 500,
+      height: 500,
       margin: "50",
       snapTo: "grid",
       stemNum: "Uppercase alphabet",
@@ -62,7 +62,7 @@ describe("Author - Graphing - Standard quadrants type question", () => {
     }
   };
 
-  const question = new GraphingStandardPage(+queData.layout.width, +queData.layout.height);
+  const question = new GraphingStandardPage(queData.layout.width, queData.layout.height);
   const editItemPage = new EditItemPage();
   const previewItemPage = new PreviewItemPage();
   const header = new Header();
@@ -290,14 +290,20 @@ describe("Author - Graphing - Standard quadrants type question", () => {
         .getBoards()
         .first()
         .find("svg")
-        .should("have.attr", "width", queData.layout.width)
-        .and("have.attr", "height", queData.layout.height);
+        .invoke("width")
+        .should("be.equal", queData.layout.width);
 
       question
         .getBoards()
         .first()
-        .should("have.css", "margin")
-        .and("eq", `${queData.layout.margin}px`);
+        .find("svg")
+        .invoke("height")
+        .should("be.equal", queData.layout.height);
+
+      question
+        .getBoards()
+        .first()
+        .should("have.css", "margin", `${queData.layout.margin}px`);
 
       question
         .getGraphTools()
@@ -312,8 +318,7 @@ describe("Author - Graphing - Standard quadrants type question", () => {
                   question
                     .getLabelsOnGraphTool(i)
                     .eq(j)
-                    .should("have.css", "font-size")
-                    .and("eq", "12px");
+                    .should("have.css", "font-size", "12px");
                 }
               });
           }

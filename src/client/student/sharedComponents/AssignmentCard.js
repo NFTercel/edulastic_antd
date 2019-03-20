@@ -48,9 +48,10 @@ const AssignmentCard = ({ startAssignment, resumeAssignment, data, theme, t, typ
     _id: assignmentId,
     safeBrowser,
     shuffleQuestions = false,
-    shuffleAnswers = false
+    shuffleAnswers = false,
+    testType,
+    maxAttempts
   } = data;
-
   const lastAttempt = last(reports) || {};
   // if last test attempt was not *submitted*, user should be able to resume it.
   const resume = lastAttempt.status == 0;
@@ -62,7 +63,6 @@ const AssignmentCard = ({ startAssignment, resumeAssignment, data, theme, t, typ
 
   const totalQuestions = correct + wrong || 0;
   const scorePercentage = (correct / totalQuestions) * 100 || 0;
-  const testType = test.testType;
   const arrow = showAttempts ? "\u2193" : "\u2191";
 
   const startTest = () => {
@@ -73,7 +73,7 @@ const AssignmentCard = ({ startAssignment, resumeAssignment, data, theme, t, typ
         assignmentId,
         testActivityId: lastAttempt._id
       });
-    } else if (attemptCount < test.maxAttempts) {
+    } else if (attemptCount < maxAttempts) {
       startAssignment({ testId, assignmentId, testType, shuffleQuestions, shuffleAnswers });
     }
   };
@@ -115,7 +115,7 @@ const AssignmentCard = ({ startAssignment, resumeAssignment, data, theme, t, typ
             <AttemptDetails>
               <Attempts onClick={toggleAttemptsView}>
                 <span data-cy="attemptsCount">
-                  {attemptCount}/{test.maxAttempts || attemptCount}
+                  {attemptCount}/{maxAttempts || attemptCount}
                 </span>
                 <AttemptsTitle data-cy="attemptClick">
                   {arrow} &nbsp;&nbsp;{t("common.attemps")}

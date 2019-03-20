@@ -16,8 +16,9 @@ var _axisLabels = _interopRequireDefault(require("./axisLabels"));
 var _axisSegments = _interopRequireDefault(require("./axisSegments"));
 
 var evaluator = function evaluator(_ref) {
-  var userResponse = _ref.userResponse,
-      validation = _ref.validation;
+  var _ref$userResponse = _ref.userResponse,
+    userResponse = _ref$userResponse === void 0 ? [] : _ref$userResponse,
+    validation = _ref.validation;
   var graphType = validation.graphType;
 
   switch (graphType) {

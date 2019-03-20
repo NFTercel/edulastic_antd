@@ -4,7 +4,6 @@ import { values, groupBy, last } from "lodash";
 import { createSelector } from "reselect";
 import { normalize } from "normalizr";
 import { push } from "react-router-redux";
-import { test } from "@edulastic/constants";
 import { assignmentApi, reportsApi, testActivityApi } from "@edulastic/api";
 import { getCurrentGroup, getCurrentSchool, fetchUserAction, fetchUser } from "../Login/ducks";
 
@@ -18,7 +17,6 @@ import {
 import { setReportsAction, reportSchema } from "../sharedDucks/ReportsModule/ducks";
 
 // constants
-const { ASSESSMENT } = test.type;
 export const FILTERS = {
   ALL: "all",
   NOT_STARTED: "notStarted",
@@ -156,7 +154,7 @@ export const filterSelector = state => state.studentAssignment.filter;
 const isLiveAssignment = assignment => {
   // max attempts should be less than total attempts made
   // and end Dtae should be greateer than current one :)
-  let maxAttempts = (assignment.test && assignment.test.maxAttempts) || 5;
+  let maxAttempts = (assignment && assignment.maxAttempts) || 1;
   let attempts = (assignment.reports && assignment.reports.length) || 0;
   let lastAttempt = last(assignment.reports) || [];
 

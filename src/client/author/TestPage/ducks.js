@@ -1,9 +1,11 @@
 import { createSelector } from "reselect";
+import { createAction } from "redux-starter-kit";
 import { test } from "@edulastic/constants";
 import { call, put, all, takeEvery } from "redux-saga/effects";
+import { push } from "connected-react-router";
 import { message } from "antd";
-import { keyBy as _keyBy } from "lodash";
-import { testsApi } from "@edulastic/api";
+import { keyBy as _keyBy, omit } from "lodash";
+import { testsApi, assignmentApi } from "@edulastic/api";
 
 import { SET_MAX_ATTEMPT, UPDATE_TEST_IMAGE } from "../src/constants/actions";
 import { loadQuestionsAction } from "../sharedDucks/questions";
@@ -24,6 +26,8 @@ export const RECEIVE_TEST_BY_ID_ERROR = "[tests] receive test by id error";
 
 export const SET_TEST_DATA = "[tests] set test data";
 export const SET_DEFAULT_TEST_DATA = "[tests] set default test data";
+export const SET_TEST_EDIT_ASSIGNED = "[tests] set edit assigned";
+export const REGRADE_TEST = "[regrade] set regrade data";
 
 // actions
 
@@ -79,6 +83,12 @@ export const setTestDataAction = data => ({
 
 export const setDefaultTestDataAction = () => ({
   type: SET_DEFAULT_TEST_DATA
+});
+
+export const setTestEditAssignedAction = createAction(SET_TEST_EDIT_ASSIGNED);
+export const setRegradeSettingsDataAction = payload => ({
+  type: REGRADE_TEST,
+  payload
 });
 
 // reducer
@@ -146,6 +156,8 @@ export const reducer = (state = initialState, { type, payload }) => {
       };
     case RECEIVE_TEST_BY_ID_REQUEST:
       return { ...state, loading: true };
+    case SET_TEST_EDIT_ASSIGNED:
+      return { ...state, editAssigned: true };
     case RECEIVE_TEST_BY_ID_SUCCESS:
       return {
         ...state,
@@ -231,12 +243,16 @@ function* receiveTestByIdSaga({ payload }) {
 }
 
 function* createTestSaga({ payload }) {
+  const { oldId, regrade = false } = payload.data;
   try {
-    delete payload.data.assignments;
-    const entity = yield call(testsApi.create, payload.data);
-
-    yield put(createTestSuccessAction(entity));
-    yield call(message.success, "Success create");
+    const dataToSend = omit(payload.data, ["assignments", "createdDate", "updatedDate"]);
+    const entity = yield call(testsApi.create, dataToSend);
+    if (regrade) {
+      yield put(push(`/author/assignments/regrade/new/${entity._id}/old/${oldId}`));
+    } else {
+      yield put(createTestSuccessAction(entity));
+      yield call(message.success, "Success create");
+    }
   } catch (err) {
     const errorMessage = "Create test is failing";
     yield call(message.error, errorMessage);
@@ -266,11 +282,22 @@ function* updateTestSaga({ payload }) {
   }
 }
 
+function* updateRegradeData({ payload }) {
+  try {
+    yield call(assignmentApi.regrade, payload);
+    yield call(message.success, "Success update");
+  } catch (e) {
+    const errorMessage = "Update test is failing";
+    yield call(message.error, errorMessage);
+  }
+}
+
 export function* watcherSaga() {
   yield all([
     yield takeEvery(RECEIVE_TEST_BY_ID_REQUEST, receiveTestByIdSaga),
     yield takeEvery(CREATE_TEST_REQUEST, createTestSaga),
-    yield takeEvery(UPDATE_TEST_REQUEST, updateTestSaga)
+    yield takeEvery(UPDATE_TEST_REQUEST, updateTestSaga),
+    yield takeEvery(REGRADE_TEST, updateRegradeData)
   ]);
 }
 

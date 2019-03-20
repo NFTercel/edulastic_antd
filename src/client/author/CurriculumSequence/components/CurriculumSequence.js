@@ -38,6 +38,7 @@ import {
 /* eslint-enable */
 import EditModal from "../../TestPage/components/Assign/components/EditModal/EditModal";
 import { fetchGroupsAction, getGroupsSelector, fetchMultipleGroupMembersAction } from "../../sharedDucks/groups";
+import AddUnitModalBody from "./AddUnitModalBody";
 
 /** @typedef {object} ModuleData
  * @property {String} contentId
@@ -201,9 +202,8 @@ class CurriculumSequence extends Component {
     this.setState({ curriculumGuide: false });
   };
 
-  addNewUnitToDestination = () => {
+  addNewUnitToDestination = newUnit => {
     const { addNewUnitToDestination } = this.props;
-    const { newUnit } = { ...this.state };
 
     /** @type {String} */
     const { afterUnitId } = newUnit;
@@ -214,21 +214,6 @@ class CurriculumSequence extends Component {
     this.setState({ newUnit: {}, addUnit: false });
   };
 
-  onNewUnitNameChange = evt => {
-    evt.preventDefault();
-
-    const { newUnit } = { ...this.state };
-    newUnit.name = evt.target.value;
-    this.setState({ newUnit });
-  };
-
-  onUnitAfterIdChange = id => {
-    const { newUnit } = { ...this.state };
-    const [afterUnitId] = id;
-    newUnit.afterUnitId = afterUnitId;
-    this.setState({ newUnit });
-  };
-
   onGuideChange = wrappedId => {
     const { setGuide } = this.props;
     const id = wrappedId[0];
@@ -237,8 +222,8 @@ class CurriculumSequence extends Component {
 
   render() {
     const desktopWidthValue = Number(desktopWidth.split("px")[0]);
-    const { onNewUnitNameChange, onUnitAfterIdChange, onGuideChange } = this;
-    const { addUnit, addCustomContent, newUnit, curriculumGuide } = this.state;
+    const { onGuideChange } = this;
+    const { addUnit, addCustomContent, curriculumGuide, newUnit } = this.state;
     const {
       expandedModules,
       onCollapseExpand,
@@ -303,28 +288,12 @@ class CurriculumSequence extends Component {
           footer={null}
           style={windowWidth > desktopWidthValue ? { minWidth: "640px", padding: "20px" } : { padding: "20px" }}
         >
-          <AddUnitModalBody>
-            <label>Unit Name</label>
-            <Input data-cy="addNewUnitInputName" value={newUnit.name || ""} onChange={onNewUnitNameChange} />
-            <label>Add After</label>
-            <Input.Group compact>
-              <Cascader
-                onChange={onUnitAfterIdChange}
-                defaultValue={[options1[0].value]}
-                style={{ width: "100%" }}
-                options={options1}
-              />
-            </Input.Group>
-          </AddUnitModalBody>
-          <ModalFooter>
-            <Button data-cy="addUnitCancel" type="primary" ghost key="back" onClick={this.handleAddUnit}>
-              CANCEL
-            </Button>
-            ,
-            <Button data-cy="addUnitSave" key="submit" type="primary" onClick={this.addNewUnitToDestination}>
-              SAVE
-            </Button>
-          </ModalFooter>
+          <AddUnitModalBody
+            destinationCurriculumSequence={destinationCurriculumSequence}
+            addNewUnitToDestination={this.addNewUnitToDestination}
+            handleAddUnit={this.handleAddUnit}
+            newUnit={newUnit}
+          />
         </Modal>
 
         <Modal
@@ -754,22 +723,6 @@ const ModalBody = styled.div`
   }
   .ant-input-group {
     width: 48%;
-  }
-  label {
-    font-weight: 600;
-    margin-bottom: 10px;
-  }
-`;
-
-const AddUnitModalBody = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding-bottom: 40px;
-  .ant-input:not(.ant-cascader-input) {
-    margin-bottom: 20px;
-  }
-  .ant-input-group {
-    width: 100%;
   }
   label {
     font-weight: 600;

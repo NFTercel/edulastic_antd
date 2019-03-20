@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import * as moment from "moment";
 
 import { StyledTable } from "./styled";
@@ -30,15 +30,21 @@ const tbleColumns = [
   }
 ];
 
-const rowSelection = {
-  onChange: (selectedRowKeys, selectedRows) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, "selectedRows: ", selectedRows);
-  }
-};
-
-const AssignmentsTable = ({ assignments }) => {
-  const tableData = assignments.map((item, i) => ({
-    key: i,
+const AssignmentsTable = ({ assignments, handleSettingsChange, regradeType, regradeSettings }) => {
+  const [list, setNewList] = useState(regradeSettings.assignmentList);
+  const rowSelection = {
+    selectedRowKeys: regradeType == "SPECIFIC" ? list : [],
+    onChange: (selectedRowKeys, selectedRows) => {
+      const assignmentList = selectedRows.map(item => item._id);
+      handleSettingsChange("assignmentList", assignmentList);
+      setNewList(assignmentList);
+    },
+    getCheckboxProps: () => ({
+      disabled: regradeType !== "SPECIFIC"
+    })
+  };
+  const tableData = assignments.map(item => ({
+    key: item._id,
     _id: item._id,
     class: item.class,
     students: item.students,

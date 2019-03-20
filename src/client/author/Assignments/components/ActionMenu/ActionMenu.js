@@ -11,6 +11,7 @@ import responsiveIcon from "../../assets/responses.svg";
 import toolsIcon from "../../assets/printing-tool.svg";
 import devIcon from "../../assets/dev.svg";
 import googleIcon from "../../assets/Google Classroom.svg";
+import { Link } from "react-router-dom";
 
 import { Container, StyledMenu, StyledLink, SpaceElement } from "./styled";
 
@@ -33,11 +34,11 @@ const ActionMenu = (onOpenReleaseScoreSettings, currentAssignment) => {
   );
   MenuItems.push(
     <Menu.Item>
-      <StyledLink target="_blank" rel="noopener noreferrer">
+      <Link style={{ marginTop: 2 }} to={`/author/tests/${currentAssignment.testId}/editAssigned`}>
         <img alt="icon" src={classIcon} />
         <SpaceElement />
         Edit Assessment
-      </StyledLink>
+      </Link>
     </Menu.Item>
   );
   MenuItems.push(

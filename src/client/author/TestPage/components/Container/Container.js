@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent, useEffect } from "react";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -167,7 +167,13 @@ class Container extends PureComponent {
       return foundItem;
     });
     if (test._id) {
-      updateTest(test._id, newTest);
+      if (this.props.editAssigned) {
+        newTest.versioned = true;
+        newTest.oldId = test._id;
+        createTest(newTest);
+      } else {
+        updateTest(test._id, newTest);
+      }
     } else {
       createTest(newTest);
     }

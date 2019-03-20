@@ -18,8 +18,8 @@ describe("Test Graphing - number line with drag and drop", () => {
       respC: "resp C"
     },
     layout: {
-      width: "700",
-      height: "300",
+      width: 700,
+      height: 300,
       lineMargin: "30",
       linePosition: "40",
       titlePosition: "10",
@@ -27,10 +27,18 @@ describe("Test Graphing - number line with drag and drop", () => {
       pointSeparationDistanceX: "20",
       pointSeparationDistanceY: "20",
       fontSize: "Small"
+    },
+    labels: {
+      frequency: "2",
+      specificPoints: "6.5, 7.5"
+    },
+    correctAnswers: {
+      points: "2",
+      alternatePoints: "3"
     }
   };
 
-  const question = new GraphingNumberLineDragAndDropPage(+queData.layout.width, +queData.layout.height);
+  const question = new GraphingNumberLineDragAndDropPage(queData.layout.width, queData.layout.height);
   const editItemPage = new EditItemPage();
   const header = new Header();
 
@@ -176,8 +184,70 @@ describe("Test Graphing - number line with drag and drop", () => {
       question
         .getBoard()
         .find("svg")
-        .should("have.attr", "width", queData.layout.width)
-        .and("have.attr", "height", queData.layout.height);
+        .invoke("width")
+        .should("be.equal", queData.layout.width);
+
+      question
+        .getBoard()
+        .find("svg")
+        .invoke("height")
+        .should("be.equal", queData.layout.height);
+
+      question.getLineOnBoard().should("have.attr", "y1", "119");
+      question.getLineOnBoard().should("have.attr", "y2", "119");
+      question.getLineOnBoard().should("have.attr", "marker-start");
+      question.getLineOnBoard().should("have.attr", "marker-end");
+
+      question.getTitleOnBoard().should("have.css", "top", "21px");
+
+      // todo: add checking for: Point box position
+
+      // todo: worked incorrect: Line margin, Point Separation distance X, Point Separation distance Y, Font Size
+    });
+
+    it("Edit labels", () => {
+      question
+        .getLabelsFrequency()
+        .clear()
+        .type(queData.labels.frequency);
+
+      question
+        .getLabelsSpecificPoints()
+        .clear()
+        .type(queData.labels.specificPoints);
+
+      question.clickOnShowMin();
+      question.clickOnShowMax();
+
+      question.getVisibleTickLabelsOnBoard().should("have.length", 6);
+    });
+
+    it("Edit ticks", () => {
+      // todo: needed implementation
+    });
+
+    it("Edit correct answers", () => {
+      question
+        .getPointsParameter()
+        .clear()
+        .type(queData.correctAnswers.points);
+
+      // todo: add drag and drop for labels to set answers
+
+      // alternate answers
+      question.clickOnTabsPlusButton();
+      question
+        .getPointsParameter()
+        .clear()
+        .type(queData.correctAnswers.alternatePoints);
+
+      question.clickOnTab(0);
+      question.getPointsParameter().should("have.value", queData.correctAnswers.points);
+      question.clickOnTab(1);
+      question.getPointsParameter().should("have.value", queData.correctAnswers.alternatePoints);
+
+      question.clickOnAlternateAnswerDeleteButton(0);
+      question.getPointsParameter().should("have.value", queData.correctAnswers.points);
     });
   });
 });

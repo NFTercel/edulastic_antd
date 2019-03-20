@@ -71,6 +71,9 @@ const onHandler = (
   lineSettings,
   containerSettings
 ) => {
+  const [markXMeasure, markYMeasure] = calcMeasure(51.5, 45, board);
+  const [xMeasure, yMeasure] = calcMeasure(board.$board.canvasWidth, board.$board.canvasHeight, board);
+  const containerY = containerSettings.yMax - (yMeasure / 100) * containerSettings.position;
   const point = board.$board.create("point", coords, {
     name: "",
     visible: false
@@ -82,6 +85,16 @@ const onHandler = (
   );
   const group = board.$board.create("group", [point, mark], { id: data.id });
   snapMark(mark, point, xCoords, snapToTicks, ticksDistance, setValue, lineSettings, containerSettings, board);
+
+  if (point.Y() >= containerY - markYMeasure * 1.35) {
+    mark.setAttribute({
+      cssClass: "mark mounted",
+      highlightCssClass: "mark mounted"
+    });
+  } else {
+    mark.setAttribute({ cssClass: "mark", highlightCssClass: "mark" });
+  }
+
   return group;
 };
 

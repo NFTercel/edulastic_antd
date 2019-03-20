@@ -166,10 +166,10 @@ var evaluator = function evaluator(_ref) {
 
   switch (scoring_type) {
     case _scoring.ScoringType.PARTIAL_MATCH:
-      return partialMatchPerResponseEvaluator(userResponse, answers);
+      return partialMatchEvaluator(userResponse, answers, roundingIsNone);
 
     case _scoring.ScoringType.PARTIAL_MATCH_V2:
-      return partialMatchEvaluator(userResponse, answers, roundingIsNone);
+      return partialMatchPerResponseEvaluator(userResponse, answers);
 
     case _scoring.ScoringType.EXACT_MATCH:
     default:

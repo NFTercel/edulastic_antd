@@ -37,6 +37,10 @@ class GraphingNumberLineDragAndDropPage extends GraphingStandardPage {
       .filter(":visible");
   }
 
+  getPointBoxOnBoard() {
+    return this.getBoard().find('polygon[fill="#efefef"]');
+  }
+
   getPossibleResponsesOption(index) {
     return this.getPossibleResponsesContainer()
       .find(".ql-editor")
@@ -77,6 +81,14 @@ class GraphingNumberLineDragAndDropPage extends GraphingStandardPage {
     return cy.get('input[name="separationDistanceY"]');
   }
 
+  getLabelsFrequency() {
+    return cy.get('input[name="frequency"]');
+  }
+
+  getLabelsSpecificPoints() {
+    return cy.get('input[name="specificPoints"]');
+  }
+
   // actions ---------------------------------------------------------------
 
   clickOnPossibleResponsesDeleteButton(index) {
@@ -98,6 +110,16 @@ class GraphingNumberLineDragAndDropPage extends GraphingStandardPage {
 
   clickOnShowRightArrow() {
     cy.contains("Show right arrow").click();
+    return this;
+  }
+
+  clickOnShowMin() {
+    cy.contains("Show min").click();
+    return this;
+  }
+
+  clickOnShowMax() {
+    cy.contains("Show max").click();
     return this;
   }
 }

@@ -23,6 +23,12 @@ class AxisLabelsMoreOptions extends Component {
     currentRenderingBaseItem: {}
   };
 
+  scoringTypes = [
+    { label: "Exact match", value: "exactMatch" },
+    { label: "Partial match", value: "partialMatch" },
+    { label: "Partial match per response", value: "partialMatchV2" }
+  ];
+
   handleExtraOptionsChange = event => {
     const {
       target: { name, value }
@@ -156,7 +162,7 @@ class AxisLabelsMoreOptions extends Component {
     return (
       <Fragment>
         <QuestionSection section="advanced" label="SCORING" cleanSections={cleanSections} fillSections={fillSections}>
-          <ScoreSettings showSelect={false} setValidation={setValidation} graphData={graphData} />
+          <ScoreSettings scoringTypes={this.scoringTypes} setValidation={setValidation} graphData={graphData} />
         </QuestionSection>
 
         <QuestionSection section="advanced" label="LAYOUT" cleanSections={cleanSections} fillSections={fillSections}>
@@ -354,7 +360,7 @@ class AxisLabelsMoreOptions extends Component {
               <MoreOptionsColumn>
                 <MoreOptionsRow>
                   <MoreOptionsLabel>{t("component.graphing.labelsoptions.frequency")}</MoreOptionsLabel>
-                  <MoreOptionsInput type="number" defaultValue="1" />
+                  <MoreOptionsInput name="frequency" type="number" defaultValue="1" />
                 </MoreOptionsRow>
                 <MoreOptionsRow>
                   <Checkbox

@@ -21,6 +21,7 @@ import { question } from "../../QuestionEditor";
 import { testsAddItems } from "../../TestPage/components/AddItems";
 import { testAssignmentsReducer } from "../../TestPage/components/Assign";
 import { assessmentCreate } from "../../AssessmentCreate";
+import { manageClass } from "../../ManageClass";
 
 const authorReducers = {
   authorUi,
@@ -45,7 +46,8 @@ const authorReducers = {
   testList,
   assessmentCreate,
   studentQuestionResponse,
-  classQuestionResponse
+  classQuestionResponse,
+  manageClass
 };
 
 export default authorReducers;

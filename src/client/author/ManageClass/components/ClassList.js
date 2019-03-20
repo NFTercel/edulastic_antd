@@ -10,7 +10,7 @@ const ClassList = ({ groups }) => {
       key: "name",
       dataIndex: "name"
     },
-    { title: "classCode" },
+    { title: "classCode", key: "code", dataIndex: "code" },
     { title: "grades" },
     { title: "subject" },
     { title: "tags" },

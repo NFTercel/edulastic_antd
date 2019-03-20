@@ -73,7 +73,7 @@ export const filterSelector = state => state.studentReport.filter;
 const isReport = assignment => {
   // either user has ran out of attempts
   // or assigments is past dueDate
-  let maxAttempts = (assignment.test && assignment.test.maxAttempts) || 5;
+  let maxAttempts = (assignment && assignment.maxAttempts) || 1;
   let attempts = (assignment.reports && assignment.reports.length) || 0;
   const isExpired = maxAttempts <= attempts || new Date(assignment.endDate) < new Date();
   return isExpired;

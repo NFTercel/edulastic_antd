@@ -6,6 +6,7 @@ import { classResponsesSaga } from "../../ClassResponses";
 import { testsListSaga } from "../../TestList";
 import { testPageSaga } from "../../TestPage";
 import { itemDetailSaga } from "../../ItemDetail";
+import { ManageClassSaga } from "../../ManageClass";
 import { questionSaga } from "../../QuestionEditor";
 import { testsAddItemsSaga } from "../../TestPage/components/AddItems";
 import { testsAssignSaga } from "../../TestPage/components/Assign";
@@ -27,7 +28,8 @@ const authorSagas = [
   testsAddItemsSaga(),
   testsAssignSaga(),
   authorGroupsWatcherSaga(),
-  assessmentPageSaga()
+  assessmentPageSaga(),
+  ManageClassSaga()
 ];
 
 export default authorSagas;

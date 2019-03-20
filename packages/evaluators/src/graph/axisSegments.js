@@ -7,13 +7,13 @@ const shapesAreEqual = (shape1, shape2) => {
   }
 
   switch (shape1.type) {
-    case AxisSegmentsShapeTypes.POINT:
+    case AxisSegmentsShapeTypes.SEGMENTS_POINT:
     case AxisSegmentsShapeTypes.RAY_LEFT_DIRECTION:
     case AxisSegmentsShapeTypes.RAY_RIGHT_DIRECTION:
     case AxisSegmentsShapeTypes.RAY_LEFT_DIRECTION_RIGHT_HOLLOW:
     case AxisSegmentsShapeTypes.RAY_RIGHT_DIRECTION_LEFT_HOLLOW:
       return shape1.point1 === shape2.point1;
-    case AxisSegmentsShapeTypes.SEGMENT:
+    case AxisSegmentsShapeTypes.SEGMENT_BOTH_POINT_INCLUDED:
     case AxisSegmentsShapeTypes.SEGMENT_LEFT_POINT_HOLLOW:
     case AxisSegmentsShapeTypes.SEGMENT_RIGHT_POINT_HOLLOW:
     case AxisSegmentsShapeTypes.SEGMENT_BOTH_POINT_HOLLOW:
@@ -154,9 +154,9 @@ const evaluator = ({ userResponse, validation }) => {
 
   switch (scoring_type) {
     case ScoringType.PARTIAL_MATCH:
-      return partialMatchPerResponseEvaluator(userResponse, answers);
-    case ScoringType.PARTIAL_MATCH_V2:
       return partialMatchEvaluator(userResponse, answers, roundingIsNone);
+    case ScoringType.PARTIAL_MATCH_V2:
+      return partialMatchPerResponseEvaluator(userResponse, answers);
     case ScoringType.EXACT_MATCH:
     default:
       return exactMatchEvaluator(userResponse, answers);

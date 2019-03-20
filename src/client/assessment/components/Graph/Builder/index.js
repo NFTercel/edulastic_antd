@@ -347,12 +347,14 @@ class Board {
   }
 
   // Render marks
-  renderMarks(marks, xCoords, settings, setValue, lineSettings, containerSettings) {
-    marks.forEach(mark => {
+  renderMarks(marks, xCoords, settings, setValue, lineSettings, containerSettings, markCoords) {
+    marks.forEach((mark, index) => {
       this.elements.push(
         Mark.onHandler(
           this,
-          checkMarksRenderSpace(this, settings, containerSettings),
+          markCoords
+            ? [markCoords[index].position, markCoords[index].y]
+            : checkMarksRenderSpace(this, settings, containerSettings),
           mark,
           calcMeasure(51.5, 45, this),
           xCoords,
@@ -725,6 +727,10 @@ class Board {
         })
       )
     );
+  }
+
+  loadMarks(elements) {
+    this.elements.push(...elements.map(element => Mark.loadMarks()));
   }
 
   loadSegments(elements) {

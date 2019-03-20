@@ -1,9 +1,9 @@
-import { GraphTypes } from './constants/graphTypes';
-import quadrantsEvaluator from './quadrants';
-import axisLabelsEvaluator from './axisLabels';
-import axisSegmentsEvaluator from './axisSegments';
+import { GraphTypes } from "./constants/graphTypes";
+import quadrantsEvaluator from "./quadrants";
+import axisLabelsEvaluator from "./axisLabels";
+import axisSegmentsEvaluator from "./axisSegments";
 
-const evaluator = ({ userResponse, validation }) => {
+const evaluator = ({ userResponse = [], validation }) => {
   const { graphType } = validation;
 
   switch (graphType) {

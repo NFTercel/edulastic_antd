@@ -1,52 +1,52 @@
+import { ScoringType } from "../const/scoring";
+
 const checkAnswer = (answer, userResponse) => {
-  const result = {
-    commonResult: false,
-    details: []
-  };
+  const result = [];
 
   const trueAnswerValue = answer.value;
 
-  userResponse.forEach(testItem => {
-    const resultForItem = {
-      point: testItem.point,
+  userResponse.forEach(testLabel => {
+    const resultForLabel = {
+      label: testLabel,
       result: false
     };
 
-    if (trueAnswerValue.findIndex(item => item.point === testItem.point && item.position === testItem.position) > -1) {
-      resultForItem.result = true;
+    if (
+      trueAnswerValue.findIndex(item => item.point === testLabel.point && item.position === testLabel.position) > -1
+    ) {
+      resultForLabel.result = true;
     }
 
-    result.details.push(resultForItem);
+    result.push(resultForLabel);
   });
-
-  const allIsTrue = result.details.filter(item => item.result).length === result.details.length;
-  result.commonResult = trueAnswerValue.length === userResponse.length && allIsTrue;
 
   return result;
 };
 
-const evaluator = ({ userResponse, validation }) => {
-  const { valid_response, alt_responses } = validation;
-
+const exactMatchEvaluator = (userResponse, answers) => {
   let score = 0;
   let maxScore = 1;
 
   const evaluation = {};
 
-  let answers = [valid_response];
-  if (alt_responses) {
-    answers = answers.concat([...alt_responses]);
-  }
-
-  let result = {};
-
   answers.forEach((answer, index) => {
-    result = checkAnswer(answer, userResponse);
-    if (result.commonResult) {
-      score = Math.max(answer.score, score);
+    const answerResult = {
+      result: false,
+      details: checkAnswer(answer, userResponse),
+      score: 0
+    };
+
+    const trueLabelsCount = answerResult.details.filter(item => item.result).length;
+    const allIsTrue = trueLabelsCount === answerResult.details.length;
+    answerResult.result = answer.value.length === userResponse.length && allIsTrue;
+
+    if (answerResult.result) {
+      answerResult.score = answer.score;
+      score = Math.max(answerResult.score, score);
     }
+
     maxScore = Math.max(answer.score, maxScore);
-    evaluation[index] = result;
+    evaluation[index] = answerResult;
   });
 
   return {
@@ -54,6 +54,92 @@ const evaluator = ({ userResponse, validation }) => {
     maxScore,
     evaluation
   };
+};
+
+const partialMatchPerResponseEvaluator = (userResponse, answers) => {
+  let score = 0;
+  let maxScore = 1;
+
+  const evaluation = {};
+
+  answers.forEach((answer, index) => {
+    const answerResult = {
+      result: false,
+      details: checkAnswer(answer, userResponse),
+      score: 0
+    };
+
+    const trueLabelsCount = answerResult.details.filter(item => item.result).length;
+    const allIsTrue = trueLabelsCount === answerResult.details.length;
+    answerResult.result = answer.value.length === userResponse.length && allIsTrue;
+
+    answerResult.score = answer.score * trueLabelsCount;
+
+    score = Math.max(answerResult.score, score);
+    maxScore = Math.max(answer.score * answer.value.length, maxScore);
+    evaluation[index] = answerResult;
+  });
+
+  return {
+    score,
+    maxScore,
+    evaluation
+  };
+};
+
+const partialMatchEvaluator = (userResponse, answers, roundingIsNone) => {
+  let score = 0;
+  let maxScore = 1;
+
+  const evaluation = {};
+
+  answers.forEach((answer, index) => {
+    const answerResult = {
+      result: false,
+      details: checkAnswer(answer, userResponse),
+      score: 0
+    };
+
+    const trueLabelsCount = answerResult.details.filter(item => item.result).length;
+    const allIsTrue = trueLabelsCount === answerResult.details.length;
+    answerResult.result = answer.value.length === userResponse.length && allIsTrue;
+
+    const pointsPerOneLabel = answer.value.length ? answer.score / answer.value.length : 0;
+    answerResult.score = roundingIsNone
+      ? pointsPerOneLabel * trueLabelsCount
+      : Math.floor(pointsPerOneLabel * trueLabelsCount);
+
+    score = Math.max(answerResult.score, score);
+    maxScore = Math.max(answer.score, maxScore);
+    evaluation[index] = answerResult;
+  });
+
+  return {
+    score,
+    maxScore,
+    evaluation
+  };
+};
+
+const evaluator = ({ userResponse, validation }) => {
+  const { valid_response, alt_responses, scoring_type, rounding } = validation;
+
+  let answers = [valid_response];
+  if (alt_responses) {
+    answers = answers.concat([...alt_responses]);
+  }
+
+  const roundingIsNone = rounding && rounding === "none";
+
+  switch (scoring_type) {
+    case ScoringType.PARTIAL_MATCH:
+      return partialMatchEvaluator(userResponse, answers, roundingIsNone);
+    case ScoringType.PARTIAL_MATCH_V2:
+      return partialMatchPerResponseEvaluator(userResponse, answers);
+    case ScoringType.EXACT_MATCH:
+    default:
+      return exactMatchEvaluator(userResponse, answers);
+  }
 };
 
 export default evaluator;

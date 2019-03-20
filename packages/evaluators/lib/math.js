@@ -31,10 +31,11 @@ var evaluate = function evaluate(data) {
 
 var getChecks = function getChecks(validation) {
   var altResponses = validation.alt_responses || [];
-  var values = (0, _toConsumableArray2.default)(validation.valid_response.value).concat(
+  var values = [].concat(
+    (0, _toConsumableArray2.default)(validation.valid_response.value),
     (0, _toConsumableArray2.default)(
       altResponses.reduce(function(acc, res) {
-        return (0, _toConsumableArray2.default)(acc).concat((0, _toConsumableArray2.default)(res.value));
+        return [].concat((0, _toConsumableArray2.default)(acc), (0, _toConsumableArray2.default)(res.value));
       }, [])
     )
   );
@@ -234,7 +235,7 @@ var exactMatchEvaluator =
                   }
 
                   maxScore = Math.max(answer.score, maxScore);
-                  evaluation = (0, _toConsumableArray2.default)(evaluation).concat([valid]);
+                  evaluation = [].concat((0, _toConsumableArray2.default)(evaluation), [valid]);
 
                 case 49:
                   _iteratorNormalCompletion = true;
@@ -299,7 +300,7 @@ var exactMatchEvaluator =
             }
           },
           _callee,
-          this,
+          null,
           [[3, 68, 71, 74], [8, 54, 58, 66], [17, 34, 38, 46], [39, , 41, 45], [59, , 61, 65]]
         );
       })
@@ -327,48 +328,44 @@ var evaluator =
           result,
           checks;
 
-        return _regenerator.default.wrap(
-          function _callee2$(_context2) {
-            while (1) {
-              switch ((_context2.prev = _context2.next)) {
-                case 0:
-                  (userResponse = _ref3.userResponse), (validation = _ref3.validation);
-                  (valid_response = validation.valid_response),
-                    (_validation$alt_respo = validation.alt_responses),
-                    (alt_responses = _validation$alt_respo === void 0 ? [] : _validation$alt_respo),
-                    (scoring_type = validation.scoring_type),
-                    (attemptScore = validation.min_score_if_attempted);
-                  answers = [valid_response].concat((0, _toConsumableArray2.default)(alt_responses));
-                  _context2.t0 = scoring_type;
-                  _context2.next = _context2.t0 === _scoring.ScoringType.EXACT_MATCH ? 6 : 6;
-                  break;
+        return _regenerator.default.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch ((_context2.prev = _context2.next)) {
+              case 0:
+                (userResponse = _ref3.userResponse), (validation = _ref3.validation);
+                (valid_response = validation.valid_response),
+                  (_validation$alt_respo = validation.alt_responses),
+                  (alt_responses = _validation$alt_respo === void 0 ? [] : _validation$alt_respo),
+                  (scoring_type = validation.scoring_type),
+                  (attemptScore = validation.min_score_if_attempted);
+                answers = [valid_response].concat((0, _toConsumableArray2.default)(alt_responses));
+                _context2.t0 = scoring_type;
+                _context2.next = _context2.t0 === _scoring.ScoringType.EXACT_MATCH ? 6 : 6;
+                break;
 
-                case 6:
-                  checks = getChecks(validation);
-                  _context2.next = 9;
-                  return exactMatchEvaluator(userResponse, answers, checks);
+              case 6:
+                checks = getChecks(validation);
+                _context2.next = 9;
+                return exactMatchEvaluator(userResponse, answers, checks);
 
-                case 9:
-                  result = _context2.sent;
+              case 9:
+                result = _context2.sent;
 
-                case 10:
-                  // if score for attempting is greater than current score
-                  // let it be the score!
-                  if (!Number.isNaN(attemptScore) && attemptScore > result.score) {
-                    result.score = attemptScore;
-                  }
+              case 10:
+                // if score for attempting is greater than current score
+                // let it be the score!
+                if (!Number.isNaN(attemptScore) && attemptScore > result.score) {
+                  result.score = attemptScore;
+                }
 
-                  return _context2.abrupt("return", result);
+                return _context2.abrupt("return", result);
 
-                case 12:
-                case "end":
-                  return _context2.stop();
-              }
+              case 12:
+              case "end":
+                return _context2.stop();
             }
-          },
-          _callee2,
-          this
-        );
+          }
+        }, _callee2);
       })
     );
 
