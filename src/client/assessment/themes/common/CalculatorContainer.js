@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
+import Draggable from "react-draggable";
 
 class CalculatorContainer extends Component {
   constructor(props) {
@@ -117,15 +118,47 @@ class CalculatorContainer extends Component {
     const { calculateMode, changeMode } = this.state;
     return (
       <Container>
-        <DesmosCalculator visible={changeMode == 2 && calculateMode === 0 && true} id="demos-graphiccalculator" />
-        <DesmosCalculator visible={changeMode == 2 && calculateMode === 1 && true} id="demos-basiccalculator" />
-        <DesmosCalculator visible={changeMode == 2 && calculateMode === 2 && true} id="demos-scientificcalculator" />
-        <GeoGebracalculator visible={changeMode == 2 && calculateMode === 3 && true} id="geogebra-graphingculator" />
-        <GeoGebracalculator visible={changeMode == 2 && calculateMode === 4 && true} id="geogebra-basiccalculator" />
-        <GeoGebracalculator
-          visible={changeMode == 2 && calculateMode === 5 && true}
-          id="geogebra-scientificcalculator"
-        />
+        <StyledDraggable>
+          <StyledDiv visible={changeMode == 2 && calculateMode === 0 && true}>
+            <StyledTitle>Desmos Graphing Calculator</StyledTitle>
+            <DesmosGraphingCalculator id="demos-graphiccalculator" />
+          </StyledDiv>
+        </StyledDraggable>
+
+        <StyledDraggable>
+          <StyledDiv visible={changeMode == 2 && calculateMode === 1 && true}>
+            <StyledTitle>Desmos Basic Calculator</StyledTitle>
+            <DesmosBasicCalculator id="demos-basiccalculator" />
+          </StyledDiv>
+        </StyledDraggable>
+
+        <StyledDraggable>
+          <StyledDiv visible={changeMode == 2 && calculateMode === 2 && true}>
+            <StyledTitle>Desmos Scientific Calculator</StyledTitle>
+            <DesmosScientificCalculator id="demos-scientificcalculator" />
+          </StyledDiv>
+        </StyledDraggable>
+
+        <StyledDraggableF>
+          <StyledDiv visible={changeMode == 2 && calculateMode === 3 && true}>
+            <StyledTitle>GeoGebra Graphing Calculator</StyledTitle>
+            <GeoGebracalculator id="geogebra-graphingculator" />
+          </StyledDiv>
+        </StyledDraggableF>
+
+        <StyledDraggableF>
+          <StyledDiv visible={changeMode == 2 && calculateMode === 4 && true}>
+            <StyledTitle>GeoGebra Basic Calculator</StyledTitle>
+            <GeoGebracalculator id="geogebra-basiccalculator" />
+          </StyledDiv>
+        </StyledDraggableF>
+
+        <StyledDraggableF>
+          <StyledDiv visible={changeMode == 2 && calculateMode === 5 && true}>
+            <StyledTitle>GeoGebra Scientific Calculator</StyledTitle>
+            <GeoGebracalculator id="geogebra-scientificcalculator" />
+          </StyledDiv>
+        </StyledDraggableF>
       </Container>
     );
   }
@@ -134,19 +167,52 @@ class CalculatorContainer extends Component {
 export default CalculatorContainer;
 
 const Container = styled.div``;
-const DesmosCalculator = styled.div`
-  width: 600px;
-  height: 400px;
+
+const StyledDraggable = styled(Draggable)`
   position: absolute;
-  left: 50%;
-  top: 300px;
-  display: ${props => (props.visible ? "block" : "none")};
 `;
-const GeoGebracalculator = styled.div`
-  width: 600px;
-  height: 400px;
+
+const StyledDraggableF = styled(Draggable)`
+  position: absolute;
+  width: 800px;
+`;
+
+const StyledDiv = styled.div`
   position: absolute;
   left: 50%;
   top: 200px;
   display: ${props => (props.visible ? "block" : "none")};
+`;
+
+const StyledTitle = styled.div`
+  width: 100%;
+  height: 35px;
+  background: #0288d1;
+  color: #ffffff;
+  font-size: 16px;
+  line-height: 35px;
+  padding: 0 12px;
+  font-weight: 600;
+  text-align: left;
+  cursor: move;
+`;
+
+const DesmosGraphingCalculator = styled.div`
+  width: 600px;
+  height: 400px;
+`;
+
+const DesmosBasicCalculator = styled.div`
+  width: 600px;
+  height: 500px;
+`;
+
+const DesmosScientificCalculator = styled.div`
+  width: 350px;
+  height: 500px;
+`;
+
+const GeoGebracalculator = styled.div`
+  width: 800px;
+  height: 600px;
 `;
