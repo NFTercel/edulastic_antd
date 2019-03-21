@@ -1,8 +1,9 @@
 import GraphingNumberLinePlotPage from "../../../../framework/author/itemList/questionType/graphing/graphingNumberLinePlotPage";
 import EditItemPage from "../../../../framework/author/itemList/itemDetail/editPage";
 import Header from "../../../../framework/author/itemList/itemDetail/header";
+import FileHelper from "../../../../framework/util/fileHelper";
 
-describe("Test Graphing - number line with plot", () => {
+describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Number line with plot" type question`, () => {
   const queData = {
     group: "Graphing",
     queType: "Number line with plot",

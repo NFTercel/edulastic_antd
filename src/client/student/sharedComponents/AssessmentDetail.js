@@ -7,11 +7,11 @@ import { formatTime } from "../utils";
 
 const { ASSESSMENT } = test.type;
 
-const AssessmentDetails = ({ test, theme, testType, t, started, resume, dueDate, type, startDate }) => (
+const AssessmentDetails = ({ test, theme, testType, t, started, resume, dueDate, type, startDate, safeBrowser }) => (
   <Wrapper>
     <Col>
       <ImageWrapper>
-        <img src={test && test.thumbnail} alt="" />
+        <Thumbnail src={test && test.thumbnail} alt="" />
       </ImageWrapper>
     </Col>
     <CardDetails>
@@ -32,17 +32,25 @@ const AssessmentDetails = ({ test, theme, testType, t, started, resume, dueDate,
           {formatTime(dueDate)}
         </span>
       </CardDate>
-      <div>
+      <StatusWrapper>
         {type === "assignment" ? (
-          <StatusButton isSubmitted={started || resume} assignment={type === "assignment"}>
-            <span data-cy="status">{started || resume ? t("common.inProgress") : t("common.notStartedTag")}</span>
-          </StatusButton>
+          <React.Fragment>
+            <StatusButton isSubmitted={started || resume} assignment={type === "assignment"}>
+              <span data-cy="status">{started || resume ? t("common.inProgress") : t("common.notStartedTag")}</span>
+            </StatusButton>
+            {safeBrowser && (
+              <SafeExamIcon
+                src="http://cdn.edulastic.com/JS/webresources/images/as/seb.png"
+                title={t("common.safeExamToolTip")}
+              />
+            )}
+          </React.Fragment>
         ) : (
           <StatusButton isSubmitted={started}>
             <span data-cy="status">{started ? t("common.submittedTag") : t("common.missed")}</span>
           </StatusButton>
         )}
-      </div>
+      </StatusWrapper>
     </CardDetails>
   </Wrapper>
 );
@@ -94,11 +102,19 @@ const ImageWrapper = styled.div`
   @media screen and (max-width: 767px) {
     max-width: 100%;
     margin: 0;
-    img {
-      max-width: 100%;
-      height: 120px;
-    }
   }
+`;
+
+const Thumbnail = styled.img`
+  max-width: 168.5px;
+  border-radius: 10px;
+  width: 100%;
+  height: 80px;
+  @media screen and (max-width: 767px) {
+    max-width: 100%;
+    height: 120px;
+  }	 
+ }
 `;
 
 const CardDetails = styled(Col)`
@@ -151,7 +167,10 @@ const StrongText = styled.span`
   font-weight: 600;
   padding-left: 5px;
 `;
-
+const StatusWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
 const StatusButton = styled.div`
   width: 135px;
   height: 23.5px;
@@ -172,6 +191,12 @@ const StatusButton = styled.div`
   @media screen and (max-width: 767px) {
     width: 100%;
   }
+`;
+
+const SafeExamIcon = styled.img`
+  width: 25px;
+  height: 25px;
+  margin-left: 10px;
 `;
 
 const TestType = styled.span`

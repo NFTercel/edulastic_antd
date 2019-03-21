@@ -1,7 +1,8 @@
 import EditItemPage from "../../../../framework/author/itemList/itemDetail/editPage";
 import TextPage from "../../../../framework/author/itemList/questionType/fillInBlank/textPage";
+import FileHelper from "../../../../framework/util/fileHelper";
 
-describe('Author - "Label Image with Text" type question', () => {
+describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Label Image with Text" type question`, () => {
   const queData = {
     group: "Fill in the Blanks",
     queType: "Label Image with Text",

@@ -13,13 +13,13 @@ import { Row, Col } from "antd";
 import AssessmentDetails from "./AssessmentDetail";
 import StartButton from "../Assignments/components/StartButton";
 import ReviewButton from "../Reports/components/ReviewButton";
+import SafeStartAssignButton from "../styled/AssignmentCardButton";
 import Attempt from "./Attempt";
-import { Button } from "antd";
 
 // actions
 import { startAssignmentAction, resumeAssignmentAction } from "../Assignments/ducks";
 
-const SafeBrowserButton = ({ testId, testType, assignmentId, testActivityId }) => {
+const SafeBrowserButton = ({ testId, testType, assignmentId, testActivityId, btnName }) => {
   const token = window.localStorage.access_token;
   let url = `${process.env.POI_APP_API_URI.replace("http", "seb").replace(
     "https",
@@ -30,7 +30,7 @@ const SafeBrowserButton = ({ testId, testType, assignmentId, testActivityId }) =
   }
 
   url += `/token/${token}/settings.seb`;
-  return <Button href={url}>Open in Seb</Button>;
+  return <SafeStartAssignButton href={url}>{btnName}</SafeStartAssignButton>;
 };
 
 const AssignmentCard = ({ startAssignment, resumeAssignment, data, theme, t, type }) => {
@@ -108,6 +108,7 @@ const AssignmentCard = ({ startAssignment, resumeAssignment, data, theme, t, typ
         resume={resume}
         dueDate={endDate}
         startDate={startDate}
+        safeBrowser={safeBrowser}
       />
       <ButtonAndDetail>
         <DetailContainer>
@@ -131,6 +132,7 @@ const AssignmentCard = ({ startAssignment, resumeAssignment, data, theme, t, typ
                 testType={testType}
                 testActivityId={lastAttempt._id}
                 assignmentId={assignmentId}
+                btnName={t("common.startAssignment")}
               />
             ) : (
               <StartButton
@@ -204,12 +206,6 @@ const CardWrapper = styled(Row)`
   border-bottom: 1px solid #f2f2f2;
   &:last-child {
     border-bottom: 0px;
-  }
-  img {
-    max-width: 168.5px;
-    border-radius: 10px;
-    width: 100%;
-    height: 80px;
   }
   @media screen and (max-width: 767px) {
     flex-direction: column;

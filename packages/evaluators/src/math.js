@@ -2,7 +2,7 @@ import axios from "axios";
 import { omitBy } from "lodash";
 import { ScoringType } from "./const/scoring";
 
-const url = "https://9ehy0wtpo7.execute-api.us-east-1.amazonaws.com/dev/evaluate";
+const url = "https://1nz4dq81w6.execute-api.us-east-1.amazonaws.com/dev/evaluate";
 
 const evaluate = data =>
   axios

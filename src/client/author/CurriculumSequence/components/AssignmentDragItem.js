@@ -3,8 +3,7 @@ import PropTypes from "prop-types";
 import { Dropdown } from "antd";
 import styled from "styled-components";
 import { DragSource } from "react-dnd";
-import { Paper } from "@edulastic/common";
-import { darkBlue, lightBlue, lightGreen, green } from "@edulastic/colors";
+import { darkBlue, lightBlue, lightGreen, green, white } from "@edulastic/colors";
 import assignContentIcon from "../assets/assign.svg";
 import visualizationIcon from "../assets/visualization-show.svg";
 
@@ -107,7 +106,8 @@ const UnitIcon = styled.span`
 `;
 UnitIcon.displayName = "UnitIcon";
 
-const Row = styled(Paper)`
+const Row = styled.div`
+  background: ${white};
   padding-top: 0px;
   padding-bottom: 0px;
   padding-left: 20px;

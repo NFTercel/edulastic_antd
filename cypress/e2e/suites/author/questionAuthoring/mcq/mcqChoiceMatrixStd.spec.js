@@ -1,7 +1,8 @@
 import ChoiceMatrixStandardPage from "../../../../framework/author/itemList/questionType/mcq/choiceMatrixStandardPage.js";
 import EditItemPage from "../../../../framework/author/itemList/itemDetail/editPage.js";
+import FileHelper from "../../../../framework/util/fileHelper";
 
-describe('Test Authoring - "Choice matrix - standard" Type Question', () => {
+describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Choice matrix - standard" type question`, () => {
   const editItem = new EditItemPage();
   const question = new ChoiceMatrixStandardPage();
   const queData = {

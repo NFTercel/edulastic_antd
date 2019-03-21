@@ -2,8 +2,9 @@
 import EditItemPage from "../../../../framework/author/itemList/itemDetail/editPage";
 import TokenHighlightPage from "../../../../framework/author/itemList/questionType/highlight/tokenHighlightPage";
 import PreviewItemPage from "../../../../framework/author/itemList/itemDetail/previewPage";
+import FileHelper from "../../../../framework/util/fileHelper";
 
-describe('Author - "Token highlight" type question', () => {
+describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Token highlight" type question`, () => {
   const queData = {
     group: "Highlight",
     queType: "Token highlight",

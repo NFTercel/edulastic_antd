@@ -1,7 +1,8 @@
 import EditItemPage from "../../../../framework/author/itemList/itemDetail/editPage";
 import EssayShortTextPage from "../../../../framework/author/itemList/questionType/writtenAndSpoken/essayShortTextPage";
+import FileHelper from "../../../../framework/util/fileHelper";
 
-describe('Author - "Essay with Short text" type question', () => {
+describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Short text" type question`, () => {
   const queData = {
     group: "Written & Spoken",
     queType: "Short text",

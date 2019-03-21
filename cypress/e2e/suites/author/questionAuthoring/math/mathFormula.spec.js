@@ -1,7 +1,8 @@
 import MathFormulaEdit from "../../../../framework/author/itemList/questionType/math/mathFormulaEdit";
 import EditItemPage from "../../../../framework/author/itemList/itemDetail/editPage";
+import FileHelper from "../../../../framework/util/fileHelper";
 
-describe('Author - "Math formula" type question', () => {
+describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Math formula" type question`, () => {
   const queData = {
     mockString: "10-5+8-4",
     group: "Math",

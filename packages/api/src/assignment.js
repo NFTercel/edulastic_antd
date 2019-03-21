@@ -55,11 +55,30 @@ const regrade = data => {
     .then(result => result.data.result);
 };
 
+const getById = id =>
+  api
+    .callApi({
+      url: `${prefix}/${id}`,
+      method: "get"
+    })
+    .then(result => result.data.result);
+
+const fetchTestActivities = (assignmentId, groupId) =>
+  api
+    .callApi({
+      url: `${prefix}/${assignmentId}/testActivity`,
+      params: { groupId },
+      method: "get"
+    })
+    .then(result => result.data.result);
+
 export default {
   create,
   update,
   remove,
   fetchAssignments,
   fetchAssigned,
-  regrade
+  regrade,
+  getById,
+  fetchTestActivities
 };

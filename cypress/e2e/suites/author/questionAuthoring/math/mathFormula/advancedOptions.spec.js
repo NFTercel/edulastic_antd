@@ -1,7 +1,8 @@
 import EditItemPage from "../../../../../framework/author/itemList/itemDetail/editPage";
 import ExtrasOptions from "../../../../../framework/author/itemList/questionType/math/mathFormula/extarsOptions";
+import FileHelper from "../../../../../framework/util/fileHelper";
 
-describe("Math formula", () => {
+describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Extras on "Math formula" type question`, () => {
   const queData = {
     group: "Math",
     queType: "Math formula"

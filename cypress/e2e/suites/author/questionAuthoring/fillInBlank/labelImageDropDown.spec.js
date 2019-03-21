@@ -1,7 +1,8 @@
 import EditItemPage from "../../../../framework/author/itemList/itemDetail/editPage";
 import DropDownPage from "../../../../framework/author/itemList/questionType/fillInBlank/dropDownPage";
+import FileHelper from "../../../../framework/util/fileHelper";
 
-describe('Author - "Label Image with Drop Down" type question', () => {
+describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Label Image with Drop Down" type question`, () => {
   const queData = {
     group: "Fill in the Blanks",
     queType: "Label Image with Drop Down",

@@ -24,6 +24,23 @@ const getMaxScoreFromQuestion = question => {
 };
 
 /**
+ *
+ * @param {string} qid
+ * @param {Object[]} testItemsData
+ */
+export const getMaxScoreOfQid = (qid, testItemsData) => {
+  for (let testItem of testItemsData) {
+    let questions = DotProp.get(testItem, ["data", "questions"], []);
+    let questionNeeded = questions.find(x => x.qid === qid);
+    if (questionNeeded) {
+      return getMaxScoreFromQuestion(question);
+    }
+  }
+  console.warn("no such qid for maxScore", qid);
+  return 0;
+};
+
+/**
  * @returns {number}
  */
 const getMaxScoreFromItem = testItem => {

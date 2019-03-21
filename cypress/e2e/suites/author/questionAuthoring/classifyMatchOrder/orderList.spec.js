@@ -1,7 +1,8 @@
 import EditItemPage from "../../../../framework/author/itemList/itemDetail/editPage";
 import OrderListPage from "../../../../framework/author/itemList/questionType/classifyMatchOrder/orderListPage";
+import FileHelper from "../../../../framework/util/fileHelper";
 
-describe('Author - "Classification" type question', () => {
+describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "OrderList" type question`, () => {
   const queData = {
     group: "Classify, Match & Order",
     queType: "OrderList",
@@ -236,7 +237,7 @@ describe('Author - "Classification" type question', () => {
   });
 
   context("Delete the question after creation", () => {
-    context("TC_84 => Delete option", () => {
+    context("Tc_95 => Delete option", () => {
       it("Click on delete button in Item Details page", () => {
         editItem
           .getDelButton()

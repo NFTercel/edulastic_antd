@@ -1,7 +1,8 @@
 import EditItemPage from "../../../../framework/author/itemList/itemDetail/editPage";
 import ClassificationPage from "../../../../framework/author/itemList/questionType/classifyMatchOrder/classificationPage";
+import FileHelper from "../../../../framework/util/fileHelper";
 
-describe('Author - "Classification" type question', () => {
+describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Classification" type question`, () => {
   const queData = {
     group: "Classify, Match & Order",
     queType: "Classification",

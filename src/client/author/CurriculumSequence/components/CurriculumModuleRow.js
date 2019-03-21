@@ -4,7 +4,7 @@ import { compose } from "redux";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Button, Menu, Dropdown, Icon } from "antd";
-import { Paper, Checkbox } from "@edulastic/common";
+import { Checkbox } from "@edulastic/common";
 import { mobileWidth, lightBlue, white, greenDarkSecondary, desktopWidth, tabletWidth } from "@edulastic/colors";
 import {
   toggleCheckedUnitItemAction,
@@ -404,7 +404,9 @@ const AssignmentIcon = styled.span`
   margin-right: 10px;
 `;
 
-const Row = styled(Paper)`
+const Row = styled.div`
+  border-radius: 10px;
+  background: ${white};
   padding-top: 15px;
   padding-bottom: 15px;
   padding-left: 20px;

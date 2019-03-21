@@ -150,11 +150,3 @@ const GeoGebracalculator = styled.div`
   top: 200px;
   display: ${props => (props.visible ? "block" : "none")};
 `;
-// const DesmosBasicCalculator = styled.div`
-//   width: 600px;
-//   height: 400px;
-//   position: absolute;
-//   left: 50%;
-//   top: 30%;
-//   transform: translateY(-50%);
-// `;

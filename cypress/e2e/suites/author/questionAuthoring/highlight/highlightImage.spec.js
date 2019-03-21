@@ -1,7 +1,8 @@
 import EditItemPage from "../../../../framework/author/itemList/itemDetail/editPage";
 import HightlightImagePage from "../../../../framework/author/itemList/questionType/highlight/highlightImagePage";
+import FileHelper from "../../../../framework/util/fileHelper";
 
-describe('Author - "Cloze with Text" type question', () => {
+describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Highlight Image" type question`, () => {
   const queData = {
     group: "Highlight",
     queType: "Highlight Image",

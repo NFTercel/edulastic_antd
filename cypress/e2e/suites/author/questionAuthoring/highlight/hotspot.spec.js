@@ -1,7 +1,8 @@
 import EditItemPage from "../../../../framework/author/itemList/itemDetail/editPage";
 import HotspotPage from "../../../../framework/author/itemList/questionType/highlight/hotspotPage";
+import FileHelper from "../../../../framework/util/fileHelper";
 
-describe('Author - "Cloze with Text" type question', () => {
+describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Hotspot" type question`, () => {
   const queData = {
     group: "Highlight",
     queType: "Hotspot",

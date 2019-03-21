@@ -1,7 +1,8 @@
 import ChoiceMatrixLabelPage from "../../../../framework/author/itemList/questionType/mcq/choiceMatrixLabelsPage";
 import EditItemPage from "../../../../framework/author/itemList/itemDetail/editPage.js";
+import FileHelper from "../../../../framework/util/fileHelper";
 
-describe('Test Authoring - "Choice matrix - labels" Type Question', () => {
+describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Choice matrix - labels" type question`, () => {
   const editItem = new EditItemPage();
   const question = new ChoiceMatrixLabelPage();
   const queData = {

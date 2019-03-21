@@ -16,6 +16,7 @@ import { Profile } from "./Profile";
 import { ManageClass } from "./ManageClass";
 import SkillReportContainer from "./SkillReport";
 import DeepLink from "./DeeplinkAssessment";
+import StartAssignment from "./StartAssignment";
 
 const StudentApp = ({ match, isSidebarCollapsed }) => (
   <ThemeProvider theme={themes.default}>
@@ -39,8 +40,8 @@ const StudentApp = ({ match, isSidebarCollapsed }) => (
             <Route path={`${match.url}/skill-report`} component={SkillReportContainer} />
             <Route path={`${match.url}/manage`} component={ManageClass} />
             <Route path={`${match.url}/profile`} component={Profile} />
-            {/*TODO*/}
             <Route path={`${match.url}/testActivityReport/:id`} component={ReportList} />
+            <Route path={`${match.url}/group/:groupId/assignment/:assignmentId`} component={StartAssignment} />
           </Switch>
         </Wrapper>
       </MainContainer>

@@ -1,7 +1,8 @@
 import choiceMatrixInlinePage from "../../../../framework/author/itemList/questionType/mcq/choiceMatrixInlinePage";
 import EditItemPage from "../../../../framework/author/itemList/itemDetail/editPage.js";
+import FileHelper from "../../../../framework/util/fileHelper";
 
-describe('Test Authoring - "Choice matrix - inline" Type Question', () => {
+describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Choice matrix - inline" type question`, () => {
   const editItem = new EditItemPage();
   const question = new choiceMatrixInlinePage();
   const queData = {

@@ -7,6 +7,7 @@ import { v4 } from "uuid";
 import { normalize, schema } from "normalizr";
 import { curriculumSequencesApi, assignmentApi } from "@edulastic/api";
 import { setCurrentAssignmentAction } from "../TestPage/components/Assign/ducks";
+import { getUserSelector } from "../src/selectors/user";
 
 // Constants
 export const CURRICULUM_TYPE_GUIDE = "guide";
@@ -242,8 +243,10 @@ function* createAssignment({ payload }) {
     ...curriculumSequenceState.destinationCurriculumSequence
   };
 
+  const { user } = yield select(getUserSelector);
+
   /** @type {AssignData[]} */
-  const assignmentApiResponse = yield call(assignmentApi.create, assignments);
+  const assignmentApiResponse = yield call(assignmentApi.create, { assignedBy: user._id, assignments });
   const testIdsFromResponse = assignmentApiResponse.map(item => item.testId);
 
   destinationCurriculumSequence.modules = [

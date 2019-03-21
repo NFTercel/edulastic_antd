@@ -1,4 +1,4 @@
-import { Anchor, Radio, Select } from "antd";
+import { Anchor, Radio, Select, Input } from "antd";
 import styled from "styled-components";
 import { mobileWidth } from "@edulastic/colors";
 
@@ -132,6 +132,11 @@ export const InputTitle = styled.div`
   font-weight: 600;
   color: #434b5d;
   margin-bottom: 12px;
+`;
+
+export const InputPassword = styled(Input)`
+  width: 20%;
+  margin-left: 30px;
 `;
 
 export const AdvancedSettings = styled.div``;

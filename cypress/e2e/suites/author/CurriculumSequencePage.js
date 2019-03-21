@@ -1,7 +1,8 @@
 /* eslint-disable-next-line */
 /// <reference types="Cypress" />
+import FileHelper from "../../framework/util/fileHelper";
 
-describe("Check Curriculum Sequence Page", () => {
+describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Check Curriculum Sequence Page`, () => {
   beforeEach(() => {
     cy.setToken();
     cy.visit("/author/curriculum-sequence");

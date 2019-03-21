@@ -21,7 +21,7 @@ var _axios = _interopRequireDefault(require("axios"));
 
 var _scoring = require("./const/scoring");
 
-var url = "https://9ehy0wtpo7.execute-api.us-east-1.amazonaws.com/dev/evaluate";
+var url = "https://1nz4dq81w6.execute-api.us-east-1.amazonaws.com/dev/evaluate";
 
 var evaluate = function evaluate(data) {
   return _axios.default.post(url, (0, _objectSpread2.default)({}, data)).then(function(result) {

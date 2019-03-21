@@ -4,8 +4,8 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 import styled from "styled-components";
 import { Dropdown, Menu, Icon, Input } from "antd";
-import { mainBlueColor, largeDesktopWidth, desktopWidth } from "@edulastic/colors";
-import { FlexContainer, Paper } from "@edulastic/common";
+import { mainBlueColor, largeDesktopWidth, desktopWidth, white } from "@edulastic/colors";
+import { FlexContainer } from "@edulastic/common";
 import { searchContentAction, setContentCurriculumAction, toggleCheckedUnitItemAction } from "../ducks";
 import SelectContentRow from "./SelectContentRow";
 import CloseButtonMobileIcon from "../assets/close-button.svg";
@@ -230,7 +230,10 @@ const CurriculumTitle = styled.div`
   }
 `;
 
-const CurriculumWrapper = styled(Paper)`
+const CurriculumWrapper = styled.div`
+  background: ${white};
+  border-radius: 10px;
+  padding: 0 10px 10px;
   .ant-btn {
     height: 24px;
   }

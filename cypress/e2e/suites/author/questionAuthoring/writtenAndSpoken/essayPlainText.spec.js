@@ -1,7 +1,9 @@
+/// <reference types="Cypress"/>
 import EditItemPage from "../../../../framework/author/itemList/itemDetail/editPage";
 import EssayPlainTextPage from "../../../../framework/author/itemList/questionType/writtenAndSpoken/essayPlainTextPage";
+import FileHelper from "../../../../framework/util/fileHelper";
 
-describe('Author - "Essay with plain text" type question', () => {
+describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Essay with plain text" type question`, () => {
   const queData = {
     group: "Written & Spoken",
     queType: "Essay with plain text",
@@ -20,9 +22,9 @@ describe('Author - "Essay with plain text" type question', () => {
     cy.setToken();
   });
 
-  context("User creates question.", () => {
+  context("User creates question", () => {
     before("visit items page and select question type", () => {
-      editItem.getItemWithId("5c358b480c8e6f22190d5ce0");
+      editItem.getItemWithId("5c91f20342846488db6e2440");
       editItem.deleteAllQuestion();
       // create new que and select type
       editItem.addNew().chooseQuestion(queData.group, queData.queType);

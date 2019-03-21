@@ -7,7 +7,7 @@ import { message } from "antd";
 import { keyBy as _keyBy, omit } from "lodash";
 import { testsApi, assignmentApi } from "@edulastic/api";
 
-import { SET_MAX_ATTEMPT, UPDATE_TEST_IMAGE } from "../src/constants/actions";
+import { SET_MAX_ATTEMPT, UPDATE_TEST_IMAGE, SET_SAFE_BROWSE_PASSWORD } from "../src/constants/actions";
 import { loadQuestionsAction } from "../sharedDucks/questions";
 
 // constants
@@ -101,6 +101,7 @@ export const initialTestState = {
   testType: test.type.ASSESSMENT,
   generateReport: true,
   safeBrowser: false,
+  // safeBrowsePassword: "", TODO need to add this when field is added to backend collection
   shuffleQuestions: false,
   shuffleAnswers: false,
   status: "draft",
@@ -209,6 +210,14 @@ export const reducer = (state = initialState, { type, payload }) => {
           maxAttempts: payload.data
         }
       };
+    case SET_SAFE_BROWSE_PASSWORD:
+      return {
+        ...state,
+        entity: {
+          ...state.entity,
+          safeBrowsePassword: payload.data
+        }
+      };
     default:
       return state;
   }
@@ -243,7 +252,7 @@ function* receiveTestByIdSaga({ payload }) {
 }
 
 function* createTestSaga({ payload }) {
-  const { oldId, regrade = false } = payload.data;
+  const { _id: oldId, versioned: regrade = false } = payload.data;
   try {
     const dataToSend = omit(payload.data, ["assignments", "createdDate", "updatedDate"]);
     const entity = yield call(testsApi.create, dataToSend);

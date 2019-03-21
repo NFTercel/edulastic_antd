@@ -169,7 +169,6 @@ class Container extends PureComponent {
     if (test._id) {
       if (this.props.editAssigned) {
         newTest.versioned = true;
-        newTest.oldId = test._id;
         createTest(newTest);
       } else {
         updateTest(test._id, newTest);

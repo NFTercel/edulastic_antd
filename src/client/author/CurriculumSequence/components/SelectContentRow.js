@@ -4,8 +4,7 @@ import { compose } from "redux";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Menu } from "antd";
-import { Paper } from "@edulastic/common";
-import { mobileWidth, lightBlue } from "@edulastic/colors";
+import { mobileWidth, lightBlue, white } from "@edulastic/colors";
 import { toggleCheckedUnitItemAction, addContentToCurriculumSequenceAction, createAssignmentNowAction } from "../ducks";
 import AssignmentDragItem from "./AssignmentDragItem";
 import triangleIcon from "../assets/triangle.svg";
@@ -157,7 +156,8 @@ const UnitIcon = styled.span`
 `;
 UnitIcon.displayName = "UnitIcon";
 
-const Row = styled(Paper)`
+const Row = styled.div`
+  background: ${white};
   padding-top: 0px;
   padding-bottom: 0px;
   padding-left: 20px;

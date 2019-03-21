@@ -161,3 +161,5 @@ export const LOGOUT = "[auth] logout"; // set redux store to initial values
 
 // test page
 export const SET_MAX_ATTEMPT = "[tests] maximum attempt";
+
+export const SET_SAFE_BROWSE_PASSWORD = "[tests] safe browser password";

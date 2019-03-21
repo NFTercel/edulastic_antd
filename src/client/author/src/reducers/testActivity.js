@@ -3,7 +3,7 @@ import {
   RECEIVE_TESTACTIVITY_SUCCESS,
   RECEIVE_TESTACTIVITY_ERROR
 } from "../constants/actions";
-import { transformGradeBookResponse } from "../../ClassBoard/Transformer";
+import { transformGradeBookResponse, getMaxScoreOfQid } from "../../ClassBoard/Transformer";
 
 import { createAction } from "redux-starter-kit";
 import { produce } from "immer";
@@ -11,9 +11,15 @@ import { produce } from "immer";
 export const REALTIME_GRADEBOOK_TEST_ACTIVITY_ADD = "[gradebook] realtime test activity add";
 export const REALTIME_GRADEBOOK_TEST_ACTIVITY_SUBMIT = "[gradebook] realtime test activity submit";
 export const REALTIME_GRADEBOOK_TEST_ITEM_ADD = "[gradebook] realtime test item add";
+
+export const REALTIME_GRADEBOOK_TEST_QUESTION_REMOVE = "[gradebook] realtime test question remove";
+export const REALTIME_GRADEBOOK_TEST_QUESTION_ADD_MAXSCORE = "[gradebook] realtime test question add max score";
+
 export const realtimeGradebookActivityAddAction = createAction(REALTIME_GRADEBOOK_TEST_ACTIVITY_ADD);
 export const realtimeGradebookActivitySubmitAction = createAction(REALTIME_GRADEBOOK_TEST_ACTIVITY_SUBMIT);
 export const realtimeGradebookTestItemAddAction = createAction(REALTIME_GRADEBOOK_TEST_ITEM_ADD);
+export const realtimeGradebookQuestionsRemoveAction = createAction(REALTIME_GRADEBOOK_TEST_QUESTION_REMOVE);
+export const realtimeGradebookQuestionAddMaxScoreAction = createAction(REALTIME_GRADEBOOK_TEST_QUESTION_ADD_MAXSCORE);
 
 const initialState = {
   entities: [],
@@ -63,6 +69,37 @@ const reducer = (state = initialState, { type, payload }) => {
         }
       });
       return nextState;
+
+    case REALTIME_GRADEBOOK_TEST_QUESTION_REMOVE:
+      nextState = produce(state, _st => {
+        /**
+         * @type string[]
+         */
+        const questionIds = payload;
+        let questionIdsMaxScore = {};
+        for (let qid of questionIds) {
+          questionIdsMaxScore[qid] = getMaxScoreOfQid(qid, _st.data.testItemsData);
+        }
+        for (let entity of _st.entities) {
+          const matchingQids = entity.questionActivities.filter(x => questionIds.includes(x._id));
+          entity.maxScore -= matchingQids.reduce((prev, qid) => prev + (questionIdsMaxScore[qid] || 0), 0);
+          entity.questionActivities = entity.questionActivities.filter(x => !questionIds.includes(x._id));
+        }
+      });
+      return nextState;
+    case REALTIME_GRADEBOOK_TEST_QUESTION_ADD_MAXSCORE:
+      nextState = produce(state, _st => {
+        let questionIdsMaxScore = {};
+        for (let { qid, maxScore } of payload) {
+          questionIdsMaxScore[qid] = maxScore;
+        }
+        const questionIds = payload.map(x => x.qid);
+        for (let entity of _st.entities) {
+          const matchingQids = entity.questionActivities.filter(x => questionIds.includes(x._id));
+          entity.maxScore += matchingQids.reduce((prev, qid) => prev + (questionIdsMaxScore[qid] || 0), 0);
+        }
+      });
+      return nextState;
     case REALTIME_GRADEBOOK_TEST_ITEM_ADD:
       nextState = produce(state, _st => {
         for (const { testActivityId, score, maxScore, ...questionItem } of payload) {
@@ -71,7 +108,8 @@ const reducer = (state = initialState, { type, payload }) => {
             console.log("entityIndex", entityIndex);
             const itemIndex = _st.entities[entityIndex].questionActivities.findIndex(x => x._id == questionItem._id);
             if (itemIndex == -1) {
-              console.warn(`can't find any questionItem for id ${testActivityId}`);
+              _st.entities[entityIndex].questionActivities.push(questionItem);
+              // console.warn(`can't find any questionItem for id ${testActivityId}`);
             } else {
               _st.entities[entityIndex].questionActivities[itemIndex] = questionItem;
             }

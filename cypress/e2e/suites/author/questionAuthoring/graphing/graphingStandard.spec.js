@@ -2,8 +2,9 @@ import GraphingStandardPage from "../../../../framework/author/itemList/question
 import EditItemPage from "../../../../framework/author/itemList/itemDetail/editPage";
 import Header from "../../../../framework/author/itemList/itemDetail/header";
 import PreviewItemPage from "../../../../framework/author/itemList/itemDetail/previewPage";
+import FileHelper from "../../../../framework/util/fileHelper";
 
-describe("Author - Graphing - Standard quadrants type question", () => {
+describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Graphing" type question`, () => {
   const queData = {
     group: "Graphing",
     queType: "Graphing",

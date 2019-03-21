@@ -1,7 +1,8 @@
 import EditItemPage from "../../../../framework/author/itemList/itemDetail/editPage";
 import ClozeDragDropPage from "../../../../framework/author/itemList/questionType/fillInBlank/clozeWithDragDropPage";
+import FileHelper from "../../../../framework/util/fileHelper";
 
-describe('Author - "Cloze with Drop Down" type question', () => {
+describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Cloze with Drag & Drop" type question`, () => {
   const queData = {
     group: "Fill in the Blanks",
     queType: "Cloze with Drag & Drop",

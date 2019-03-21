@@ -16,6 +16,7 @@
     "correctAnswer": "Correct Answer",
     "score": "Score",
     "finishedIn": "Finished in",
-    "missed": "MISSED"
+    "missed": "MISSED",
+    "safeExamToolTip": "This test requires Safe Exam Browser"
   }
 }

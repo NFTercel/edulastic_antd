@@ -1,7 +1,8 @@
 import EditItemPage from "../../../../framework/author/itemList/itemDetail/editPage.js";
 import EssayRichTextPage from "../../../../framework/author/itemList/questionType/writtenAndSpoken/essayRichTextPage";
+import FileHelper from "../../../../framework/util/fileHelper";
 
-describe('Author - "Essay with rich text" type question', () => {
+describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Essay with rich text" type question`, () => {
   const queData = {
     group: "Written & Spoken",
     queType: "Essay with rich text",

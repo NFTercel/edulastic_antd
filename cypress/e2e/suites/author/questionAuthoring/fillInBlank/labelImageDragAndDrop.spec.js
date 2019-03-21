@@ -1,7 +1,8 @@
 import EditItemPage from "../../../../framework/author/itemList/itemDetail/editPage";
 import DragAndDropPage from "../../../../framework/author/itemList/questionType/fillInBlank/dragAndDropPage";
+import FileHelper from "../../../../framework/util/fileHelper";
 
-describe('Author - "Label Image with Drag & Drop" type question', () => {
+describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Label Image with Drag & Drop" type question`, () => {
   const queData = {
     group: "Fill in the Blanks",
     queType: "Label Image with Drag & Drop",

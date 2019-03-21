@@ -1,4 +1,5 @@
 import { createAction, createReducer } from "redux-starter-kit";
+import { maxBy as _maxBy } from "lodash";
 import { takeLatest, put, call, all, select } from "redux-saga/effects";
 import { values, groupBy, last } from "lodash";
 import { createSelector } from "reselect";
@@ -30,7 +31,7 @@ export const SET_TEST_ACTIVITY_ID = "[test] add test activity id";
 export const SET_RESUME_STATUS = "[test] set resume status";
 export const RESUME_ASSIGNMENT = "[studentAssignments] resume assignments";
 export const BOOTSTRAP_ASSESSMENT = "[assessment] bootstrap";
-
+export const LAUNCH_ASSIGNMENT_FROM_LINK = "[studentAssignemnts] launch assignment from link";
 // actions
 export const fetchAssignmentsAction = createAction(FETCH_ASSIGNMENTS_DATA);
 export const startAssignmentAction = createAction(START_ASSIGNMENT);
@@ -38,6 +39,7 @@ export const setTestActivityAction = createAction(SET_TEST_ACTIVITY_ID);
 export const setResumeAssignment = createAction(SET_RESUME_STATUS);
 export const resumeAssignmentAction = createAction(RESUME_ASSIGNMENT);
 export const bootstrapAssessmentAction = createAction(BOOTSTRAP_ASSESSMENT);
+export const launchAssignmentFromLinkAction = createAction(LAUNCH_ASSIGNMENT_FROM_LINK);
 
 // sagas
 // fetch and load assignments and reports for the student
@@ -80,7 +82,6 @@ function* startAssignment({ payload }) {
 
     yield put(setActiveAssignmentAction(assignmentId));
     const groupId = yield select(getCurrentGroup);
-    console.log("got group id", groupId);
     const institutionId = yield select(getCurrentSchool);
     const groupType = "class";
     const { _id: testActivityId } = yield testActivityApi.create({
@@ -135,13 +136,35 @@ function* bootstrapAssesment({ payload }) {
   }
 }
 
+// launch assignment
+function* launchAssignment({ payload }) {
+  try {
+    const { assignmentId, groupId } = payload;
+    const [assignment, testActivities] = yield Promise.all([
+      assignmentApi.getById(assignmentId),
+      assignmentApi.fetchTestActivities(assignmentId, groupId)
+    ]);
+    const lastActivity = _maxBy(testActivities, "createdAt");
+    const { testId, testType = "assessment", shuffleQuestions, shuffleAnswers } = assignment;
+
+    if (lastActivity) {
+      yield put(resumeAssignmentAction({ testId, testType, assignmentId, testActivityId: lastActivity._id }));
+    } else {
+      yield put(startAssignmentAction({ testId, assignmentId, testType, shuffleQuestions, shuffleAnswers }));
+    }
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 // set actions watcherss
 export function* watcherSaga() {
   yield all([
     yield takeLatest(FETCH_ASSIGNMENTS_DATA, fetchAssignments),
     yield takeLatest(START_ASSIGNMENT, startAssignment),
     yield takeLatest(RESUME_ASSIGNMENT, resumeAssignment),
-    yield takeLatest(BOOTSTRAP_ASSESSMENT, bootstrapAssesment)
+    yield takeLatest(BOOTSTRAP_ASSESSMENT, bootstrapAssesment),
+    yield takeLatest(LAUNCH_ASSIGNMENT_FROM_LINK, launchAssignment)
   ]);
 }
 

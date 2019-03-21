@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Col, Radio } from "antd";
 //components
-import { AlignRight, AlignSwitchRight, StyledRowSettings, SettingsWrapper, MaxAttemptIInput } from "./styled";
+import { AlignRight, AlignSwitchRight, StyledRowSettings, SettingsWrapper, MaxAttemptIInput, Password } from "./styled";
 //selectors
 import { test } from "@edulastic/constants";
 const { releaseGradeTypes } = test;
@@ -14,6 +14,8 @@ const Settings = ({ onUpdateMaxAttempts, testSettings, assignmentSettings, updat
 
   const [calcType, setCalcType] = useState(0);
   const [type, setEvaluationType] = useState(0);
+  const [showPassword, togglePasswordField] = useState(false);
+  const [tempTestSettings, updateTempTestSettings] = useState({ ...testSettings });
 
   const updateMarkAsDone = e => {
     setAssignmentCompletionType(e.target.value);
@@ -27,13 +29,31 @@ const Settings = ({ onUpdateMaxAttempts, testSettings, assignmentSettings, updat
     setEvaluationType(e.target.value);
   };
 
-  const overRideSettings = (key, val) => {
+  const overRideSettings = (key, value) => {
     const newSettingsState = {
       ...assignmentSettings,
-      [key]: val
+      [key]: value
     };
+    const newTempTestSettingsState = {
+      ...tempTestSettings,
+      [key]: value
+    };
+    if (key === "safeBrowser" && value === false) {
+      delete newSettingsState.safeBrowsePassword;
+      delete newTempTestSettingsState.safeBrowsePassword;
+    }
+
+    updateTempTestSettings(newTempTestSettingsState);
     updateAssignmentSettings(newSettingsState);
   };
+  const {
+    releaseScore = tempTestSettings.releaseScore,
+    maxAttempts = tempTestSettings.maxAttempts,
+    safeBrowser = tempTestSettings.safeBrowser,
+    safeBrowsePassword = tempTestSettings.safeBrowsePassword,
+    shuffleQuestions = tempTestSettings.shuffleQuestions,
+    shuffleAnswers = tempTestSettings.shuffleAnswers
+  } = assignmentSettings;
   return (
     <SettingsWrapper>
       {/* Mark as done */}
@@ -52,10 +72,7 @@ const Settings = ({ onUpdateMaxAttempts, testSettings, assignmentSettings, updat
       <StyledRowSettings gutter={16}>
         <Col span={8}>RELEASE SCORES AUTOMATICALLY</Col>
         <Col span={16}>
-          <AlignRight
-            defaultValue={assignmentSettings.releaseScore || testSettings.releaseScore}
-            onChange={e => overRideSettings("releaseScore", e.target.value)}
-          >
+          <AlignRight value={releaseScore} onChange={e => overRideSettings("releaseScore", e.target.value)}>
             {releaseGradeKeys.map(item => (
               <Radio value={item} key={item}>
                 {releaseGradeTypes[item]}
@@ -72,7 +89,7 @@ const Settings = ({ onUpdateMaxAttempts, testSettings, assignmentSettings, updat
           <MaxAttemptIInput
             type="number"
             size="large"
-            value={assignmentSettings.maxAttempts || testSettings.maxAttempts}
+            value={maxAttempts}
             onChange={e => onUpdateMaxAttempts(e.target.value)}
             min={1}
             step={1}
@@ -82,12 +99,24 @@ const Settings = ({ onUpdateMaxAttempts, testSettings, assignmentSettings, updat
 
       {/* Require Safe Exam Browser */}
       <StyledRowSettings gutter={16}>
-        <Col span={8}>REQUIRE SAFE EXAM BROWSER</Col>
-        <Col span={16}>
-          <AlignSwitchRight
-            defaultChecked={assignmentSettings.safeBrowser || testSettings.safeBrowser}
-            onChange={value => overRideSettings("safeBrowser", value)}
-          />
+        <Col span={16}>REQUIRE SAFE EXAM BROWSER</Col>
+        <Col span={8}>
+          <AlignSwitchRight defaultChecked={safeBrowser} onChange={value => overRideSettings("safeBrowser", value)} />
+          {safeBrowser && (
+            <Password
+              prefix={
+                <i
+                  className={`fa fa-eye${showPassword ? "-slash" : ""}`}
+                  onClick={() => togglePasswordField(!showPassword)}
+                />
+              }
+              onChange={e => overRideSettings("safeBrowsePassword", e.target.value)}
+              size="large"
+              value={safeBrowsePassword}
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+            />
+          )}
         </Col>
       </StyledRowSettings>
       {/* Require Safe Exam Browser */}
@@ -97,7 +126,7 @@ const Settings = ({ onUpdateMaxAttempts, testSettings, assignmentSettings, updat
         <Col span={8}>SHUFFLE QUESTION</Col>
         <Col span={16}>
           <AlignSwitchRight
-            defaultChecked={assignmentSettings.shuffleQuestions || testSettings.shuffleQuestions}
+            defaultChecked={shuffleQuestions}
             onChange={value => overRideSettings("shuffleQuestions", value)}
           />
         </Col>
@@ -109,7 +138,7 @@ const Settings = ({ onUpdateMaxAttempts, testSettings, assignmentSettings, updat
         <Col span={8}>SHUFFLE ANSWER CHOICE</Col>
         <Col span={16}>
           <AlignSwitchRight
-            defaultChecked={assignmentSettings.shuffleAnswers || testSettings.shuffleAnswers}
+            defaultChecked={shuffleAnswers}
             onChange={value => overRideSettings("shuffleAnswers", value)}
           />
         </Col>

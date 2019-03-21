@@ -93,6 +93,8 @@ const EditModal = ({
   const disabled = assignment.specificStudents
     ? !selectedStudents || selectedStudents.length == 0
     : !assignment.class.length;
+
+  const { testType = testSettings.testType, generateReport = testSettings.generateReport } = assignment;
   return (
     <ModalWrapper
       data-cy="title"
@@ -125,8 +127,8 @@ const EditModal = ({
           changeField={changeField}
         />
         <TestTypeSelector
-          testType={assignment.testType || testSettings.testType}
-          generateReport={assignment.generateReport || testSettings.generateReport}
+          testType={testType}
+          generateReport={generateReport}
           onAssignmentTypeChange={handleAssignmentTypeChange}
           onGenerateReportFieldChange={changeField("generateReport")}
         />
