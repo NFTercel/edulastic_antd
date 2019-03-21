@@ -10,6 +10,10 @@ class CalculatorContainer extends Component {
       calculateMode: this.props.calculateMode,
       changeMode: this.props.changeMode
     };
+
+    this.desmosGraphingRef = React.createRef();
+    this.desmosBasicRef = React.createRef();
+    this.desmosScientificRef = React.createRef();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -20,98 +24,91 @@ class CalculatorContainer extends Component {
   }
 
   componentDidMount() {
-    const node = ReactDOM.findDOMNode(this);
+    let desmosGraphCalculator = Desmos.GraphingCalculator(ReactDOM.findDOMNode(this.desmosGraphingRef));
+    desmosGraphCalculator.setExpression({ dragMode: Desmos.DragModes.XY });
 
-    if (node instanceof HTMLElement) {
-      let desmosGraphCalculatorElt = node.querySelector("#demos-graphiccalculator");
-      let desmosGraphCalculator = Desmos.GraphingCalculator(desmosGraphCalculatorElt);
-      desmosGraphCalculator.setExpression({ dragMode: Desmos.DragModes.XY });
+    setTimeout(() => {
+      Desmos.FourFunctionCalculator(ReactDOM.findDOMNode(this.desmosBasicRef));
+    }, 200);
 
-      setTimeout(() => {
-        let desmosBasicCalculatorElt = node.querySelector("#demos-basiccalculator");
-        Desmos.FourFunctionCalculator(desmosBasicCalculatorElt);
-      }, 300);
+    setTimeout(() => {
+      Desmos.ScientificCalculator(ReactDOM.findDOMNode(this.desmosScientificRef));
+    }, 400);
 
-      setTimeout(() => {
-        let desmosScientificCalculatorElt = node.querySelector("#demos-scientificcalculator");
-        Desmos.ScientificCalculator(desmosScientificCalculatorElt);
-      }, 600);
+    setTimeout(() => {
+      var parameters = {
+        id: "ggbApplet",
+        appName: "graphing",
+        width: 800,
+        height: 600,
+        showToolBar: true,
+        borderColor: null,
+        showMenuBar: true,
+        allowStyleBar: true,
+        showAlgebraInput: true,
+        enableLabelDrags: false,
+        enableShiftDragZoom: true,
+        capturingThreshold: null,
+        showToolBarHelp: false,
+        errorDialogsActive: true,
+        showTutorialLink: true,
+        showLogging: true,
+        useBrowserForJS: false
+      };
 
-      setTimeout(() => {
-        var parameters = {
-          id: "ggbApplet",
-          appName: "graphing",
-          width: 800,
-          height: 600,
-          showToolBar: true,
-          borderColor: null,
-          showMenuBar: true,
-          allowStyleBar: true,
-          showAlgebraInput: true,
-          enableLabelDrags: false,
-          enableShiftDragZoom: true,
-          capturingThreshold: null,
-          showToolBarHelp: false,
-          errorDialogsActive: true,
-          showTutorialLink: true,
-          showLogging: true,
-          useBrowserForJS: false
-        };
+      let applet = new GGBApplet(parameters, "5.0", "geogebra-graphingculator");
+      applet.inject("geogebra-graphingculator");
+    }, 600);
 
-        let applet = new GGBApplet(parameters, "5.0", "geogebra-graphingculator");
-        applet.inject("geogebra-graphingculator");
-      }, 900);
+    setTimeout(() => {
+      var parameters = {
+        id: "ggbApplet",
+        appName: "scientific",
+        width: 800,
+        height: 600,
+        showToolBar: true,
+        borderColor: null,
+        showMenuBar: true,
+        allowStyleBar: true,
+        showAlgebraInput: true,
+        enableLabelDrags: false,
+        enableShiftDragZoom: true,
+        capturingThreshold: null,
+        showToolBarHelp: false,
+        errorDialogsActive: true,
+        showTutorialLink: true,
+        showLogging: true,
+        useBrowserForJS: false
+      };
 
-      setTimeout(() => {
-        var parameters = {
-          id: "ggbApplet",
-          appName: "scientific",
-          width: 800,
-          height: 600,
-          showToolBar: true,
-          borderColor: null,
-          showMenuBar: true,
-          allowStyleBar: true,
-          showAlgebraInput: true,
-          enableLabelDrags: false,
-          enableShiftDragZoom: true,
-          capturingThreshold: null,
-          showToolBarHelp: false,
-          errorDialogsActive: true,
-          showTutorialLink: true,
-          showLogging: true,
-          useBrowserForJS: false
-        };
+      let applet = new GGBApplet(parameters, "5.0", "geogebra-scientificcalculator");
+      applet.inject("geogebra-scientificcalculator");
+    }, 800);
 
-        let applet = new GGBApplet(parameters, "5.0", "geogebra-scientificcalculator");
-        applet.inject("geogebra-scientificcalculator");
-      }, 1200);
+    setTimeout(() => {
+      var parameters = {
+        id: "ggbApplet",
+        appName: "basic",
+        width: 800,
+        height: 600,
+        showToolBar: true,
+        borderColor: null,
+        showMenuBar: true,
+        allowStyleBar: true,
+        showAlgebraInput: true,
+        enableLabelDrags: false,
+        enableShiftDragZoom: true,
+        capturingThreshold: null,
+        showToolBarHelp: false,
+        errorDialogsActive: true,
+        showTutorialLink: true,
+        showLogging: true,
+        useBrowserForJS: false
+      };
 
-      setTimeout(() => {
-        var parameters = {
-          id: "ggbApplet",
-          appName: "basic",
-          width: 800,
-          height: 600,
-          showToolBar: true,
-          borderColor: null,
-          showMenuBar: true,
-          allowStyleBar: true,
-          showAlgebraInput: true,
-          enableLabelDrags: false,
-          enableShiftDragZoom: true,
-          capturingThreshold: null,
-          showToolBarHelp: false,
-          errorDialogsActive: true,
-          showTutorialLink: true,
-          showLogging: true,
-          useBrowserForJS: false
-        };
-
-        let applet = new GGBApplet(parameters, "5.0", "geogebra-basiccalculator");
-        applet.inject("geogebra-basiccalculator");
-      }, 1200);
-    }
+      let applet = new GGBApplet(parameters, "5.0", "geogebra-basiccalculator");
+      applet.inject("geogebra-basiccalculator");
+    }, 1000);
   }
 
   render() {
@@ -121,21 +118,34 @@ class CalculatorContainer extends Component {
         <StyledDraggable>
           <StyledDiv visible={changeMode == 2 && calculateMode === 0 && true}>
             <StyledTitle>Desmos Graphing Calculator</StyledTitle>
-            <DesmosGraphingCalculator id="demos-graphiccalculator" />
+            <DesmosGraphingCalculator
+              id="demos-graphiccalculator"
+              ref={ref => {
+                this.desmosGraphingRef = ref;
+              }}
+            />
           </StyledDiv>
         </StyledDraggable>
 
         <StyledDraggable>
           <StyledDiv visible={changeMode == 2 && calculateMode === 1 && true}>
             <StyledTitle>Desmos Basic Calculator</StyledTitle>
-            <DesmosBasicCalculator id="demos-basiccalculator" />
+            <DesmosBasicCalculator
+              ref={ref => {
+                this.desmosBasicRef = ref;
+              }}
+            />
           </StyledDiv>
         </StyledDraggable>
 
         <StyledDraggable>
           <StyledDiv visible={changeMode == 2 && calculateMode === 2 && true}>
             <StyledTitle>Desmos Scientific Calculator</StyledTitle>
-            <DesmosScientificCalculator id="demos-scientificcalculator" />
+            <DesmosScientificCalculator
+              ref={ref => {
+                this.desmosScientificRef = ref;
+              }}
+            />
           </StyledDiv>
         </StyledDraggable>
 
