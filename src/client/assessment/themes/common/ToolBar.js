@@ -40,30 +40,29 @@ class ToolBar extends Component {
 
   render() {
     const { select } = this.state;
-
     return (
       <Container>
-        <StyledButton enable={select === 0 && true} onClick={() => this.toolbarHandler(0)}>
+        <StyledButton enable={select === 0} onClick={() => this.toolbarHandler(0)}>
           <CursorIcon />
         </StyledButton>
 
-        <StyledButton enable={select === 1 && true} onClick={() => this.toolbarHandler(1)}>
+        <StyledButton enable={select === 1} onClick={() => this.toolbarHandler(1)}>
           <InRulerIcon />
         </StyledButton>
 
-        <StyledButton enable={select === 2 && true} onClick={() => this.toolbarHandler(2)}>
+        <StyledButton enable={select === 2} onClick={() => this.toolbarHandler(2)}>
           <CaculatorIcon />
           {select == 2 && <CalculatorMenu changeCaculateMode={this.handleCalculateMode} />}
         </StyledButton>
 
-        <StyledButton enable={select === 3 && true} onClick={() => this.toolbarHandler(3)}>
+        <StyledButton enable={select === 3} onClick={() => this.toolbarHandler(3)}>
           <CloseIcon />
         </StyledButton>
 
-        <StyledButton enable={select === 4 && true} onClick={() => this.toolbarHandler(4)}>
+        <StyledButton enable={select === 4} onClick={() => this.toolbarHandler(4)}>
           <ProtactorIcon />
         </StyledButton>
-        <StyledButton enable={select === 5 && true} onClick={() => this.toolbarHandler(5)}>
+        <StyledButton enable={select === 5} onClick={() => this.toolbarHandler(5)}>
           <ScratchPadIcon />
         </StyledButton>
       </Container>

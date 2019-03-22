@@ -25,27 +25,27 @@ class CalculatorMenu extends Component {
     const { select } = this.state;
     return (
       <Container>
-        <StyledButton enable={select === 0 && true} onClick={e => this.calculatorMenuHandler(e, 0)}>
+        <StyledButton enable={select === 0} onClick={e => this.calculatorMenuHandler(e, 0)}>
           <CaculatorIcon />
         </StyledButton>
 
-        <StyledButton enable={select === 1 && true} onClick={e => this.calculatorMenuHandler(e, 1)}>
+        <StyledButton enable={select === 1} onClick={e => this.calculatorMenuHandler(e, 1)}>
           <CaculatorIcon />
         </StyledButton>
 
-        <StyledButton enable={select === 2 && true} onClick={e => this.calculatorMenuHandler(e, 2)}>
+        <StyledButton enable={select === 2} onClick={e => this.calculatorMenuHandler(e, 2)}>
           <CaculatorIcon />
         </StyledButton>
 
-        <StyledButton enable={select === 3 && true} onClick={e => this.calculatorMenuHandler(e, 3)}>
+        <StyledButton enable={select === 3} onClick={e => this.calculatorMenuHandler(e, 3)}>
           <CaculatorIcon />
         </StyledButton>
 
-        <StyledButton enable={select === 4 && true} onClick={e => this.calculatorMenuHandler(e, 4)}>
+        <StyledButton enable={select === 4} onClick={e => this.calculatorMenuHandler(e, 4)}>
           <CaculatorIcon />
         </StyledButton>
 
-        <StyledButton enable={select === 5 && true} onClick={e => this.calculatorMenuHandler(e, 5)}>
+        <StyledButton enable={select === 5} onClick={e => this.calculatorMenuHandler(e, 5)}>
           <CaculatorIcon />
         </StyledButton>
       </Container>

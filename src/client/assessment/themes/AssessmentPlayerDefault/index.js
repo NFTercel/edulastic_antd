@@ -248,7 +248,8 @@ class AssessmentPlayerDefault extends React.Component {
       currentTab,
       lineWidth,
       fillColor,
-      changeMode
+      changeMode,
+      calculateMode
     } = this.state;
 
     const dropdownOptions = Array.isArray(items) ? items.map((item, index) => index) : [];
@@ -392,7 +393,7 @@ class AssessmentPlayerDefault extends React.Component {
               )}
             </MainWrapper>
           </Main>
-          <CalculatorContainer changeMode={changeMode} calculateMode={this.state.calculateMode} />
+          <CalculatorContainer changeMode={changeMode} calculateMode={calculateMode} />
         </Container>
       </ThemeProvider>
     );
