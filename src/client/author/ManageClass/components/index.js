@@ -6,7 +6,6 @@ import { fetchGroupsAction, getGroupsSelector } from "../../sharedDucks/groups";
 import { setModalAction, syncClassAction } from "../ducks";
 // components
 import Header from "./Header";
-import ClassSelector from "./ClassSelector";
 import ClassList from "./ClassList";
 import ClassSelectModal from "./ClassSelectModal";
 
@@ -28,7 +27,6 @@ const ManageClass = ({ fetchGroups, setModal, groups, isModalVisible, googleCour
         syncClass={syncClass}
         selectedGroups={selectedGroups}
       />
-      <ClassSelector />
       <ClassList groups={groups} />
     </React.Fragment>
   );

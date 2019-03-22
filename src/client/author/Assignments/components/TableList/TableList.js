@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-import { Link } from "react-router-dom";
+import { compose } from "redux";
+
+import { Link, withRouter } from "react-router-dom";
 import { Dropdown } from "antd";
 import { withNamespaces } from "@edulastic/localization";
 import { test } from "@edulastic/constants";
@@ -9,7 +11,6 @@ import { test } from "@edulastic/constants";
 import { FlexContainer } from "@edulastic/common";
 
 import arrowUpIcon from "../../assets/arrow-up.svg";
-import assignedIcon from "../../../Shared/Assets/assigned.svg";
 import presentationIcon from "../../assets/presentation.svg";
 import additemsIcon from "../../assets/add-items.svg";
 import piechartIcon from "../../assets/pie-chart.svg";
@@ -23,14 +24,15 @@ import {
   AssignmentTD,
   IconArrowDown,
   BtnAction,
-  AssignedImg,
-  PracticeIcon,
+  TypeIcon,
   ExpandDivdier,
   BtnSubmitted,
   BtnStarted,
   ActionDiv,
   GreyFont,
-  ExpandedTable
+  ExpandedTable,
+  IconExpand,
+  ActionsWrapper
 } from "./styled";
 
 const convertTableData = data => ({
@@ -40,23 +42,25 @@ const convertTableData = data => ({
   type: data[0].type,
   assigned: "Lorem Ipsum",
   status: "",
-  submitted: `${data[0].submittedNumber} of ${data.length}`,
+  submitted: `${data[0].submittedNumber || 0} of ${data.length}`,
   graded: "1",
   action: "",
   classId: data[0].classId,
   currentAssignment: data[0]
 });
+
 const convertExpandTableData = (data, totalNumber) => ({
   name: "",
-  key: data._id,
+  key: data.classId,
   class: data.className,
   type: data.type,
   assigned: "Lorem Ipsum",
   status: data.status,
-  submitted: `${data.submittedNumber} of ${totalNumber}`,
+  submitted: `${data.submittedNumber || 0} of ${totalNumber}`,
   graded: "1",
   action: "",
-  classId: data.classId
+  classId: data.classId,
+  testType: data.testType
 });
 
 class TableList extends Component {
@@ -81,92 +85,64 @@ class TableList extends Component {
     const columns = [
       {
         dataIndex: "name",
-        width: "23%",
-        render: text => <div>{text}</div>
+        width: "22%",
+        render: () => <GreyFont style={{ width: "253px", display: "block" }} />
       },
       {
         dataIndex: "class",
         width: "11%",
-        render: text => (
-          <div>
-            <GreyFont>{text}</GreyFont>
-          </div>
-        )
+        render: () => <GreyFont />
       },
       {
         dataIndex: "type",
         width: "11%",
-        render: () => (
-          <div>
-            {getInfo && getInfo.type === test.type.PRACTICE ? (
-              <PracticeIcon>P</PracticeIcon>
-            ) : (
-              <AssignedImg src={assignedIcon} />
-            )}
-          </div>
-        )
+        render: (text, row) =>
+          row && row.testType === test.type.PRACTICE ? <TypeIcon type="practice">P</TypeIcon> : <TypeIcon>A</TypeIcon>
       },
       {
         dataIndex: "assigned",
         width: "15%",
-        render: text => (
-          <div style={{ paddingLeft: "20px" }}>
-            <GreyFont>{text}</GreyFont>
-          </div>
-        )
+        render: text => <GreyFont>{text}</GreyFont>
       },
       {
         dataIndex: "status",
         width: "12%",
-        render: text => (
-          <div>
-            {text === "IN PROGRESS" ? (
-              <BtnProgress size="small">{text}</BtnProgress>
-            ) : text === t("common.submittedTag") ? (
-              <BtnSubmitted size="small">{text}</BtnSubmitted>
-            ) : text === t("common.notStartedTag") ? (
-              <BtnStarted size="small">{text}</BtnStarted>
-            ) : (
-              ""
-            )}
-          </div>
-        )
+        render: text =>
+          text === "IN PROGRESS" ? (
+            <BtnProgress size="small">{text}</BtnProgress>
+          ) : text === t("common.submittedTag") ? (
+            <BtnSubmitted size="small">{text}</BtnSubmitted>
+          ) : text === t("common.notStartedTag") ? (
+            <BtnStarted size="small">{text}</BtnStarted>
+          ) : (
+            ""
+          )
       },
       {
         dataIndex: "submitted",
         width: "16%",
-        render: text => (
-          <div>
-            <GreyFont>{text}</GreyFont>
-          </div>
-        )
+        render: text => <GreyFont>{text}</GreyFont>
       },
       {
         dataIndex: "graded",
-        width: "15%",
-        render: text => (
-          <div style={{ paddingLeft: "12px" }}>
-            <GreyFont>{text}</GreyFont>
-          </div>
-        )
+        width: "14%",
+        render: text => <GreyFont>{text}</GreyFont>
       },
       {
         dataIndex: "action",
         width: "14%",
         render: () => (
-          <ActionDiv>
-            <FlexContainer justifyContent="space-between" style={{ marginLeft: 20, marginRight: 20 }}>
-              <Link to={`/author/classboard/${getInfo.key}/${getInfo.classId}`}>
-                <Icon src={presentationIcon} alt="Images" />
-              </Link>
-              <Link to="/author/expressgrader">
-                <Icon src={additemsIcon} alt="Images" />
-              </Link>
-              <div>
-                <Icon src={piechartIcon} alt="Images" />
-              </div>
-            </FlexContainer>
-          </ActionDiv>
+          <ActionsWrapper>
+            <Link to={`/author/classboard/${getInfo.key}/${getInfo.classId}`}>
+              <Icon src={presentationIcon} alt="Images" />
+            </Link>
+            <Link to="/author/expressgrader">
+              <Icon src={additemsIcon} alt="Images" />
+            </Link>
+            <Link to={`/author/standardsBasedReport/${getInfo.key}/${getInfo.classId}`}>
+              <Icon src={piechartIcon} alt="Images" />
+            </Link>
+          </ActionsWrapper>
         )
       }
     ];
@@ -186,7 +162,7 @@ class TableList extends Component {
   };
 
   render() {
-    const { assignments, onOpenReleaseScoreSettings } = this.props;
+    const { assignments, onOpenReleaseScoreSettings, history, renderFilter } = this.props;
     const { details } = this.state;
     const columns = [
       {
@@ -211,10 +187,7 @@ class TableList extends Component {
         sorter: true,
         width: "11%",
         render: () => (
-          <ExpandDivdier
-            onMouseEnter={() => this.setState({ details: true })}
-            onMouseLeave={() => this.setState({ details: false })}
-          >
+          <ExpandDivdier>
             <IconArrowDown onclick={() => false} src={arrowUpIcon} />1
           </ExpandDivdier>
         )
@@ -260,17 +233,22 @@ class TableList extends Component {
         render: text => <div> {text} </div>
       },
       {
+        title: renderFilter(),
         dataIndex: "action",
         width: "14%",
         render: (text, row) => (
           <ActionDiv>
             <Dropdown
-              overlay={ActionMenu(onOpenReleaseScoreSettings, row.currentAssignment)}
+              overlay={ActionMenu(onOpenReleaseScoreSettings, row.currentAssignment, history)}
               placement="bottomCenter"
               trigger={["click"]}
             >
               <BtnAction>ACTIONS</BtnAction>
             </Dropdown>
+            <IconExpand
+              onMouseEnter={() => this.setState({ details: true })}
+              onMouseLeave={() => this.setState({ details: false })}
+            />
           </ActionDiv>
         )
       }
@@ -291,8 +269,18 @@ class TableList extends Component {
   }
 }
 
-export default withNamespaces("assignmentCard")(TableList);
-
 TableList.propTypes = {
-  assignments: PropTypes.array.isRequired
+  assignments: PropTypes.array.isRequired,
+  renderFilter: PropTypes.func
 };
+
+TableList.defaultProps = {
+  renderFilter: () => {}
+};
+
+const enhance = compose(
+  withRouter,
+  withNamespaces("assignmentCard")
+);
+
+export default enhance(TableList);

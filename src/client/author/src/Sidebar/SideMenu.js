@@ -44,7 +44,8 @@ const menuItems = [
   },
   {
     label: "Manage Class",
-    icon: IconManage
+    icon: IconManage,
+    path: "author/manageClass"
   },
   {
     label: "Item List",
@@ -168,37 +169,41 @@ class SideMenu extends Component {
               })}
             </Menu>
             <MenuFooter className="footerBottom">
-              <QuestionButton className="questionBtn">
-                <HelpIcon />
-                {isCollapsed ? null : <span>Help Center</span>}
-              </QuestionButton>
-              <UserInfoButton isVisible={isVisible} isCollapsed={isCollapsed} className="userinfoBtn">
-                <Dropdown
-                  onClick={this.toggleDropdown}
-                  overlayStyle={{ position: "fixed", minWidth: "198px" }}
-                  className="footerDropdown"
-                  overlay={footerDropdownMenu}
-                  trigger={["click"]}
-                  placement="topCenter"
-                  isVisible={isVisible}
-                  onVisibleChange={this.handleVisibleChange}
-                >
-                  <div>
-                    <img src={Profile} alt="Profile" />
-                    <div style={{ paddingLeft: 11 }}>
-                      {!isCollapsed && <UserName>{firstName || "Zack Oliver"}</UserName>}
-                      {!isCollapsed && <UserType>Teacher</UserType>}
+              {!isCollapsed && (
+                <QuestionButton className="questionBtn">
+                  <HelpIcon />
+                  {isCollapsed ? null : <span>Help Center</span>}
+                </QuestionButton>
+              )}
+              {!isCollapsed && (
+                <UserInfoButton isVisible={isVisible} isCollapsed={isCollapsed} className="userinfoBtn">
+                  <Dropdown
+                    onClick={this.toggleDropdown}
+                    overlayStyle={{ position: "fixed", minWidth: "198px" }}
+                    className="footerDropdown"
+                    overlay={footerDropdownMenu}
+                    trigger={["click"]}
+                    placement="topCenter"
+                    isVisible={isVisible}
+                    onVisibleChange={this.handleVisibleChange}
+                  >
+                    <div>
+                      <img src={Profile} alt="Profile" />
+                      <div style={{ paddingLeft: 11 }}>
+                        {!isCollapsed && <UserName>{firstName || "Zack Oliver"}</UserName>}
+                        {!isCollapsed && <UserType>Teacher</UserType>}
+                      </div>
+                      {!isCollapsed && (
+                        <IconDropdown
+                          style={{ fontSize: 20 }}
+                          className="drop-caret"
+                          type={isVisible ? "caret-up" : "caret-down"}
+                        />
+                      )}
                     </div>
-                    {!isCollapsed && (
-                      <IconDropdown
-                        style={{ fontSize: 20 }}
-                        className="drop-caret"
-                        type={isVisible ? "caret-up" : "caret-down"}
-                      />
-                    )}
-                  </div>
-                </Dropdown>
-              </UserInfoButton>
+                  </Dropdown>
+                </UserInfoButton>
+              )}
             </MenuFooter>
           </MenuWrapper>
         </SideBar>

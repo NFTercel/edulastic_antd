@@ -1,16 +1,30 @@
 import styled from "styled-components";
-import { Popover, Icon, Modal } from "antd";
-import { mobileWidth, tabletWidth } from "@edulastic/colors";
+import { Popover, Icon, Modal, Input, Checkbox } from "antd";
+
+import { mobileWidth, tabletWidth, lightBlueSecondary, white, lightGreySecondary } from "@edulastic/colors";
 
 export const Container = styled.div`
-  padding: 10px 15px 14px 15px;
+  padding: 9px 38px 9px 11px;
   display: flex;
   align-items: center;
   cursor: pointer;
-  :hover {
-    background-color: #fff;
-    padding: 10px 15px 10px 15px;
+  box-shadow: 0px 2px 7px 0 rgba(201, 208, 219, 0.5);
+  border-radius: 5px;
+  color: ${props => (props.active ? white : lightBlueSecondary)};
+  margin-right: 0 !important;
+  padding-bottom: 8px;
+  width: 120px;
+  height: 28px;
+  background: ${props => (props.active ? lightBlueSecondary : white)};
+  font-weight: 600;
+  font-size: 12px;
+  user-select: none;
+  text-transform: uppercase;
+
+  img {
+    filter: ${props => (props.active ? "brightness(0) invert(1)" : "none")};
   }
+
   @media (max-width: 770px) {
     background-color: #fff;
     border-radius: 5px;
@@ -25,8 +39,13 @@ export const FilterImg = styled.img`
 
 export const MainContainer = styled.div`
   width: 260px;
-  text-align: center;
-  padding: 10px;
+  padding: 16px 19px;
+  margin-top: -48px;
+  margin-right: -20px;
+  background: ${white};
+  box-shadow: 0px 2px 8px 1px rgba(163, 160, 160, 0.2);
+  border-radius: 5px;
+
   @media (max-width: ${mobileWidth}) {
     width: 100%;
     padding: 30px;
@@ -47,12 +66,14 @@ export const StyledPopover = styled(Popover)`
 `;
 
 export const StyledBoldText = styled.p`
-  fontweight: bold;
+  font-weight: 600;
+  font-size: 12px;
   margin: 15px 0px 10px 0px;
   text-align: left;
 `;
 
 export const StyledParagraph = styled.p`
+  display: inline-block;
   margin: 15px 0px 10px 0px;
   text-align: left;
 `;
@@ -120,4 +141,35 @@ export const StyledCloseIcon = styled(Icon)`
   font-weight: bolder;
   font-size: 22px;
   cursor: pointer;
+`;
+
+export const FilterInput = styled(Input.Search)`
+  .ant-input {
+    border: none;
+    background: ${lightGreySecondary};
+  }
+
+  .ant-input-search-icon {
+    color: ${lightBlueSecondary};
+  }
+`;
+
+export const FilterCheckboxWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+`;
+
+export const FilterCheckbox = styled(Checkbox)`
+  font-weight: 600;
+  font-size: 12px;
+
+  .ant-checkbox-wrapper {
+    white-space: nowrap;
+  }
+`;
+
+export const FilterButtonWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
 `;

@@ -13,8 +13,7 @@ package-lock.json
 .sass-cache
 .env
 cypress/screenshots/
-src/server/test.js
-src/server/test.py
+dist/
 
 # vi swap files
 *.sw*

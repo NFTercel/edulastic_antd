@@ -2,10 +2,12 @@ import getDefaultConfig, { CONSTANT, Colors } from "./config";
 import {
   Point,
   Line,
+  Ellipse,
   Circle,
   Sin,
   Polygon,
   Parabola,
+  Hyperbola,
   Label,
   Input,
   Mark,
@@ -156,6 +158,12 @@ class Board {
       case CONSTANT.TOOLS.PARABOLA:
         this.setCreatingHandler(Parabola.onHandler());
         return;
+      case CONSTANT.TOOLS.HYPERBOLA:
+        this.setCreatingHandler(Hyperbola.onHandler());
+        return;
+      case CONSTANT.TOOLS.ELLIPSE:
+        this.setCreatingHandler(Ellipse.onHandler());
+        return;
       case CONSTANT.TOOLS.LABEL:
         this.setCreatingHandler(Label.onHandler());
         return;
@@ -216,6 +224,11 @@ class Board {
       case CONSTANT.TOOLS.PARABOLA:
         Parabola.abort(points => points.map(this.removeObject.bind(this)));
         break;
+      case CONSTANT.TOOLS.ELLIPSE:
+        Ellipse.abort(points => points.map(this.removeObject.bind(this)));
+        break;
+      case CONSTANT.TOOLS.HYPERBOLA:
+        Hyperbola.abort(points => points.map(this.removeObject.bind(this)));
       default:
         break;
     }
@@ -492,12 +505,16 @@ class Board {
           return Line.getConfig(e);
         case window.JXG.OBJECT_TYPE_CIRCLE:
           return Circle.getConfig(e);
+        case window.JXG.OBJECT_TYPE_CONIC:
+          return Ellipse.getConfig(e);
         case window.JXG.OBJECT_TYPE_POLYGON:
           return Polygon.getConfig(e);
         case window.JXG.OBJECT_TYPE_CURVE:
           return Parabola.getConfig(e);
         case window.JXG.OBJECT_TYPE_TEXT:
           return Mark.getConfig(e);
+        case 90:
+          return Hyperbola.getConfig(e);
         default:
           throw new Error("Unknown element type:", e.name, e.type);
       }
@@ -635,6 +652,18 @@ class Board {
         highlightFillColor: "transparent",
         highlightStrokeWidth: 1
       },
+      [CONSTANT.TOOLS.ELLIPSE]: {
+        ...defaultBgObjectParameters(),
+        fillColor: "transparent",
+        highlightFillColor: "transparent",
+        highlightStrokeWidth: 1
+      },
+      [CONSTANT.TOOLS.HYPERBOLA]: {
+        ...defaultBgObjectParameters(),
+        fillColor: "transparent",
+        highlightFillColor: "transparent",
+        highlightStrokeWidth: 1
+      },
       [CONSTANT.TOOLS.SIN]: {
         ...defaultBgObjectParameters(),
         fillColor: "transparent",
@@ -702,6 +731,12 @@ class Board {
                 type === CONSTANT.TOOLS.VECTOR
               ) {
                 return CONSTANT.TOOLS.LINE;
+              }
+              if (type === CONSTANT.TOOLS.ELLIPSE) {
+                return CONSTANT.TOOLS.ELLIPSE;
+              }
+              if (type === CONSTANT.TOOLS.HYPERBOLA) {
+                return CONSTANT.TOOLS.HYPERBOLA;
               }
               return type;
             })(el.type)
@@ -890,6 +925,64 @@ class Board {
                   ],
                   {
                     ...Circle.parseConfig(),
+                    ...attrs
+                  }
+                )
+            })
+          );
+          break;
+        case window.JXG.OBJECT_TYPE_CONIC:
+          objects.push(
+            mixProps({
+              el,
+              objectCreator: attrs =>
+                this.createElement(
+                  "ellipse",
+                  [
+                    mixProps({
+                      el: el.points[0],
+                      objectCreator: attributes => this.createPointFromConfig(el.points[0], attributes)
+                    }),
+                    mixProps({
+                      el: el.points[1],
+                      objectCreator: attributes => this.createPointFromConfig(el.points[1], attributes)
+                    }),
+                    mixProps({
+                      el: el.points[2],
+                      objectCreator: attributes => this.createPointFromConfig(el.points[2], attributes)
+                    })
+                  ],
+                  {
+                    ...Ellipse.parseConfig(),
+                    ...attrs
+                  }
+                )
+            })
+          );
+          break;
+        case 90:
+          objects.push(
+            mixProps({
+              el,
+              objectCreator: attrs =>
+                this.createElement(
+                  "hyperbola",
+                  [
+                    mixProps({
+                      el: el.points[0],
+                      objectCreator: attributes => this.createPointFromConfig(el.points[0], attributes)
+                    }),
+                    mixProps({
+                      el: el.points[1],
+                      objectCreator: attributes => this.createPointFromConfig(el.points[1], attributes)
+                    }),
+                    mixProps({
+                      el: el.points[2],
+                      objectCreator: attributes => this.createPointFromConfig(el.points[2], attributes)
+                    })
+                  ],
+                  {
+                    ...Hyperbola.parseConfig(),
                     ...attrs
                   }
                 )

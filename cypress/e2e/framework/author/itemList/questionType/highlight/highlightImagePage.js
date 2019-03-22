@@ -1,10 +1,32 @@
+/* eslint-disable class-methods-use-this */
 import EditToolBar from "../common/editToolBar";
 import Header from "../../itemDetail/header";
+import Helpers from "../../../../util/Helpers";
 
 class HighlightImage {
   constructor() {
     this.editToolBar = new EditToolBar();
     this.header = new Header();
+  }
+
+  checkFontSize(fontSize) {
+    this.header.preview();
+    Helpers.getElement("adaptiveButtonList")
+      .find('[data-cy="undo"]')
+      .should("have.css", "font-size")
+      .and("eq", fontSize);
+
+    Helpers.getElement("adaptiveButtonList")
+      .find('[data-cy="redo"]')
+      .should("have.css", "font-size")
+      .and("eq", fontSize);
+
+    Helpers.getElement("adaptiveButtonList")
+      .find('[data-cy="clear"]')
+      .should("have.css", "font-size")
+      .and("eq", fontSize);
+
+    this.header.edit();
   }
 
   // get current question from Store
@@ -53,6 +75,38 @@ class HighlightImage {
       .click();
     return this;
   };
+
+  getLayout() {
+    return Helpers.getElement("layout");
+  }
+
+  getFontSizeSelect() {
+    return Helpers.getElement("fontSizeSelect");
+  }
+
+  getSmallFontSizeOption() {
+    return Helpers.getElement("small");
+  }
+
+  getNormalFontSizeOption() {
+    return Helpers.getElement("normal");
+  }
+
+  getLargeFontSizeOption() {
+    return Helpers.getElement("large");
+  }
+
+  getExtraLargeFontSizeOption() {
+    return Helpers.getElement("xlarge");
+  }
+
+  getHugeFontSizeOption() {
+    return Helpers.getElement("xxlarge");
+  }
+
+  getLineWidth() {
+    return Helpers.getElement("lineWidthOption");
+  }
 }
 
 export default HighlightImage;

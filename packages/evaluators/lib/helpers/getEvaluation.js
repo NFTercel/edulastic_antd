@@ -7,6 +7,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _isBoolean2 = _interopRequireDefault(require("lodash/isBoolean"));
+
 var _difference2 = _interopRequireDefault(require("lodash/difference"));
 
 var _includes2 = _interopRequireDefault(require("lodash/includes"));
@@ -38,7 +40,9 @@ var getEvaluation = function getEvaluation(response, answers, rightIndex, compar
         break;
     }
   });
-  return evaluation;
+  return evaluation.filter(function(item) {
+    return (0, _isBoolean2.default)(item);
+  });
 };
 
 var _default = getEvaluation;

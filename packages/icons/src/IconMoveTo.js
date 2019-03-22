@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
-import withIconStyles from './HOC/withIconStyles';
-import SVG from './common/SVG';
+import React from "react";
+import withIconStyles from "./HOC/withIconStyles";
+import SVG from "./common/SVG";
 
 const IconMoveTo = props => (
   <SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9.406 11.761" {...props}>

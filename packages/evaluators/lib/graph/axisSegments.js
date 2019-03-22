@@ -40,24 +40,22 @@ var shapesAreEqual = function shapesAreEqual(shape1, shape2) {
 var checkAnswer = function checkAnswer(answer, userResponse) {
   var result = [];
   var trueAnswerValue = answer.value;
-  answer, userResponse;
-  userResponse &&
-    userResponse.forEach(function(testShape) {
-      var resultForShape = {
-        shape: testShape,
-        result: false
-      };
+  userResponse.forEach(function(testShape) {
+    var resultForShape = {
+      shape: testShape,
+      result: false
+    };
 
-      if (
-        trueAnswerValue.findIndex(function(item) {
-          return shapesAreEqual(item, testShape);
-        }) > -1
-      ) {
-        resultForShape.result = true;
-      }
+    if (
+      trueAnswerValue.findIndex(function(item) {
+        return shapesAreEqual(item, testShape);
+      }) > -1
+    ) {
+      resultForShape.result = true;
+    }
 
-      result.push(resultForShape);
-    });
+    result.push(resultForShape);
+  });
   return result;
 };
 

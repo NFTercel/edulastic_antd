@@ -1,4 +1,4 @@
-import { groupBy as _groupBy, uniq } from "lodash";
+import { groupBy as _groupBy, uniq, get } from "lodash";
 
 export const getListOfStudents = (students, classes) => {
   let idList = [];
@@ -7,32 +7,40 @@ export const getListOfStudents = (students, classes) => {
     .filter(student => classes.includes(student.groupId))
     .filter(({ _id }) => {
       if (idList.includes(_id)) return false;
-      else {
-        idList.push(_id);
-        return true;
-      }
+
+      idList.push(_id);
+      return true;
     });
   return selected;
 };
 
-export const generateClassData = (classes = [], selectedStudents = [], studentList = [], specificStudents) => {
+export const generateClassData = (
+  classes = [],
+  selectedStudents = [],
+  studentList = [],
+  specificStudents,
+  groupsData
+) => {
   if (!specificStudents) {
     return classes.map(_id => ({
-      _id
+      _id,
+      assignedCount: get(groupsData, `${_id}.studentCount`, 0)
     }));
   }
 
   selectedStudents = studentList.filter(({ _id }) => selectedStudents.includes(_id));
 
-  let groupedByClass = _groupBy(selectedStudents, "groupId");
+  const groupedByClass = _groupBy(selectedStudents, "groupId");
 
   return (
     classes
       .map(classId => {
-        let tempStudents = (groupedByClass[classId] || []).map(item => item._id);
+        const tempStudents = uniq((groupedByClass[classId] || []).map(item => item._id));
+
         return {
           _id: classId,
-          students: uniq(tempStudents)
+          students: tempStudents,
+          assignedCount: tempStudents.length
         };
       })
       // remove classes without students

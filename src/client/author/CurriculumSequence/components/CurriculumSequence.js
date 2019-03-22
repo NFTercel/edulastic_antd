@@ -10,19 +10,27 @@ import { Button, Modal, Input, Cascader, Radio, Icon } from "antd";
 import { FlexContainer } from "@edulastic/common";
 import {
   white,
-  green,
-  mainBlueColor,
   greenSecondary,
-  largeDesktopWidth,
+  greenThird,
+  titleColor,
+  mobileWidth,
+  middleMobileWidth,
+  smallMobileWidth,
+  tabletWidth,
   desktopWidth,
-  mobileWidth
+  largeDesktopWidth,
+  extraDesktopWidth
 } from "@edulastic/colors";
-/* eslint-disable */
-import customContentIcon from "../assets/custom-content.svg";
-import addUnitIcon from "../assets/add-unit.svg";
-import selectContentIcon from "../assets/select-content.svg";
+import {
+  IconShare,
+  IconDiskette,
+  IconGraduationCap,
+  IconBook,
+  IconPlus,
+  IconMoveTo,
+  IconCollapse
+} from "@edulastic/icons";
 import Curriculum from "./Curriculum";
-import ShareIcon from "../assets/share-button.svg";
 import SelectContent from "./SelectContent";
 import {
   changeGuideAction,
@@ -382,64 +390,88 @@ class CurriculumSequence extends Component {
           </ModalFooter>
         </Modal>
         <TopBar>
-          <CurriculumHeader>
+          <CurriculumHeader justifyContent="space-between">
             <HeaderTitle>
               {title}
               <Icon
-                style={{ fontSize: "16px", cursor: "pointer", marginLeft: "10px" }}
+                style={{ fontSize: "12px", cursor: "pointer", marginLeft: "18px" }}
                 type={curriculumGuide ? "up" : "down"}
                 onClick={this.handleGuidePopup}
               />
             </HeaderTitle>
-            <ShareButtonStyle>
-              <Button type="default">
-                <ShareButtonText>
-                  {windowWidth > desktopWidthValue ? (
-                    "SHARE"
-                  ) : (
-                    <img src={ShareIcon} alt="SHARE" style={{ width: "100%" }} />
-                  )}
-                </ShareButtonText>
-              </Button>
-            </ShareButtonStyle>
-            <SaveButtonStyle windowWidth={windowWidth}>
-              <Button type="primary" data-cy="saveCurriculumSequence" onClick={handleSaveClick}>
-                <SaveButtonText>{windowWidth > desktopWidthValue ? "Save Changes" : "Save"}</SaveButtonText>
-              </Button>
-            </SaveButtonStyle>
+            <CurriculumHeaderButtons>
+              <ShareButtonStyle>
+                <Button type="default">
+                  <ShareButtonIcon color={greenThird} width={20} height={20} />
+                  <ShareButtonText>SHARE</ShareButtonText>
+                </Button>
+              </ShareButtonStyle>
+              <SaveButtonStyle windowWidth={windowWidth}>
+                <Button data-cy="saveCurriculumSequence" onClick={handleSaveClick}>
+                  <SaveButtonIcon color={greenThird} width={20} height={20} />
+                  <SaveButtonText>{windowWidth > desktopWidthValue ? "Save Changes" : "Save"}</SaveButtonText>
+                </Button>
+              </SaveButtonStyle>
+            </CurriculumHeaderButtons>
           </CurriculumHeader>
-          <CurriculumSubheader active={isContentExpanded}>
-            <ModuleProgressWrapper>
-              <ModuleProgressLabel>
-                <ModuleProgressText>Module Progress</ModuleProgressText>
-                <ModuleProgressValues>
-                  {modulesCompleted} / {totalModules} Completed
-                </ModuleProgressValues>
-              </ModuleProgressLabel>
-              <ModuleProgress modules={destinationCurriculumSequence.modules} />
-            </ModuleProgressWrapper>
-            <SubheaderActions active={isContentExpanded}>
-              <AddUnitSubHeaderButtonStyle>
-                <Button type="primary" data-cy="openAddUnit" onClick={this.handleAddUnitOpen}>
-                  <img src={addUnitIcon} alt="Add unit" />
-                  <ButtonText>Add Unit</ButtonText>
-                </Button>
-              </AddUnitSubHeaderButtonStyle>
-              <SelectContentSubHeaderButtonStyle active={isContentExpanded}>
-                <Button type="primary" data-cy="openAddContent" onClick={this.handleSelectContent}>
-                  <img src={selectContentIcon} alt="Select content" />
-                  <ButtonText>Select Content</ButtonText>
-                </Button>
-              </SelectContentSubHeaderButtonStyle>
-              <AddCustomContentSubHeaderButtonStyle>
-                <Button type="primary" data-cy="openAddCustomContentButton" onClick={this.handleAddCustomContent}>
-                  <img src={customContentIcon} alt="Custom content" />
-                  <ButtonText>Add Custom Content</ButtonText>
-                </Button>
-              </AddCustomContentSubHeaderButtonStyle>
-            </SubheaderActions>
-          </CurriculumSubheader>
         </TopBar>
+        <SubTopBar>
+          <SubTopBarContainer active={isContentExpanded}>
+            <CurriculumSubHeaderRow marginBottom="36px">
+              <SubHeaderTitleContainer>
+                <SubHeaderTitle>Grade 2 Math Pacing Guide</SubHeaderTitle>
+                <SubHeaderDescription>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eget tellus velit. Sed at tortor accumsan
+                  odio molestie congue.
+                </SubHeaderDescription>
+              </SubHeaderTitleContainer>
+              <SunHeaderInfo>
+                <SunHeaderInfoCard marginBottom="13px" marginLeft="-3px">
+                  <GraduationCapIcon color="#848993" />
+                  <SunHeaderInfoCardText marginLeft="-3px">Grad 2-4</SunHeaderInfoCardText>
+                </SunHeaderInfoCard>
+                <SunHeaderInfoCard>
+                  <BookIcon color="#848993" />
+                  <SunHeaderInfoCardText>Mathematics</SunHeaderInfoCardText>
+                </SunHeaderInfoCard>
+              </SunHeaderInfo>
+            </CurriculumSubHeaderRow>
+            <CurriculumSubHeaderRow>
+              <ModuleProgressWrapper>
+                <ModuleProgressLabel>
+                  <ModuleProgressText>Module Progress</ModuleProgressText>
+                  <ModuleProgressValuesWrapper>
+                    <ModuleProgressValues>
+                      {modulesCompleted}/{totalModules}
+                    </ModuleProgressValues>
+                    <ModuleProgressValuesLabel>Completed</ModuleProgressValuesLabel>
+                  </ModuleProgressValuesWrapper>
+                </ModuleProgressLabel>
+                <ModuleProgress modules={destinationCurriculumSequence.modules} />
+              </ModuleProgressWrapper>
+              <SubheaderActions active={isContentExpanded}>
+                <AddUnitSubHeaderButtonStyle>
+                  <Button data-cy="openAddUnit" block onClick={this.handleAddUnitOpen}>
+                    <IconPlus color="#1774F0" />
+                    <ButtonText>Add Unit</ButtonText>
+                  </Button>
+                </AddUnitSubHeaderButtonStyle>
+                <SelectContentSubHeaderButtonStyle block active={isContentExpanded}>
+                  <Button data-cy="openAddContent" onClick={this.handleSelectContent}>
+                    <IconMoveTo color="#1774F0" />
+                    <ButtonText>Select Content</ButtonText>
+                  </Button>
+                </SelectContentSubHeaderButtonStyle>
+                <AddCustomContentSubHeaderButtonStyle>
+                  <Button data-cy="openAddCustomContentButton" block onClick={this.handleAddCustomContent}>
+                    <IconCollapse color="#1774F0" />
+                    <ButtonText>Add Custom Content</ButtonText>
+                  </Button>
+                </AddCustomContentSubHeaderButtonStyle>
+              </SubheaderActions>
+            </CurriculumSubHeaderRow>
+          </SubTopBarContainer>
+        </SubTopBar>
         <Wrapper active={isContentExpanded}>
           {destinationCurriculumSequence && (
             <Curriculum
@@ -509,8 +541,8 @@ CurriculumSequence.defaultProps = {
 
 const ModuleProgress = ({ modules }) => (
   <ModuleProgressBars>
-    {modules.map(m => (
-      <ModuleProgressBar completed={m.completed} />
+    {modules.map((m, index) => (
+      <ModuleProgressBar completed={m.completed} key={index} />
     ))}
   </ModuleProgressBars>
 );
@@ -522,10 +554,18 @@ const TopBar = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${greenSecondary};
+  width: 100%;
+  min-height: 100px;
 `;
 
 const SubheaderActions = styled.div`
   display: flex;
+  @media only screen and (max-width: ${extraDesktopWidth}) {
+    flex-wrap: wrap;
+  }
+  @media only screen and (max-width: ${largeDesktopWidth}) {
+    width: 100%;
+  }
   @media only screen and (max-width: 1366px) {
     margin-top: 20px;
     justify-content: flex-start;
@@ -539,22 +579,25 @@ const SubheaderActions = styled.div`
 `;
 
 const ModuleProgressBar = styled.div`
-  border-radius: 1px;
-  width: 40px;
-  height: 6px;
-  margin-right: 6px;
-  background: ${props => (props.completed ? "rgba(255, 255, 255, 1)" : "rgba(255, 255, 255, 0.6)")};
+  border-radius: 2px;
+  width: 42px;
+  height: 7px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  background: ${props => (props.completed ? greenSecondary : "rgba(197, 197, 197, 0.49)")};
 `;
 
 const ModuleProgressLabel = styled.div`
-  width: 100%;
   display: flex;
+  flex-direction: column;
+  width: 100%;
   padding-bottom: 4px;
 `;
 
 const ModuleProgressBars = styled.div`
   width: 100%;
   display: flex;
+  flex-wrap: wrap;
 `;
 
 const ModuleProgressWrapper = styled.div`
@@ -566,14 +609,29 @@ const ModuleProgressWrapper = styled.div`
 ModuleProgressWrapper.displayName = "ModuleProgressWrapper";
 
 const ModuleProgressText = styled.div`
-  color: rgba(255, 255, 255, 1);
-  padding-right: 8px;
-  font-weight: 600;
+  color: #949494;
+  text-align: left;
+  font-size: 14px;
+`;
+
+const ModuleProgressValuesWrapper = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const ModuleProgressValues = styled.div`
-  color: rgba(1, 1, 1, 1);
+  color: #434b5d;
+  margin-right: 8px;
+  font-size: 22px;
   font-weight: 600;
+  font-family: "Open Sans, Bold";
+`;
+
+const ModuleProgressValuesLabel = styled.div`
+  font-family: "Open Sans, Semibold";
+  font-size: 16px;
+  font-weight: 500;
+  color: #434b5d;
 `;
 
 const GuidesDropdownWrapper = styled.div`
@@ -623,16 +681,33 @@ const AddUnitSubHeaderButtonStyle = styled.div`
   display: flex;
   align-items: center;
   .ant-btn {
-    color: ${white};
+    color: #1774f0;
     border-color: ${white};
-    background-color: transparent;
     display: flex;
     align-items: center;
+    box-shadow: 0 2px 4px rgba(201, 208, 219, 0.5);
+    @media only screen and (max-width: ${smallMobileWidth}) {
+      width: 95px;
+    }
   }
   .ant-btn:hover {
-    background-color: ${mainBlueColor};
+    background-color: #1774f0;
     color: ${white};
-    border-color: ${mainBlueColor};
+    border-color: #1774f0;
+    svg {
+      fill: ${white};
+    }
+  }
+  @media only screen and (max-width: ${extraDesktopWidth}) {
+    width: 45%;
+  }
+  @media only screen and (max-width: ${middleMobileWidth}) {
+    position: relative;
+    svg {
+      position: absolute;
+      left: 5px;
+      top: 4px;
+    }
   }
 `;
 
@@ -641,16 +716,37 @@ const AddCustomContentSubHeaderButtonStyle = styled.div`
   align-items: center;
   padding-left: 10px;
   .ant-btn {
-    color: ${white};
+    color: #1774f0;
     border-color: ${white};
-    background-color: transparent;
     display: flex;
     align-items: center;
+    box-shadow: 0 2px 4px rgba(201, 208, 219, 0.5);
+    @media only screen and (max-width: ${smallMobileWidth}) {
+      width: 228px;
+    }
   }
   .ant-btn:hover {
-    background-color: ${mainBlueColor};
+    background-color: #1774f0;
     color: ${white};
-    border-color: ${mainBlueColor};
+    border-color: #1774f0;
+    svg {
+      fill: ${white};
+    }
+  }
+  @media only screen and (max-width: ${extraDesktopWidth}) {
+    padding-left: 0px;
+    width: 100%;
+  }
+  @media only screen and (max-width: ${tabletWidth}) {
+    margin-top: 5px;
+  }
+  @media only screen and (max-width: ${smallMobileWidth}) {
+    position: relative;
+    width: 227px;
+    svg {
+      position: absolute;
+      top: 4px;
+    }
   }
 `;
 
@@ -660,40 +756,81 @@ const SelectContentSubHeaderButtonStyle = styled.div`
   padding-left: 10px;
   /* TODO: responsive paddings - negative margin on the parent */
   .ant-btn {
-    color: ${white};
-    border-color: ${props => (props.active ? mainBlueColor : white)};
-    background-color: ${props => (props.active ? mainBlueColor : "transparent")};
+    color: #1774f0;
+    border-color: ${white};
     display: flex;
     align-items: center;
+    box-shadow: 0 2px 4px rgba(201, 208, 219, 0.5);
+    width: 100%;
+    @media only screen and (max-width: ${smallMobileWidth}) {
+      width: 125px;
+    }
   }
   .ant-btn:hover {
-    background-color: ${mainBlueColor};
+    background-color: #1774f0;
     color: ${white};
-    border-color: ${mainBlueColor};
+    border-color: #1774f0;
+    svg {
+      fill: ${white};
+    }
+  }
+  @media only screen and (max-width: ${extraDesktopWidth}) {
+    width: 55%;
+  }
+  @media only screen and (max-width: ${middleMobileWidth}) {
+    position: relative;
+    svg {
+      position: absolute;
+      left: 5px;
+      top: 4px;
+    }
   }
 `;
 
 const ShareButtonStyle = styled.div`
+  margin-right: 20px !important;
   .ant-btn {
-    padding: 10px;
-    min-height: 40px;
+    padding: 10px 18px;
+    min-height: 45px;
     min-width: 120px;
-    color: ${mainBlueColor};
+    color: ${greenSecondary};
+    display: flex;
+    align-items: center;
     @media only screen and (max-width: ${largeDesktopWidth}) {
-      min-width: 40px;
-      max-width: auto;
+      min-width: 60px;
       padding: 0px;
+    }
+    @media only screen and (max-width: ${mobileWidth}) {
+      min-width: 43px;
+      min-height: 40px;
+      padding: unset;
+      svg {
+        margin-left: unset;
+        margin: auto;
+      }
     }
   }
 `;
 
 const SaveButtonStyle = styled.div`
   .ant-btn {
-    padding: 10px;
-    min-height: 40px;
+    padding: 10px 18px;
+    min-height: 45px;
     min-width: 120px;
-    background-color: ${green};
-    border-color: ${green};
+    color: ${greenSecondary};
+    display: flex;
+    align-items: center;
+    @media only screen and (max-width: ${largeDesktopWidth}) {
+      min-width: 60px;
+    }
+    @media only screen and (max-width: ${mobileWidth}) {
+      padding: unset;
+      min-width: 43px;
+      min-height: 40px;
+      svg {
+        margin: auto;
+      }
+    }
   }
 `;
 
@@ -754,15 +891,16 @@ const Wrapper = styled.div`
   padding-left: 40px;
   padding-right: 40px;
   box-sizing: border-box;
-  margin-top: -50px;
   width: ${props => (props.active ? "100%" : "80%")};
   align-self: ${props => (props.active ? "flex-start" : "center")};
   margin-left: ${props => (props.active ? "0px" : "auto")};
   margin-right: ${props => (props.active ? "0px" : "auto")};
-  @media only screen and (max-width: ${desktopWidth}) {
-    padding-left: 20px;
-    padding-right: 20px;
+  @media only screen and (max-width: ${largeDesktopWidth}) {
+    padding: 0px 40px;
     width: 100%;
+  }
+  @media only screen and (max-width: ${desktopWidth}) {
+    padding: 0px 25px;
   }
 `;
 
@@ -771,8 +909,8 @@ const CurriculumHeader = styled(FlexContainer)`
   z-index: 0;
   display: flex;
   align-items: baseline;
-  justify-content: flex-end;
-  padding: 20px 40px 50px 30px;
+  justify-content: space-between;
+  padding: 20px 40px 35px 30px;
   align-items: center;
 
   @media only screen and (max-width: ${mobileWidth}) {
@@ -780,50 +918,72 @@ const CurriculumHeader = styled(FlexContainer)`
   }
 
   @media only screen and (min-width: 846px) {
-    padding: 20px 40px 50px 40px;
+    padding: 20px 40px 35px 40px;
   }
 `;
 
-const CurriculumSubheader = styled.div`
+const CurriculumHeaderButtons = styled(FlexContainer)`
+  display: flex;
+`;
+
+const SubTopBar = styled.div`
+  width: ${props => (props.active ? "60%" : "80%")};
   padding-left: 43px;
   padding-right: ${props => (props.active ? "30px" : "43px")};
-  margin-bottom: 60px;
+  @media only screen and (min-width: 1800px) {
+    width: ${props => (props.active ? "60%" : "80%")};
+    margin-left: ${props => (props.active ? "" : "auto")};
+    margin-right: ${props => (props.active ? "" : "auto")};
+  }
+  @media only screen and (max-width: ${largeDesktopWidth}) {
+    width: 100%;
+    padding: 0px 40px;
+  }
+  @media only screen and (max-width: ${desktopWidth}) {
+    padding: 0px 25px;
+  }
+`;
+
+const SubTopBarContainer = styled.div`
+  background: ${white};
+  padding: 28px 43px 36px 45px;
+  margin-bottom: 10px;
+  margin-top: -15px;
   z-index: 1;
   display: flex;
+  flex-direction: column;
+  justify-content: space-around;
   align-items: center;
-  width: ${props => (props.active ? "60%" : "80%")};
+  width: 100%;
   margin-left: ${props => (props.active ? "" : "auto")};
   margin-right: ${props => (props.active ? "" : "auto")};
+  border-radius: 5px;
+  box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.1);
   @media only screen and (max-width: 1366px) {
     flex-direction: column;
     justify-self: flex-start;
     margin-right: auto;
   }
   @media only screen and (max-width: 1750px) and (min-width: 1367px) {
-    flex-direction: ${props => (props.active ? "column" : "row")};
+    /* flex-direction: ${props => (props.active ? "column" : "row")};
     justify-self: ${props => (props.active ? "flex-start" : "")};
-    margin-right: ${props => (props.active ? "auto" : "")};
-  }
-  @media only screen and (min-width: 1800px) {
-    width: ${props => (props.active ? "60%" : "80%")};
-    margin-left: ${props => (props.active ? "" : "auto")};
-    margin-right: ${props => (props.active ? "" : "auto")};
+    margin-right: ${props => (props.active ? "auto" : "")}; */
   }
   @media only screen and (max-width: 480px) {
     padding-left: 20px;
   }
 `;
-CurriculumSubheader.displayName = "CurriculumSubheader";
+SubTopBarContainer.displayName = "SubTopBarContainer";
 
 const ButtonText = styled.div`
   text-transform: uppercase;
-  padding-left: 20px;
+  padding-left: 17px;
   padding-right: 20px;
   font-size: 10px;
   font-weight: 600;
-  display: flex;
+  width: 100%;
   @media only screen and (max-width: 1250px) {
-    display: none;
+    /* display: none; */
   }
 `;
 
@@ -831,34 +991,123 @@ const ShareButtonText = styled.div`
   text-transform: uppercase;
   padding-left: 20px;
   padding-right: 20px;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   @media only screen and (max-width: ${desktopWidth}) {
     padding-left: 0px;
     padding-right: 0px;
   }
+  @media only screen and (max-width: ${tabletWidth}) {
+    display: none;
+  }
+`;
+
+const ShareButtonIcon = styled(IconShare)`
+  margin-left: 17px;
 `;
 
 const SaveButtonText = styled.div`
   text-transform: uppercase;
   padding-left: 20px;
   padding-right: 20px;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
+  @media only screen and (max-width: ${tabletWidth}) {
+    display: none;
+  }
 `;
 
+const SaveButtonIcon = styled(IconDiskette)``;
+
 const CurriculumSequenceWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   .ant-btn {
     height: 24px;
   }
 `;
 
 const HeaderTitle = styled.div`
-  justify-self: flex-start;
+  display: flex;
+  align-items: center;
   margin-right: auto;
-  font-size: 20px;
+  font-size: 30px;
   font-weight: 700;
   color: ${white};
+  @media only screen and (max-width: ${mobileWidth}) {
+    font-size: 25px;
+  }
+  @media only screen and (max-width: ${middleMobileWidth}) {
+    font-size: 20px;
+  }
+  @media only screen and (max-width: ${smallMobileWidth}) {
+    font-size: 14px;
+  }
+`;
+
+const CurriculumSubHeaderRow = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  margin-bottom: ${props => props.marginBottom || "0px"};
+  @media only screen and (max-width: ${tabletWidth}) {
+    flex-direction: column;
+    margin-bottom: ${props => props.marginBottom && "7px"};
+  }
+`;
+
+const SubHeaderTitleContainer = styled.div`
+  max-width: 55%;
+  word-break: break-word;
+  @media only screen and (max-width: ${tabletWidth}) {
+    max-width: 100%;
+  }
+`;
+
+const SubHeaderTitle = styled.h2`
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 7px;
+  color: ${titleColor};
+`;
+const SubHeaderDescription = styled.p`
+  color: #848993;
+  font-size: 14px;
+`;
+
+const SunHeaderInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  @media only screen and (max-width: ${tabletWidth}) {
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: baseline;
+    margin-top: 20px;
+  }
+`;
+
+const SunHeaderInfoCard = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: ${props => props.marginBottom || "0px"};
+  margin-left: ${props => props.marginLeft || "0px"};
+  @media only screen and (max-width: ${tabletWidth}) {
+    margin-left: ${props => !props.marginLeft && "15px"};
+  }
+`;
+
+const GraduationCapIcon = styled(IconGraduationCap)`
+  margin-right: 9.5px;
+`;
+
+const BookIcon = styled(IconBook)`
+  margin-right: 9.5px;
+`;
+
+const SunHeaderInfoCardText = styled.div`
+  margin-left: ${props => props.marginLeft || "0px"};
 `;
 
 const enhance = compose(

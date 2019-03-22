@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Input } from "antd";
-import { isUndefined } from "lodash";
+import { isUndefined, chunk } from "lodash";
 
-import { QuestionOption } from "../../common/Form";
+import { QuestionOption, QuestionChunk } from "../../common/Form";
 
 export default class FormChoice extends React.Component {
   static propTypes = {
@@ -67,7 +67,15 @@ export default class FormChoice extends React.Component {
 
     if (!options.length) return this.renderOptionsCreateForm();
 
-    return options.map(({ label }, key) => <QuestionOption key={label + key}>{label}</QuestionOption>);
+    const optionChunks = chunk(options, 4);
+
+    return optionChunks.map(items => (
+      <QuestionChunk>
+        {items.map(({ label }, key) => (
+          <QuestionOption key={label + key}>{label}</QuestionOption>
+        ))}
+      </QuestionChunk>
+    ));
   };
 
   renderForm = () => {
@@ -92,17 +100,23 @@ export default class FormChoice extends React.Component {
       return false;
     };
 
-    return options.map(({ label, value }, key) => (
-      <QuestionOption
-        key={`form-${label}-${key}`}
-        selected={currentValue.includes(value)}
-        correct={evaluation && getCorrect(value)}
-        checked={!isUndefined(evaluation) && view !== "clear"}
-        onClick={this.handleSelect(value)}
-        review
-      >
-        {label}
-      </QuestionOption>
+    const optionChunks = chunk(options, 4);
+
+    return optionChunks.map(items => (
+      <QuestionChunk>
+        {items.map(({ label, value }, key) => (
+          <QuestionOption
+            key={`form-${label}-${key}`}
+            selected={currentValue.includes(value)}
+            correct={evaluation && getCorrect(value)}
+            checked={!isUndefined(evaluation) && view !== "clear"}
+            onClick={this.handleSelect(value)}
+            review
+          >
+            {label}
+          </QuestionOption>
+        ))}
+      </QuestionChunk>
     ));
   };
 

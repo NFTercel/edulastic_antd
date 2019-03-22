@@ -1,7 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components";
 import { Table } from "antd";
+
+import { TableWrapper } from "./styled";
+
+import ClassSelector from "./ClassSelector";
 
 const ClassList = ({ groups }) => {
   const columns = [
@@ -10,16 +13,17 @@ const ClassList = ({ groups }) => {
       key: "name",
       dataIndex: "name"
     },
-    { title: "classCode", key: "code", dataIndex: "code" },
-    { title: "grades" },
-    { title: "subject" },
-    { title: "tags" },
-    { title: "students" },
-    { title: "assigments" }
+    { title: "Class Code", key: "code", dataIndex: "code" },
+    { title: "Grades" },
+    { title: "Subject" },
+    { title: "Tags" },
+    { title: "Students" },
+    { title: "Assigments" }
   ];
 
   return (
     <TableWrapper>
+      <ClassSelector />
       <Table columns={columns} dataSource={groups} />
     </TableWrapper>
   );
@@ -28,9 +32,4 @@ const ClassList = ({ groups }) => {
 ClassList.propTypes = {
   groups: PropTypes.array.isRequired
 };
-
-const TableWrapper = styled.div`
-  margin: 10px;
-`;
-
 export default ClassList;

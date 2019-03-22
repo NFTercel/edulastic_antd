@@ -1,8 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Select } from "antd";
+import { chunk } from "lodash";
 
-import { QuestionOption } from "../../common/Form";
+import { QuestionOption, QuestionChunk } from "../../common/Form";
 import { Dropdown } from "./styled";
 
 export default class FormDropdown extends React.Component {
@@ -38,8 +39,14 @@ export default class FormDropdown extends React.Component {
       question: { options }
     } = this.props;
 
-    return options[0].map((option, key) => (
-      <QuestionOption key={`dropdown-view-${option}-${key}`}>{option}</QuestionOption>
+    const optionChunks = chunk(options[0], 4);
+
+    return optionChunks.map(items => (
+      <QuestionChunk>
+        {items.map((option, key) => (
+          <QuestionOption key={`dropdown-view-${option}-${key}`}>{option}</QuestionOption>
+        ))}
+      </QuestionChunk>
     ));
   };
 

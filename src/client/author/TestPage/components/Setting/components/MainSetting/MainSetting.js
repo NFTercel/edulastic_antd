@@ -39,6 +39,7 @@ const {
   navigations,
   completionTypes,
   calculators,
+  calculatorKeys,
   evalTypes,
   accessibilities,
   releaseGradeTypes,
@@ -71,7 +72,6 @@ class MainSetting extends Component {
 
     this.state = {
       markAsDoneValue: props.entity.markAsDoneValue,
-      calcType: props.entity.calcType,
       evalType: props.entity.evalType,
       showPassword: false,
       enable: true,
@@ -121,7 +121,7 @@ class MainSetting extends Component {
     }
     if (key === "safeBrowser" && value === false) {
       setTestData({
-        safeBrowsePassword: "",
+        sebPassword: "",
         [key]: value
       });
     } else {
@@ -156,22 +156,22 @@ class MainSetting extends Component {
   };
 
   render() {
-    const { markAsDoneValue, calcType, evalType, enable, showAdvancedOption, showPassword } = this.state;
+    const { markAsDoneValue, evalType, enable, showAdvancedOption, showPassword } = this.state;
     const { history, windowWidth, entity } = this.props;
 
     const {
       releaseScore,
       maxAttempts,
       safeBrowser,
-      safeBrowsePassword,
+      sebPassword,
       shuffleQuestions,
       shuffleAnswers,
       answerOnPaper,
       requirePassword,
       testType,
-      generateReport
+      generateReport,
+      calcType
     } = entity;
-
     const isSmallSize = windowWidth > 993 ? 1 : 0;
     return (
       <Paper style={{ marginTop: 27 }}>
@@ -294,7 +294,7 @@ class MainSetting extends Component {
                     }
                     onChange={this.setPassword}
                     size="large"
-                    value={safeBrowsePassword}
+                    value={sebPassword}
                     type={showPassword ? "text" : "password"}
                     placeholder="Password"
                   />
@@ -339,8 +339,8 @@ class MainSetting extends Component {
               <Title>Show Calculator</Title>
               <Body>
                 <StyledRadioGroup onChange={this.updateFeatures("calcType")} value={calcType}>
-                  {Object.keys(calculators).map(item => (
-                    <Radio value={calculators[item]} key={calculators[item]}>
+                  {calculatorKeys.map(item => (
+                    <Radio value={item} key={item}>
                       {calculators[item]}
                     </Radio>
                   ))}

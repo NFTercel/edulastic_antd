@@ -135,7 +135,7 @@ export const InputTitle = styled.div`
 `;
 
 export const InputPassword = styled(Input)`
-  width: 20%;
+  width: 40%;
   margin-left: 30px;
 `;
 

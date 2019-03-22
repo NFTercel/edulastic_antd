@@ -1,5 +1,7 @@
+/* eslint-disable class-methods-use-this */
 import EditToolBar from "../common/editToolBar";
 import Header from "../../itemDetail/header";
+import Helpers from "../../../../util/Helpers";
 
 class HotspotPage {
   constructor() {
@@ -8,6 +10,19 @@ class HotspotPage {
   }
 
   // get current question from Store
+
+  checkFontSize(fontSize) {
+    this.header.preview();
+    Helpers.getElement("stimulus")
+      .should("have.css", "font-size")
+      .and("eq", fontSize);
+
+    this.header.edit();
+  }
+
+  getHotspotMap() {
+    return Helpers.getElement("hotspotMap");
+  }
 
   getCurrentStoreQuestion = () => {
     const storeValue = JSON.parse(window.localStorage.getItem("persist:root")).authorQuestions;
@@ -98,6 +113,54 @@ class HotspotPage {
   getPontsInput = () => cy.get('[data-cy="points"]');
 
   getMultipleCheck = () => cy.contains("span", "Multiple responses").closest("label");
+
+  getLayout() {
+    return Helpers.getElement("layout");
+  }
+
+  getFontSizeSelect() {
+    return Helpers.getElement("fontSizeSelect");
+  }
+
+  getSmallFontSizeOption() {
+    return Helpers.getElement("small");
+  }
+
+  getNormalFontSizeOption() {
+    return Helpers.getElement("normal");
+  }
+
+  getLargeFontSizeOption() {
+    return Helpers.getElement("large");
+  }
+
+  getExtraLargeFontSizeOption() {
+    return Helpers.getElement("xlarge");
+  }
+
+  getHugeFontSizeOption() {
+    return Helpers.getElement("xxlarge");
+  }
+
+  getMaxWidth() {
+    return Helpers.getElement("maxWidthOption");
+  }
+
+  getStemNumeration() {
+    return Helpers.getElement("responseContainerPositionOption");
+  }
+
+  getNumericalStemOption() {
+    return Helpers.getElement("numerical");
+  }
+
+  getUpperAlphaOption() {
+    return Helpers.getElement("upper-alpha");
+  }
+
+  getLowerAlphaOption() {
+    return Helpers.getElement("lower-alpha");
+  }
 }
 
 export default HotspotPage;

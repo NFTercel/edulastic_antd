@@ -59,19 +59,31 @@ class ButtonBar extends Component {
         {windowWidth > 468 ? (
           <Container>
             <Menu mode="horizontal" selectedKeys={[current]} style={{ marginLeft: 80 }}>
-              <MenuItem className={current === "edit" && "active"} onClick={() => this.handleMenuClick("edit")}>
+              <MenuItem
+                data-cy="editButton"
+                className={current === "edit" && "active"}
+                onClick={() => this.handleMenuClick("edit")}
+              >
                 <HeadIcon>
                   <IconSelected color={white} width={18} height={16} />
                 </HeadIcon>
                 EDIT
               </MenuItem>
-              <MenuItem className={current === "preview" && "active"} onClick={() => this.handleMenuClick("preview")}>
+              <MenuItem
+                data-cy="previewButton"
+                className={current === "preview" && "active"}
+                onClick={() => this.handleMenuClick("preview")}
+              >
                 <HeadIcon>
                   <IconEye color={white} width={18} height={16} />
                 </HeadIcon>
                 PREVIEW
               </MenuItem>
-              <MenuItem className={current === "metadata" && "active"} onClick={() => this.handleMenuClick("metadata")}>
+              <MenuItem
+                data-cy="metadataButton"
+                className={current === "metadata" && "active"}
+                onClick={() => this.handleMenuClick("metadata")}
+              >
                 <HeadIcon>
                   <IconMetadata color={white} width={18} height={16} />
                 </HeadIcon>

@@ -74,7 +74,7 @@ const SegmentsTools = ({
   const getIconTemplate = (toolName = "point", options) => getIconByToolName(toolName, options);
 
   return (
-    <GraphToolbar fontSize={fontSize}>
+    <GraphToolbar data-cy="segmentsToolbar" fontSize={fontSize}>
       {uiTools.map(
         uiTool =>
           !uiTool.group && (

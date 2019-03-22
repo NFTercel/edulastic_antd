@@ -2,14 +2,15 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { compose } from "redux";
-import { Button } from "@edulastic/common";
-import { IconPlus } from "@edulastic/icons";
 import { Icon } from "antd";
 import { connect } from "react-redux";
-import { FlexContainer } from "@edulastic/common";
-import { toggleSideBarAction } from "../../actions/togglemenu";
-import { tabletWidth, greenDarkSecondary, darkBlueSecondary, white } from "@edulastic/colors";
+
+import { IconPlus, IconMenuOpenClose } from "@edulastic/icons";
+import { FlexContainer, Button } from "@edulastic/common";
+import { tabletWidth, darkBlueSecondary, white, lightBlueSecondary } from "@edulastic/colors";
 import { withNamespaces } from "@edulastic/localization";
+
+import { toggleSideBarAction } from "../../actions/togglemenu";
 import HeaderWrapper from "../../mainContent/headerWrapper";
 
 const toggleMenu = toggle => {
@@ -20,15 +21,14 @@ const ListHeader = ({ onCreate, t, title, btnTitle, toggleSideBar }) => {
   return (
     <Container>
       <FlexContainer>
-        <MenuIcon type="bars" onClick={() => toggleMenu(toggleSideBar)} />
+        <MenuIcon onClick={() => toggleMenu(toggleSideBar)} />
         <Title>{title}</Title>
       </FlexContainer>
 
       <CreateButton
-        // disabled={creating}
         onClick={onCreate}
         color="success"
-        icon={<IconPlusStyled color={greenDarkSecondary} left={-10} width={13} height={13} hoverColor={white} />}
+        icon={<IconPlusStyled color={white} left={-10} width={13} height={13} hoverColor={white} />}
       >
         {btnTitle ? btnTitle : t("component.itemlist.header.create")}
       </CreateButton>
@@ -66,24 +66,46 @@ const Container = styled(HeaderWrapper)`
 `;
 
 const CreateButton = styled(Button)`
-  height: 50px;
-  min-width: 151;
-  color: ${white};
-  border-radius: 5;
+  position: relative;
+  width: 194px;
+  height: 45px;
+  padding-left: 44px !important;
+  color: ${lightBlueSecondary} !important;
+  border-radius: 3px !important;
+  background: ${white} !important;
   margin: 0;
+
   @media (max-width: ${tabletWidth}) {
+    width: 45px;
     height: 40px;
+    padding: 0 !important;
+    min-width: 0 !important;
+
+    span {
+      display: none;
+    }
   }
 `;
 
 const IconPlusStyled = styled(IconPlus)`
-  position: relative;
+  position: absolute;
+  top: 12px;
+  left: 18px;
+  background: ${lightBlueSecondary};
+  border-radius: 20px;
+  padding: 4px;
+  width: 20px;
+  height: 20px;
+
+  rect {
+    fill: ${white};
+  }
+
+  @media (max-width: ${tabletWidth}) {
+    position: unset;
+  }
 `;
 
-// const HeaderWrapper = styled.div`
-//   padding-top: 62px;
-//   margin-bottom: 10px;
-// `;
 export const Title = styled.h1`
   color: ${white};
   font-size: 22px;
@@ -91,11 +113,14 @@ export const Title = styled.h1`
   margin: 0;
   padding: 0;
 `;
-const MenuIcon = styled(Icon)`
+
+const MenuIcon = styled(IconMenuOpenClose)`
   display: none;
+  fill: ${white};
+  width: 18px;
+  margin-right: 25px !important;
+
   @media (max-width: ${tabletWidth}) {
     display: block;
-    color: #fff;
-    font-size: 18px;
   }
 `;

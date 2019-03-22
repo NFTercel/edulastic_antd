@@ -1,5 +1,5 @@
 import * as moment from "moment";
-import { omit } from "lodash";
+import { omit, keyBy } from "lodash";
 import { createReducer, createAction } from "redux-starter-kit";
 import { createSelector } from "reselect";
 import { assignmentApi } from "@edulastic/api";
@@ -7,8 +7,8 @@ import { test } from "@edulastic/constants";
 import { all, call, put, takeEvery, select } from "redux-saga/effects";
 import { SET_ASSIGNMENT, getTestSelector, getTestIdSelector } from "../../ducks";
 import { generateClassData, formatAssignment } from "./utils";
-import { getStudentsSelector } from "../../../sharedDucks/groups";
-import { getUserNameSelector } from "../../../src/selectors/user";
+import { getStudentsSelector, getGroupsSelector } from "../../../sharedDucks/groups";
+import { getUserNameSelector, getCurrentTerm } from "../../../src/selectors/user";
 // constants
 export const SAVE_ASSIGNMENT = "[assignments] save assignment";
 export const UPDATE_ASSIGNMENT = "[assignments] update assignment";
@@ -100,8 +100,17 @@ export const getCurrentAssignmentSelector = createSelector(
 function* saveAssignment({ payload }) {
   try {
     const studentsList = yield select(getStudentsSelector);
+    const allGroups = yield select(getGroupsSelector);
     const testId = yield select(getTestIdSelector);
-    let classData = generateClassData(payload.class, payload.students, studentsList, payload.specificStudents);
+    const termId = yield select(getCurrentTerm);
+
+    let classData = generateClassData(
+      payload.class,
+      payload.students,
+      studentsList,
+      payload.specificStudents,
+      keyBy(allGroups, "_id")
+    );
     const assignedBy = yield select(getUserNameSelector);
     // if no class is selected dont bother sending a request.
     if (!classData.length) {
@@ -137,7 +146,8 @@ function* saveAssignment({ payload }) {
         class: classData,
         startDate,
         endDate,
-        testId
+        testId,
+        termId
       },
       ["_id", "__v", "createdAt", "updatedAt", "students", "scoreReleasedClasses", "googleAssignmentIds"]
     );

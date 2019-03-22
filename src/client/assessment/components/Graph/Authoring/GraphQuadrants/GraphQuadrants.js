@@ -48,8 +48,10 @@ class GraphQuadrants extends Component {
     { value: "segment", label: "Segment" },
     { value: "vector", label: "Vector" },
     { value: "circle", label: "Circle" },
+    { value: "ellipse", label: "Ellipse" },
     { value: "parabola", label: "Parabola" },
     { value: "sine", label: "Sine" },
+    { value: "hyperbola", label: "Hyperbola" },
     { value: "polygon", label: "Polygon" },
     { value: "label", label: "Label" }
   ];

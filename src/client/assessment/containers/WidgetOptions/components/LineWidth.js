@@ -8,7 +8,7 @@ import CommonInput from "./common/CommonInput";
 const LineWidth = ({ t, type, ...restProps }) => (
   <Fragment>
     <Label>{t("component.options.lineWidth")}</Label>
-    <CommonInput type={type} {...restProps} />
+    <CommonInput type={type} {...restProps} data-cy="lineWidthOption" />
   </Fragment>
 );
 

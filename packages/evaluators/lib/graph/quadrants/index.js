@@ -110,6 +110,15 @@ var checkAnswer = function checkAnswer(answer, userResponse, ignoreRepeatedShape
 
               break;
 
+            case _shapeTypes.ShapeTypes.ELLIPSE:
+            case _shapeTypes.ShapeTypes.HYPERBOLA:
+              if (checkableShape.subElementsIds[2] !== allowedSubElementsIds[2]) {
+                sameShapes[j].result = false;
+                result.commonResult = false;
+              }
+
+              break;
+
             case _shapeTypes.ShapeTypes.PARABOLA:
             case _shapeTypes.ShapeTypes.SINE:
             case _shapeTypes.ShapeTypes.LINE:

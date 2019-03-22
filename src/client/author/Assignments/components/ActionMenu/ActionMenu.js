@@ -12,17 +12,30 @@ import toolsIcon from "../../assets/printing-tool.svg";
 import devIcon from "../../assets/dev.svg";
 import googleIcon from "../../assets/Google Classroom.svg";
 import { Link } from "react-router-dom";
+import { assignmentApi } from "@edulastic/api";
 
-import { Container, StyledMenu, StyledLink, SpaceElement } from "./styled";
+import { Container, StyledMenu, StyledLink, SpaceElement, ActionButtonWrapper, ActionButton } from "./styled";
 
 const { releaseGradeLabels } = test;
-
-const ActionMenu = (onOpenReleaseScoreSettings, currentAssignment) => {
+const { duplicateAssignment } = assignmentApi;
+const ActionMenu = (onOpenReleaseScoreSettings, currentAssignment, history) => {
   const showRleaseGrade =
     currentAssignment.releaseScore === releaseGradeLabels.DONT_RELEASE || !currentAssignment.releaseScore;
   const currentTestId = currentAssignment.testId;
   const currentAssignmentId = currentAssignment._id;
   const MenuItems = [];
+  const createDuplicateAssignment = () => {
+    duplicateAssignment(currentAssignment.testId).then(test => {
+      const duplicateTestId = test._id;
+      history.push(`/author/tests/${duplicateTestId}`);
+    });
+  };
+
+  MenuItems.push(
+    <ActionButtonWrapper>
+      <ActionButton>Actions</ActionButton>
+    </ActionButtonWrapper>
+  );
   MenuItems.push(
     <Menu.Item>
       <StyledLink target="_blank" rel="noopener noreferrer">
@@ -42,7 +55,7 @@ const ActionMenu = (onOpenReleaseScoreSettings, currentAssignment) => {
     </Menu.Item>
   );
   MenuItems.push(
-    <Menu.Item>
+    <Menu.Item onClick={createDuplicateAssignment}>
       <StyledLink target="_blank" rel="noopener noreferrer">
         <img alt="icon" src={copyItem} />
         <SpaceElement />

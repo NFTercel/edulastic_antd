@@ -216,6 +216,36 @@ class MathFormulaEdit {
     return this;
   };
 
+  clearAnswerValueInput = length => {
+    for (let i = 0; i < length; i++) {
+      this.getAnswerValueMathInput().type("{del}", { force: true });
+    }
+  };
+
+  checkCorrectAnswer = (expectedValue, preview, inputLength, isCorrect, score = false) => {
+    preview.header.preview();
+    this.getPreviewMathQuill().type(expectedValue, { force: true });
+    preview
+      .getCheckAnswer()
+      .click()
+      .then(() =>
+        cy
+          .get("body")
+          .children()
+          .should("contain", `score: ${isCorrect ? "2/2" : `0/${score ? "2" : "1"}`}`)
+      );
+    preview
+      .getClear()
+      .click()
+      .then(() => {
+        cy.get("body")
+          .children()
+          .should("not.contain", "Correct Answers");
+      });
+    preview.header.edit();
+    if (inputLength > 0) this.clearAnswerValueInput(inputLength);
+  };
+
   getMethodSelectionDropdow = () => cy.get('[data-cy="method-selection-dropdown"]');
 
   getMethodSelectionDropdowList = index => cy.get(`[data-cy="method-selection-dropdown-list-${index}"]`);
@@ -223,7 +253,7 @@ class MathFormulaEdit {
   getAnswerValueMathInput = () =>
     cy
       .get('[data-cy="answer-math-input"]')
-      .wait(500)
+      .wait(3000)
       .next()
       .find("textarea");
 

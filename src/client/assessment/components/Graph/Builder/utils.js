@@ -222,6 +222,8 @@ function numberWithCommas(x) {
 function getPointsFromFlatConfig(type, pointIds, config) {
   switch (type) {
     case CONSTANT.TOOLS.POLYGON:
+    case CONSTANT.TOOLS.ELLIPSE:
+    case CONSTANT.TOOLS.HYPERBOLA:
       return Object.keys(pointIds)
         .sort()
         .map(k => config.find(element => element.id === pointIds[k]));
@@ -392,7 +394,7 @@ export function flatConfig(config, accArg = {}, isSub = false) {
       id: element.id,
       label: element.label
     };
-    if (type !== CONSTANT.TOOLS.POLYGON) {
+    if (type !== CONSTANT.TOOLS.POLYGON && type !== CONSTANT.TOOLS.ELLIPSE && type !== CONSTANT.TOOLS.HYPERBOLA) {
       acc[id].subElementsIds = {
         startPoint: points[0].id,
         endPoint: points[1].id
@@ -408,12 +410,13 @@ export function flat2nestedConfig(config) {
   return Object.values(
     config.reduce((acc, element) => {
       const { id, type, subElement = false } = element;
+
       if (!acc[id] && !subElement) {
         acc[id] = {
           id,
           type,
           _type: element._type,
-          colors: element.colors,
+          colors: element.colors || null,
           label: element.label
         };
         if (type === CONSTANT.TOOLS.POINT || type === CONSTANT.TOOLS.MARK) {

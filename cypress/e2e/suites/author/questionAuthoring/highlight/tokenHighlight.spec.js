@@ -1,8 +1,10 @@
+// eslint-disable-next-line spaced-comment
 /// <reference types="Cypress"/>
 import EditItemPage from "../../../../framework/author/itemList/itemDetail/editPage";
 import TokenHighlightPage from "../../../../framework/author/itemList/questionType/highlight/tokenHighlightPage";
 import PreviewItemPage from "../../../../framework/author/itemList/itemDetail/previewPage";
 import FileHelper from "../../../../framework/util/fileHelper";
+import Helpers from "../../../../framework/util/Helpers";
 
 describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Token highlight" type question`, () => {
   const queData = {
@@ -300,6 +302,139 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Token highligh
           });
 
         preview.getClear().click();
+      });
+    });
+  });
+
+  context("Advanced Options", () => {
+    before("visit items page and select question type", () => {
+      editItem.getItemWithId("5c88a7c965790664ff78b4ba");
+      editItem.deleteAllQuestion();
+      // create new que and select type
+      editItem.addNew().chooseQuestion(queData.group, queData.queType);
+    });
+
+    beforeEach(() => {
+      editItem.header.edit();
+      editItem.showAdvancedOptions();
+    });
+
+    afterEach(() => {
+      editItem.header.edit();
+    });
+
+    describe("Layout", () => {
+      it("should be able to select small font size", () => {
+        const select = question.getFontSizeSelect();
+        const { name } = Helpers.fontSize("small");
+
+        select.should("be.visible").click();
+
+        question
+          .getSmallFontSizeOption()
+          .should("be.visible")
+          .click();
+
+        select.should("contain", name);
+        question.checkFontSize("12.8px");
+      });
+      it("should be able to select normal font size", () => {
+        const select = question.getFontSizeSelect();
+        const { name } = Helpers.fontSize("normal");
+
+        select.should("be.visible").click();
+
+        question
+          .getNormalFontSizeOption()
+          .should("be.visible")
+          .click();
+
+        select.should("contain", name);
+        question.checkFontSize("16px");
+      });
+      it("should be able to select large font size", () => {
+        const select = question.getFontSizeSelect();
+        const { name } = Helpers.fontSize("large");
+
+        select.should("be.visible").click();
+
+        question
+          .getLargeFontSizeOption()
+          .should("be.visible")
+          .click();
+
+        select.should("contain", name);
+        question.checkFontSize("19.2px");
+      });
+      it("should be able to select extra large font size", () => {
+        const select = question.getFontSizeSelect();
+        const { name } = Helpers.fontSize("xlarge");
+
+        select.should("be.visible").click();
+
+        question
+          .getExtraLargeFontSizeOption()
+          .should("be.visible")
+          .click();
+
+        select.should("contain", name);
+        question.checkFontSize("22.4px");
+      });
+      it("should be able to select huge font size", () => {
+        const select = question.getFontSizeSelect();
+        const { name } = Helpers.fontSize("xxlarge");
+
+        select.should("be.visible").click();
+
+        question
+          .getHugeFontSizeOption()
+          .should("be.visible")
+          .click();
+
+        select.should("contain", name);
+        question.checkFontSize("25.6px");
+      });
+      it("should be able to change max selection", () => {
+        const maxSelection = 2;
+
+        question
+          .getMaxSelection()
+          .should("be.visible")
+          .type(`{selectall}${maxSelection}`)
+          .should("have.value", `${maxSelection}`);
+
+        question.header.preview();
+
+        question
+          .getPreviewWrapper()
+          .find(".answer")
+          .each($el => {
+            cy.wrap($el)
+              .should("be.visible")
+              .click();
+          });
+
+        question
+          .getPreviewWrapper()
+          .find(".active-word")
+          .should("be.visible")
+          .should("have.length", maxSelection);
+
+        question
+          .getPreviewWrapper()
+          .find(".active-word")
+          .each($el => {
+            cy.wrap($el)
+              .should("be.visible")
+              .click();
+          });
+
+        question
+          .getPreviewWrapper()
+          .find(".active-word")
+          .should("not.be.visible");
+
+        question.header.edit();
       });
     });
   });

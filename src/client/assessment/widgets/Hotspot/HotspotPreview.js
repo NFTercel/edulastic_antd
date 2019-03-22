@@ -65,10 +65,12 @@ const HotspotPreview = ({ view, item, smallSize, saveAnswer, userAnswer, preview
   return (
     <Paper style={{ fontSize }} padding={smallSize} boxShadow={smallSize ? "none" : ""}>
       <InstructorStimulus>{item.instructor_stimulus}</InstructorStimulus>
-      {view === PREVIEW && !smallSize && <Stimulus dangerouslySetInnerHTML={{ __html: item.stimulus }} />}
+      {view === PREVIEW && !smallSize && (
+        <Stimulus data-cy="stimulus" dangerouslySetInnerHTML={{ __html: item.stimulus }} />
+      )}
 
       {!smallSize ? (
-        <BlockContainer style={{ maxWidth }} justifyContent="center">
+        <BlockContainer data-cy="hotspotMap" style={{ maxWidth }} justifyContent="center">
           <Svg data-cy="answer-container" width={+width} height={+height}>
             <image href={source} width={+width} height={+height} preserveAspectRatio="none" x={0} y={0} />
             {areas.map((area, i) => (

@@ -23,8 +23,10 @@ const getQuestions = (testItems = []) => {
   const allQuestions = [];
 
   testItems.forEach(item => {
-    const { questions = [], resources = [] } = item.data;
-    allQuestions.push(...questions, ...resources);
+    if (item.data) {
+      const { questions = [], resources = [] } = item.data;
+      allQuestions.push(...questions, ...resources);
+    }
   });
 
   return allQuestions;

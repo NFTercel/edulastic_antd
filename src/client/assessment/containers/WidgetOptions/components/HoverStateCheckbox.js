@@ -4,7 +4,7 @@ import { Checkbox } from "antd";
 import { withNamespaces } from "@edulastic/localization";
 
 const HoverStateCheckbox = ({ onChange, checked, t, ...restProps }) => (
-  <Checkbox checked={checked} onChange={e => onChange(e.target.checked)} {...restProps}>
+  <Checkbox data-cy="hoverStateOption" checked={checked} onChange={e => onChange(e.target.checked)} {...restProps}>
     {t("component.options.hoverState")}
   </Checkbox>
 );

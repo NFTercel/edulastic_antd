@@ -119,8 +119,12 @@ const getColoredAnswer = answerArr => {
         case CONSTANT.TOOLS.VECTOR:
           colors = Colors.yellow[CONSTANT.TOOLS.VECTOR];
           break;
+        case CONSTANT.TOOLS.ELLIPSE:
         case CONSTANT.TOOLS.CIRCLE:
           colors = Colors.yellow[CONSTANT.TOOLS.CIRCLE];
+          break;
+        case CONSTANT.TOOLS.HYPERBOLA:
+          colors = Colors.yellow[CONSTANT.TOOLS.HYPERBOLA];
           break;
         case CONSTANT.TOOLS.SIN:
           colors = Colors.yellow[CONSTANT.TOOLS.SIN];
@@ -542,6 +546,8 @@ class GraphContainer extends Component {
         return <IconVector {...newOptions} />;
       },
       circle: () => <IconCircle {...options} />,
+      ellipse: () => "ellipse",
+      hyperbola: () => "hyperbola",
       parabola: () => <IconParabola {...options} />,
       sine: () => {
         const newOptions = {
@@ -567,7 +573,20 @@ class GraphContainer extends Component {
     return iconsByToolName[toolName]();
   };
 
-  allTools = ["point", "line", "ray", "segment", "vector", "circle", "sine", "polygon", "parabola", "label"];
+  allTools = [
+    "point",
+    "line",
+    "ray",
+    "segment",
+    "vector",
+    "circle",
+    "ellipse",
+    "sine",
+    "hyperbola",
+    "polygon",
+    "parabola",
+    "label"
+  ];
 
   allControls = ["undo", "redo", "reset"];
 

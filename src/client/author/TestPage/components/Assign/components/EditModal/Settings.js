@@ -4,25 +4,18 @@ import { Col, Radio } from "antd";
 import { AlignRight, AlignSwitchRight, StyledRowSettings, SettingsWrapper, MaxAttemptIInput, Password } from "./styled";
 //selectors
 import { test } from "@edulastic/constants";
-const { releaseGradeTypes } = test;
-const calculators = ["None", "Scientific", "Basic", "Graphing"];
+const { releaseGradeTypes, calculatorKeys, calculators } = test;
 const evaluationtypes = ["All or Nothing", "Partial Credit", "Dont penalize for incorrect selection"];
 const releaseGradeKeys = ["DONT_RELEASE", "SCORE_ONLY", "WITH_RESPONSE", "WITH_ANSWERS"];
 
 const Settings = ({ onUpdateMaxAttempts, testSettings, assignmentSettings, updateAssignmentSettings }) => {
   const [isAutomatic, setAssignmentCompletionType] = useState(0);
-
-  const [calcType, setCalcType] = useState(0);
   const [type, setEvaluationType] = useState(0);
   const [showPassword, togglePasswordField] = useState(false);
   const [tempTestSettings, updateTempTestSettings] = useState({ ...testSettings });
 
   const updateMarkAsDone = e => {
     setAssignmentCompletionType(e.target.value);
-  };
-
-  const calculatorShowMethod = e => {
-    setCalcType(e.target.value);
   };
 
   const evalMethod = e => {
@@ -39,10 +32,9 @@ const Settings = ({ onUpdateMaxAttempts, testSettings, assignmentSettings, updat
       [key]: value
     };
     if (key === "safeBrowser" && value === false) {
-      delete newSettingsState.safeBrowsePassword;
-      delete newTempTestSettingsState.safeBrowsePassword;
+      delete newSettingsState.sebPassword;
+      delete newTempTestSettingsState.sebPassword;
     }
-
     updateTempTestSettings(newTempTestSettingsState);
     updateAssignmentSettings(newSettingsState);
   };
@@ -50,9 +42,11 @@ const Settings = ({ onUpdateMaxAttempts, testSettings, assignmentSettings, updat
     releaseScore = tempTestSettings.releaseScore,
     maxAttempts = tempTestSettings.maxAttempts,
     safeBrowser = tempTestSettings.safeBrowser,
-    safeBrowsePassword = tempTestSettings.safeBrowsePassword,
+    sebPassword = tempTestSettings.sebPassword,
     shuffleQuestions = tempTestSettings.shuffleQuestions,
-    shuffleAnswers = tempTestSettings.shuffleAnswers
+    shuffleAnswers = tempTestSettings.shuffleAnswers,
+    calcType = tempTestSettings.calcType,
+    answerOnPaper = tempTestSettings.answerOnPaper
   } = assignmentSettings;
   return (
     <SettingsWrapper>
@@ -110,9 +104,9 @@ const Settings = ({ onUpdateMaxAttempts, testSettings, assignmentSettings, updat
                   onClick={() => togglePasswordField(!showPassword)}
                 />
               }
-              onChange={e => overRideSettings("safeBrowsePassword", e.target.value)}
+              onChange={e => overRideSettings("sebPassword", e.target.value)}
               size="large"
-              value={safeBrowsePassword}
+              value={sebPassword}
               type={showPassword ? "text" : "password"}
               placeholder="Password"
             />
@@ -149,10 +143,10 @@ const Settings = ({ onUpdateMaxAttempts, testSettings, assignmentSettings, updat
       <StyledRowSettings gutter={16}>
         <Col span={8}>SHOW CALCULATOR</Col>
         <Col span={16}>
-          <AlignRight onChange={calculatorShowMethod} value={calcType}>
-            {calculators.map((item, index) => (
-              <Radio value={index} key={index}>
-                {item}
+          <AlignRight value={calcType} onChange={e => overRideSettings("calcType", e.target.value)}>
+            {calculatorKeys.map(item => (
+              <Radio value={item} key={item}>
+                {calculators[item]}
               </Radio>
             ))}
           </AlignRight>
@@ -164,7 +158,10 @@ const Settings = ({ onUpdateMaxAttempts, testSettings, assignmentSettings, updat
       <StyledRowSettings gutter={16}>
         <Col span={8}>ANSWER ON PAPER</Col>
         <Col span={16}>
-          <AlignSwitchRight />
+          <AlignSwitchRight
+            defaultChecked={answerOnPaper}
+            onChange={value => overRideSettings("answerOnPaper", value)}
+          />
         </Col>
       </StyledRowSettings>
       {/* Answer on Paper */}

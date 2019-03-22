@@ -1,4 +1,4 @@
-import GraphingStandardPage from "./graphingStandardPage";
+import GraphingNumberLineStandardPage from "./graphingNumberLineStdPage";
 
 class GraphingNumberLineDragAndDropPage extends GraphingStandardPage {
   constructor() {

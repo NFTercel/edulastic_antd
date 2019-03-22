@@ -1,4 +1,4 @@
-import React, { Fragment, Component } from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { PREVIEW, EDIT, CLEAR } from "../../constants/constantsForQuestions";
@@ -6,17 +6,16 @@ import { setQuestionDataAction } from "../../../author/QuestionEditor/ducks";
 import ShadingPreview from "./ShadingPreview";
 import ShadingEdit from "./ShadingEdit";
 
-class Shading extends Component {
-  render() {
-    const { view } = this.props;
-    return (
-      <Fragment>
-        {view === PREVIEW && <ShadingPreview {...this.props} />}
-        {view === EDIT && <ShadingEdit {...this.props} />}
-      </Fragment>
-    );
-  }
-}
+const Shading = props => {
+  const { view } = props;
+
+  return (
+    <Fragment>
+      {view === PREVIEW && <ShadingPreview {...props} />}
+      {view === EDIT && <ShadingEdit {...props} />}
+    </Fragment>
+  );
+};
 
 Shading.propTypes = {
   view: PropTypes.string.isRequired,

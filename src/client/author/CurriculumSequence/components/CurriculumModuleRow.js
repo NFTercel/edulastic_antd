@@ -4,21 +4,16 @@ import { compose } from "redux";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Button, Menu, Dropdown, Icon } from "antd";
-import { Checkbox } from "@edulastic/common";
-import { mobileWidth, lightBlue, white, greenDarkSecondary, desktopWidth, tabletWidth } from "@edulastic/colors";
+import { mobileWidth, lightBlue, white, desktopWidth, tabletWidth, lightGreenSecondary } from "@edulastic/colors";
+import { IconVerified, IconVisualization, IconCheckSmall, IconMoreVertical, IconLeftArrow } from "@edulastic/icons";
 import {
   toggleCheckedUnitItemAction,
   setSelectedItemsForAssignAction,
   removeItemFromUnitAction,
   removeUnitAction
 } from "../ducks";
-import minusIcon from "../assets/minus.svg";
-import plusIcon from "../assets/plus.svg";
-import visualizationIcon from "../assets/visualization-show.svg";
 import assessmentRed from "../assets/assessment.svg";
 import assessmentGreen from "../assets/concept-check.svg";
-import moduleCompletedIcon from "../assets/module-completed.svg";
-import moreIcon from "../assets/more.svg";
 
 /**
  * @typedef {object} Props
@@ -53,8 +48,8 @@ class ModuleRow extends Component {
       onCollapseExpand,
       collapsed,
       padding,
-      checkedUnitItems,
-      toggleUnitItem,
+      // checkedUnitItems,
+      // toggleUnitItem,
       isContentExpanded,
       setSelectedItemsForAssign,
       module,
@@ -72,21 +67,20 @@ class ModuleRow extends Component {
       <ModuleWrapper data-cy="curriculumModuleRow" key={`${module.data.length}-${module.id}`} padding={padding}>
         <Container>
           <Module>
-            <ModuleHeader collapsed={collapsed}>
+            <ModuleHeader
+              collapsed={collapsed}
+              padding="17px 25px 16px 27px"
+              borderRadius={collapsed ? "5px" : "unset"}
+              boxShadow={collapsed ? "0 3px 7px 0 rgba(0, 0, 0, 0.1)" : "unset"}
+            >
               <ModuleInfo>
-                <Button
-                  type="primary"
-                  ghost
-                  className="module-btn-expand-collapse"
-                  onClick={() => onCollapseExpand(id)}
-                  data-cy="expandCollapseAssignments"
-                >
+                <CustomIcon marginRight="25" onClick={() => onCollapseExpand(id)}>
                   {!collapsed ? (
-                    <img src={minusIcon} alt="collapse module " />
+                    <Icon type="up" style={{ color: "#707070" }} />
                   ) : (
-                    <img src={plusIcon} alt="expand module " />
+                    <Icon type="down" style={{ color: "#707070" }} />
                   )}
-                </Button>
+                </CustomIcon>
                 <ModuleTitleAssignedWrapper>
                   <ModuleTitleWrapper>
                     <ModuleTitlePrefix>
@@ -107,7 +101,7 @@ class ModuleRow extends Component {
                         <ModuleCompletedLabel>MODULE COMPLETED</ModuleCompletedLabel>
                         <ModuleCompletedIcon>
                           <CustomIcon>
-                            <img src={moduleCompletedIcon} alt="module completed icon" />
+                            <IconVerified color={lightGreenSecondary} />
                           </CustomIcon>
                         </ModuleCompletedIcon>
                       </ModuleCompleted>
@@ -122,7 +116,7 @@ class ModuleRow extends Component {
                         <TotalAssigned data-cy="totalAssigned">{totalAssigned}</TotalAssigned>
                       </ModulesAssigned>
                       <AssignModuleButton>
-                        <Button type="primary" ghost data-cy="AssignWholeModule" onClick={() => assignModule(module)}>
+                        <Button ghost data-cy="AssignWholeModule" onClick={() => assignModule(module)}>
                           ASSIGN MODULE
                         </Button>
                       </AssignModuleButton>
@@ -152,52 +146,62 @@ class ModuleRow extends Component {
                   );
 
                   return (
-                    <Assignment data-cy="moduleAssignment" key={`${moduleData.id}-${moduleData.assigned}`}>
+                    <Assignment
+                      data-cy="moduleAssignment"
+                      key={`${moduleData.id}-${moduleData.assigned}`}
+                      padding="14px 30px 14px 50px"
+                      borderRadius="unset"
+                      boxShadow="unset"
+                    >
+                      <ModuleFocused />
                       <AssignmentInnerWrapper>
-                        <ModuleFocused />
-
                         <AssignmentContent expanded={isContentExpanded}>
-                          <Checkbox
+                          {/* <Checkbox
                             onChange={() => toggleUnitItem(moduleData.id)}
                             checked={checkedUnitItems.indexOf(moduleData.id) !== -1}
                             className="module-checkbox"
-                          />
+                          /> */}
+                          <CustomIcon>
+                            <Icon type="right" style={{ color: "#707070" }} />
+                          </CustomIcon>
                           <ModuleDataName>{moduleData.name}</ModuleDataName>
                         </AssignmentContent>
+                        <ModuleAssignedUnit>
+                          {moduleData.assigned && !moduleData.completed && (
+                            <CustomIcon>
+                              <img src={assessmentRed} alt="Module item is assigned" />
+                            </CustomIcon>
+                          )}
+                          {moduleData.completed && (
+                            <CustomIcon>
+                              <img src={assessmentGreen} alt="Module item is completed" />
+                            </CustomIcon>
+                          )}
+                        </ModuleAssignedUnit>
                         <AssignmentIconsWrapper expanded={isContentExpanded}>
-                          <ModuleAssignedUnit>
-                            {moduleData.assigned && !moduleData.completed && (
-                              <CustomIcon>
-                                <img src={assessmentRed} alt="Module item is assigned" />
-                              </CustomIcon>
-                            )}
-                            {moduleData.completed && (
-                              <CustomIcon>
-                                <img src={assessmentGreen} alt="Module item is completed" />
-                              </CustomIcon>
-                            )}
-                          </ModuleAssignedUnit>
                           <AssignmentIconsHolder>
                             <AssignmentIcon>
                               <CustomIcon>
-                                <img src={visualizationIcon} alt="visualize " />
+                                <IconVisualization color="#1774F0" />
                               </CustomIcon>
                             </AssignmentIcon>
-                            <AssignmentButton>
+                            <AssignmentButton assigned={moduleData.assigned}>
                               <Button
                                 data-cy="assignButton"
                                 onClick={() => setSelectedItemsForAssign(moduleData.testId)}
-                                type="primary"
-                                icon={moduleData.assigned ? "check" : "arrow-right"}
-                                ghost={!moduleData.assigned}
                               >
+                                {moduleData.assigned ? (
+                                  <IconCheckSmall color={white} />
+                                ) : (
+                                  <IconLeftArrow color="#1774F0" width={13.3} height={9.35} />
+                                )}
                                 {moduleData.assigned ? IS_ASSIGNED : NOT_ASSIGNED}
                               </Button>
                             </AssignmentButton>
                             <AssignmentIcon>
                               <Dropdown overlay={moreMenu} trigger={["click"]}>
-                                <CustomIcon data-cy="assignmentMoreOptionsIcon">
-                                  <img style={{ width: "16px" }} src={moreIcon} alt="more options" />
+                                <CustomIcon data-cy="assignmentMoreOptionsIcon" marginLeft={25} marginRight={1}>
+                                  <IconMoreVertical color="#1774F0" />
                                 </CustomIcon>
                               </Dropdown>
                             </AssignmentIcon>
@@ -207,7 +211,6 @@ class ModuleRow extends Component {
                     </Assignment>
                   );
                 })}
-                <ModuleFooter />
               </div>
             )}
           </Module>
@@ -223,15 +226,22 @@ ModuleRow.propTypes = {
   onCollapseExpand: PropTypes.func.isRequired,
   collapsed: PropTypes.bool.isRequired,
   padding: PropTypes.bool.isRequired,
-  checkedUnitItems: PropTypes.array.isRequired,
+  // checkedUnitItems: PropTypes.array.isRequired,
   isContentExpanded: PropTypes.bool.isRequired,
   removeItemFromUnit: PropTypes.func.isRequired,
-  toggleUnitItem: PropTypes.func.isRequired,
+  // toggleUnitItem: PropTypes.func.isRequired,
   removeUnit: PropTypes.func.isRequired
 };
 
 const CustomIcon = styled.span`
   cursor: pointer;
+  margin-right: ${props => props.marginRight || 25}px;
+  margin-left: ${props => props.marginLeft || 0}px;
+  @media only screen and (max-width: ${mobileWidth}) {
+    margin-right: 0px;
+    margin-left: 0px;
+    padding: 5px;
+  }
 `;
 
 const AssignmentIconsHolder = styled.div`
@@ -246,10 +256,9 @@ const AssignmentIconsHolder = styled.div`
 `;
 
 /* NOTE: margin-right: 100%; - hack but works */
-
 const ModuleFocused = styled.div`
-  border-left: 5px solid ${greenDarkSecondary};
-  width: 5px;
+  border-left: 3px solid #4aac8b;
+  width: 3px;
   position: absolute;
   height: 100%;
   left: 0;
@@ -259,26 +268,45 @@ const ModuleFocused = styled.div`
   opacity: 0;
 `;
 
-const ModuleAssignedUnit = styled.span`
-  justify-self: flex-start;
-  margin-right: auto;
+const ModuleAssignedUnit = styled.div`
+  margin-left: auto;
   @media only screen and (max-width: ${tabletWidth}) {
     margin-right: 0;
+  }
+  @media only screen and (max-width: ${tabletWidth}) and (min-width: ${mobileWidth}) {
+    margin-right: -25px;
   }
 `;
 
 const ModuleTitleWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  @media only screen and (max-width: ${tabletWidth}) {
+    width: 80%;
+  }
+  @media only screen and (max-width: ${mobileWidth}) {
+    width: 100%;
+  }
 `;
 
 const ModuleCompletedLabel = styled.div`
-  color: #4aac8b;
+  color: ${lightGreenSecondary};
+  font-size: 11px;
+  @media only screen and (max-width: ${tabletWidth}) {
+    display: none;
+  }
 `;
 
 const ModuleCompletedIcon = styled.div`
   padding-left: 30px;
   padding-right: 30px;
+  @media only screen and (max-width: ${tabletWidth}) {
+    padding-left: 0px;
+    padding-right: 0px;
+    position: absolute;
+    top: 5px;
+    right: -10px;
+  }
 `;
 
 const ModuleCompleted = styled.div`
@@ -307,9 +335,21 @@ const TotalAssigned = styled.strong`
 const AssignmentButton = styled.div`
   min-width: 121px;
   .ant-btn {
+    color: ${({ assigned }) => (assigned ? white : "#1774F0")};
+    border-color: ${({ assigned }) => (assigned ? "#1774F0" : white)};
+    background-color: ${({ assigned }) => (assigned ? "#1774F0" : white)};
     min-width: 121px;
     display: flex;
     align-items: center;
+    box-shadow: 0 2px 4px rgba(201, 208, 219, 0.5);
+    &:hover {
+      background-color: ${({ assigned }) => (assigned ? white : "#1774F0")};
+      color: ${({ assigned }) => (assigned ? "#1774F0" : white)};
+      border-color: ${({ assigned }) => (assigned ? white : "#1774F0")};
+      svg {
+        fill: ${({ assigned }) => (assigned ? "#1774F0" : white)};
+      }
+    }
     i {
       position: absolute;
       position: absolute;
@@ -332,6 +372,13 @@ const AssignModuleButton = styled.div`
     min-height: 30px;
     font-size: 10px;
     margin-right: 20px;
+    color: #1774f0;
+    border-color: ${white};
+    box-shadow: 0 2px 4px rgba(201, 208, 219, 0.5);
+    @media only screen and (max-width: ${mobileWidth}) {
+      margin-right: 0px;
+      padding: 0px 7px;
+    }
   }
   @media only screen and (max-width: ${desktopWidth}) {
     align-self: flex-start;
@@ -342,17 +389,26 @@ const AssignmentContent = styled.div`
   flex-direction: row;
   display: flex;
   min-width: ${props => (!props.expanded ? "30%" : "45%")};
+  @media only screen and (max-width: ${mobileWidth}) {
+    width: 80%;
+  }
 `;
 
 const ModuleTitle = styled.div`
   display: flex;
   justify-self: flex-start;
   align-items: center;
+  color: #30404f;
+  font-size: 18px;
   @media only screen and (max-width: ${tabletWidth}) {
     align-items: flex-start;
     padding-top: 10px;
     padding-bottom: 10px;
     padding-right: 10px;
+  }
+  @media only screen and (max-width: ${mobileWidth}) {
+    font-size: 12px;
+    padding: 0px 0px 5px;
   }
 `;
 
@@ -361,7 +417,9 @@ const ModuleTitleAssignedWrapper = styled.div`
   flex-grow: 1;
   align-items: center;
   @media only screen and (max-width: ${tabletWidth}) {
-    flex-direction: column;
+    flex-wrap: wrap;
+    margin-top: -5px;
+    position: relative;
   }
 `;
 
@@ -381,7 +439,9 @@ const ModuleInfo = styled.div`
   display: flex;
   width: 100%;
   align-items: center;
-  padding-bottom: 15px;
+  @media only screen and (max-width: ${mobileWidth}) {
+    align-items: flex-start;
+  }
 `;
 
 const AssignmentIconsWrapper = styled.div`
@@ -393,9 +453,8 @@ const AssignmentIconsWrapper = styled.div`
   justify-content: flex-end;
   @media only screen and (max-width: ${tabletWidth}) {
     padding-top: 10px;
-    justify-content: flex-start;
-    margin-right: auto;
-    margin-left: 0;
+    margin-left: auto;
+    margin-right: 0px;
   }
 `;
 
@@ -420,11 +479,10 @@ const Container = styled.div`
   height: 100%;
   left: 0;
   right: 0;
-  overflow: auto;
   height: 100%;
 
   @media (max-width: ${mobileWidth}) {
-    padding-left: 10px;
+    padding-left: 0px;
     margin-right: ${props => !props.value && "20px !important"};
     margin-left: ${props => props.value && "20px !important"};
   }
@@ -439,19 +497,22 @@ const ModulesWrapper = styled.div`
   margin-top: auto;
   @media only screen and (max-width: ${tabletWidth}) {
     justify-content: flex-start;
-    margin-right: auto;
+    margin-left: auto;
     margin-bottom: 0;
     margin-top: 0;
-    margin-left: 0;
   }
   @media only screen and (max-width: ${mobileWidth}) {
-    flex-direction: column;
+    /* flex-direction: column; */
   }
 `;
 
 const Module = styled.div`
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
+  color: #949494;
+  @media only screen and (max-width: ${mobileWidth}) {
+    font-size: 11px;
+  }
 `;
 
 const ModuleHeader = styled(Row)`
@@ -460,18 +521,24 @@ const ModuleHeader = styled(Row)`
   flex-direction: column;
   border-bottom-left-radius: ${({ collapsed }) => (!collapsed ? "0px" : "10px")};
   border-bottom-right-radius: ${({ collapsed }) => (!collapsed ? "0px" : "10px")};
-  padding-bottom: 0;
+  /* padding-bottom: 0; */
   overflow: hidden;
   position: relative;
 `;
 
 const Assignment = styled(Row)`
   border-radius: 0;
-  padding-left: 30px;
-  padding-right: 30px;
-  padding-top: 0;
+  border-bottom: 1px #f2f2f2 solid;
+  position: relative;
+  background: #f9fbfc !important;
   &:active ${ModuleFocused}, &:focus ${ModuleFocused}, &:hover ${ModuleFocused} {
     opacity: 1;
+  }
+  &:first-child {
+    border-top: 1px #f2f2f2 solid;
+  }
+  &:last-child {
+    border-bottom: 0px;
   }
   @media only screen and (max-width: ${desktopWidth}) {
     flex-direction: column;
@@ -482,12 +549,7 @@ Assignment.displayName = "Assignment";
 const AssignmentInnerWrapper = styled.div`
   display: flex;
   align-items: center;
-  padding: 16px 20px;
-  background-color: #fbfbfb;
-  border: 1px solid #f5f5f5;
-  border-radius: 4px;
   position: relative;
-  overflow: hidden;
   .module-checkbox {
     align-self: center;
   }
@@ -496,21 +558,14 @@ const AssignmentInnerWrapper = styled.div`
     align-items: center;
   }
   @media only screen and (max-width: ${tabletWidth}) {
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
     justify-items: center;
     margin-left: auto;
     align-items: flex-start;
   }
 `;
 AssignmentInnerWrapper.displayName = "AssignmentInnerWrapper";
-
-const ModuleFooter = styled(Assignment)`
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-  color: ${white};
-  display: flex;
-  /* padding-bottom: 0; */
-`;
 
 const ModulesAssigned = styled.div`
   font-size: 12px;
@@ -534,6 +589,10 @@ const ModulesAssigned = styled.div`
     margin: 0;
     margin-bottom: 10px;
   }
+  @media only screen and (max-width: ${mobileWidth}) {
+    min-width: 95px;
+    margin-bottom: 0px;
+  }
 `;
 
 const ModuleWrapper = styled.div`
@@ -554,7 +613,7 @@ const ModuleWrapper = styled.div`
   .module-btn-assigned {
     background-color: ${lightBlue};
     margin-left: auto;
-    justifyself: flex-end;
+    justify-self: flex-end;
   }
   .module-btn-expand-collapse {
     border: none;

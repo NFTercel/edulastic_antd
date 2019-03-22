@@ -22,7 +22,7 @@ import Options from "./components/Options";
 
 const OptionsList = withPoints(ShadingPreview);
 
-const ShadingEdit = ({ item, setQuestionData, t, theme }) => {
+const ShadingEdit = ({ item, setQuestionData, t, theme, saveAnswer }) => {
   const { canvas } = item;
 
   const cell_width = canvas ? canvas.cell_width : 1;
@@ -245,7 +245,7 @@ const ShadingEdit = ({ item, setQuestionData, t, theme }) => {
         />
       </Paper>
 
-      <Options />
+      <Options saveAnswer={saveAnswer} />
     </Fragment>
   );
 };
@@ -253,6 +253,7 @@ const ShadingEdit = ({ item, setQuestionData, t, theme }) => {
 ShadingEdit.propTypes = {
   item: PropTypes.object.isRequired,
   setQuestionData: PropTypes.func.isRequired,
+  saveAnswer: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
   theme: PropTypes.object.isRequired
 };

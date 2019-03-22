@@ -4,6 +4,7 @@ import items from "./items";
 import testItem from "./testItem";
 import dictionaries from "./dictionaries";
 import author_assignments from "./assignments";
+import { reportAssessmentSummaryReducer } from "../../Reports/subPages/AssessmentSummary/ducks";
 import author_classboard_gradebook from "./gradeBook";
 import author_classboard_testActivity from "./testActivity";
 import authorGroups from "../../sharedDucks/groups";
@@ -36,6 +37,7 @@ const authorReducers = {
   dictionaries,
   authorQuestions,
   author_assignments,
+  reportAssessmentSummaryReducer,
   authorTestAssignments: testAssignmentsReducer,
   author_classboard_gradebook,
   author_classboard_testActivity,

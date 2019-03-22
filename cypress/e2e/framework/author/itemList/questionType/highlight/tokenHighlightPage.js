@@ -1,5 +1,7 @@
+/* eslint-disable class-methods-use-this */
 import EditToolBar from "../common/editToolBar";
 import Header from "../../itemDetail/header";
+import Helpers from "../../../../util/Helpers";
 
 class TokenhighLightPage {
   constructor() {
@@ -72,6 +74,51 @@ class TokenhighLightPage {
   // preview
   getAllTokenOnPreview() {
     return cy.get(".token.answer");
+  }
+
+  getLayout() {
+    return Helpers.getElement("layout");
+  }
+
+  getFontSizeSelect() {
+    return Helpers.getElement("fontSizeSelect");
+  }
+
+  getSmallFontSizeOption() {
+    return Helpers.getElement("small");
+  }
+
+  getNormalFontSizeOption() {
+    return Helpers.getElement("normal");
+  }
+
+  getLargeFontSizeOption() {
+    return Helpers.getElement("large");
+  }
+
+  getExtraLargeFontSizeOption() {
+    return Helpers.getElement("xlarge");
+  }
+
+  getHugeFontSizeOption() {
+    return Helpers.getElement("xxlarge");
+  }
+
+  getMaxSelection() {
+    return Helpers.getElement("maxSelectionOption").should("be.visible");
+  }
+
+  getPreviewWrapper() {
+    return Helpers.getElement("previewWrapper").should("be.visible");
+  }
+
+  checkFontSize(fontSize) {
+    this.header.preview();
+    this.getPreviewWrapper()
+      .should("have.css", "font-size")
+      .and("eq", fontSize);
+
+    this.header.edit();
   }
 }
 

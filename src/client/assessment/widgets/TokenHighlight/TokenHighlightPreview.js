@@ -155,7 +155,12 @@ const TokenHighlightPreview = ({
   };
 
   return (
-    <Paper style={{ fontSize, wordBreak: "break-word" }} padding={smallSize} boxShadow={smallSize ? "none" : ""}>
+    <Paper
+      data-cy="previewWrapper"
+      style={{ fontSize, wordBreak: "break-word" }}
+      padding={smallSize}
+      boxShadow={smallSize ? "none" : ""}
+    >
       <InstructorStimulus>{item.instructor_stimulus}</InstructorStimulus>
       {view === PREVIEW && !smallSize && <Stimulus dangerouslySetInnerHTML={{ __html: item.stimulus }} />}
       {item.templeWithTokens.map((el, i) =>

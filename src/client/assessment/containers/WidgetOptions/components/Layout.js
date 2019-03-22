@@ -5,7 +5,7 @@ import { Block } from "../../../styled/WidgetOptions/Block";
 import { Heading } from "../../../styled/WidgetOptions/Heading";
 
 const Layout = ({ children, t }) => (
-  <Block>
+  <Block data-cy="layout">
     <Heading>{t("component.options.layout")}</Heading>
     {children}
   </Block>

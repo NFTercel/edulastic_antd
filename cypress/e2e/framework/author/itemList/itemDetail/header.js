@@ -1,47 +1,47 @@
+/* eslint-disable class-methods-use-this */
 import EditItemPage from "./editPage";
 import PreviewItemPage from "./previewPage";
 import MetadataPage from "./metadataPage";
 
 class Header {
+  edit() {
+    cy.get('[data-cy="editButton"]')
+      .should("be.visible")
+      .click();
 
-    edit() {
-        cy.contains('EDIT')
-            .should('be.visible')
-            .click();
+    return new EditItemPage();
+  }
 
-        return new EditItemPage()
-    }
+  preview() {
+    cy.get('[data-cy="previewButton"]')
+      .should("be.visible")
+      .click();
 
-    preview() {
-        cy.contains('PREVIEW')
-            .should('be.visible')
-            .click();
+    return new PreviewItemPage();
+  }
 
-        return new PreviewItemPage();
-    }
+  metadata() {
+    cy.get('[data-cy="metadataButton"]')
+      .should("be.visible")
+      .click();
 
-    metadata() {
-        cy.contains('METADATA')
-            .should('be.visible')
-            .click();
+    return new MetadataPage();
+  }
 
-        return new MetadataPage() ;
-    }
+  save() {
+    cy.server();
+    cy.route("PUT", "**/testitem/**").as("saveItem");
+    cy.route("GET", "**/testitem/**").as("reload");
 
-    save() {
-        cy.server();
-        cy.route('PUT','**/testitem/**').as('saveItem');
-        cy.route('GET','**/testitem/**').as('reload');
+    cy.contains("div", "SAVE")
+      .should("be.visible")
+      .click();
 
-        cy.contains('div','SAVE')
-            .should('be.visible')   
-            .click();
+    cy.wait("@saveItem");
+    cy.wait("@reload");
 
-        cy.wait('@saveItem');
-        cy.wait('@reload');
-
-        return new EditItemPage();
-    }
+    return new EditItemPage();
+  }
 }
 
-export default Header ;
+export default Header;

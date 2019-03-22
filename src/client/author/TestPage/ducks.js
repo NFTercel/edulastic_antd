@@ -101,9 +101,11 @@ export const initialTestState = {
   testType: test.type.ASSESSMENT,
   generateReport: true,
   safeBrowser: false,
-  // safeBrowsePassword: "", TODO need to add this when field is added to backend collection
+  sebPassword: "",
   shuffleQuestions: false,
   shuffleAnswers: false,
+  calcType: test.calculatorKeys[0],
+  answerOnPaper: false,
   status: "draft",
   thumbnail: "https://fakeimg.pl/500x135/",
   createdBy: {
@@ -215,7 +217,7 @@ export const reducer = (state = initialState, { type, payload }) => {
         ...state,
         entity: {
           ...state.entity,
-          safeBrowsePassword: payload.data
+          sebPassword: payload.data
         }
       };
     default:

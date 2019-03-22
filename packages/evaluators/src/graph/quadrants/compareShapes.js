@@ -1,7 +1,9 @@
-import { ShapeTypes } from './constants/shapeTypes';
-import { FractionDigits } from './constants/fractionDigits';
-import LineFunction from './lineFunction';
-import ParabolaFunction from './parabolaFunction';
+import { ShapeTypes } from "./constants/shapeTypes";
+import { FractionDigits } from "./constants/fractionDigits";
+import LineFunction from "./lineFunction";
+import ParabolaFunction from "./parabolaFunction";
+import EllipseFunction from "./ellipseFunction";
+import HyperbolaFunction from "./hyperbolaFunction";
 
 class CompareShapes {
   constructor(trueAnswerValue, testAnswer) {
@@ -21,25 +23,38 @@ class CompareShapes {
     }
 
     switch (testShape.type) {
-      case ShapeTypes.POINT: return CompareShapes.comparePoints(testShape, trueShape);
-      case ShapeTypes.LINE: return this.compareLines(testShape, trueShape);
-      case ShapeTypes.RAY: return this.compareRays(testShape, trueShape);
-      case ShapeTypes.SEGMENT: return this.compareSegments(testShape, trueShape);
-      case ShapeTypes.VECTOR: return this.compareVectors(testShape, trueShape);
-      case ShapeTypes.CIRCLE: return this.compareCircles(testShape, trueShape);
-      case ShapeTypes.PARABOLA: return this.compareParabolas(testShape, trueShape);
-      case ShapeTypes.SINE: return this.compareSines(testShape, trueShape);
-      case ShapeTypes.POLYGON: return this.comparePolygons(testShape, trueShape);
-      default: return {
-        id: testId,
-        result: false
-      };
+      case ShapeTypes.POINT:
+        return CompareShapes.comparePoints(testShape, trueShape);
+      case ShapeTypes.LINE:
+        return this.compareLines(testShape, trueShape);
+      case ShapeTypes.RAY:
+        return this.compareRays(testShape, trueShape);
+      case ShapeTypes.SEGMENT:
+        return this.compareSegments(testShape, trueShape);
+      case ShapeTypes.VECTOR:
+        return this.compareVectors(testShape, trueShape);
+      case ShapeTypes.CIRCLE:
+        return this.compareCircles(testShape, trueShape);
+      case ShapeTypes.PARABOLA:
+        return this.compareParabolas(testShape, trueShape);
+      case ShapeTypes.SINE:
+        return this.compareSines(testShape, trueShape);
+      case ShapeTypes.POLYGON:
+        return this.comparePolygons(testShape, trueShape);
+      case ShapeTypes.ELLIPSE:
+        return this.compareEllipses(testShape, trueShape);
+      case ShapeTypes.HYPERBOLA:
+        return this.compareHyperbolas(testShape, trueShape);
+      default:
+        return {
+          id: testId,
+          result: false
+        };
     }
   }
 
   static comparePoints(testPoint, truePoint) {
-    if (testPoint.x === truePoint.x &&
-      testPoint.y === truePoint.y) {
+    if (testPoint.x === truePoint.x && testPoint.y === truePoint.y) {
       return {
         id: testPoint.id,
         relatedId: truePoint.id,
@@ -71,8 +86,7 @@ class CompareShapes {
     const testLineFunc = new LineFunction(testLinePoints);
     const trueLineFunc = new LineFunction(trueLinePoints);
 
-    if (testLineFunc.getKoefA() === trueLineFunc.getKoefA() &&
-      testLineFunc.getKoefB() === trueLineFunc.getKoefB()) {
+    if (testLineFunc.getKoefA() === trueLineFunc.getKoefA() && testLineFunc.getKoefB() === trueLineFunc.getKoefB()) {
       return {
         id: testLine.id,
         relatedId: trueLine.id,
@@ -105,23 +119,23 @@ class CompareShapes {
       deltaX: testRayPoints.x2 - testRayPoints.x1,
       deltaY: testRayPoints.y2 - testRayPoints.y1
     };
-    testRayParams.koef = testRayParams.deltaX === 0
-      ? 'NaN'
-      : (testRayParams.deltaY / testRayParams.deltaX).toFixed(FractionDigits);
+    testRayParams.koef =
+      testRayParams.deltaX === 0 ? "NaN" : (testRayParams.deltaY / testRayParams.deltaX).toFixed(FractionDigits);
 
     const trueRayParams = {
       deltaX: trueRayPoints.x2 - trueRayPoints.x1,
       deltaY: trueRayPoints.y2 - trueRayPoints.y1
     };
-    trueRayParams.koef = trueRayParams.deltaX === 0
-      ? 'NaN'
-      : (trueRayParams.deltaY / trueRayParams.deltaX).toFixed(FractionDigits);
+    trueRayParams.koef =
+      trueRayParams.deltaX === 0 ? "NaN" : (trueRayParams.deltaY / trueRayParams.deltaX).toFixed(FractionDigits);
 
-    if (testRayPoints.x1 === trueRayPoints.x1 &&
+    if (
+      testRayPoints.x1 === trueRayPoints.x1 &&
       testRayPoints.y1 === trueRayPoints.y1 &&
       testRayParams.koef === trueRayParams.koef &&
       Math.sign(testRayParams.deltaX) === Math.sign(trueRayParams.deltaX) &&
-      Math.sign(testRayParams.deltaY) === Math.sign(trueRayParams.deltaY)) {
+      Math.sign(testRayParams.deltaY) === Math.sign(trueRayParams.deltaY)
+    ) {
       return {
         id: testRay.id,
         relatedId: trueRay.id,
@@ -134,7 +148,6 @@ class CompareShapes {
       result: false
     };
   }
-
 
   compareSegments(testSegment, trueSegment) {
     const testSegmentPoints = {
@@ -153,14 +166,13 @@ class CompareShapes {
 
     if (
       (testSegmentPoints.x1 === trueSegmentPoints.x1 &&
-      testSegmentPoints.y1 === trueSegmentPoints.y1 &&
-      testSegmentPoints.x2 === trueSegmentPoints.x2 &&
-      testSegmentPoints.y2 === trueSegmentPoints.y2)
-      ||
+        testSegmentPoints.y1 === trueSegmentPoints.y1 &&
+        testSegmentPoints.x2 === trueSegmentPoints.x2 &&
+        testSegmentPoints.y2 === trueSegmentPoints.y2) ||
       (testSegmentPoints.x1 === trueSegmentPoints.x2 &&
-      testSegmentPoints.y1 === trueSegmentPoints.y2 &&
-      testSegmentPoints.x2 === trueSegmentPoints.x1 &&
-      testSegmentPoints.y2 === trueSegmentPoints.y1)
+        testSegmentPoints.y1 === trueSegmentPoints.y2 &&
+        testSegmentPoints.x2 === trueSegmentPoints.x1 &&
+        testSegmentPoints.y2 === trueSegmentPoints.y1)
     ) {
       return {
         id: testSegment.id,
@@ -190,7 +202,8 @@ class CompareShapes {
       y2: +this.trueAnswerValue.find(item => item.id === trueVector.subElementsIds.endPoint).y
     };
 
-    if (testVectorPoints.x1 === trueVectorPoints.x1 &&
+    if (
+      testVectorPoints.x1 === trueVectorPoints.x1 &&
       testVectorPoints.y1 === trueVectorPoints.y1 &&
       testVectorPoints.x2 === trueVectorPoints.x2 &&
       testVectorPoints.y2 === trueVectorPoints.y2
@@ -231,9 +244,11 @@ class CompareShapes {
     deltaY = trueCirclePoints.startY - trueCirclePoints.endY;
     const trueCircleRadius = Math.sqrt(deltaX * deltaX + deltaY * deltaY).toFixed(FractionDigits);
 
-    if (testCirclePoints.startX === trueCirclePoints.startX &&
+    if (
+      testCirclePoints.startX === trueCirclePoints.startX &&
       testCirclePoints.startY === trueCirclePoints.startY &&
-      testCircleRadius === trueCircleRadius) {
+      testCircleRadius === trueCircleRadius
+    ) {
       return {
         id: testCircle.id,
         relatedId: trueCircle.id,
@@ -265,9 +280,11 @@ class CompareShapes {
     const testFunc = new ParabolaFunction(testParabolaPoints);
     const trueFunc = new ParabolaFunction(trueParabolaPoints);
 
-    if (testParabolaPoints.startX === trueParabolaPoints.startX &&
+    if (
+      testParabolaPoints.startX === trueParabolaPoints.startX &&
       testParabolaPoints.startY === trueParabolaPoints.startY &&
-      testFunc.getKoefA() === trueFunc.getKoefA()) {
+      testFunc.getKoefA() === trueFunc.getKoefA()
+    ) {
       return {
         id: testParabola.id,
         relatedId: trueParabola.id,
@@ -306,12 +323,10 @@ class CompareShapes {
     const testPeriod = (testSinePoints.endX - testSinePoints.startX) * 4;
     const truePeriod = (trueSinePoints.endX - trueSinePoints.startX) * 4;
     // offsets
-    const testNormalX = (testSinePoints.endY < testSinePoints.startY)
-      ? testSinePoints.startX + testPeriod / 2
-      : testSinePoints.startX;
-    const trueNormalX = (trueSinePoints.endY < trueSinePoints.startY)
-      ? trueSinePoints.startX + truePeriod / 2
-      : trueSinePoints.startX;
+    const testNormalX =
+      testSinePoints.endY < testSinePoints.startY ? testSinePoints.startX + testPeriod / 2 : testSinePoints.startX;
+    const trueNormalX =
+      trueSinePoints.endY < trueSinePoints.startY ? trueSinePoints.startX + truePeriod / 2 : trueSinePoints.startX;
     let testOffset = testNormalX % testPeriod;
     if (testOffset < 0) {
       testOffset += testPeriod;
@@ -321,10 +336,12 @@ class CompareShapes {
       trueOffset += truePeriod;
     }
 
-    if (testAmpl === trueAmpl &&
+    if (
+      testAmpl === trueAmpl &&
       testCenterLine === trueCenterLine &&
       testPeriod === truePeriod &&
-      testOffset === trueOffset) {
+      testOffset === trueOffset
+    ) {
       return {
         id: testSine.id,
         relatedId: trueSine.id,
@@ -351,7 +368,7 @@ class CompareShapes {
     };
 
     let testPolygonPoints = [];
-    Object.getOwnPropertyNames(testPolygon.subElementsIds).forEach((value) => {
+    Object.getOwnPropertyNames(testPolygon.subElementsIds).forEach(value => {
       const pointId = testPolygon.subElementsIds[value];
       const point = this.testAnswer.find(item => item.id === pointId);
       testPolygonPoints.push({ x: point.x, y: point.y });
@@ -359,7 +376,7 @@ class CompareShapes {
     testPolygonPoints.pop();
 
     const truePolygonPoints = [];
-    Object.getOwnPropertyNames(truePolygon.subElementsIds).forEach((value) => {
+    Object.getOwnPropertyNames(truePolygon.subElementsIds).forEach(value => {
       const pointId = truePolygon.subElementsIds[value];
       const point = this.trueAnswerValue.find(item => item.id === pointId);
       truePolygonPoints.push({ x: point.x, y: point.y });
@@ -373,8 +390,7 @@ class CompareShapes {
     // find first equal point
     let startIndex = -1;
     for (let i = 0; i < testPolygonPoints.length; i++) {
-      if (testPolygonPoints[i].x === truePolygonPoints[0].x &&
-        testPolygonPoints[i].y === truePolygonPoints[0].y) {
+      if (testPolygonPoints[i].x === truePolygonPoints[0].x && testPolygonPoints[i].y === truePolygonPoints[0].y) {
         startIndex = i;
         break;
       }
@@ -391,8 +407,7 @@ class CompareShapes {
     // check direct order
     let equalCount = 0;
     for (let i = 0; i < testPolygonPoints.length; i++) {
-      if (testPolygonPoints[i].x === truePolygonPoints[i].x &&
-        testPolygonPoints[i].y === truePolygonPoints[i].y) {
+      if (testPolygonPoints[i].x === truePolygonPoints[i].x && testPolygonPoints[i].y === truePolygonPoints[i].y) {
         equalCount++;
       }
     }
@@ -407,8 +422,7 @@ class CompareShapes {
 
     equalCount = 0;
     for (let i = 0; i < testPolygonPoints.length; i++) {
-      if (testPolygonPoints[i].x === truePolygonPoints[i].x &&
-        testPolygonPoints[i].y === truePolygonPoints[i].y) {
+      if (testPolygonPoints[i].x === truePolygonPoints[i].x && testPolygonPoints[i].y === truePolygonPoints[i].y) {
         equalCount++;
       }
     }
@@ -417,6 +431,98 @@ class CompareShapes {
     }
 
     return negativeResult;
+  }
+
+  compareEllipses(testEllipse, trueEllipse) {
+    const testEllipsePoints = {
+      focusPoint1X: +this.testAnswer.find(item => item.id === testEllipse.subElementsIds[0]).x,
+      focusPoint1Y: +this.testAnswer.find(item => item.id === testEllipse.subElementsIds[0]).y,
+      focusPoint2X: +this.testAnswer.find(item => item.id === testEllipse.subElementsIds[1]).x,
+      focusPoint2Y: +this.testAnswer.find(item => item.id === testEllipse.subElementsIds[1]).y,
+      linePointX: +this.testAnswer.find(item => item.id === testEllipse.subElementsIds[2]).x,
+      linePointY: +this.testAnswer.find(item => item.id === testEllipse.subElementsIds[2]).y
+    };
+
+    const trueEllipsePoints = {
+      focusPoint1X: +this.trueAnswerValue.find(item => item.id === trueEllipse.subElementsIds[0]).x,
+      focusPoint1Y: +this.trueAnswerValue.find(item => item.id === trueEllipse.subElementsIds[0]).y,
+      focusPoint2X: +this.trueAnswerValue.find(item => item.id === trueEllipse.subElementsIds[1]).x,
+      focusPoint2Y: +this.trueAnswerValue.find(item => item.id === trueEllipse.subElementsIds[1]).y,
+      linePointX: +this.trueAnswerValue.find(item => item.id === trueEllipse.subElementsIds[2]).x,
+      linePointY: +this.trueAnswerValue.find(item => item.id === trueEllipse.subElementsIds[2]).y
+    };
+
+    const testFunc = new EllipseFunction(testEllipsePoints);
+    const trueFunc = new EllipseFunction(trueEllipsePoints);
+
+    const focusPointsAreMatched =
+      (testEllipsePoints.focusPoint1X === trueEllipsePoints.focusPoint1X &&
+        testEllipsePoints.focusPoint1Y === trueEllipsePoints.focusPoint1Y &&
+        testEllipsePoints.focusPoint2X === trueEllipsePoints.focusPoint2X &&
+        testEllipsePoints.focusPoint2Y === trueEllipsePoints.focusPoint2Y) ||
+      (testEllipsePoints.focusPoint1X === trueEllipsePoints.focusPoint2X &&
+        testEllipsePoints.focusPoint1Y === trueEllipsePoints.focusPoint2Y &&
+        testEllipsePoints.focusPoint2X === trueEllipsePoints.focusPoint1X &&
+        testEllipsePoints.focusPoint2Y === trueEllipsePoints.focusPoint1Y);
+
+    if (focusPointsAreMatched && testFunc.getR1R2Sum() === trueFunc.getR1R2Sum()) {
+      return {
+        id: testEllipse.id,
+        relatedId: trueEllipse.id,
+        result: true
+      };
+    }
+
+    return {
+      id: testEllipse.id,
+      result: false
+    };
+  }
+
+  compareHyperbolas(testHyperbola, trueHyperbola) {
+    const testHyperbolaPoints = {
+      focusPoint1X: +this.testAnswer.find(item => item.id === testHyperbola.subElementsIds[0]).x,
+      focusPoint1Y: +this.testAnswer.find(item => item.id === testHyperbola.subElementsIds[0]).y,
+      focusPoint2X: +this.testAnswer.find(item => item.id === testHyperbola.subElementsIds[1]).x,
+      focusPoint2Y: +this.testAnswer.find(item => item.id === testHyperbola.subElementsIds[1]).y,
+      linePointX: +this.testAnswer.find(item => item.id === testHyperbola.subElementsIds[2]).x,
+      linePointY: +this.testAnswer.find(item => item.id === testHyperbola.subElementsIds[2]).y
+    };
+
+    const trueHyperbolaPoints = {
+      focusPoint1X: +this.trueAnswerValue.find(item => item.id === trueHyperbola.subElementsIds[0]).x,
+      focusPoint1Y: +this.trueAnswerValue.find(item => item.id === trueHyperbola.subElementsIds[0]).y,
+      focusPoint2X: +this.trueAnswerValue.find(item => item.id === trueHyperbola.subElementsIds[1]).x,
+      focusPoint2Y: +this.trueAnswerValue.find(item => item.id === trueHyperbola.subElementsIds[1]).y,
+      linePointX: +this.trueAnswerValue.find(item => item.id === trueHyperbola.subElementsIds[2]).x,
+      linePointY: +this.trueAnswerValue.find(item => item.id === trueHyperbola.subElementsIds[2]).y
+    };
+
+    const testFunc = new HyperbolaFunction(testHyperbolaPoints);
+    const trueFunc = new HyperbolaFunction(trueHyperbolaPoints);
+
+    const focusPointsAreMatched =
+      (testHyperbolaPoints.focusPoint1X === trueHyperbolaPoints.focusPoint1X &&
+        testHyperbolaPoints.focusPoint1Y === trueHyperbolaPoints.focusPoint1Y &&
+        testHyperbolaPoints.focusPoint2X === trueHyperbolaPoints.focusPoint2X &&
+        testHyperbolaPoints.focusPoint2Y === trueHyperbolaPoints.focusPoint2Y) ||
+      (testHyperbolaPoints.focusPoint1X === trueHyperbolaPoints.focusPoint2X &&
+        testHyperbolaPoints.focusPoint1Y === trueHyperbolaPoints.focusPoint2Y &&
+        testHyperbolaPoints.focusPoint2X === trueHyperbolaPoints.focusPoint1X &&
+        testHyperbolaPoints.focusPoint2Y === trueHyperbolaPoints.focusPoint1Y);
+
+    if (focusPointsAreMatched && testFunc.getR1R2Diff() === trueFunc.getR1R2Diff()) {
+      return {
+        id: testHyperbola.id,
+        relatedId: trueHyperbola.id,
+        result: true
+      };
+    }
+
+    return {
+      id: testHyperbola.id,
+      result: false
+    };
   }
 }
 

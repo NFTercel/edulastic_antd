@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Menu, Dropdown } from "antd";
 
+import { ClassSelect, LabelMyClasses } from "./styled";
+
 const options = ["Active Classes"];
 
 const ClassSelector = () => {
@@ -15,10 +17,10 @@ const ClassSelector = () => {
   );
 
   return (
-    <div>
-      My Classes
+    <ClassSelect>
+      <LabelMyClasses>My Classes</LabelMyClasses>
       <Dropdown.Button overlay={menu}> {selectedOption} </Dropdown.Button>
-    </div>
+    </ClassSelect>
   );
 };
 

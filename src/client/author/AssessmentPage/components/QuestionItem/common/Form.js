@@ -8,6 +8,12 @@ const getBackground = ({ selected, checked, correct }) =>
 const getBorder = ({ selected, checked, correct }) =>
   selected ? (checked ? (correct ? green : red) : mainBlueColor) : "#eee";
 
+export const QuestionChunk = styled.div`
+  &:not(:last-child) {
+    margin-bottom: 8px;
+  }
+`;
+
 export const QuestionOption = styled.span`
   display: inline-block;
   min-width: 36px;
@@ -21,8 +27,8 @@ export const QuestionOption = styled.span`
   background: ${getBackground};
   cursor: ${({ review }) => (review ? "pointer" : "default")};
 
-  &:not(:first-child) {
-    margin-left: 9px;
+  &:not(:last-child) {
+    margin-right: 8px;
   }
 `;
 

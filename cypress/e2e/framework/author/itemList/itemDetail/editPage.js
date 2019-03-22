@@ -1,4 +1,5 @@
-import Header from "./header.js";
+/* eslint-disable class-methods-use-this */
+import Header from "./header";
 
 class EditItemPage {
   constructor() {
@@ -18,6 +19,30 @@ class EditItemPage {
     cy.get('[data-cy="toggleAdvancedOptionsButton"]')
       .should("be.visible")
       .click();
+
+    return this;
+  }
+
+  showAdvancedOptions() {
+    const $button = Cypress.$('[data-cy="toggleAdvancedOptionsButton"]');
+
+    if (!$button.next().length) {
+      cy.get('[data-cy="toggleAdvancedOptionsButton"]')
+        .should("be.visible")
+        .click();
+    }
+
+    return this;
+  }
+
+  hideAdvancedOptions() {
+    const $button = Cypress.$('[data-cy="toggleAdvancedOptionsButton"]');
+
+    if ($button.next().length) {
+      cy.get('[data-cy="toggleAdvancedOptionsButton"]')
+        .should("be.visible")
+        .click();
+    }
 
     return this;
   }

@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { darkBlueSecondary, mobileWidth } from "@edulastic/colors";
+import { lightBlueSecondary, mobileWidth } from "@edulastic/colors";
 import { Affix } from "antd";
 
 const HeaderWrapper = ({ children }) => (
@@ -19,19 +19,25 @@ HeaderWrapper.propTypes = {
 export default memo(HeaderWrapper);
 
 const HeaderContainer = styled.div`
-  padding-top: 62px;
-  margin-bottom: 10px;
+  padding-top: 96px;
+  margin-bottom: 28px;
+
+  @media (max-width: ${mobileWidth}) {
+    padding-top: 62px;
+    margin-bottom: 33px;
+  }
 `;
 
 const Container = styled.div`
-  height: 62px;
-  padding: 0px 2.5%;
-  background: ${darkBlueSecondary};
+  height: 96px;
+  padding: 0 44px;
+  background: ${lightBlueSecondary};
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   @media (max-width: ${mobileWidth}) {
-    flex-direction: column;
-    height: 100px;
+    height: 61px;
+    padding: 0 26px;
   }
 `;

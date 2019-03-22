@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { Layout } from "antd";
 import { connect } from "react-redux";
 import { Progress } from "@edulastic/common";
-import { tabletWidth } from "@edulastic/colors";
+import { tabletWidth, mainBgColor } from "@edulastic/colors";
 import Sidebar from "./Sidebar/SideMenu";
 /* lazy load routes */
 const Assignments = lazy(() => import("../Assignments"));
@@ -25,6 +25,7 @@ const PickUpQuestionType = lazy(() => import("../PickUpQuestionType"));
 const CurriculumContainer = lazy(() => import("../CurriculumSequence"));
 const Reports = lazy(() => import("../Reports"));
 const ResponseFrequency = lazy(() => import("../Reports/subPages/ResponseFrequency"));
+const AssessmentSummary = lazy(() => import("../Reports/subPages/AssessmentSummary"));
 const StandardsBasedReport = lazy(() => import("../StandardsBasedReport"));
 const ManageClass = lazy(() => import("../ManageClass"));
 // eslint-disable-next-line react/prop-types
@@ -32,7 +33,7 @@ const Author = ({ match, history, isSidebarCollapsed }) => {
   const isPickQuestion = !!history.location.pathname.includes("pickup-questiontype");
   const isCollapsed = isPickQuestion || isSidebarCollapsed;
   return (
-    <Layout>
+    <StyledLayout>
       <MainContainer isCollapsed={isCollapsed}>
         <SidebarCompnent />
         <Wrapper>
@@ -113,11 +114,12 @@ const Author = ({ match, history, isSidebarCollapsed }) => {
               <Route exact path="/author/questions/edit" component={QuestionEditor} />
               <Route exact path="/author/reports/" component={Reports} />
               <Route exact path="/author/reports/response-frequency/test/:testId" component={ResponseFrequency} />
+              <Route exact path="/author/reports/assessment-summary/test/:testId" component={AssessmentSummary} />
             </Switch>
           </Suspense>
         </Wrapper>
       </MainContainer>
-    </Layout>
+    </StyledLayout>
   );
 };
 
@@ -154,4 +156,8 @@ const SidebarCompnent = styled(Sidebar)`
 `;
 const Wrapper = styled.div`
   position: relative;
+`;
+
+const StyledLayout = styled(Layout)`
+  background: ${mainBgColor};
 `;

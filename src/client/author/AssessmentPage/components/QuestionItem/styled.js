@@ -13,7 +13,7 @@ export const QuestionItemWrapper = styled.div`
 
 export const AnswerForm = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 `;
 
 export const QuestionNumber = styled.span`
@@ -32,6 +32,7 @@ export const QuestionNumber = styled.span`
 
 export const QuestionForm = styled.div`
   display: flex;
+  flex-wrap: wrap;
   width: 180px;
   margin-left: 13px;
 `;

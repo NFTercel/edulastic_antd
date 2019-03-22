@@ -21,11 +21,13 @@ import {
 import { Subtitle } from "../../styled/Subtitle";
 
 import ShadesView from "./components/ShadesView";
+import { getFontSize } from "../../utils/helpers";
 
 const { Option } = Select;
 
 const ShadingPreview = ({ view, item, smallSize, saveAnswer, userAnswer, method, t, previewTab, theme }) => {
   const { canvas, validation } = item;
+  const fontSize = getFontSize(get(item, "ui_style.fontsize"));
 
   const [isCheck, setIsCheck] = useState(false);
 
@@ -110,10 +112,12 @@ const ShadingPreview = ({ view, item, smallSize, saveAnswer, userAnswer, method,
   const hidden = get(item, "canvas.hidden", []);
 
   return (
-    <Paper padding={smallSize} boxShadow={smallSize ? "none" : ""}>
+    <Paper style={{ fontSize }} padding={smallSize} boxShadow={smallSize ? "none" : ""}>
       <InstructorStimulus>{item.instructor_stimulus}</InstructorStimulus>
 
-      {view === PREVIEW && !smallSize && <Stimulus dangerouslySetInnerHTML={{ __html: item.stimulus }} />}
+      {view === PREVIEW && !smallSize && (
+        <Stimulus data-cy="stimulus" dangerouslySetInnerHTML={{ __html: item.stimulus }} />
+      )}
       <FlexContainer alignItems="flex-start" flexDirection="column">
         {view === EDIT && (
           <Fragment>

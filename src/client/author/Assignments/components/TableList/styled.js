@@ -1,6 +1,18 @@
-import { mobileWidth, tabletWidth, red } from "@edulastic/colors";
 import styled from "styled-components";
 import { Table, Button } from "antd";
+
+import { IconChevronLeft } from "@edulastic/icons";
+
+import {
+  mobileWidth,
+  tabletWidth,
+  red,
+  darkGrey,
+  lightBlueSecondary,
+  lightGreySecondary,
+  white,
+  green
+} from "@edulastic/colors";
 
 export const Container = styled.div`
   padding: 30;
@@ -19,40 +31,88 @@ export const Icon = styled.img`
     width: 15px;
     height: 15px;
   }
-  @media (max-width: 920px) {
-    width: 15px;
-    height: 15px;
-  }
-  @media (max-width: 920px) {
-    width: 15px;
-    height: 15px;
-  }
 `;
 
 export const TableData = styled(Table)`
   text-align: center;
-  .ant-table-thead > tr > th .ant-table-column-sorters {
-    padding-left: 20px;
+
+  .ant-table-thead > tr > th .ant-table-column-sorter {
+    position: relative;
+    margin-left: 20px;
   }
-  @media (max-width: 920px) {
-    .ant-table-thead > tr > th,
-    .ant-table-tbody > tr > td {
-      padding: 20px 0px;
-    }
-    .ant-table-thead > tr > th .ant-table-column-sorters {
-      padding-left: 2px;
-      padding-right: 0px;
-    }
-  }
-  @media (max-width: 1000px) {
-    .ant-table-thead > tr > th,
-    .ant-table-tbody > tr > td {
-      padding-left: 2px;
-    }
-    .ant-table-thead > tr > th .ant-table-column-sorters {
-      padding-left: 2px;
+
+  .ant-table-thead > tr {
+    th {
+      .ant-table-column-sorters {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      &:first-child {
+        .ant-table-column-sorters {
+          justify-content: flex-start;
+          padding-left: 26px;
+        }
+      }
     }
   }
+
+  .ant-table-thead > tr > th.ant-table-column-has-actions.ant-table-column-has-sorters {
+    padding-right: 0 !important;
+  }
+
+  .ant-table-thead th {
+    border-bottom: none;
+
+    &:hover {
+      background: transparent !important;
+    }
+  }
+
+  tr.ant-table-expanded-row,
+  tr.ant-table-expanded-row:hover {
+    background: transparent;
+  }
+
+  tr.ant-table-expanded-row td > .ant-table-wrapper {
+    margin: 0;
+  }
+
+  .ant-table-thead > tr > th {
+    font-weight: bold;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: ${darkGrey};
+    white-space: nowrap;
+    padding: 0 !important;
+    padding-bottom: 34px !important;
+  }
+
+  .ant-table-thead > tr > th > .ant-table-column-has-actions > .ant-table-column-sorters {
+    padding: 0;
+  }
+
+  .ant-table-tbody {
+    .ant-table-expanded-row td {
+      padding-left: 0 !important;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
+    tr {
+    }
+
+    td {
+      padding: 8px 0;
+      font-weight: 600;
+
+      &:first-child {
+        padding-left: 26px;
+      }
+    }
+  }
+
   .ant-table-thead > tr > th.ant-table-column-has-actions.ant-table-column-has-sorters,
   .ant-table-thead > tr > th.ant-table-column-has-actions.ant-table-column-has-filters {
     text-align: center;
@@ -63,6 +123,51 @@ export const TableData = styled(Table)`
   .ant-table-tbody > tr > td {
     border-bottom: none;
   }
+
+  .ant-table-thead > tr > th {
+    background: transparent;
+  }
+
+  .ant-pagination {
+    margin-bottom: 0;
+
+    &-item {
+      box-shadow: 0px 2px 8px 1px rgba(163, 160, 160, 0.2);
+      border: none;
+      background: ${white};
+      line-height: 35px;
+
+      &-link {
+        border: none;
+      }
+
+      &-active {
+        background: ${lightBlueSecondary};
+        box-shadow: none;
+
+        a {
+          color: ${white};
+        }
+      }
+    }
+
+    &-prev,
+    &-next {
+      box-shadow: 0px 2px 8px 1px rgba(163, 160, 160, 0.2);
+    }
+
+    &-jump {
+      &-next,
+      &-prev {
+        min-width: 33px;
+        height: 33px;
+        background: ${white};
+        box-shadow: 0px 2px 8px 1px rgba(163, 160, 160, 0.2);
+        line-height: 35px;
+      }
+    }
+  }
+
   @media (max-width: ${tabletWidth}) {
     display: none;
   }
@@ -100,14 +205,19 @@ export const TableData = styled(Table)`
 export const BtnGreen = styled(Button)`
   background-color: #1cd6dc !important;
   border: 0px;
-  width: 55px;
-  margin-right: 15px;
+  width: 71px;
+  height: 23px;
+  margin-right: 9px;
 `;
 
 export const AssignmentTD = styled.div`
   text-align: left;
   padding-left: 0px !important;
   padding-right: 0px !important;
+  width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const IconArrowDown = styled.img`
@@ -117,25 +227,26 @@ export const IconArrowDown = styled.img`
 `;
 
 export const BtnAction = styled(Button)`
-  color: #12a6e8;
-  border-color: #12a6e8;
+  color: ${lightBlueSecondary};
+  border: none;
+  box-shadow: 0px 2px 4px 0 rgba(201, 208, 219, 0.5);
   max-width: 140px;
-  height: 32px;
+  height: 28px;
   font-size: 0.7em;
-  font-weight: bold;
+  font-weight: 600;
   width: 100%;
   padding: 0px 20px;
   text-align: center;
+  width: 90px;
+
   :active {
-    background-color: #12a6e8;
+    background-color: ${lightBlueSecondary};
     color: #fff;
   }
+
   :hover {
-    background-color: #12a6e8;
+    background-color: ${lightBlueSecondary};
     color: #fff;
-  }
-  @media (max-width: 1300px) {
-    padding: 10px;
   }
 `;
 
@@ -143,16 +254,19 @@ export const AssignedImg = styled.img`
   color: #12a6e8;
 `;
 
-export const PracticeIcon = styled.span`
+export const TypeIcon = styled.span`
   display: inline-block;
-  width: 24px;
-  height: 24px;
-  border: 2px solid ${red};
+  width: 18px;
+  height: 18px;
+  max-width: 18px;
+  background: ${props => (props.type === "practice" ? red : "#5EB500")};
   text-align: center;
-  color: ${red};
+  color: ${white};
   border-radius: 50%;
-  font-weight: bold;
-  padding-left: 3px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 17px;
+  padding-left: 1px;
 `;
 
 export const ExpandDivdier = styled.div`
@@ -200,16 +314,26 @@ export const BtnStarted = styled(Button)`
 `;
 
 export const ActionDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   text-align: center;
   flex: 1;
+  padding-right: 7px;
 `;
 
-export const GreyFont = styled.div`
+export const ActionsWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-right: 20px;
+  padding: 0;
+  width: 110px;
+`;
+
+export const GreyFont = styled.span`
   color: grey;
-  font-size: 12px;
-  @media (max-width: 1170px) {
-    font-size: 9px;
-  }
+  font-size: 14px;
 `;
 
 export const ExpandedTable = styled(Table)`
@@ -222,29 +346,28 @@ export const ExpandedTable = styled(Table)`
       width: 90%;
     }
   }
+
   .ant-table-thead th {
     display: none;
   }
+
   .ant-table-tbody tr {
-    background-color: #fbfbfb;
-    border: 3px solid #ffffff;
-    border-radius: 10px;
+    background-color: ${lightGreySecondary};
   }
+
   .ant-table-tbody tr td {
     padding: 9px 0px 9px 25px !important;
   }
-  @media (max-width: 1285px) {
-    .ant-table-tbody tr td {
-      padding: 9px 0px !important;
-    }
-  }
-  @media (max-width: 1000px) {
-    .ant-table-tbody tr td {
-      padding: 9px 0px !important;
-      margin-left: 13px;
-    }
-  }
+
   @media (max-width: ${mobileWidth}) {
     display: none;
   }
+`;
+
+export const IconExpand = styled(IconChevronLeft)`
+  height: 12px;
+  transform: rotate(-90deg);
+  margin: 0 16px 0 12px;
+  cursor: pointer;
+  fill: ${lightBlueSecondary};
 `;

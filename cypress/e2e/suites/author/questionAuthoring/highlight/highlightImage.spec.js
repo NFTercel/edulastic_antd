@@ -1,6 +1,7 @@
 import EditItemPage from "../../../../framework/author/itemList/itemDetail/editPage";
 import HightlightImagePage from "../../../../framework/author/itemList/questionType/highlight/highlightImagePage";
 import FileHelper from "../../../../framework/util/fileHelper";
+import Helpers from "../../../../framework/util/Helpers";
 
 describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Highlight Image" type question`, () => {
   const queData = {
@@ -149,6 +150,107 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Highlight Imag
           .click();
 
         preview.header.edit();
+      });
+    });
+  });
+
+  context("Advanced Options", () => {
+    before("visit items page and select question type", () => {
+      editItem.getItemWithId("5c358b480c8e6f22190d5ce0");
+      editItem.deleteAllQuestion();
+      // create new que and select type
+      editItem.addNew().chooseQuestion(queData.group, queData.queType);
+    });
+
+    beforeEach(() => {
+      editItem.header.edit();
+      editItem.showAdvancedOptions();
+    });
+
+    afterEach(() => {
+      editItem.header.edit();
+    });
+
+    describe("Layout", () => {
+      it("should be able to select small font size", () => {
+        const select = question.getFontSizeSelect();
+        const { name, font } = Helpers.fontSize("small");
+
+        select.should("be.visible").click();
+
+        question
+          .getSmallFontSizeOption()
+          .should("be.visible")
+          .click();
+
+        select.should("contain", name);
+        question.checkFontSize(font);
+      });
+      it("should be able to select normal font size", () => {
+        const select = question.getFontSizeSelect();
+        const { name, font } = Helpers.fontSize("normal");
+
+        select.should("be.visible").click();
+
+        question
+          .getNormalFontSizeOption()
+          .should("be.visible")
+          .click();
+
+        select.should("contain", name);
+        question.checkFontSize(font);
+      });
+      it("should be able to select large font size", () => {
+        const select = question.getFontSizeSelect();
+        const { name, font } = Helpers.fontSize("large");
+
+        select.should("be.visible").click();
+
+        question
+          .getLargeFontSizeOption()
+          .should("be.visible")
+          .click();
+
+        select.should("contain", name);
+        question.checkFontSize(font);
+      });
+      it("should be able to select extra large font size", () => {
+        const select = question.getFontSizeSelect();
+        const { name, font } = Helpers.fontSize("xlarge");
+
+        select.should("be.visible").click();
+
+        question
+          .getExtraLargeFontSizeOption()
+          .should("be.visible")
+          .click();
+
+        select.should("contain", name);
+        question.checkFontSize(font);
+      });
+      it("should be able to select huge font size", () => {
+        const select = question.getFontSizeSelect();
+        const { name, font } = Helpers.fontSize("xxlarge");
+
+        select.should("be.visible").click();
+
+        question
+          .getHugeFontSizeOption()
+          .should("be.visible")
+          .click();
+
+        select.should("contain", name);
+        question.checkFontSize(font);
+      });
+      it("should be able to change line width", () => {
+        const width = 6;
+
+        question
+          .getLineWidth()
+          .should("be.visible")
+          .clear()
+          .type(`{selectall}${width}`)
+          .should("have.value", `${width}`);
       });
     });
   });

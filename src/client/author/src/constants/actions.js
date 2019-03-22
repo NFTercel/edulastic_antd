@@ -163,3 +163,11 @@ export const LOGOUT = "[auth] logout"; // set redux store to initial values
 export const SET_MAX_ATTEMPT = "[tests] maximum attempt";
 
 export const SET_SAFE_BROWSE_PASSWORD = "[tests] safe browser password";
+
+// -----|-----|-----|----- REPORTS BEGIN -----|-----|-----|----- //
+
+export const GET_REPORTS_ASSESSMENT_SUMMARY_REQUEST = "[reports] get reports assessment summary";
+export const GET_REPORTS_ASSESSMENT_SUMMARY_REQUEST_SUCCESS = "[reports] get reports assessment summary success";
+export const GET_REPORTS_ASSESSMENT_SUMMARY_REQUEST_ERROR = "[reports] get reports assessment summary error";
+
+// -----|-----|-----|----- REPORTS ENDED -----|-----|-----|----- //

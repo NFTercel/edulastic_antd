@@ -1,0 +1,224 @@
+{
+  "school": {
+    "columns": [
+      {
+        "title": "School",
+        "dataIndex": "schoolName",
+        "key": "schoolName",
+        "width": 250
+      },
+      {
+        "title": "Avg. Student Score (%)",
+        "dataIndex": "avgStudentScore",
+        "key": "avgStudentScore",
+        "width": 150
+      },
+      {
+        "title": "#Assigned",
+        "dataIndex": "studentsAssigned",
+        "key": "studentsAssigned",
+        "width": 100
+      },
+      {
+        "title": "#Graded",
+        "dataIndex": "studentsGraded",
+        "key": "studentsGraded",
+        "width": 100
+      },
+      {
+        "title": "Absent",
+        "dataIndex": "studentsAbsent",
+        "key": "studentsAbsent",
+        "width": 100
+      },
+      {
+        "title": "Assessment Date",
+        "dataIndex": "assessmentDate",
+        "key": "assessmentDate",
+        "width": 150
+      },
+      {
+        "title": "Min. Score",
+        "dataIndex": "minScore",
+        "key": "minScore",
+        "width": 100
+      },
+      {
+        "title": "Max. Score",
+        "dataIndex": "maxScore",
+        "key": "maxScore",
+        "width": 100
+      },
+      {
+        "title": "Avg. Score",
+        "dataIndex": "avgScore",
+        "key": "avgScore",
+        "width": 100
+      },
+      {
+        "title": "Std. dev.(P) of Score",
+        "dataIndex": "scoreStdDeviation",
+        "key": "scoreStdDeviation",
+        "width": 150
+      },
+      {
+        "title": "Variance (P) of Score",
+        "dataIndex": "scoreVariance",
+        "key": "scoreVariance",
+        "width": 150
+      }
+    ]
+  },
+  "teacher": {
+    "columns": [
+      {
+        "title": "School",
+        "dataIndex": "schoolName",
+        "key": "schoolName",
+        "width": 250
+      },
+      {
+        "title": "Teacher",
+        "dataIndex": "teacherName",
+        "key": "teacherName",
+        "width": 150
+      },
+      {
+        "title": "Avg. Student Score (%)",
+        "dataIndex": "avgStudentScore",
+        "key": "avgStudentScore",
+        "width": 150
+      },
+      {
+        "title": "#Assigned",
+        "dataIndex": "studentsAssigned",
+        "key": "studentsAssigned",
+        "width": 100
+      },
+      {
+        "title": "#Graded",
+        "dataIndex": "studentsGraded",
+        "key": "studentsGraded",
+        "width": 100
+      },
+      {
+        "title": "Absent",
+        "dataIndex": "studentsAbsent",
+        "key": "studentsAbsent",
+        "width": 100
+      },
+      {
+        "title": "Assessment Date",
+        "dataIndex": "assessmentDate",
+        "key": "assessmentDate",
+        "width": 150
+      },
+      {
+        "title": "Min. Score",
+        "dataIndex": "minScore",
+        "key": "minScore",
+        "width": 100
+      },
+      {
+        "title": "Max. Score",
+        "dataIndex": "maxScore",
+        "key": "maxScore",
+        "width": 100
+      },
+      {
+        "title": "Avg. Score",
+        "dataIndex": "avgScore",
+        "key": "avgScore",
+        "width": 100
+      },
+      {
+        "title": "Std. dev.(P) of Score",
+        "dataIndex": "scoreStdDeviation",
+        "key": "scoreStdDeviation",
+        "width": 150
+      },
+      {
+        "title": "Variance (P) of Score",
+        "dataIndex": "scoreVariance",
+        "key": "scoreVariance",
+        "width": 150
+      }
+    ]
+  },
+  "class": {
+    "columns": [
+      {
+        "title": "School",
+        "dataIndex": "schoolName",
+        "key": "schoolName",
+        "width": 250
+      },
+      {
+        "title": "Class Name",
+        "dataIndex": "groupName",
+        "key": "groupName",
+        "width": 150
+      },
+      {
+        "title": "Avg. Student Score (%)",
+        "dataIndex": "avgStudentScore",
+        "key": "avgStudentScore",
+        "width": 150
+      },
+      {
+        "title": "#Assigned",
+        "dataIndex": "studentsAssigned",
+        "key": "studentsAssigned",
+        "width": 100
+      },
+      {
+        "title": "#Graded",
+        "dataIndex": "studentsGraded",
+        "key": "studentsGraded",
+        "width": 100
+      },
+      {
+        "title": "Absent",
+        "dataIndex": "studentsAbsent",
+        "key": "studentsAbsent",
+        "width": 100
+      },
+      {
+        "title": "Assessment Date",
+        "dataIndex": "assessmentDate",
+        "key": "assessmentDate",
+        "width": 150
+      },
+      {
+        "title": "Min. Score",
+        "dataIndex": "minScore",
+        "key": "minScore",
+        "width": 100
+      },
+      {
+        "title": "Max. Score",
+        "dataIndex": "maxScore",
+        "key": "maxScore",
+        "width": 100
+      },
+      {
+        "title": "Avg. Score",
+        "dataIndex": "avgScore",
+        "key": "avgScore",
+        "width": 100
+      },
+      {
+        "title": "Std. dev.(P) of Score",
+        "dataIndex": "scoreStdDeviation",
+        "key": "scoreStdDeviation",
+        "width": 150
+      },
+      {
+        "title": "Variance (P) of Score",
+        "dataIndex": "scoreVariance",
+        "key": "scoreVariance",
+        "width": 150
+      }
+    ]
+  }
+}

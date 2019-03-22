@@ -40,6 +40,14 @@ import {
   truePolygonWithOtherOrderedPoints,
   secondTruePolygon,
   errorPolygon,
+  trueAnswerWith1Ellipse,
+  trueEllipseWithOtherPoints,
+  secondTrueEllipse,
+  errorEllipse,
+  trueAnswerWith1Hyperbola,
+  trueHyperbolaWithOtherPoints,
+  secondTrueHyperbola,
+  errorHyperbola,
   axisLabelsObj1,
   axisLabelsObj2,
   axisLabelsObj3,
@@ -1683,6 +1691,384 @@ test("#GraphPolygon: there are not all polygons", async t => {
   t.is(result.evaluation[0].details.find(item => item.id === "lrn_3").result, true);
 });
 
+// Ellipse =========================================================================================
+
+test("#GraphEllipse: check 1 true ellipse {ignoreRepeatedShapes = NO}", async t => {
+  // prepare data
+  const eObj = {
+    validation: clone(trueAnswerWith1Ellipse),
+    userResponse: trueAnswerWith1Ellipse.valid_response.value
+  };
+  eObj.validation.ignore_repeated_shapes = IgnoreRepeatedShapes.NO;
+  // action
+  const result = evaluator(eObj);
+  // check
+  t.is(result.evaluation[0].commonResult, true);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_4").result, true);
+});
+
+test("#GraphEllipse: check 1 true ellipse {ignoreRepeatedShapes = COMPARE_BY_SLOPE}", async t => {
+  // prepare data
+  const eObj = {
+    validation: clone(trueAnswerWith1Ellipse),
+    userResponse: trueAnswerWith1Ellipse.valid_response.value
+  };
+  eObj.validation.ignore_repeated_shapes = IgnoreRepeatedShapes.COMPARE_BY_SLOPE;
+  // action
+  const result = evaluator(eObj);
+  // check
+  t.is(result.evaluation[0].commonResult, true);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_4").result, true);
+});
+
+test("#GraphEllipse: check 1 true ellipse {ignoreRepeatedShapes = COMPARE_BY_POINTS}", async t => {
+  // prepare data
+  const eObj = {
+    validation: clone(trueAnswerWith1Ellipse),
+    userResponse: trueAnswerWith1Ellipse.valid_response.value
+  };
+  eObj.validation.ignore_repeated_shapes = IgnoreRepeatedShapes.COMPARE_BY_POINTS;
+  // action
+  const result = evaluator(eObj);
+  // check
+  t.is(result.evaluation[0].commonResult, true);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_4").result, true);
+});
+
+test("#GraphEllipse: check 1 error ellipse {ignoreRepeatedShapes = NO}", async t => {
+  // prepare data
+  const eObj = {
+    validation: clone(trueAnswerWith1Ellipse),
+    userResponse: errorEllipse
+  };
+  eObj.validation.ignore_repeated_shapes = IgnoreRepeatedShapes.NO;
+  // action
+  const result = evaluator(eObj);
+  // check
+  t.is(result.evaluation[0].commonResult, false);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_10").result, false);
+});
+
+test("#GraphEllipse: check 1 error ellipse {ignoreRepeatedShapes = COMPARE_BY_SLOPE}", async t => {
+  // prepare data
+  const eObj = {
+    validation: clone(trueAnswerWith1Ellipse),
+    userResponse: errorEllipse
+  };
+  eObj.validation.ignore_repeated_shapes = IgnoreRepeatedShapes.COMPARE_BY_SLOPE;
+  // action
+  const result = evaluator(eObj);
+  // check
+  t.is(result.evaluation[0].commonResult, false);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_10").result, false);
+});
+
+test("#GraphEllipse: check 1 error ellipse {ignoreRepeatedShapes = COMPARE_BY_POINTS}", async t => {
+  // prepare data
+  const eObj = {
+    validation: clone(trueAnswerWith1Ellipse),
+    userResponse: errorEllipse
+  };
+  eObj.validation.ignore_repeated_shapes = IgnoreRepeatedShapes.COMPARE_BY_POINTS;
+  // action
+  const result = evaluator(eObj);
+  // check
+  t.is(result.evaluation[0].commonResult, false);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_10").result, false);
+});
+
+test("#GraphEllipse: check 1 true ellipse, but in test answer 3 true ellipses {ignoreRepeatedShapes = NO}", async t => {
+  // prepare data
+  const eObj = {
+    validation: clone(trueAnswerWith1Ellipse),
+    userResponse: clone(trueAnswerWith1Ellipse.valid_response.value)
+  };
+  eObj.validation.ignore_repeated_shapes = IgnoreRepeatedShapes.NO;
+  eObj.userResponse.push(Object.assign({}, trueAnswerWith1Ellipse.valid_response.value[3], { id: "lrn_30" }));
+  eObj.userResponse = eObj.userResponse.concat(trueEllipseWithOtherPoints);
+  // action
+  const result = evaluator(eObj);
+  // check
+  t.is(result.evaluation[0].commonResult, false);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_4").result, true);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_30").result, false);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_6").result, false);
+});
+
+test("#GraphEllipse: check 1 true ellipse, but in test answer 3 true ellipses {ignoreRepeatedShapes = COMPARE_BY_SLOPE}", async t => {
+  // prepare data
+  const eObj = {
+    validation: clone(trueAnswerWith1Ellipse),
+    userResponse: clone(trueAnswerWith1Ellipse.valid_response.value)
+  };
+  eObj.validation.ignore_repeated_shapes = IgnoreRepeatedShapes.COMPARE_BY_SLOPE;
+  eObj.userResponse.push(Object.assign({}, trueAnswerWith1Ellipse.valid_response.value[3], { id: "lrn_30" }));
+  eObj.userResponse = eObj.userResponse.concat(trueEllipseWithOtherPoints);
+  // action
+  const result = evaluator(eObj);
+  // check
+  t.is(result.evaluation[0].commonResult, true);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_4").result, true);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_30").result, true);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_6").result, true);
+});
+
+test("#GraphEllipse: check 1 true ellipse, but in test answer 3 true ellipses {ignoreRepeatedShapes = COMPARE_BY_POINTS}", async t => {
+  // prepare data
+  const eObj = {
+    validation: clone(trueAnswerWith1Ellipse),
+    userResponse: clone(trueAnswerWith1Ellipse.valid_response.value)
+  };
+  eObj.validation.ignore_repeated_shapes = IgnoreRepeatedShapes.COMPARE_BY_POINTS;
+  eObj.userResponse.push(Object.assign({}, trueAnswerWith1Ellipse.valid_response.value[3], { id: "lrn_30" }));
+  eObj.userResponse = eObj.userResponse.concat(trueEllipseWithOtherPoints);
+  // action
+  const result = evaluator(eObj);
+  // check
+  t.is(result.evaluation[0].commonResult, false);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_4").result, true);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_30").result, true);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_6").result, false);
+});
+
+test("#GraphEllipse: check 2 true ellipses {ignoreRepeatedShapes = NO}", async t => {
+  // prepare data
+  const eObj = {
+    validation: clone(trueAnswerWith1Ellipse),
+    userResponse: clone(trueAnswerWith1Ellipse.valid_response.value)
+  };
+  eObj.validation.valid_response.value = eObj.validation.valid_response.value.concat(secondTrueEllipse);
+  eObj.validation.ignore_repeated_shapes = IgnoreRepeatedShapes.NO;
+  eObj.userResponse = eObj.userResponse.concat(secondTrueEllipse);
+  // action
+  const result = evaluator(eObj);
+  // check
+  t.is(result.evaluation[0].commonResult, true);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_4").result, true);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_14").result, true);
+});
+
+test("#GraphEllipse: check 2 ellipses: 1 - true ellipse, 2 - error ellipse {ignoreRepeatedShapes = NO}", async t => {
+  // prepare data
+  const eObj = {
+    validation: clone(trueAnswerWith1Ellipse),
+    userResponse: clone(trueAnswerWith1Ellipse.valid_response.value)
+  };
+  eObj.validation.valid_response.value = eObj.validation.valid_response.value.concat(secondTrueEllipse);
+  eObj.validation.ignore_repeated_shapes = IgnoreRepeatedShapes.NO;
+  eObj.userResponse = eObj.userResponse.concat(errorEllipse);
+  // action
+  const result = evaluator(eObj);
+  // check
+  t.is(result.evaluation[0].commonResult, false);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_4").result, true);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_10").result, false);
+});
+
+test("#GraphEllipse: there are not all ellipses", async t => {
+  // prepare data
+  const eObj = {
+    validation: clone(trueAnswerWith1Ellipse),
+    userResponse: trueAnswerWith1Ellipse.valid_response.value
+  };
+  eObj.validation.valid_response.value = eObj.validation.valid_response.value.concat(secondTrueEllipse);
+  eObj.validation.ignore_repeated_shapes = IgnoreRepeatedShapes.NO;
+  // action
+  const result = evaluator(eObj);
+  // check
+  t.is(result.evaluation[0].commonResult, false);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_4").result, true);
+});
+
+// Hyperbola =======================================================================================
+
+test("#GraphHyperbola: check 1 true hyperbola {ignoreRepeatedShapes = NO}", async t => {
+  // prepare data
+  const eObj = {
+    validation: clone(trueAnswerWith1Hyperbola),
+    userResponse: trueAnswerWith1Hyperbola.valid_response.value
+  };
+  eObj.validation.ignore_repeated_shapes = IgnoreRepeatedShapes.NO;
+  // action
+  const result = evaluator(eObj);
+  // check
+  t.is(result.evaluation[0].commonResult, true);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_4").result, true);
+});
+
+test("#GraphHyperbola: check 1 true hyperbola {ignoreRepeatedShapes = COMPARE_BY_SLOPE}", async t => {
+  // prepare data
+  const eObj = {
+    validation: clone(trueAnswerWith1Hyperbola),
+    userResponse: trueAnswerWith1Hyperbola.valid_response.value
+  };
+  eObj.validation.ignore_repeated_shapes = IgnoreRepeatedShapes.COMPARE_BY_SLOPE;
+  // action
+  const result = evaluator(eObj);
+  // check
+  t.is(result.evaluation[0].commonResult, true);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_4").result, true);
+});
+
+test("#GraphHyperbola: check 1 true hyperbola {ignoreRepeatedShapes = COMPARE_BY_POINTS}", async t => {
+  // prepare data
+  const eObj = {
+    validation: clone(trueAnswerWith1Hyperbola),
+    userResponse: trueAnswerWith1Hyperbola.valid_response.value
+  };
+  eObj.validation.ignore_repeated_shapes = IgnoreRepeatedShapes.COMPARE_BY_POINTS;
+  // action
+  const result = evaluator(eObj);
+  // check
+  t.is(result.evaluation[0].commonResult, true);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_4").result, true);
+});
+
+test("#GraphHyperbola: check 1 error hyperbola {ignoreRepeatedShapes = NO}", async t => {
+  // prepare data
+  const eObj = {
+    validation: clone(trueAnswerWith1Hyperbola),
+    userResponse: errorHyperbola
+  };
+  eObj.validation.ignore_repeated_shapes = IgnoreRepeatedShapes.NO;
+  // action
+  const result = evaluator(eObj);
+  // check
+  t.is(result.evaluation[0].commonResult, false);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_10").result, false);
+});
+
+test("#GraphHyperbola: check 1 error hyperbola {ignoreRepeatedShapes = COMPARE_BY_SLOPE}", async t => {
+  // prepare data
+  const eObj = {
+    validation: clone(trueAnswerWith1Hyperbola),
+    userResponse: errorHyperbola
+  };
+  eObj.validation.ignore_repeated_shapes = IgnoreRepeatedShapes.COMPARE_BY_SLOPE;
+  // action
+  const result = evaluator(eObj);
+  // check
+  t.is(result.evaluation[0].commonResult, false);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_10").result, false);
+});
+
+test("#GraphHyperbola: check 1 error hyperbola {ignoreRepeatedShapes = COMPARE_BY_POINTS}", async t => {
+  // prepare data
+  const eObj = {
+    validation: clone(trueAnswerWith1Hyperbola),
+    userResponse: errorHyperbola
+  };
+  eObj.validation.ignore_repeated_shapes = IgnoreRepeatedShapes.COMPARE_BY_POINTS;
+  // action
+  const result = evaluator(eObj);
+  // check
+  t.is(result.evaluation[0].commonResult, false);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_10").result, false);
+});
+
+test("#GraphHyperbola: check 1 true hyperbola, but in test answer 3 true hyperbolas {ignoreRepeatedShapes = NO}", async t => {
+  // prepare data
+  const eObj = {
+    validation: clone(trueAnswerWith1Hyperbola),
+    userResponse: clone(trueAnswerWith1Hyperbola.valid_response.value)
+  };
+  eObj.validation.ignore_repeated_shapes = IgnoreRepeatedShapes.NO;
+  eObj.userResponse.push(Object.assign({}, trueAnswerWith1Hyperbola.valid_response.value[3], { id: "lrn_30" }));
+  eObj.userResponse = eObj.userResponse.concat(trueHyperbolaWithOtherPoints);
+  // action
+  const result = evaluator(eObj);
+  // check
+  t.is(result.evaluation[0].commonResult, false);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_4").result, true);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_30").result, false);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_6").result, false);
+});
+
+test("#GraphHyperbola: check 1 true hyperbola, but in test answer 3 true hyperbolas {ignoreRepeatedShapes = COMPARE_BY_SLOPE}", async t => {
+  // prepare data
+  const eObj = {
+    validation: clone(trueAnswerWith1Hyperbola),
+    userResponse: clone(trueAnswerWith1Hyperbola.valid_response.value)
+  };
+  eObj.validation.ignore_repeated_shapes = IgnoreRepeatedShapes.COMPARE_BY_SLOPE;
+  eObj.userResponse.push(Object.assign({}, trueAnswerWith1Hyperbola.valid_response.value[3], { id: "lrn_30" }));
+  eObj.userResponse = eObj.userResponse.concat(trueHyperbolaWithOtherPoints);
+  // action
+  const result = evaluator(eObj);
+  // check
+  t.is(result.evaluation[0].commonResult, true);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_4").result, true);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_30").result, true);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_6").result, true);
+});
+
+test("#GraphHyperbola: check 1 true hyperbola, but in test answer 3 true hyperbolas {ignoreRepeatedShapes = COMPARE_BY_POINTS}", async t => {
+  // prepare data
+  const eObj = {
+    validation: clone(trueAnswerWith1Hyperbola),
+    userResponse: clone(trueAnswerWith1Hyperbola.valid_response.value)
+  };
+  eObj.validation.ignore_repeated_shapes = IgnoreRepeatedShapes.COMPARE_BY_POINTS;
+  eObj.userResponse.push(Object.assign({}, trueAnswerWith1Hyperbola.valid_response.value[3], { id: "lrn_30" }));
+  eObj.userResponse = eObj.userResponse.concat(trueHyperbolaWithOtherPoints);
+  // action
+  const result = evaluator(eObj);
+  // check
+  t.is(result.evaluation[0].commonResult, false);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_4").result, true);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_30").result, true);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_6").result, false);
+});
+
+test("#GraphHyperbola: check 2 true hyperbolas {ignoreRepeatedShapes = NO}", async t => {
+  // prepare data
+  const eObj = {
+    validation: clone(trueAnswerWith1Hyperbola),
+    userResponse: clone(trueAnswerWith1Hyperbola.valid_response.value)
+  };
+  eObj.validation.valid_response.value = eObj.validation.valid_response.value.concat(secondTrueHyperbola);
+  eObj.validation.ignore_repeated_shapes = IgnoreRepeatedShapes.NO;
+  eObj.userResponse = eObj.userResponse.concat(secondTrueHyperbola);
+  // action
+  const result = evaluator(eObj);
+  // check
+  t.is(result.evaluation[0].commonResult, true);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_4").result, true);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_14").result, true);
+});
+
+test("#GraphHyperbola: check 2 hyperbolas: 1 - true hyperbola, 2 - error hyperbola {ignoreRepeatedShapes = NO}", async t => {
+  // prepare data
+  const eObj = {
+    validation: clone(trueAnswerWith1Hyperbola),
+    userResponse: clone(trueAnswerWith1Hyperbola.valid_response.value)
+  };
+  eObj.validation.valid_response.value = eObj.validation.valid_response.value.concat(secondTrueHyperbola);
+  eObj.validation.ignore_repeated_shapes = IgnoreRepeatedShapes.NO;
+  eObj.userResponse = eObj.userResponse.concat(errorHyperbola);
+  // action
+  const result = evaluator(eObj);
+  // check
+  t.is(result.evaluation[0].commonResult, false);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_4").result, true);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_10").result, false);
+});
+
+test("#GraphHyperbola: there are not all hyperbolas", async t => {
+  // prepare data
+  const eObj = {
+    validation: clone(trueAnswerWith1Hyperbola),
+    userResponse: trueAnswerWith1Hyperbola.valid_response.value
+  };
+  eObj.validation.valid_response.value = eObj.validation.valid_response.value.concat(secondTrueHyperbola);
+  eObj.validation.ignore_repeated_shapes = IgnoreRepeatedShapes.NO;
+  // action
+  const result = evaluator(eObj);
+  // check
+  t.is(result.evaluation[0].commonResult, false);
+  t.is(result.evaluation[0].details.find(item => item.id === "lrn_4").result, true);
+});
+
 // Axis Labels =====================================================================================
 
 test("#AxisLabels: true userResponse, EXACT_MATCH", async t => {
@@ -1806,6 +2192,326 @@ test("#AxisLabels: true userResponse, alt_responses, max score, EXACT_MATCH", as
   t.is(result.evaluation[0].result, false);
   t.is(result.evaluation[1].score, 7);
   t.is(result.evaluation[1].result, true);
+  t.is(result.evaluation[2].score, 0);
+  t.is(result.evaluation[2].result, false);
+
+  t.deepEqual(result.evaluation[0].details[0].label, obj.userResponse[0]);
+  t.is(result.evaluation[0].details[0].result, false);
+  t.deepEqual(result.evaluation[0].details[1].label, obj.userResponse[1]);
+  t.is(result.evaluation[0].details[1].result, false);
+
+  t.deepEqual(result.evaluation[1].details[0].label, obj.validation.alt_responses[0].value[0]);
+  t.is(result.evaluation[1].details[0].result, true);
+  t.deepEqual(result.evaluation[1].details[1].label, obj.validation.alt_responses[0].value[1]);
+  t.is(result.evaluation[1].details[1].result, true);
+
+  t.deepEqual(result.evaluation[2].details[0].label, obj.userResponse[0]);
+  t.is(result.evaluation[2].details[0].result, false);
+  t.deepEqual(result.evaluation[2].details[1].label, obj.userResponse[1]);
+  t.is(result.evaluation[2].details[1].result, false);
+});
+
+test("#AxisLabels: true userResponse, alt_responses, max score, PARTIAL_MATCH_V2", async t => {
+  // prepare data
+  const obj = clone(axisLabelsObj3);
+  obj.validation.scoring_type = ScoringType.PARTIAL_MATCH_V2;
+  // action
+  const result = evaluator(obj);
+  // check
+  t.is(result.score, 14);
+  t.is(result.maxScore, 14);
+  t.is(result.evaluation[0].score, 0);
+  t.is(result.evaluation[0].result, false);
+  t.is(result.evaluation[1].score, 14);
+  t.is(result.evaluation[1].result, true);
+  t.is(result.evaluation[2].score, 0);
+  t.is(result.evaluation[2].result, false);
+
+  t.deepEqual(result.evaluation[0].details[0].label, obj.userResponse[0]);
+  t.is(result.evaluation[0].details[0].result, false);
+  t.deepEqual(result.evaluation[0].details[1].label, obj.userResponse[1]);
+  t.is(result.evaluation[0].details[1].result, false);
+
+  t.deepEqual(result.evaluation[1].details[0].label, obj.validation.alt_responses[0].value[0]);
+  t.is(result.evaluation[1].details[0].result, true);
+  t.deepEqual(result.evaluation[1].details[1].label, obj.validation.alt_responses[0].value[1]);
+  t.is(result.evaluation[1].details[1].result, true);
+
+  t.deepEqual(result.evaluation[2].details[0].label, obj.userResponse[0]);
+  t.is(result.evaluation[2].details[0].result, false);
+  t.deepEqual(result.evaluation[2].details[1].label, obj.userResponse[1]);
+  t.is(result.evaluation[2].details[1].result, false);
+});
+
+test("#AxisLabels: true userResponse, alt_responses, max score, PARTIAL_MATCH", async t => {
+  // prepare data
+  const obj = clone(axisLabelsObj3);
+  obj.validation.scoring_type = ScoringType.PARTIAL_MATCH;
+  // action
+  const result = evaluator(obj);
+  // check
+  t.is(result.score, 7);
+  t.is(result.maxScore, 7);
+  t.is(result.evaluation[0].score, 0);
+  t.is(result.evaluation[0].result, false);
+  t.is(result.evaluation[1].score, 7);
+  t.is(result.evaluation[1].result, true);
+  t.is(result.evaluation[2].score, 0);
+  t.is(result.evaluation[2].result, false);
+
+  t.deepEqual(result.evaluation[0].details[0].label, obj.userResponse[0]);
+  t.is(result.evaluation[0].details[0].result, false);
+  t.deepEqual(result.evaluation[0].details[1].label, obj.userResponse[1]);
+  t.is(result.evaluation[0].details[1].result, false);
+
+  t.deepEqual(result.evaluation[1].details[0].label, obj.validation.alt_responses[0].value[0]);
+  t.is(result.evaluation[1].details[0].result, true);
+  t.deepEqual(result.evaluation[1].details[1].label, obj.validation.alt_responses[0].value[1]);
+  t.is(result.evaluation[1].details[1].result, true);
+
+  t.deepEqual(result.evaluation[2].details[0].label, obj.userResponse[0]);
+  t.is(result.evaluation[2].details[0].result, false);
+  t.deepEqual(result.evaluation[2].details[1].label, obj.userResponse[1]);
+  t.is(result.evaluation[2].details[1].result, false);
+});
+
+test("#AxisLabels: true userResponse, alt_responses, not max score, EXACT_MATCH", async t => {
+  // prepare data
+  const obj = clone(axisLabelsObj4);
+  obj.validation.scoring_type = ScoringType.EXACT_MATCH;
+  // action
+  const result = evaluator(obj);
+  // check
+  t.is(result.score, 2);
+  t.is(result.maxScore, 7);
+  t.is(result.evaluation[0].score, 0);
+  t.is(result.evaluation[0].result, false);
+  t.is(result.evaluation[1].score, 0);
+  t.is(result.evaluation[1].result, false);
+  t.is(result.evaluation[2].score, 2);
+  t.is(result.evaluation[2].result, true);
+
+  t.deepEqual(result.evaluation[0].details[0].label, obj.userResponse[0]);
+  t.is(result.evaluation[0].details[0].result, false);
+  t.deepEqual(result.evaluation[0].details[1].label, obj.validation.valid_response.value[1]);
+  t.is(result.evaluation[0].details[1].result, true);
+
+  t.deepEqual(result.evaluation[1].details[0].label, obj.userResponse[0]);
+  t.is(result.evaluation[1].details[0].result, false);
+  t.deepEqual(result.evaluation[1].details[1].label, obj.userResponse[1]);
+  t.is(result.evaluation[1].details[1].result, false);
+
+  t.deepEqual(result.evaluation[2].details[0].label, obj.validation.alt_responses[1].value[0]);
+  t.is(result.evaluation[2].details[0].result, true);
+  t.deepEqual(result.evaluation[2].details[1].label, obj.validation.alt_responses[1].value[1]);
+  t.is(result.evaluation[2].details[1].result, true);
+});
+
+test("#AxisLabels: true userResponse, alt_responses, not max score, PARTIAL_MATCH_V2", async t => {
+  // prepare data
+  const obj = clone(axisLabelsObj4);
+  obj.validation.scoring_type = ScoringType.PARTIAL_MATCH_V2;
+  // action
+  const result = evaluator(obj);
+  // check
+  t.is(result.score, 5);
+  t.is(result.maxScore, 14);
+  t.is(result.evaluation[0].score, 5);
+  t.is(result.evaluation[0].result, false);
+  t.is(result.evaluation[1].score, 0);
+  t.is(result.evaluation[1].result, false);
+  t.is(result.evaluation[2].score, 4);
+  t.is(result.evaluation[2].result, true);
+
+  t.deepEqual(result.evaluation[0].details[0].label, obj.userResponse[0]);
+  t.is(result.evaluation[0].details[0].result, false);
+  t.deepEqual(result.evaluation[0].details[1].label, obj.validation.valid_response.value[1]);
+  t.is(result.evaluation[0].details[1].result, true);
+
+  t.deepEqual(result.evaluation[1].details[0].label, obj.userResponse[0]);
+  t.is(result.evaluation[1].details[0].result, false);
+  t.deepEqual(result.evaluation[1].details[1].label, obj.userResponse[1]);
+  t.is(result.evaluation[1].details[1].result, false);
+
+  t.deepEqual(result.evaluation[2].details[0].label, obj.validation.alt_responses[1].value[0]);
+  t.is(result.evaluation[2].details[0].result, true);
+  t.deepEqual(result.evaluation[2].details[1].label, obj.validation.alt_responses[1].value[1]);
+  t.is(result.evaluation[2].details[1].result, true);
+});
+
+test("#AxisLabels: true userResponse, alt_responses, not max score, PARTIAL_MATCH", async t => {
+  // prepare data
+  const obj = clone(axisLabelsObj4);
+  obj.validation.scoring_type = ScoringType.PARTIAL_MATCH;
+  // action
+  const result = evaluator(obj);
+  // check
+  t.is(result.score, 2);
+  t.is(result.maxScore, 7);
+  t.is(result.evaluation[0].score, 2);
+  t.is(result.evaluation[0].result, false);
+  t.is(result.evaluation[1].score, 0);
+  t.is(result.evaluation[1].result, false);
+  t.is(result.evaluation[2].score, 2);
+  t.is(result.evaluation[2].result, true);
+
+  t.deepEqual(result.evaluation[0].details[0].label, obj.userResponse[0]);
+  t.is(result.evaluation[0].details[0].result, false);
+  t.deepEqual(result.evaluation[0].details[1].label, obj.validation.valid_response.value[1]);
+  t.is(result.evaluation[0].details[1].result, true);
+
+  t.deepEqual(result.evaluation[1].details[0].label, obj.userResponse[0]);
+  t.is(result.evaluation[1].details[0].result, false);
+  t.deepEqual(result.evaluation[1].details[1].label, obj.userResponse[1]);
+  t.is(result.evaluation[1].details[1].result, false);
+
+  t.deepEqual(result.evaluation[2].details[0].label, obj.validation.alt_responses[1].value[0]);
+  t.is(result.evaluation[2].details[0].result, true);
+  t.deepEqual(result.evaluation[2].details[1].label, obj.validation.alt_responses[1].value[1]);
+  t.is(result.evaluation[2].details[1].result, true);
+});
+
+test("#AxisLabels: partially true userResponse, alt_responses, EXACT_MATCH", async t => {
+  // prepare data
+  const obj = clone(axisLabelsObj5);
+  obj.validation.scoring_type = ScoringType.EXACT_MATCH;
+  // action
+  const result = evaluator(obj);
+  // check
+  t.is(result.score, 0);
+  t.is(result.maxScore, 7);
+  t.is(result.evaluation[0].score, 0);
+  t.is(result.evaluation[0].result, false);
+  t.is(result.evaluation[1].score, 0);
+  t.is(result.evaluation[1].result, false);
+  t.is(result.evaluation[2].score, 0);
+  t.is(result.evaluation[2].result, false);
+
+  t.deepEqual(result.evaluation[0].details[0].label, obj.userResponse[0]);
+  t.is(result.evaluation[0].details[0].result, false);
+  t.deepEqual(result.evaluation[0].details[1].label, obj.validation.valid_response.value[1]);
+  t.is(result.evaluation[0].details[1].result, true);
+
+  t.deepEqual(result.evaluation[1].details[0].label, obj.validation.alt_responses[0].value[0]);
+  t.is(result.evaluation[1].details[0].result, true);
+  t.deepEqual(result.evaluation[1].details[1].label, obj.userResponse[1]);
+  t.is(result.evaluation[1].details[1].result, false);
+
+  t.deepEqual(result.evaluation[2].details[0].label, obj.userResponse[0]);
+  t.is(result.evaluation[2].details[0].result, false);
+  t.deepEqual(result.evaluation[2].details[1].label, obj.validation.alt_responses[1].value[1]);
+  t.is(result.evaluation[2].details[1].result, true);
+});
+
+test("#AxisLabels: partially true userResponse, alt_responses, PARTIAL_MATCH_V2", async t => {
+  // prepare data
+  const obj = clone(axisLabelsObj5);
+  obj.validation.scoring_type = ScoringType.PARTIAL_MATCH_V2;
+  // action
+  const result = evaluator(obj);
+  // check
+  t.is(result.score, 7);
+  t.is(result.maxScore, 14);
+  t.is(result.evaluation[0].score, 5);
+  t.is(result.evaluation[0].result, false);
+  t.is(result.evaluation[1].score, 7);
+  t.is(result.evaluation[1].result, false);
+  t.is(result.evaluation[2].score, 2);
+  t.is(result.evaluation[2].result, false);
+
+  t.deepEqual(result.evaluation[0].details[0].label, obj.userResponse[0]);
+  t.is(result.evaluation[0].details[0].result, false);
+  t.deepEqual(result.evaluation[0].details[1].label, obj.validation.valid_response.value[1]);
+  t.is(result.evaluation[0].details[1].result, true);
+
+  t.deepEqual(result.evaluation[1].details[0].label, obj.validation.alt_responses[0].value[0]);
+  t.is(result.evaluation[1].details[0].result, true);
+  t.deepEqual(result.evaluation[1].details[1].label, obj.userResponse[1]);
+  t.is(result.evaluation[1].details[1].result, false);
+
+  t.deepEqual(result.evaluation[2].details[0].label, obj.userResponse[0]);
+  t.is(result.evaluation[2].details[0].result, false);
+  t.deepEqual(result.evaluation[2].details[1].label, obj.validation.alt_responses[1].value[1]);
+  t.is(result.evaluation[2].details[1].result, true);
+});
+
+test("#AxisLabels: partially true userResponse, alt_responses, PARTIAL_MATCH", async t => {
+  // prepare data
+  const obj = clone(axisLabelsObj5);
+  obj.validation.scoring_type = ScoringType.PARTIAL_MATCH;
+  // action
+  const result = evaluator(obj);
+  // check
+  t.is(result.score, 3);
+  t.is(result.maxScore, 7);
+  t.is(result.evaluation[0].score, 2);
+  t.is(result.evaluation[0].result, false);
+  t.is(result.evaluation[1].score, 3);
+  t.is(result.evaluation[1].result, false);
+  t.is(result.evaluation[2].score, 1);
+  t.is(result.evaluation[2].result, false);
+
+  t.deepEqual(result.evaluation[0].details[0].label, obj.userResponse[0]);
+  t.is(result.evaluation[0].details[0].result, false);
+  t.deepEqual(result.evaluation[0].details[1].label, obj.validation.valid_response.value[1]);
+  t.is(result.evaluation[0].details[1].result, true);
+
+  t.deepEqual(result.evaluation[1].details[0].label, obj.validation.alt_responses[0].value[0]);
+  t.is(result.evaluation[1].details[0].result, true);
+  t.deepEqual(result.evaluation[1].details[1].label, obj.userResponse[1]);
+  t.is(result.evaluation[1].details[1].result, false);
+
+  t.deepEqual(result.evaluation[2].details[0].label, obj.userResponse[0]);
+  t.is(result.evaluation[2].details[0].result, false);
+  t.deepEqual(result.evaluation[2].details[1].label, obj.validation.alt_responses[1].value[1]);
+  t.is(result.evaluation[2].details[1].result, true);
+});
+
+test("#AxisLabels: error userResponse, alt_responses, EXACT_MATCH", async t => {
+  // prepare data
+  const obj = clone(axisLabelsObj6);
+  obj.validation.scoring_type = ScoringType.EXACT_MATCH;
+  // action
+  const result = evaluator(obj);
+  // check
+  t.is(result.score, 0);
+  t.is(result.maxScore, 7);
+  t.is(result.evaluation[0].score, 0);
+  t.is(result.evaluation[0].result, false);
+  t.is(result.evaluation[1].score, 0);
+  t.is(result.evaluation[1].result, false);
+  t.is(result.evaluation[2].score, 0);
+  t.is(result.evaluation[2].result, false);
+
+  t.deepEqual(result.evaluation[0].details[0].label, obj.userResponse[0]);
+  t.is(result.evaluation[0].details[0].result, false);
+  t.deepEqual(result.evaluation[0].details[1].label, obj.userResponse[1]);
+  t.is(result.evaluation[0].details[1].result, false);
+
+  t.deepEqual(result.evaluation[1].details[0].label, obj.userResponse[0]);
+  t.is(result.evaluation[1].details[0].result, false);
+  t.deepEqual(result.evaluation[1].details[1].label, obj.userResponse[1]);
+  t.is(result.evaluation[1].details[1].result, false);
+
+  t.deepEqual(result.evaluation[2].details[0].label, obj.userResponse[0]);
+  t.is(result.evaluation[2].details[0].result, false);
+  t.deepEqual(result.evaluation[2].details[1].label, obj.userResponse[1]);
+  t.is(result.evaluation[2].details[1].result, false);
+});
+
+test("#AxisLabels: error userResponse, alt_responses, PARTIAL_MATCH_V2", async t => {
+  // prepare data
+  const obj = clone(axisLabelsObj6);
+  obj.validation.scoring_type = ScoringType.PARTIAL_MATCH_V2;
+  // action
+  const result = evaluator(obj);
+  // check
+  t.is(result.score, 0);
+  t.is(result.maxScore, 14);
+  t.is(result.evaluation[0].score, 0);
+  t.is(result.evaluation[0].result, false);
+  t.is(result.evaluation[1].score, 0);
+  t.is(result.evaluation[1].result, false);
   t.is(result.evaluation[2].score, 0);
   t.is(result.evaluation[2].result, false);
 

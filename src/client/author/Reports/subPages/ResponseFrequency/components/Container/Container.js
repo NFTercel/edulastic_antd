@@ -6,7 +6,7 @@ import { ResponseFrequencyTable } from "../table/responseFrequencyTable";
 import { SimpleBarChart } from "../charts/simpleBarChart";
 import { StyledContainer, StyledCard } from "../styled";
 import Breadcrumb from "../../../../../src/components/Breadcrumb";
-import { CustomizedHeaderWrapper } from "../../../../components/header";
+import { CustomizedHeaderWrapper } from "../../../../common/components/header";
 import { reportsApi } from "@edulastic/api";
 import jsonData from "../../static/json/data.json";
 

@@ -72,6 +72,14 @@ const fetchTestActivities = (assignmentId, groupId) =>
     })
     .then(result => result.data.result);
 
+const duplicateAssignment = testId =>
+  api
+    .callApi({
+      url: `test/${testId}/duplicate`,
+      method: "post"
+    })
+    .then(result => result.data.result);
+
 export default {
   create,
   update,
@@ -80,5 +88,6 @@ export default {
   fetchAssigned,
   regrade,
   getById,
-  fetchTestActivities
+  fetchTestActivities,
+  duplicateAssignment
 };

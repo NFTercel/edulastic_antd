@@ -8,7 +8,7 @@ import CommonInput from "./common/CommonInput";
 const MaxSelection = ({ t, type, value, ...restProps }) => (
   <Fragment>
     <Label>{t("component.options.maxSelection")}</Label>
-    <CommonInput value={value} type={type} {...restProps} />
+    <CommonInput data-cy="maxSelectionOption" value={value} type={type} {...restProps} />
   </Fragment>
 );
 

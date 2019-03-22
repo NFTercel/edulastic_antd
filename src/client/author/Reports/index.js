@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { compose } from "redux";
 
-import { StyledContainer, StyledCard } from "./components/styled";
+// import { StyledContainer, StyledCard } from "./components/styled";
+import { StyledContainer, StyledCard } from "./common/styled";
 import { Row, Col } from "antd";
 
 import { SingleAssessmentReport } from "./components/singleAssessmentReport";
-import { CustomizedHeaderWrapper } from "./components/header";
+import { CustomizedHeaderWrapper } from "./common/components/header";
 
 const Container = props => {
   return (
@@ -16,7 +17,7 @@ const Container = props => {
           <StyledCard className="single-assessment-reports report">
             <SingleAssessmentReport />
           </StyledCard>
-          <StyledCard className="single-assessment-reports report" />
+          <StyledCard className="student-profile-reports report" />
         </Col>
         <Col className="report-category">
           <StyledCard className="multiple-assessment-reports report" />

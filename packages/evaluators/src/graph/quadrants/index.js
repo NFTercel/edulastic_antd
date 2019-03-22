@@ -80,6 +80,14 @@ const checkAnswer = (answer, userResponse, ignoreRepeatedShapes) => {
               }
               break;
 
+            case ShapeTypes.ELLIPSE:
+            case ShapeTypes.HYPERBOLA:
+              if (checkableShape.subElementsIds[2] !== allowedSubElementsIds[2]) {
+                sameShapes[j].result = false;
+                result.commonResult = false;
+              }
+              break;
+
             case ShapeTypes.PARABOLA:
             case ShapeTypes.SINE:
             case ShapeTypes.LINE:

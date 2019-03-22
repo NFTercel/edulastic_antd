@@ -1,7 +1,7 @@
 import React from "react";
 import { Row, Col, Icon } from "antd";
 import styled from "styled-components";
-
+import { StyledH3 } from "../styled";
 import { fadedBlack } from "@edulastic/colors";
 
 export const BoxHeading = props => {
@@ -30,10 +30,4 @@ const StyledCol = styled(Col)`
 const StyledIcon = styled(Icon)`
   height: 50px;
   width: 50px;
-`;
-
-const StyledH3 = styled.h3`
-  font-weight: 900;
-  color: ${fadedBlack};
-  margin: 0;
 `;

@@ -1,28 +1,39 @@
 import React, { Component } from "react";
-import { Input, Checkbox } from "antd";
+import { Dropdown } from "antd";
+
 import { FlexContainer } from "@edulastic/common";
+
 import FilterIcon from "../../assets/filter.svg";
 import {
   Container,
   FilterImg,
   MainContainer,
-  StyledPopover,
   StyledBoldText,
   StyledParagraph,
   ModalContent,
   StyledModal,
   HeaderContent,
   FilterHeader,
-  StyledCloseIcon
+  StyledCloseIcon,
+  FilterInput,
+  FilterCheckbox,
+  FilterCheckboxWrapper,
+  FilterButtonWrapper
 } from "./styled";
 
 class FilterBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalshow: false
+      modalshow: false,
+      popoverVisible: false
     };
   }
+
+  togglePopover = () =>
+    this.setState(state => ({
+      popoverVisible: !state.popoverVisible
+    }));
 
   showModal = () => {
     this.setState({
@@ -37,44 +48,55 @@ class FilterBar extends Component {
   };
 
   render() {
+    const { modalshow, popoverVisible } = this.state;
     const { windowWidth, windowHeight } = this.props;
-    const Search = Input.Search;
     const FilterElement = (
       <MainContainer>
+        <FilterButtonWrapper>
+          <Container active={popoverVisible}>
+            <FilterImg src={FilterIcon} /> Filter
+          </Container>
+        </FilterButtonWrapper>
         <StyledBoldText>Grade</StyledBoldText>
-        <Input.Search size="large" />
-        <StyledParagraph>
-          <Checkbox>All</Checkbox>
-        </StyledParagraph>
-        <StyledParagraph>
-          <Checkbox>Lorem Ispum</Checkbox>{" "}
-        </StyledParagraph>
-        <StyledParagraph>
-          <Checkbox>Lorem Ispum</Checkbox>{" "}
-        </StyledParagraph>
-        <br />
-        <hr />
+        <FilterInput size="large" />
+        <FilterCheckboxWrapper>
+          <StyledParagraph>
+            <FilterCheckbox>All</FilterCheckbox>
+          </StyledParagraph>
+          <StyledParagraph>
+            <FilterCheckbox>Lorem</FilterCheckbox>
+          </StyledParagraph>
+          <StyledParagraph>
+            <FilterCheckbox>Lorem</FilterCheckbox>
+          </StyledParagraph>
+        </FilterCheckboxWrapper>
         <StyledBoldText>Subject</StyledBoldText>
-        <Input.Search size="large" />
+        <FilterInput size="large" />
         <StyledBoldText>Year</StyledBoldText>
-        <Input.Search size="large" />
+        <FilterInput size="large" />
       </MainContainer>
     );
     return (
       <FlexContainer>
-        <StyledPopover content={FilterElement} placement="bottomLeft" trigger="click">
-          <Container>
+        <Dropdown
+          overlay={FilterElement}
+          placement="bottomRight"
+          trigger={["click"]}
+          visible={popoverVisible}
+          onVisibleChange={this.togglePopover}
+        >
+          <Container active={popoverVisible}>
             <FilterImg src={FilterIcon} /> Filter
           </Container>
-        </StyledPopover>
+        </Dropdown>
         <ModalContent>
-          <Container onClick={this.showModal}>
+          <Container active={modalshow} onClick={this.showModal}>
             <FilterImg src={FilterIcon} /> Filter
           </Container>
           <StyledModal
             footer={false}
             closable={false}
-            visible={this.state.modalshow}
+            visible={modalshow}
             bodyStyle={{ height: windowHeight, width: windowWidth }}
           >
             <HeaderContent>

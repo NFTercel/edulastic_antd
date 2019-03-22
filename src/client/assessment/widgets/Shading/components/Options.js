@@ -21,7 +21,7 @@ import ShadesView from "./ShadesView";
 import { setQuestionDataAction, getQuestionDataSelector } from "../../../../author/QuestionEditor/ducks";
 import { changeItemAction, changeUIStyleAction } from "../../../../author/src/actions/question";
 
-const Options = ({ item, t, changeItem, changeUIStyle, setQuestionData }) => {
+const Options = ({ item, t, changeItem, changeUIStyle, setQuestionData, saveAnswer }) => {
   const { canvas } = item;
 
   const _cellClick = (rowNumber, colNumber) => () => {
@@ -66,7 +66,13 @@ const Options = ({ item, t, changeItem, changeUIStyle, setQuestionData }) => {
             <BorderTypeOption onChange={val => changeItem("border", val)} value={item.border} />
           </Col>
           <Col md={12}>
-            <MaxSelectionOption onChange={val => changeItem("max_selection", +val)} value={item.max_selection} />
+            <MaxSelectionOption
+              onChange={val => {
+                changeItem("max_selection", +val);
+                saveAnswer([]);
+              }}
+              value={item.max_selection}
+            />
           </Col>
         </Row>
 
@@ -95,6 +101,7 @@ Options.propTypes = {
   changeItem: PropTypes.func.isRequired,
   changeUIStyle: PropTypes.func.isRequired,
   setQuestionData: PropTypes.func.isRequired,
+  saveAnswer: PropTypes.func.isRequired,
   item: PropTypes.object.isRequired
 };
 

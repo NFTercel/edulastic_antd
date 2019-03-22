@@ -47,8 +47,6 @@ const AssignmentCard = ({ startAssignment, resumeAssignment, data, theme, t, typ
     startDate,
     _id: assignmentId,
     safeBrowser,
-    shuffleQuestions = false,
-    shuffleAnswers = false,
     testType,
     maxAttempts
   } = data;
@@ -74,7 +72,7 @@ const AssignmentCard = ({ startAssignment, resumeAssignment, data, theme, t, typ
         testActivityId: lastAttempt._id
       });
     } else if (attemptCount < maxAttempts) {
-      startAssignment({ testId, assignmentId, testType, shuffleQuestions, shuffleAnswers });
+      startAssignment({ testId, assignmentId, testType });
     }
   };
 

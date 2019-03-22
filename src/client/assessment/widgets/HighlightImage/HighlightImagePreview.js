@@ -167,18 +167,24 @@ const HighlightImagePreview = ({ view, item, smallSize, saveAnswer, userAnswer, 
             ))}
           </StyledSelect>
         )}
-        <AdaptiveButtonList>
+        <AdaptiveButtonList data-cy="adaptiveButtonList">
           <Button disabled={historyTab === 0} onClick={onUndoClick}>
             <IconUndo style={{ marginRight: 25 }} width={18} height={18} />
-            <Text fontSize={fontSize}>{t("component.highlightImage.undo")}</Text>
+            <Text data-cy="undo" fontSize={fontSize}>
+              {t("component.highlightImage.undo")}
+            </Text>
           </Button>
           <Button disabled={historyTab === history.length - 1 || history.length === 0} onClick={onRedoClick}>
             <IconRedo style={{ marginRight: 25 }} width={18} height={18} />
-            <Text fontSize={fontSize}>{t("component.highlightImage.redo")}</Text>
+            <Text data-cy="redo" fontSize={fontSize}>
+              {t("component.highlightImage.redo")}
+            </Text>
           </Button>
           <Button onClick={onClearClick}>
             <IconEraseText style={{ marginRight: 25 }} width={18} height={18} />
-            <Text fontSize={fontSize}>{t("component.highlightImage.clear")}</Text>
+            <Text data-cy="clear" fontSize={fontSize}>
+              {t("component.highlightImage.clear")}
+            </Text>
           </Button>
         </AdaptiveButtonList>
       </Container>

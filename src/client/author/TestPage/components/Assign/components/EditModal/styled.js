@@ -100,6 +100,9 @@ export const TestTypeDropDown = styled(Select)`
 
 export const AlignRight = styled(RadioGroup)`
   float: right;
+  .ant-radio-wrapper {
+    white-space: normal;
+  }
 `;
 
 export const AlignSwitchRight = styled(Switch)`

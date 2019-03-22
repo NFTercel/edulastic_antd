@@ -10,6 +10,8 @@ export const TOOLS = {
   SIN: "sine",
   POLYGON: "polygon",
   PARABOLA: "parabola",
+  HYPERBOLA: "hyperbola",
+  ELLIPSE: "ellipse",
   LABEL: "label",
   MARK: "mark",
   SEGMENTS_POINT: "segments_point",

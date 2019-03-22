@@ -1,11 +1,10 @@
 import React from "react";
-import styled from "styled-components";
 import PropTypes from "prop-types";
-import { Button } from "antd";
 import { connect } from "react-redux";
+import { white } from "@edulastic/colors";
 import { GoogleLogin } from "react-google-login";
-import { googleApi } from "@edulastic/api";
 // components
+import { Title, IconManageClass, CreateClassButton, SyncButtons, CreateIcon, ButtonsWrapper } from "./styled";
 import HeaderWrapper from "../../src/mainContent/headerWrapper";
 // ducks
 import { fetchClassListAction } from "../ducks";
@@ -34,29 +33,27 @@ const Header = ({ fetchClassList }) => {
 
   return (
     <HeaderWrapper>
-      <Title> Manage Class</Title>
-      <Button> Start Sync </Button>
-      <GoogleLogin
-        clientId={process.env.POI_APP_GOOGLE_CLIENT_ID}
-        buttonText="Sync Google ClassRoom"
-        scope={scopes}
-        onSuccess={handleLoginSucess}
-        onFailure={handleError}
-        prompt="consent"
-        responseType="code"
-      />
-      <Button> Create Class </Button>
+      <Title>
+        <IconManageClass color={white} width={20} height={20} /> <span>Manage Class</span>
+      </Title>
+      <ButtonsWrapper>
+        <GoogleLogin
+          clientId={process.env.POI_APP_GOOGLE_CLIENT_ID}
+          buttonText="Sync with Google Classroom"
+          render={renderProps => <SyncButtons onClick={renderProps.onClick}>Sync with Google Classroom</SyncButtons>}
+          scope={scopes}
+          onSuccess={handleLoginSucess}
+          onFailure={handleError}
+          prompt="consent"
+          responseType="code"
+        />
+        <CreateClassButton>
+          <CreateIcon color={white} /> Create Class{" "}
+        </CreateClassButton>
+      </ButtonsWrapper>
     </HeaderWrapper>
   );
 };
-
-const Title = styled.div`
-  font-size: 22px;
-  font-weight: bold;
-  line-height: 1.36;
-  text-align: left;
-  display: flex;
-`;
 
 Header.propTypes = {
   fetchClassList: PropTypes.func.isRequired

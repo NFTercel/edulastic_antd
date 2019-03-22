@@ -75,7 +75,7 @@ function* fetchAssignments({ payload }) {
  */
 function* startAssignment({ payload }) {
   try {
-    const { assignmentId, testId, testType, shuffleQuestions, shuffleAnswers } = payload;
+    const { assignmentId, testId, testType } = payload;
     if (!assignmentId || !testId) {
       throw new Error("insufficient data");
     }
@@ -89,8 +89,7 @@ function* startAssignment({ payload }) {
       groupId,
       institutionId,
       groupType,
-      shuffleQuestions,
-      shuffleAnswers
+      testId
     });
     // set Activity id
     yield put(push(`/student/${testType}/${testId}/uta/${testActivityId}/qid/0`));
@@ -145,12 +144,12 @@ function* launchAssignment({ payload }) {
       assignmentApi.fetchTestActivities(assignmentId, groupId)
     ]);
     const lastActivity = _maxBy(testActivities, "createdAt");
-    const { testId, testType = "assessment", shuffleQuestions, shuffleAnswers } = assignment;
+    const { testId, testType = "assessment" } = assignment;
 
     if (lastActivity) {
       yield put(resumeAssignmentAction({ testId, testType, assignmentId, testActivityId: lastActivity._id }));
     } else {
-      yield put(startAssignmentAction({ testId, assignmentId, testType, shuffleQuestions, shuffleAnswers }));
+      yield put(startAssignmentAction({ testId, assignmentId, testType }));
     }
   } catch (e) {
     console.log(e);

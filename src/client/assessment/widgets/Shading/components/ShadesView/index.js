@@ -64,7 +64,7 @@ const ShadesView = ({
   };
 
   return (
-    <Wrapper border={border} marginTop={marginTop}>
+    <Wrapper border={border} marginTop={marginTop} data-cy="shadesView">
       {rowsArray.map((row, i) => (
         <Ul key={i}>
           {columnsArray.map((col, j) => {
@@ -76,6 +76,7 @@ const ShadesView = ({
                   isCorrectAnswer(i, j) ||
                   (!Array.isArray(correctAnswers[0]) && isShadeActive(i, j) && correctAnswers[0] > count)
                 }
+                data-cy="shadesViewItem"
                 border={border}
                 hover={hover}
                 visibility={getVisibility({ rowIndex: i, columnIndex: j })}

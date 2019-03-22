@@ -67,10 +67,18 @@ const fetchResponseFrequency = params => {
   return api.callApi({ url: `/report/responseFrequency?${str}` });
 };
 
+const fetchAssessmentSummaryReport = params => {
+  return api.callApi({
+    url: `/report/assessmentSummary?testId=${params.testId}&districtId=${params.districtId}`
+  });
+  // ?testId=5c90d974a649cb81bc5d4ca2&districtId=5c9089b1a649cb81bc398b1f
+};
+
 export default {
   fetchReports,
   fetchTestActivityDetail,
   fetchTestActivityReport,
   fetchSkillReport,
-  fetchResponseFrequency
+  fetchResponseFrequency,
+  fetchAssessmentSummaryReport
 };

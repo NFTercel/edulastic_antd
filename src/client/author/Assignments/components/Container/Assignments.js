@@ -19,14 +19,13 @@ import {
   getToggleReleaseGradeStateSelector
 } from "../../../src/selectors/assignments";
 
-import SortBar from "../SortBar/SortBar";
 import FilterBar from "../FilterBar/FilterBar";
 import TableList from "../TableList/TableList";
 import ReleaseGradeSettingsModal from "../ReleaseGradeSettings/ReleaseGradeSetting";
-import MobileTableList from "../MobileTabList/MobileTableList";
+import MobileTableList from "../MobileTableList/MobileTableList";
 import ListHeader from "../../../src/components/common/ListHeader";
+import { Container, Main, StyledCard } from "./styled";
 
-import { Container, PaginationInfo, Main, DRadio, StyledCard, FullFlexContainer, StyledFlexContainer } from "./styled";
 const { releaseGradeLabels } = test;
 class Assignments extends Component {
   constructor(props) {
@@ -64,16 +63,16 @@ class Assignments extends Component {
     }
   };
 
+  renderFilter = () => {
+    const { windowWidth, windowHeight } = this.props;
+    return <FilterBar windowWidth={windowWidth} windowHeight={windowHeight} />;
+  };
+
   render() {
-    const {
-      assignments,
-      creating,
-      t,
-      windowWidth,
-      windowHeight,
-      isShowReleaseSettingsPopup,
-      toggleReleaseGradePopUp
-    } = this.props;
+    const { assignments, creating, t, isShowReleaseSettingsPopup, toggleReleaseGradePopUp } = this.props;
+
+    const tabletWidth = 768;
+
     return (
       <div>
         <ListHeader
@@ -85,27 +84,21 @@ class Assignments extends Component {
         <Container>
           <FlexContainer>
             <Main>
-              <FlexContainer justifyContent="space-between" style={{ marginBottom: 10 }}>
-                <PaginationInfo>
-                  1 to 20 of <i>25668</i>
-                </PaginationInfo>
-                <FullFlexContainer>
-                  <SortBar onSortChange={this.handleSortChange} onStyleChange={this.handleStyleChange} />
-                  <StyledFlexContainer>
-                    <FilterBar windowWidth={windowWidth} windowHeight={windowHeight} />
-                    <DRadio value={1}>
-                      <span style={{ paddingLeft: "15px", display: "inline-block" }}>Assigned</span>
-                    </DRadio>
-                    <DRadio value={2}>
-                      <span style={{ paddingLeft: "15px", display: "inline-block" }}>Drafts</span>
-                    </DRadio>
-                  </StyledFlexContainer>
-                </FullFlexContainer>
-              </FlexContainer>
-              <StyledCard>
-                <TableList assignments={assignments} onOpenReleaseScoreSettings={this.onOpenReleaseScoreSettings} />
-                <MobileTableList assignments={assignments} windowWidth={windowWidth} windowHeight={windowHeight} />
-              </StyledCard>
+              {window.innerWidth >= tabletWidth && (
+                <StyledCard>
+                  <TableList
+                    assignments={assignments}
+                    renderFilter={this.renderFilter}
+                    onOpenReleaseScoreSettings={this.onOpenReleaseScoreSettings}
+                  />
+                </StyledCard>
+              )}
+              {window.innerWidth < tabletWidth && (
+                <MobileTableList
+                  assignments={assignments}
+                  onOpenReleaseScoreSettings={this.onOpenReleaseScoreSettings}
+                />
+              )}
             </Main>
           </FlexContainer>
         </Container>
