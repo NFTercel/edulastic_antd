@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import styled from "styled-components";
 import Draggable from "react-draggable";
 import BasicCalculator from "./BasicCalculator";
+import { WithResources } from "@edulastic/common";
 
 class CalculatorContainer extends Component {
   constructor(props) {
@@ -28,17 +29,12 @@ class CalculatorContainer extends Component {
     let desmosGraphCalculator = Desmos.GraphingCalculator(ReactDOM.findDOMNode(this.desmosGraphingRef));
     desmosGraphCalculator.setExpression({ dragMode: Desmos.DragModes.XY });
 
-    setTimeout(() => {
-      Desmos.FourFunctionCalculator(ReactDOM.findDOMNode(this.desmosBasicRef));
-    }, 200);
+    Desmos.FourFunctionCalculator(ReactDOM.findDOMNode(this.desmosBasicRef));
+    Desmos.ScientificCalculator(ReactDOM.findDOMNode(this.desmosScientificRef));
 
-    setTimeout(() => {
-      Desmos.ScientificCalculator(ReactDOM.findDOMNode(this.desmosScientificRef));
-    }, 400);
-
-    setTimeout(() => {
-      var parameters = {
-        id: "ggbApplet",
+    let geogebraGraphing = new GGBApplet(
+      {
+        id: "ggbAppletGraphing",
         appName: "graphing",
         width: 800,
         height: 600,
@@ -55,15 +51,15 @@ class CalculatorContainer extends Component {
         showTutorialLink: true,
         showLogging: true,
         useBrowserForJS: false
-      };
+      },
+      "5.0",
+      "geogebra-graphingculator"
+    );
+    geogebraGraphing.inject("geogebra-graphingculator");
 
-      let applet = new GGBApplet(parameters, "5.0", "geogebra-graphingculator");
-      applet.inject("geogebra-graphingculator");
-    }, 600);
-
-    setTimeout(() => {
-      var parameters = {
-        id: "ggbApplet",
+    let geogebraScientific = new GGBApplet(
+      {
+        id: "ggbAppletScientific",
         appName: "scientific",
         width: 800,
         height: 600,
@@ -80,11 +76,11 @@ class CalculatorContainer extends Component {
         showTutorialLink: true,
         showLogging: true,
         useBrowserForJS: false
-      };
-
-      let applet = new GGBApplet(parameters, "5.0", "geogebra-scientificcalculator");
-      applet.inject("geogebra-scientificcalculator");
-    }, 800);
+      },
+      "5.0",
+      "geogebra-scientificcalculator"
+    );
+    geogebraScientific.inject("geogebra-scientificcalculator");
   }
 
   render() {
@@ -197,8 +193,22 @@ const DesmosScientificCalculator = styled.div`
 `;
 
 const GeoGebracalculator = styled.div`
-  width: 800px;
-  height: 600px;
+  width: 800px !important;
+  height: 600px !important;
 `;
 
-export default CalculatorContainer;
+const CalculatorContainerWithResources = ({ ...props }) => (
+  <WithResources
+    resources={[
+      "https://www.desmos.com/api/v1.2/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6&ext.js",
+      "https://cdn.geogebra.org/apps/deployggb.js"
+    ]}
+    fallBack={<h2>Loading...</h2>}
+  >
+    <CalculatorContainer {...props} />
+  </WithResources>
+);
+
+export default CalculatorContainerWithResources;
+
+// export default CalculatorContainer;
