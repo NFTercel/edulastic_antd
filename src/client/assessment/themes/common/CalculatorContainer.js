@@ -88,7 +88,7 @@ class CalculatorContainer extends Component {
     return (
       <Container>
         <StyledDraggable>
-          <StyledDiv visible={changeMode == 2 && calculateMode === 0 && true}>
+          <StyledDiv visible={changeMode == 2 && calculateMode === 0}>
             <StyledTitle>Desmos Graphing Calculator</StyledTitle>
             <DesmosGraphingCalculator
               id="demos-graphiccalculator"
@@ -100,7 +100,7 @@ class CalculatorContainer extends Component {
         </StyledDraggable>
 
         <StyledDraggable>
-          <StyledDiv visible={changeMode == 2 && calculateMode === 1 && true}>
+          <StyledDiv visible={changeMode == 2 && calculateMode === 1}>
             <StyledTitle>Desmos Basic Calculator</StyledTitle>
             <DesmosBasicCalculator
               ref={ref => {
@@ -111,7 +111,7 @@ class CalculatorContainer extends Component {
         </StyledDraggable>
 
         <StyledDraggable>
-          <StyledDiv visible={changeMode == 2 && calculateMode === 2 && true}>
+          <StyledDiv visible={changeMode == 2 && calculateMode === 2}>
             <StyledTitle>Desmos Scientific Calculator</StyledTitle>
             <DesmosScientificCalculator
               ref={ref => {
@@ -122,21 +122,21 @@ class CalculatorContainer extends Component {
         </StyledDraggable>
 
         <StyledDraggableF>
-          <StyledDiv visible={changeMode == 2 && calculateMode === 3 && true}>
+          <StyledDiv visible={changeMode == 2 && calculateMode === 3}>
             <StyledTitle>GeoGebra Graphing Calculator</StyledTitle>
             <GeoGebracalculator id="geogebra-graphingculator" />
           </StyledDiv>
         </StyledDraggableF>
 
         <StyledDraggableF>
-          <StyledDiv visible={changeMode == 2 && calculateMode === 4 && true}>
+          <StyledDiv visible={changeMode == 2 && calculateMode === 4}>
             <StyledTitle>Basic Calculator</StyledTitle>
             <BasicCalculator id="geogebra-basiccalculator" />
           </StyledDiv>
         </StyledDraggableF>
 
         <StyledDraggableF>
-          <StyledDiv visible={changeMode == 2 && calculateMode === 5 && true}>
+          <StyledDiv visible={changeMode == 2 && calculateMode === 5}>
             <StyledTitle>GeoGebra Scientific Calculator</StyledTitle>
             <GeoGebracalculator id="geogebra-scientificcalculator" />
           </StyledDiv>
