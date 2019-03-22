@@ -66,29 +66,29 @@ class CalculatorContainer extends Component {
         appName: "scientific",
         width: 800,
         height: 600,
-        showToolBar: true,
+        showToolBar: false,
         borderColor: null,
-        showMenuBar: true,
-        allowStyleBar: true,
+        showMenuBar: false,
+        allowStyleBar: false,
         showAlgebraInput: true,
         enableLabelDrags: false,
-        enableShiftDragZoom: true,
+        enableShiftDragZoom: false,
         capturingThreshold: null,
         showToolBarHelp: false,
         errorDialogsActive: true,
-        showTutorialLink: true,
+        showTutorialLink: false,
         showLogging: true,
         useBrowserForJS: false
       };
 
-      let applet = new GGBApplet(parameters, "5.0", "geogebra-scientificcalculator");
-      applet.inject("geogebra-scientificcalculator");
+      let applet = new GGBApplet(parameters, "5.0", "geogebra-basiccalculator");
+      applet.inject("geogebra-basiccalculator");
     }, 800);
 
     setTimeout(() => {
       var parameters = {
         id: "ggbApplet",
-        appName: "basic",
+        appName: "scientific",
         width: 800,
         height: 600,
         showToolBar: true,
@@ -106,8 +106,8 @@ class CalculatorContainer extends Component {
         useBrowserForJS: false
       };
 
-      let applet = new GGBApplet(parameters, "5.0", "geogebra-basiccalculator");
-      applet.inject("geogebra-basiccalculator");
+      let applet = new GGBApplet(parameters, "5.0", "geogebra-scientificcalculator");
+      applet.inject("geogebra-scientificcalculator");
     }, 1000);
   }
 
@@ -174,8 +174,6 @@ class CalculatorContainer extends Component {
   }
 }
 
-export default CalculatorContainer;
-
 const Container = styled.div``;
 
 const StyledDraggable = styled(Draggable)`
@@ -213,12 +211,12 @@ const DesmosGraphingCalculator = styled.div`
 `;
 
 const DesmosBasicCalculator = styled.div`
-  width: 600px;
+  width: 350px;
   height: 500px;
 `;
 
 const DesmosScientificCalculator = styled.div`
-  width: 350px;
+  width: 600px;
   height: 500px;
 `;
 
@@ -226,3 +224,5 @@ const GeoGebracalculator = styled.div`
   width: 800px;
   height: 600px;
 `;
+
+export default CalculatorContainer;
