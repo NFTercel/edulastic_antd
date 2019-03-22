@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
 import Draggable from "react-draggable";
+import BasicCalculator from "./BasicCalculator";
 
 class CalculatorContainer extends Component {
   constructor(props) {
@@ -66,31 +67,6 @@ class CalculatorContainer extends Component {
         appName: "scientific",
         width: 800,
         height: 600,
-        showToolBar: false,
-        borderColor: null,
-        showMenuBar: false,
-        allowStyleBar: false,
-        showAlgebraInput: true,
-        enableLabelDrags: false,
-        enableShiftDragZoom: false,
-        capturingThreshold: null,
-        showToolBarHelp: false,
-        errorDialogsActive: true,
-        showTutorialLink: false,
-        showLogging: true,
-        useBrowserForJS: false
-      };
-
-      let applet = new GGBApplet(parameters, "5.0", "geogebra-basiccalculator");
-      applet.inject("geogebra-basiccalculator");
-    }, 800);
-
-    setTimeout(() => {
-      var parameters = {
-        id: "ggbApplet",
-        appName: "scientific",
-        width: 800,
-        height: 600,
         showToolBar: true,
         borderColor: null,
         showMenuBar: true,
@@ -108,7 +84,7 @@ class CalculatorContainer extends Component {
 
       let applet = new GGBApplet(parameters, "5.0", "geogebra-scientificcalculator");
       applet.inject("geogebra-scientificcalculator");
-    }, 1000);
+    }, 800);
   }
 
   render() {
@@ -158,8 +134,8 @@ class CalculatorContainer extends Component {
 
         <StyledDraggableF>
           <StyledDiv visible={changeMode == 2 && calculateMode === 4 && true}>
-            <StyledTitle>GeoGebra Basic Calculator</StyledTitle>
-            <GeoGebracalculator id="geogebra-basiccalculator" />
+            <StyledTitle>Basic Calculator</StyledTitle>
+            <BasicCalculator id="geogebra-basiccalculator" />
           </StyledDiv>
         </StyledDraggableF>
 
