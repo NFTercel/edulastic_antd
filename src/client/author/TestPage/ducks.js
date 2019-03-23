@@ -2,7 +2,7 @@ import { createSelector } from "reselect";
 import { createAction } from "redux-starter-kit";
 import { test } from "@edulastic/constants";
 import { call, put, all, takeEvery } from "redux-saga/effects";
-import { push } from "connected-react-router";
+import { push, replace } from "connected-react-router";
 import { message } from "antd";
 import { keyBy as _keyBy, omit } from "lodash";
 import { testsApi, assignmentApi } from "@edulastic/api";
@@ -127,7 +127,6 @@ export const initialTestState = {
   grades: [],
   subjects: [],
   courses: [],
-  assignments: [],
   collections: "",
   analytics: {
     usage: "0",
@@ -149,14 +148,6 @@ export const reducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case SET_DEFAULT_TEST_DATA:
       return { ...state, entity: initialTestState };
-    case SET_ASSIGNMENT:
-      return {
-        ...state,
-        entity: {
-          ...state.entity,
-          assignments: [...state.entity.assignments, payload.obj]
-        }
-      };
     case RECEIVE_TEST_BY_ID_REQUEST:
       return { ...state, loading: true };
     case SET_TEST_EDIT_ASSIGNED:
@@ -166,8 +157,6 @@ export const reducer = (state = initialState, { type, payload }) => {
         ...state,
         loading: false,
         entity: {
-          // TODO: someone Fix this shit!!!
-          assignments: [],
           ...payload.entity
         }
       };
@@ -191,7 +180,6 @@ export const reducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         entity: {
-          assignments: [],
           ...state.entity,
           ...payload.data
         }
@@ -258,14 +246,22 @@ function* createTestSaga({ payload }) {
   try {
     const dataToSend = omit(payload.data, ["assignments", "createdDate", "updatedDate"]);
     const entity = yield call(testsApi.create, dataToSend);
+    yield put({
+      type: SET_TEST_DATA,
+      payload: {
+        data: entity
+      }
+    });
+
     if (regrade) {
       yield put(push(`/author/assignments/regrade/new/${entity._id}/old/${oldId}`));
     } else {
       yield put(createTestSuccessAction(entity));
-      yield call(message.success, "Success create");
+      yield put(replace(`/author/tests/${entity._id}`));
+      yield call(message.success, "Test created");
     }
   } catch (err) {
-    const errorMessage = "Create test is failing";
+    const errorMessage = "Failed to create test!";
     yield call(message.error, errorMessage);
     yield put(createTestErrorAction(errorMessage));
   }
@@ -281,7 +277,7 @@ function* updateTestSaga({ payload }) {
     const entity = yield call(testsApi.update, payload);
 
     yield put(updateTestSuccessAction(entity));
-    yield call(message.success, "Success update");
+    yield call(message.success, "Update Sucessful");
 
     if (payload.updateLocal) {
       yield put(setTestDataAction(payload.data));

@@ -1108,6 +1108,8 @@ const BookIcon = styled(IconBook)`
 
 const SunHeaderInfoCardText = styled.div`
   margin-left: ${props => props.marginLeft || "0px"};
+  font-family: Open Sans, Bold;
+  font-weight: 600;
 `;
 
 const enhance = compose(

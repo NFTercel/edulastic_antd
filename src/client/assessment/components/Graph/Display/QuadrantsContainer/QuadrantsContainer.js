@@ -107,17 +107,12 @@ const getColoredAnswer = answerArr => {
         case CONSTANT.TOOLS.POINT:
           colors = Colors.yellow[CONSTANT.TOOLS.POINT];
           break;
+
+        case CONSTANT.TOOLS.VECTOR:
+        case CONSTANT.TOOLS.SEGMENT:
+        case CONSTANT.TOOLS.RAY:
         case CONSTANT.TOOLS.LINE:
           colors = Colors.yellow[CONSTANT.TOOLS.LINE];
-          break;
-        case CONSTANT.TOOLS.RAY:
-          colors = Colors.yellow[CONSTANT.TOOLS.RAY];
-          break;
-        case CONSTANT.TOOLS.SEGMENT:
-          colors = Colors.yellow[CONSTANT.TOOLS.SEGMENT];
-          break;
-        case CONSTANT.TOOLS.VECTOR:
-          colors = Colors.yellow[CONSTANT.TOOLS.VECTOR];
           break;
         case CONSTANT.TOOLS.ELLIPSE:
         case CONSTANT.TOOLS.CIRCLE:
@@ -134,6 +129,12 @@ const getColoredAnswer = answerArr => {
           break;
         case CONSTANT.TOOLS.PARABOLA:
           colors = Colors.yellow[CONSTANT.TOOLS.PARABOLA];
+          break;
+        case CONSTANT.TOOLS.TANGENT:
+          colors = Colors.yellow[CONSTANT.TOOLS.TANGENT];
+          break;
+        case CONSTANT.TOOLS.SECANT:
+          colors = Colors.yellow[CONSTANT.TOOLS.SECANT];
           break;
         default:
           break;
@@ -213,8 +214,10 @@ class GraphContainer extends Component {
       bgImgOptions,
       backgroundShapes,
       showAnswer,
+      checkAnswer,
       validation,
-      tools
+      tools,
+      elements
     } = this.props;
 
     this._graph = makeBorder(this._graphId);
@@ -254,7 +257,13 @@ class GraphContainer extends Component {
       }
     }
 
-    this.mapElementsToGraph();
+    if (checkAnswer) {
+      this.mapElementsToGraph();
+    }
+
+    if (!showAnswer && !checkAnswer) {
+      this._graph.loadFromConfig(elements);
+    }
 
     this.setGraphUpdateEventHandler();
 
@@ -497,7 +506,7 @@ class GraphContainer extends Component {
       newElems = getColoredElems(elements, compareResult);
     }
 
-    this._graph.loadFromConfig(newElems);
+    this._graph.loadAnswersFromConfig(newElems);
   };
 
   getIconByToolName = (toolName, options) => {
@@ -548,6 +557,8 @@ class GraphContainer extends Component {
       circle: () => <IconCircle {...options} />,
       ellipse: () => "ellipse",
       hyperbola: () => "hyperbola",
+      tangent: () => "tangent",
+      secant: () => "secant",
       parabola: () => <IconParabola {...options} />,
       sine: () => {
         const newOptions = {
@@ -582,6 +593,8 @@ class GraphContainer extends Component {
     "circle",
     "ellipse",
     "sine",
+    "tangent",
+    "secant",
     "hyperbola",
     "polygon",
     "parabola",

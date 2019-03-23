@@ -1,8 +1,8 @@
 import GraphingStandardPage from "./graphingStandardPage";
 
 class GraphingNumberLineStandardPage extends GraphingStandardPage {
-  constructor(svgWidth, svgHeight) {
-    super(svgWidth, svgHeight);
+  constructor() {
+    super();
   }
 
   // elements ---------------------------------------------------------------
@@ -70,6 +70,13 @@ class GraphingNumberLineStandardPage extends GraphingStandardPage {
   getMarksOnBoard() {
     return this.getBoard()
       .find("div.mark:not(:empty)")
+      .filter(":visible");
+  }
+
+  getMountedMark(name) {
+    return this.getBoard()
+      .find("div.mark.mounted:not(:empty)")
+      .contains("div", name)
       .filter(":visible");
   }
 
@@ -186,6 +193,7 @@ class GraphingNumberLineStandardPage extends GraphingStandardPage {
     this.getToolbarContainer()
       .find('select[data-cy="selectStyle"]')
       .eq(index)
+      .should("be.visible")
       .select(option);
     return this;
   }
@@ -198,6 +206,69 @@ class GraphingNumberLineStandardPage extends GraphingStandardPage {
       .next()
       .click();
     return this;
+  }
+
+  clickOnSegmentsToolbarTool(index) {
+    this.getSegmentsToolbar()
+      .children()
+      .eq(index)
+      .click({ force: true });
+    return this;
+  }
+
+  clickOnSegmentsToolbarDeleteTool() {
+    this.getSegmentsToolbar()
+      .children()
+      .last()
+      .click({ force: true });
+    return this;
+  }
+
+  // boardIndex - board number on page, start with 0
+  // fromXK - percentage of graph width
+  // fromYK - percentage of graph height
+  // toXK - percentage of graph width
+  // toYK - percentage of graph height
+  invokeBoardDragDrop(boardIndex, fromXK, fromYK, toXK, toYK) {
+    return this.getBoards()
+      .eq(boardIndex)
+      .then(board => {
+        cy.window().then(window => {
+          const boardRect = board[0].getBoundingClientRect();
+          const left = boardRect.left + window.pageXOffset;
+          const { top, width, height } = boardRect;
+
+          const fromPoint = {
+            clientX: fromXK * width + left,
+            clientY: fromYK * height + top
+          };
+          const toPoint = {
+            clientX: toXK * width + left,
+            clientY: toYK * height + top
+          };
+
+          const downEvent = new Event("pointerdown");
+          downEvent.clientX = fromPoint.clientX;
+          downEvent.clientY = fromPoint.clientY;
+          const moveEvent = new Event("pointermove");
+          moveEvent.clientX = toPoint.clientX;
+          moveEvent.clientY = toPoint.clientY;
+          const upEvent = new Event("pointerup");
+          upEvent.clientX = toPoint.clientX;
+          upEvent.clientY = toPoint.clientY;
+
+          let result = true;
+          try {
+            board[0].dispatchEvent(downEvent);
+            board[0].dispatchEvent(moveEvent);
+            window.document.dispatchEvent(upEvent);
+          } catch (e) {
+            result = false;
+          }
+
+          assert.isTrue(result, "invoke board drag and drop");
+        });
+      });
   }
 }
 export default GraphingNumberLineStandardPage;

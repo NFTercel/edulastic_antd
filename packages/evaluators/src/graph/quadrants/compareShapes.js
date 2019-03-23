@@ -38,6 +38,8 @@ class CompareShapes {
       case ShapeTypes.PARABOLA:
         return this.compareParabolas(testShape, trueShape);
       case ShapeTypes.SINE:
+      case ShapeTypes.TANGENT:
+      case ShapeTypes.SECANT:
         return this.compareSines(testShape, trueShape);
       case ShapeTypes.POLYGON:
         return this.comparePolygons(testShape, trueShape);

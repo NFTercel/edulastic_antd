@@ -4,7 +4,15 @@ import { compose } from "redux";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Button, Menu, Dropdown, Icon } from "antd";
-import { mobileWidth, lightBlue, white, desktopWidth, tabletWidth, lightGreenSecondary } from "@edulastic/colors";
+import {
+  mobileWidth,
+  lightBlue,
+  white,
+  desktopWidth,
+  tabletWidth,
+  lightGreenSecondary,
+  extraDesktopWidth
+} from "@edulastic/colors";
 import { IconVerified, IconVisualization, IconCheckSmall, IconMoreVertical, IconLeftArrow } from "@edulastic/icons";
 import {
   toggleCheckedUnitItemAction,
@@ -74,7 +82,7 @@ class ModuleRow extends Component {
               boxShadow={collapsed ? "0 3px 7px 0 rgba(0, 0, 0, 0.1)" : "unset"}
             >
               <ModuleInfo>
-                <CustomIcon marginRight="25" onClick={() => onCollapseExpand(id)}>
+                <CustomIcon marginRight="25" marginLeft={7} onClick={() => onCollapseExpand(id)}>
                   {!collapsed ? (
                     <Icon type="up" style={{ color: "#707070" }} />
                   ) : (
@@ -161,24 +169,24 @@ class ModuleRow extends Component {
                             checked={checkedUnitItems.indexOf(moduleData.id) !== -1}
                             className="module-checkbox"
                           /> */}
-                          <CustomIcon>
+                          <CustomIcon marginLeft={16}>
                             <Icon type="right" style={{ color: "#707070" }} />
                           </CustomIcon>
                           <ModuleDataName>{moduleData.name}</ModuleDataName>
                         </AssignmentContent>
-                        <ModuleAssignedUnit>
-                          {moduleData.assigned && !moduleData.completed && (
-                            <CustomIcon>
-                              <img src={assessmentRed} alt="Module item is assigned" />
-                            </CustomIcon>
-                          )}
-                          {moduleData.completed && (
-                            <CustomIcon>
-                              <img src={assessmentGreen} alt="Module item is completed" />
-                            </CustomIcon>
-                          )}
-                        </ModuleAssignedUnit>
                         <AssignmentIconsWrapper expanded={isContentExpanded}>
+                          <ModuleAssignedUnit>
+                            {moduleData.assigned && !moduleData.completed && (
+                              <CustomIcon>
+                                <img src={assessmentRed} alt="Module item is assigned" />
+                              </CustomIcon>
+                            )}
+                            {moduleData.completed && (
+                              <CustomIcon>
+                                <img src={assessmentGreen} alt="Module item is completed" />
+                              </CustomIcon>
+                            )}
+                          </ModuleAssignedUnit>
                           <AssignmentIconsHolder>
                             <AssignmentIcon>
                               <CustomIcon>
@@ -235,10 +243,10 @@ ModuleRow.propTypes = {
 
 const CustomIcon = styled.span`
   cursor: pointer;
-  margin-right: ${props => props.marginRight || 25}px;
-  margin-left: ${props => props.marginLeft || 0}px;
+  margin-right: ${props => (props.marginRight ? props.marginRight : 25)}px;
+  margin-left: ${({ marginLeft }) => marginLeft || 0}px;
   @media only screen and (max-width: ${mobileWidth}) {
-    margin-right: 0px;
+    margin-right: 5px;
     margin-left: 0px;
     padding: 5px;
   }
@@ -269,12 +277,14 @@ const ModuleFocused = styled.div`
 `;
 
 const ModuleAssignedUnit = styled.div`
-  margin-left: auto;
+  margin-right: auto;
   @media only screen and (max-width: ${tabletWidth}) {
     margin-right: 0;
+    position: absolute;
+    top: 0px;
   }
   @media only screen and (max-width: ${tabletWidth}) and (min-width: ${mobileWidth}) {
-    margin-right: -25px;
+    right: -25px;
   }
 `;
 
@@ -283,9 +293,6 @@ const ModuleTitleWrapper = styled.div`
   flex-direction: column;
   @media only screen and (max-width: ${tabletWidth}) {
     width: 80%;
-  }
-  @media only screen and (max-width: ${mobileWidth}) {
-    width: 100%;
   }
 `;
 
@@ -428,7 +435,10 @@ const ModuleTitlePrefix = styled.div`
 `;
 
 const ModuleDataName = styled.div`
-  font-weight: 300;
+  font-weight: 600;
+  color: #30404f;
+  font-size: 14px;
+  font-family: Open Sans, SemiBold;
   @media only screen and (max-width: ${desktopWidth}) {
     min-width: auto;
     order: 2;
@@ -448,13 +458,23 @@ const AssignmentIconsWrapper = styled.div`
   margin-left: auto;
   padding: 0px;
   display: inline-flex;
-  min-width: 55%;
+  min-width: 65%;
   display: flex;
   justify-content: flex-end;
+  @media screen and (max-width: ${extraDesktopWidth}) {
+    min-width: 45%;
+  }
+  @media screen and (max-width: ${desktopWidth}) {
+    min-width: 35%;
+  }
   @media only screen and (max-width: ${tabletWidth}) {
+    min-width: 50%;
     padding-top: 10px;
     margin-left: auto;
     margin-right: 0px;
+  }
+  @media screen and (max-width: ${mobileWidth}) {
+    min-width: 100%;
   }
 `;
 
@@ -472,6 +492,9 @@ const Row = styled.div`
   padding-right: 10px;
   box-shadow: none;
   align-items: center;
+  @media (max-width: ${mobileWidth}) {
+    padding-left: 10px;
+  }
 `;
 
 const Container = styled.div`
@@ -573,8 +596,8 @@ const ModulesAssigned = styled.div`
   align-items: center;
   padding-right: 20px;
   padding-left: 20px;
-  font-weight: 100;
-  color: #000;
+  font-weight: 400;
+  color: #434b5d;
   margin-left: auto;
   justify-self: flex-end;
   line-height: 2.4;
@@ -582,6 +605,7 @@ const ModulesAssigned = styled.div`
   max-height: 30px;
   margin-top: auto;
   margin-bottom: auto;
+  font-family: Open Sans, SemiBold;
   @media only screen and (max-width: ${tabletWidth}) {
     margin-right: auto;
     justify-self: flex-start;

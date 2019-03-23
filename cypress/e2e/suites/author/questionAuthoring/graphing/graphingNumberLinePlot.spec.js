@@ -1,6 +1,7 @@
 import GraphingNumberLinePlotPage from "../../../../framework/author/itemList/questionType/graphing/graphingNumberLinePlotPage";
 import EditItemPage from "../../../../framework/author/itemList/itemDetail/editPage";
 import Header from "../../../../framework/author/itemList/itemDetail/header";
+import PreviewItemPage from "../../../../framework/author/itemList/itemDetail/previewPage";
 import FileHelper from "../../../../framework/util/fileHelper";
 
 describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Number line with plot" type question`, () => {
@@ -15,7 +16,8 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Number line wi
       allowedResponses: "3"
     },
     layout: {
-      width: 600
+      width: 600,
+      fontSize: "Small"
     },
     ticks: {
       minorTicks: "2"
@@ -29,8 +31,9 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Number line wi
     }
   };
 
-  const question = new GraphingNumberLinePlotPage(queData.layout.width, 150);
+  const question = new GraphingNumberLinePlotPage();
   const editItemPage = new EditItemPage();
+  const previewItemPage = new PreviewItemPage();
   const header = new Header();
 
   before(() => {
@@ -97,6 +100,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Number line wi
     });
 
     it("Edit layout", () => {
+      // todo: changing the width causes the page to hang
       // question
       //   .getLayoutWidth()
       //   .clear()
@@ -112,12 +116,29 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Number line wi
 
       question.clickOnShowMaxArrow();
 
+      question.selectFontSizeOption(queData.layout.fontSize);
+
       question.getLineOnBoard().should("have.attr", "y1", "74");
       question.getLineOnBoard().should("have.attr", "y2", "74");
       question.getLineOnBoard().should("have.attr", "marker-start");
       question.getLineOnBoard().should("have.attr", "marker-end");
 
-      // todo: add testing for other parameters
+      question
+        .getVisibleTickLabelsOnBoard()
+        .its("length")
+        .then(length => {
+          for (let i = 0; i < length; i++) {
+            question
+              .getVisibleTickLabelsOnBoard()
+              .eq(i)
+              .should("have.css", "font-size", "10px");
+          }
+        });
+
+      // todo: add tests for:
+      // Line margin,
+      // Stack responses
+      // Spacing between stacked responses
     });
 
     it("Edit toolbar", () => {
@@ -139,6 +160,9 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Number line wi
         .getSegmentsToolbar()
         .children()
         .should("have.length", 3);
+
+      question.clickOnDeleteToolOnToolbar(1);
+      question.clickOnDeleteToolOnToolbar(0);
     });
 
     it("Edit ticks", () => {
@@ -177,10 +201,14 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Number line wi
         .clear()
         .type(queData.ticks.minorTicks);
 
-      // todo: add testing for:
-      // Rendering base
-      // Show ticks
+      // todo: add tests for:
       // Minor ticks
+
+      // todo: worked incorrect:
+      // Show ticks
+
+      // todo: not implemented
+      // Rendering base
     });
 
     it("Edit labels", () => {
@@ -210,19 +238,100 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Number line wi
         .clear()
         .type(queData.correctAnswers.points);
 
-      // question.invokeBoardTrigger(0, 0.2, 0.5).then(result => {
-      //   assert.isTrue(result, "invoke board trigger");
-      // });
-      //
-      // question.selectToolOnToolbar(0, "Segment");
-      // question.invokeBoardTrigger(0, 0.5, 0.5).then(result => {
-      //   assert.isTrue(result, "invoke board trigger");
-      // });
-      //
-      // question.selectToolOnToolbar(0, "Left ray");
-      // question.invokeBoardTrigger(0, 0.8, 0.5).then(result => {
-      //   assert.isTrue(result, "invoke board trigger");
-      // });
+      // Point
+      question.clickOnSegmentsToolbarTool(0);
+      question.invokeBoardClick(0, 0.5, 0.5);
+      question.getBoard().within(() => {
+        question.getGraphPoints().should("have.length", 1);
+      });
+      question.clickOnSegmentsToolbarDeleteTool();
+      question.invokeBoardClick(0, 0.5, 0.5);
+
+      // Segment
+      question.clickOnSegmentsToolbarTool(1);
+      question.invokeBoardClick(0, 0.5, 0.5);
+      question.getBoard().within(() => {
+        question.getGraphPoints().should("have.length", 2);
+        question.getGraphLines().should("have.length", 1);
+      });
+      question.clickOnSegmentsToolbarDeleteTool();
+      question.invokeBoardClick(0, 0.5, 0.5);
+
+      // Segment with both hollow points
+      question.clickOnSegmentsToolbarTool(2);
+      question.invokeBoardClick(0, 0.5, 0.5);
+      question.getBoard().within(() => {
+        question.getGraphHollowPoints().should("have.length", 2);
+        question.getGraphLines().should("have.length", 1);
+      });
+      question.clickOnSegmentsToolbarDeleteTool();
+      question.invokeBoardClick(0, 0.5, 0.5);
+
+      // Segment with left hollow point
+      question.clickOnSegmentsToolbarTool(3);
+      question.invokeBoardClick(0, 0.5, 0.5);
+      question.getBoard().within(() => {
+        question.getGraphPoints().should("have.length", 1);
+        question.getGraphHollowPoints().should("have.length", 1);
+        question.getGraphLines().should("have.length", 1);
+      });
+      question.clickOnSegmentsToolbarDeleteTool();
+      question.invokeBoardClick(0, 0.5, 0.5);
+
+      // Segment with right hollow point
+      question.clickOnSegmentsToolbarTool(4);
+      question.invokeBoardClick(0, 0.5, 0.5);
+      question.getBoard().within(() => {
+        question.getGraphPoints().should("have.length", 1);
+        question.getGraphHollowPoints().should("have.length", 1);
+        question.getGraphLines().should("have.length", 1);
+      });
+      question.clickOnSegmentsToolbarDeleteTool();
+      question.invokeBoardClick(0, 0.5, 0.5);
+
+      // Left ray
+      question.clickOnSegmentsToolbarTool(5);
+      question.invokeBoardClick(0, 0.5, 0.5);
+      question.getBoard().within(() => {
+        question.getGraphPoints().should("have.length", 1);
+        question.getGraphLines().should("have.attr", "marker-start");
+        question.getGraphLines().should("not.have.attr", "marker-end");
+      });
+      question.clickOnSegmentsToolbarDeleteTool();
+      question.invokeBoardClick(0, 0.5, 0.5);
+
+      // Right ray
+      question.clickOnSegmentsToolbarTool(6);
+      question.invokeBoardClick(0, 0.5, 0.5);
+      question.getBoard().within(() => {
+        question.getGraphPoints().should("have.length", 1);
+        question.getGraphLines().should("not.have.attr", "marker-start");
+        question.getGraphLines().should("have.attr", "marker-end");
+      });
+      question.clickOnSegmentsToolbarDeleteTool();
+      question.invokeBoardClick(0, 0.6, 0.5);
+
+      // Left ray with hollow point
+      question.clickOnSegmentsToolbarTool(7);
+      question.invokeBoardClick(0, 0.5, 0.5);
+      question.getBoard().within(() => {
+        question.getGraphHollowPoints().should("have.length", 1);
+        question.getGraphLines().should("have.attr", "marker-start");
+        question.getGraphLines().should("not.have.attr", "marker-end");
+      });
+      question.clickOnSegmentsToolbarDeleteTool();
+      question.invokeBoardClick(0, 0.5, 0.5);
+
+      // Right ray with hollow point
+      question.clickOnSegmentsToolbarTool(8);
+      question.invokeBoardClick(0, 0.5, 0.5);
+      question.getBoard().within(() => {
+        question.getGraphHollowPoints().should("have.length", 1);
+        question.getGraphLines().should("not.have.attr", "marker-start");
+        question.getGraphLines().should("have.attr", "marker-end");
+      });
+      question.clickOnSegmentsToolbarDeleteTool();
+      question.invokeBoardClick(0, 0.6, 0.5);
 
       // alternate answers
       question.clickOnTabsPlusButton();
@@ -238,6 +347,33 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Number line wi
 
       question.clickOnAlternateAnswerDeleteButton(0);
       question.getPointsParameter().should("have.value", queData.correctAnswers.points);
+    });
+
+    it("Check preview", () => {
+      // question.selectToolOnToolbar(0, "Point");
+      question.invokeBoardClick(0, 0.4, 0.5);
+
+      header.save();
+      header.preview();
+
+      previewItemPage.getShowAnswer().click();
+      question.getBoard().within(() => {
+        question.getGraphCorrectAnswerPoints().should("have.length", 1);
+      });
+
+      previewItemPage.getClear().click();
+      question.invokeBoardClick(0, 0.8, 0.5);
+      previewItemPage.getCheckAnswer().click();
+      question.getBoard().within(() => {
+        question.getGraphIncorrectPoints().should("have.length", 1);
+      });
+
+      previewItemPage.getClear().click();
+      question.invokeBoardClick(0, 0.4, 0.5);
+      previewItemPage.getCheckAnswer().click();
+      question.getBoard().within(() => {
+        question.getGraphCorrectPoints().should("have.length", 1);
+      });
     });
   });
 });

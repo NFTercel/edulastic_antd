@@ -42,9 +42,10 @@ export const lightGreen = "#f5f9fe";
 export const greenDark = "#4aac8b";
 export const greenDarkSecondary = "#057750";
 export const greenSecondary = "#4CD43B";
-export const greenSomeWhatDark = "#17a67d";
 export const greenThird = "#5eb500";
 export const lightGreenSecondary = "#5EB500";
+
+export const greenSomeWhatDark = "#17a67d";
 
 export const yellow = "#febe00";
 

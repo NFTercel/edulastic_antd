@@ -8,6 +8,8 @@ export const TOOLS = {
   VECTOR: "vector",
   CIRCLE: "circle",
   SIN: "sine",
+  TANGENT: "tangent",
+  SECANT: "secant",
   POLYGON: "polygon",
   PARABOLA: "parabola",
   HYPERBOLA: "hyperbola",

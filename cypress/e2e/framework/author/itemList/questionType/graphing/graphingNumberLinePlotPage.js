@@ -1,8 +1,8 @@
 import GraphingNumberLineStandardPage from "./graphingNumberLineStdPage";
 
 class GraphingNumberLinePlotPage extends GraphingNumberLineStandardPage {
-  constructor(svgWidth, svgHeight) {
-    super(svgWidth, svgHeight);
+  constructor() {
+    super();
   }
 }
 export default GraphingNumberLinePlotPage;

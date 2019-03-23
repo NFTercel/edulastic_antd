@@ -63,7 +63,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Graphing" type
     }
   };
 
-  const question = new GraphingStandardPage(queData.layout.width, queData.layout.height);
+  const question = new GraphingStandardPage();
   const editItemPage = new EditItemPage();
   const previewItemPage = new PreviewItemPage();
   const header = new Header();
@@ -325,7 +325,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Graphing" type
           }
         });
 
-      // todo: add checking for:
+      // todo: add tests for:
       // Snap to,
       // Draw Label Zero,
       // Display Position On Hover,
@@ -562,7 +562,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Graphing" type
         .clear()
         .type(1);
 
-      // todo: add checking for:
+      // todo: add tests for:
       // X Distance,
       // Y Distance,
       // Hide Ticks (both),
@@ -611,7 +611,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Graphing" type
               .should("exist")
               .and("have.attr", "xlink:href", queData.bgImage.url)
               .and("have.attr", "opacity", `${+queData.bgImage.opacity / 100}`);
-            // todo: add checking for:
+            // todo: add tests for:
             // height
             // width
             // xAxisPosition
@@ -646,13 +646,9 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Graphing" type
         });
       });
 
-      question.invokeBoardTrigger(1, queData.bgShapes.point1.x, queData.bgShapes.point1.y).then(result => {
-        assert.isTrue(result, "invoke board trigger");
-      });
+      question.invokeBoardClick(1, queData.bgShapes.point1.x, queData.bgShapes.point1.y);
 
-      question.invokeBoardTrigger(1, queData.bgShapes.point2.x, queData.bgShapes.point2.y).then(result => {
-        assert.isTrue(result, "invoke board trigger");
-      });
+      question.invokeBoardClick(1, queData.bgShapes.point2.x, queData.bgShapes.point2.y);
 
       question
         .getBoards()
@@ -723,9 +719,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Graphing" type
 
       // draw point
       question.selectTool(queData.tools.defaultGroupName, 0, "Point");
-      question.invokeBoardTrigger(0, 0.6, 0.6).then(result => {
-        assert.isTrue(result, "invoke board trigger");
-      });
+      question.invokeBoardClick(0, 0.6, 0.6);
       question
         .getBoards()
         .eq(0)
@@ -736,12 +730,8 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Graphing" type
       // draw line
       question.clickOnResetButton();
       question.selectTool(queData.tools.defaultGroupName, 0, "Line");
-      question.invokeBoardTrigger(0, 0.6, 0.6).then(result => {
-        assert.isTrue(result, "invoke board trigger");
-      });
-      question.invokeBoardTrigger(0, 0.3, 0.3).then(result => {
-        assert.isTrue(result, "invoke board trigger");
-      });
+      question.invokeBoardClick(0, 0.6, 0.6);
+      question.invokeBoardClick(0, 0.3, 0.3);
       question
         .getBoards()
         .eq(0)
@@ -755,12 +745,8 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Graphing" type
       // draw ray
       question.clickOnResetButton();
       question.selectTool(queData.tools.defaultGroupName, 0, "Ray");
-      question.invokeBoardTrigger(0, 0.6, 0.6).then(result => {
-        assert.isTrue(result, "invoke board trigger");
-      });
-      question.invokeBoardTrigger(0, 0.3, 0.3).then(result => {
-        assert.isTrue(result, "invoke board trigger");
-      });
+      question.invokeBoardClick(0, 0.6, 0.6);
+      question.invokeBoardClick(0, 0.3, 0.3);
       question
         .getBoards()
         .eq(0)
@@ -774,12 +760,8 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Graphing" type
       // draw segment
       question.clickOnResetButton();
       question.selectTool(queData.tools.defaultGroupName, 0, "Segment");
-      question.invokeBoardTrigger(0, 0.6, 0.6).then(result => {
-        assert.isTrue(result, "invoke board trigger");
-      });
-      question.invokeBoardTrigger(0, 0.3, 0.3).then(result => {
-        assert.isTrue(result, "invoke board trigger");
-      });
+      question.invokeBoardClick(0, 0.6, 0.6);
+      question.invokeBoardClick(0, 0.3, 0.3);
       question
         .getBoards()
         .eq(0)
@@ -793,12 +775,8 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Graphing" type
       // draw vector
       question.clickOnResetButton();
       question.selectTool(queData.tools.defaultGroupName, 0, "Vector");
-      question.invokeBoardTrigger(0, 0.6, 0.6).then(result => {
-        assert.isTrue(result, "invoke board trigger");
-      });
-      question.invokeBoardTrigger(0, 0.3, 0.3).then(result => {
-        assert.isTrue(result, "invoke board trigger");
-      });
+      question.invokeBoardClick(0, 0.6, 0.6);
+      question.invokeBoardClick(0, 0.3, 0.3);
       question
         .getBoards()
         .eq(0)
@@ -812,12 +790,8 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Graphing" type
       // draw circle
       question.clickOnResetButton();
       question.selectTool(queData.tools.defaultGroupName, 0, "Circle");
-      question.invokeBoardTrigger(0, 0.6, 0.6).then(result => {
-        assert.isTrue(result, "invoke board trigger");
-      });
-      question.invokeBoardTrigger(0, 0.3, 0.3).then(result => {
-        assert.isTrue(result, "invoke board trigger");
-      });
+      question.invokeBoardClick(0, 0.6, 0.6);
+      question.invokeBoardClick(0, 0.3, 0.3);
       question
         .getBoards()
         .eq(0)
@@ -829,12 +803,8 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Graphing" type
       // draw parabola
       question.clickOnResetButton();
       question.selectTool(queData.tools.defaultGroupName, 0, "Parabola");
-      question.invokeBoardTrigger(0, 0.6, 0.6).then(result => {
-        assert.isTrue(result, "invoke board trigger");
-      });
-      question.invokeBoardTrigger(0, 0.7, 0.7).then(result => {
-        assert.isTrue(result, "invoke board trigger");
-      });
+      question.invokeBoardClick(0, 0.6, 0.6);
+      question.invokeBoardClick(0, 0.7, 0.7);
       question
         .getBoards()
         .eq(0)
@@ -846,12 +816,8 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Graphing" type
       // draw sine
       question.clickOnResetButton();
       question.selectTool(queData.tools.defaultGroupName, 0, "Sine");
-      question.invokeBoardTrigger(0, 0.6, 0.6).then(result => {
-        assert.isTrue(result, "invoke board trigger");
-      });
-      question.invokeBoardTrigger(0, 0.7, 0.7).then(result => {
-        assert.isTrue(result, "invoke board trigger");
-      });
+      question.invokeBoardClick(0, 0.6, 0.6);
+      question.invokeBoardClick(0, 0.7, 0.7);
       question
         .getBoards()
         .eq(0)
@@ -863,21 +829,11 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Graphing" type
       // draw polygon
       question.clickOnResetButton();
       question.selectTool(queData.tools.defaultGroupName, 0, "Polygon");
-      question.invokeBoardTrigger(0, 0.6, 0.6).then(result => {
-        assert.isTrue(result, "invoke board trigger");
-      });
-      question.invokeBoardTrigger(0, 0.8, 0.6).then(result => {
-        assert.isTrue(result, "invoke board trigger");
-      });
-      question.invokeBoardTrigger(0, 0.8, 0.4).then(result => {
-        assert.isTrue(result, "invoke board trigger");
-      });
-      question.invokeBoardTrigger(0, 0.6, 0.4).then(result => {
-        assert.isTrue(result, "invoke board trigger");
-      });
-      question.invokeBoardTrigger(0, 0.6, 0.6).then(result => {
-        assert.isTrue(result, "invoke board trigger");
-      });
+      question.invokeBoardClick(0, 0.6, 0.6);
+      question.invokeBoardClick(0, 0.8, 0.6);
+      question.invokeBoardClick(0, 0.8, 0.4);
+      question.invokeBoardClick(0, 0.6, 0.4);
+      question.invokeBoardClick(0, 0.6, 0.6);
       question
         .getBoards()
         .eq(0)
@@ -887,7 +843,8 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Graphing" type
           question.getGraphPolygon().should("have.length", 1);
         });
 
-      // todo: add testing for: draw label
+      // todo: add tests for:
+      // draw label
 
       // alternate answers
       question.clickOnTabsPlusButton();
@@ -908,9 +865,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Graphing" type
     it("Check preview", () => {
       question.clickOnResetButton();
       question.selectTool(queData.tools.defaultGroupName, 0, "Point");
-      question.invokeBoardTrigger(0, 0.6, 0.6).then(result => {
-        assert.isTrue(result, "invoke board trigger");
-      });
+      question.invokeBoardClick(0, 0.6, 0.6);
 
       header.save();
       header.preview();
@@ -924,9 +879,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Graphing" type
         });
 
       previewItemPage.getClear().click();
-      question.invokeBoardTrigger(0, 0.2, 0.4).then(result => {
-        assert.isTrue(result, "invoke board trigger");
-      });
+      question.invokeBoardClick(0, 0.2, 0.4);
       previewItemPage.getCheckAnswer().click();
       question
         .getBoards()
@@ -936,9 +889,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Graphing" type
         });
 
       previewItemPage.getClear().click();
-      question.invokeBoardTrigger(0, 0.6, 0.6).then(result => {
-        assert.isTrue(result, "invoke board trigger");
-      });
+      question.invokeBoardClick(0, 0.6, 0.6);
       previewItemPage.getCheckAnswer().click();
       question
         .getBoards()

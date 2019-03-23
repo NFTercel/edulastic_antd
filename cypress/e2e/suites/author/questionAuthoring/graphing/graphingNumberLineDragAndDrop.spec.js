@@ -1,6 +1,7 @@
 import GraphingNumberLineDragAndDropPage from "../../../../framework/author/itemList/questionType/graphing/graphingNumberLineDragAndDropPage";
 import EditItemPage from "../../../../framework/author/itemList/itemDetail/editPage";
 import Header from "../../../../framework/author/itemList/itemDetail/header";
+import PreviewItemPage from "../../../../framework/author/itemList/itemDetail/previewPage";
 import FileHelper from "../../../../framework/util/fileHelper";
 
 describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Number line with drag & drop" type question`, () => {
@@ -39,8 +40,9 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Number line wi
     }
   };
 
-  const question = new GraphingNumberLineDragAndDropPage(queData.layout.width, queData.layout.height);
+  const question = new GraphingNumberLineDragAndDropPage();
   const editItemPage = new EditItemPage();
+  const previewItemPage = new PreviewItemPage();
   const header = new Header();
 
   before(() => {
@@ -182,6 +184,8 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Number line wi
 
       question.clickOnShowRightArrow();
 
+      question.selectFontSizeOption(queData.layout.fontSize);
+
       question
         .getBoard()
         .find("svg")
@@ -193,17 +197,59 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Number line wi
         .find("svg")
         .invoke("height")
         .should("be.equal", queData.layout.height);
-
       question.getLineOnBoard().should("have.attr", "y1", "119");
       question.getLineOnBoard().should("have.attr", "y2", "119");
       question.getLineOnBoard().should("have.attr", "marker-start");
+
       question.getLineOnBoard().should("have.attr", "marker-end");
 
       question.getTitleOnBoard().should("have.css", "top", "21px");
 
-      // todo: add checking for: Point box position
+      question
+        .getVisibleTickLabelsOnBoard()
+        .its("length")
+        .then(length => {
+          for (let i = 0; i < length; i++) {
+            question
+              .getVisibleTickLabelsOnBoard()
+              .eq(i)
+              .should("have.css", "font-size", "10px");
+          }
+        });
 
-      // todo: worked incorrect: Line margin, Point Separation distance X, Point Separation distance Y, Font Size
+      // todo: add tests for:
+      // Line margin,
+      // Point box position
+
+      // todo: worked incorrect:
+      // Point Separation distance X,
+      // Point Separation distance Y
+    });
+
+    it("Edit ticks", () => {
+      question
+        .getTicksDistance()
+        .type("{uparrow}")
+        .should("have.value", "2")
+        .blur();
+      question.getVisibleTickLabelsOnBoard().should("have.length", 6);
+
+      question
+        .getTicksDistance()
+        .type("{downarrow}")
+        .should("have.value", "1")
+        .blur();
+      question.getVisibleTickLabelsOnBoard().should("have.length", 10);
+
+      // todo: add tests for:
+      // Snap to ticks
+
+      // todo: worked incorrect:
+      // Show ticks
+
+      // todo: not implemented
+      // Fractions format
+      // Rendering base
     });
 
     it("Edit labels", () => {
@@ -223,17 +269,38 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Number line wi
       question.getVisibleTickLabelsOnBoard().should("have.length", 6);
     });
 
-    it("Edit ticks", () => {
-      // todo: needed implementation
-    });
-
     it("Edit correct answers", () => {
       question
         .getPointsParameter()
         .clear()
         .type(queData.correctAnswers.points);
 
-      // todo: add drag and drop for labels to set answers
+      question.clickOnPossibleResponsesDeleteButton(2);
+      question.clickOnPossibleResponsesDeleteButton(1);
+      question.clickOnPossibleResponsesDeleteButton(0);
+      question.clickOnPossibleResponsesAddButton();
+      question.clickOnPossibleResponsesAddButton();
+      question.clickOnPossibleResponsesAddButton();
+      question
+        .getPossibleResponsesOption(0)
+        .clear()
+        .type(queData.possibleResponses.respA);
+      question
+        .getPossibleResponsesOption(1)
+        .clear()
+        .type(queData.possibleResponses.respB);
+      question
+        .getPossibleResponsesOption(2)
+        .clear()
+        .type(queData.possibleResponses.respC);
+
+      question.invokeBoardDragDrop(0, 0.1, 0.9, 0.2, 0.4);
+      question.invokeBoardDragDrop(0, 0.3, 0.9, 0.8, 0.4);
+      question.invokeBoardDragDrop(0, 0.5, 0.9, 0.5, 0.4);
+
+      question.getMountedMark(queData.possibleResponses.respA).should("be.exist");
+      question.getMountedMark(queData.possibleResponses.respB).should("be.exist");
+      question.getMountedMark(queData.possibleResponses.respC).should("be.exist");
 
       // alternate answers
       question.clickOnTabsPlusButton();
@@ -249,6 +316,37 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Number line wi
 
       question.clickOnAlternateAnswerDeleteButton(0);
       question.getPointsParameter().should("have.value", queData.correctAnswers.points);
+    });
+
+    it("Check preview", () => {
+      question.clickOnPossibleResponsesDeleteButton(2);
+      question.clickOnPossibleResponsesDeleteButton(1);
+      question.clickOnPossibleResponsesDeleteButton(0);
+      question.clickOnPossibleResponsesAddButton();
+      question
+        .getPossibleResponsesOption(0)
+        .clear()
+        .type(queData.possibleResponses.respA);
+
+      question.invokeBoardDragDrop(0, 0.1, 0.9, 0.2, 0.4);
+
+      question.getMountedMark(queData.possibleResponses.respA).should("be.exist");
+
+      header.save();
+      header.preview();
+
+      previewItemPage.getShowAnswer().click();
+      question.getMountedMark(queData.possibleResponses.respA).should("have.class", "show");
+
+      previewItemPage.getClear().click();
+      question.invokeBoardDragDrop(0, 0.1, 0.9, 0.8, 0.4);
+      previewItemPage.getCheckAnswer().click();
+      question.getMountedMark(queData.possibleResponses.respA).should("have.class", "incorrect");
+
+      previewItemPage.getClear().click();
+      question.invokeBoardDragDrop(0, 0.1, 0.9, 0.2, 0.4);
+      previewItemPage.getCheckAnswer().click();
+      question.getMountedMark(queData.possibleResponses.respA).should("have.class", "correct");
     });
   });
 });

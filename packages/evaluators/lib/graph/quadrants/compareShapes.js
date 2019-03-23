@@ -75,6 +75,8 @@ var CompareShapes =
                 return this.compareParabolas(testShape, trueShape);
 
               case _shapeTypes.ShapeTypes.SINE:
+              case _shapeTypes.ShapeTypes.TANGENT:
+              case _shapeTypes.ShapeTypes.SECANT:
                 return this.compareSines(testShape, trueShape);
 
               case _shapeTypes.ShapeTypes.POLYGON:

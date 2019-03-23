@@ -1,5 +1,5 @@
 class GraphingStandardPage {
-  constructor(svgWidth, svgHeight) {
+  constructor() {
     this.ignoreRepeatedShapesOption = {
       No: "no",
       "Compare by slope": "yes",
@@ -25,54 +25,6 @@ class GraphingStandardPage {
       Redo: "redo",
       Reset: "reset"
     };
-
-    this.svgWidth = svgWidth;
-    this.svgHeight = svgHeight;
-  }
-
-  // boardIndex - board number on page, start with 0
-  // xK - percentage of graph width
-  // yK - percentage of graph height
-  invokeBoardTrigger(boardIndex, xK, yK) {
-    const self = this;
-    function CreateEvent(eventName, pos, offset) {
-      const ev = new Event(eventName);
-      ev.clientX = pos[0] * self.svgWidth + offset[0];
-      ev.clientY = pos[1] * self.svgHeight + offset[1];
-
-      return ev;
-    }
-
-    function CreatePointerDown(xPer, yPer, offsetX, offsetY) {
-      return CreateEvent("pointerdown", [xPer, yPer], [offsetX, offsetY]);
-    }
-
-    function CreatePointerUp(xPer, yPer, offsetX, offsetY) {
-      return CreateEvent("pointerup", [xPer, yPer], [offsetX, offsetY]);
-    }
-
-    return this.getBoards()
-      .eq(boardIndex)
-      .then(board => {
-        cy.window().then(window => {
-          const boardRect = board[0].getBoundingClientRect();
-
-          const left = boardRect.left + window.pageXOffset;
-          const { top } = boardRect;
-          const downEvent = CreatePointerDown(xK, yK, left, top);
-          const upEvent = CreatePointerUp(xK, yK, left, top);
-
-          let result = true;
-          try {
-            board[0].dispatchEvent(downEvent);
-            window.document.dispatchEvent(upEvent);
-          } catch (e) {
-            result = false;
-          }
-
-          return result;
-        });
-      });
   }
 
   // elements ---------------------------------------------------------------
@@ -348,6 +300,10 @@ class GraphingStandardPage {
     return cy.get('ellipse[fill="#00b2ff"][stroke="#00b2ff"]').filter(":visible");
   }
 
+  getGraphHollowPoints() {
+    return cy.get('ellipse[fill="#ffffff"][stroke="#00b2ff"]').filter(":visible");
+  }
+
   getGraphCorrectAnswerPoints() {
     return cy.get('ellipse[fill="#ffcb00"][stroke="#ffcb00"]').filter(":visible");
   }
@@ -539,6 +495,44 @@ class GraphingStandardPage {
       .find("svg")
       .click();
     return this;
+  }
+
+  // boardIndex - board number on page, start with 0
+  // xK - percentage of graph width
+  // yK - percentage of graph height
+  invokeBoardClick(boardIndex, xK, yK) {
+    return this.getBoards()
+      .eq(boardIndex)
+      .then(board => {
+        cy.window().then(window => {
+          const boardRect = board[0].getBoundingClientRect();
+          const left = boardRect.left + window.pageXOffset;
+          const { top, width, height } = boardRect;
+
+          const point = {
+            clientX: xK * width + left,
+            clientY: yK * height + top
+          };
+
+          const downEvent = new Event("pointerdown");
+          downEvent.clientX = point.clientX;
+          downEvent.clientY = point.clientY;
+
+          const upEvent = new Event("pointerup");
+          upEvent.clientX = point.clientX;
+          upEvent.clientY = point.clientY;
+
+          let result = true;
+          try {
+            board[0].dispatchEvent(downEvent);
+            window.document.dispatchEvent(upEvent);
+          } catch (e) {
+            result = false;
+          }
+
+          assert.isTrue(result, "invoke board click");
+        });
+      });
   }
 }
 

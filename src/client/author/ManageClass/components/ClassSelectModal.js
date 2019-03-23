@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Modal, Table } from "antd";
 
@@ -18,11 +18,17 @@ const columns = [
 const ClassListModal = ({ visible, close, groups, syncClass, selectedGroups }) => {
   const [selectedRows, setSelectedRows] = useState([]);
 
+  // clear selected class while modal changes
+  useEffect(() => {
+    setSelectedRows([]);
+  }, [visible]);
+
   // add keys to  each group. antd table selection works based on keys.
   groups = groups.map((group, index) => ({ ...group, key: index }));
 
   // for antd row selection
   const rowSelection = {
+    selectedRowKeys: selectedRows,
     onChange: rows => {
       setSelectedRows(rows);
     },

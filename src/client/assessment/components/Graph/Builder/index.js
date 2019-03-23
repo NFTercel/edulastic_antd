@@ -16,7 +16,9 @@ import {
   NumberlineVector,
   NumberlineSegment,
   NumberlineTrash,
-  Title
+  Title,
+  Tangent,
+  Secant
 } from "./elements";
 import {
   mergeParams,
@@ -36,7 +38,8 @@ import {
   checkMarksRenderSpace,
   calcMeasure,
   calcUnitX,
-  findElementsDiff
+  findElementsDiff,
+  handleSnap
 } from "./utils";
 import _events from "./events";
 
@@ -164,6 +167,12 @@ class Board {
       case CONSTANT.TOOLS.ELLIPSE:
         this.setCreatingHandler(Ellipse.onHandler());
         return;
+      case CONSTANT.TOOLS.TANGENT:
+        this.setCreatingHandler(Tangent.onHandler());
+        break;
+      case CONSTANT.TOOLS.SECANT:
+        this.setCreatingHandler(Secant.onHandler());
+        break;
       case CONSTANT.TOOLS.LABEL:
         this.setCreatingHandler(Label.onHandler());
         return;
@@ -515,6 +524,10 @@ class Board {
           return Mark.getConfig(e);
         case 90:
           return Hyperbola.getConfig(e);
+        case 91:
+          return Parabola.getConfig(e);
+        case 92:
+          return Parabola.getConfig(e);
         default:
           throw new Error("Unknown element type:", e.name, e.type);
       }
@@ -669,6 +682,18 @@ class Board {
         fillColor: "transparent",
         highlightFillColor: "transparent",
         highlightStrokeWidth: 1
+      },
+      [CONSTANT.TOOLS.TANGENT]: {
+        ...defaultBgObjectParameters(),
+        fillColor: "transparent",
+        highlightFillColor: "transparent",
+        highlightStrokeWidth: 1
+      },
+      [CONSTANT.TOOLS.SECANT]: {
+        ...defaultBgObjectParameters(),
+        fillColor: "transparent",
+        highlightFillColor: "transparent",
+        highlightStrokeWidth: 1
       }
     };
     this.bgElements.push(
@@ -737,6 +762,53 @@ class Board {
               }
               if (type === CONSTANT.TOOLS.HYPERBOLA) {
                 return CONSTANT.TOOLS.HYPERBOLA;
+              }
+              if (type === CONSTANT.TOOLS.TANGENT) {
+                return CONSTANT.TOOLS.TANGENT;
+              }
+              if (type === CONSTANT.TOOLS.SECANT) {
+                return CONSTANT.TOOLS.SECANT;
+              }
+              return type;
+            })(el.type)
+          ],
+          ...el.colors
+        });
+        if (el.label) {
+          newElement.setLabel(el.label);
+          Input(newElement).sub();
+        }
+        return newElement;
+      })
+    );
+  }
+
+  loadAnswersFromConfig(flatCfg) {
+    const config = flat2nestedConfig(flatCfg);
+    this.elements.push(
+      ...this.loadAnswersObjects(config, ({ objectCreator, el }) => {
+        const newElement = objectCreator({
+          ...Colors.default[
+            (type => {
+              if (
+                type === CONSTANT.TOOLS.LINE ||
+                type === CONSTANT.TOOLS.RAY ||
+                type === CONSTANT.TOOLS.SEGMENT ||
+                type === CONSTANT.TOOLS.VECTOR
+              ) {
+                return CONSTANT.TOOLS.LINE;
+              }
+              if (type === CONSTANT.TOOLS.ELLIPSE) {
+                return CONSTANT.TOOLS.ELLIPSE;
+              }
+              if (type === CONSTANT.TOOLS.HYPERBOLA) {
+                return CONSTANT.TOOLS.HYPERBOLA;
+              }
+              if (type === CONSTANT.TOOLS.TANGENT) {
+                return CONSTANT.TOOLS.TANGENT;
+              }
+              if (type === CONSTANT.TOOLS.SECANT) {
+                return CONSTANT.TOOLS.SECANT;
               }
               return type;
             })(el.type)
@@ -935,8 +1007,8 @@ class Board {
           objects.push(
             mixProps({
               el,
-              objectCreator: attrs =>
-                this.createElement(
+              objectCreator: attrs => {
+                const newLine = this.createElement(
                   "ellipse",
                   [
                     mixProps({
@@ -956,7 +1028,11 @@ class Board {
                     ...Ellipse.parseConfig(),
                     ...attrs
                   }
-                )
+                );
+
+                handleSnap(newLine, Object.values(newLine.ancestors));
+                return newLine;
+              }
             })
           );
           break;
@@ -964,8 +1040,8 @@ class Board {
           objects.push(
             mixProps({
               el,
-              objectCreator: attrs =>
-                this.createElement(
+              objectCreator: attrs => {
+                const newLine = this.createElement(
                   "hyperbola",
                   [
                     mixProps({
@@ -985,7 +1061,12 @@ class Board {
                     ...Hyperbola.parseConfig(),
                     ...attrs
                   }
-                )
+                );
+
+                handleSnap(newLine, Object.values(newLine.ancestors));
+
+                return newLine;
+              }
             })
           );
           break;
@@ -1034,6 +1115,63 @@ class Board {
                   [points[1].id]: points[1]
                 };
                 newElem.addParents(points);
+                handleSnap(newElem, Object.values(newElem.ancestors));
+                return newElem;
+              }
+            })
+          );
+          break;
+        case 91:
+          objects.push(
+            mixProps({
+              el,
+              objectCreator: attrs => {
+                const [name, [makeFn, points], props] = Tangent.parseConfig(
+                  el.points.map(pointEl =>
+                    mixProps({
+                      el: pointEl,
+                      objectCreator: attributes => this.createPointFromConfig(pointEl, attributes)
+                    })
+                  )
+                );
+                const newElem = this.createElement(name, makeFn(points), {
+                  ...props,
+                  ...attrs
+                });
+                newElem.ancestors = {
+                  [points[0].id]: points[0],
+                  [points[1].id]: points[1]
+                };
+                newElem.addParents(points);
+                handleSnap(newElem, Object.values(newElem.ancestors));
+                return newElem;
+              }
+            })
+          );
+          break;
+        case 92:
+          objects.push(
+            mixProps({
+              el,
+              objectCreator: attrs => {
+                const [name, [makeFn, points], props] = Secant.parseConfig(
+                  el.points.map(pointEl =>
+                    mixProps({
+                      el: pointEl,
+                      objectCreator: attributes => this.createPointFromConfig(pointEl, attributes)
+                    })
+                  )
+                );
+                const newElem = this.createElement(name, makeFn(points), {
+                  ...props,
+                  ...attrs
+                });
+                newElem.ancestors = {
+                  [points[0].id]: points[0],
+                  [points[1].id]: points[1]
+                };
+                newElem.addParents(points);
+                handleSnap(newElem, Object.values(newElem.ancestors));
                 return newElem;
               }
             })
@@ -1058,6 +1196,281 @@ class Board {
   }
 
   /**
+   *
+   * @param {array} objects
+   * @see getConfig
+   */
+  loadAnswersObjects(objectArray, mixProps) {
+    const objects = [];
+    objectArray.forEach(el => {
+      switch (el._type) {
+        case window.JXG.OBJECT_TYPE_POINT:
+          objects.push(
+            mixProps({
+              el,
+              objectCreator: attrs => {
+                const [name, points, props] = Point.parseConfig(el, this.getParameters(CONSTANT.TOOLS.POINT));
+                return this.createElement(name, points, {
+                  ...props,
+                  ...attrs,
+                  visible: true,
+                  fixed: true
+                });
+              }
+            })
+          );
+          break;
+        case window.JXG.OBJECT_TYPE_LINE:
+          objects.push(
+            mixProps({
+              el,
+              objectCreator: attrs =>
+                this.createElement(
+                  "line",
+                  [
+                    mixProps({
+                      el: el.points[0],
+                      objectCreator: attributes => this.createAnswerPointFromConfig(el.points[0], attributes)
+                    }),
+                    mixProps({
+                      el: el.points[1],
+                      objectCreator: attributes => this.createAnswerPointFromConfig(el.points[1], attributes)
+                    })
+                  ],
+                  {
+                    ...Line.parseConfig(el.type),
+                    ...attrs,
+                    fixed: true
+                  }
+                )
+            })
+          );
+          break;
+        case window.JXG.OBJECT_TYPE_CIRCLE:
+          objects.push(
+            mixProps({
+              el,
+              objectCreator: attrs =>
+                this.createElement(
+                  "circle",
+                  [
+                    mixProps({
+                      el: el.points[0],
+                      objectCreator: attributes => this.createAnswerPointFromConfig(el.points[0], attributes)
+                    }),
+                    mixProps({
+                      el: el.points[1],
+                      objectCreator: attributes => this.createAnswerPointFromConfig(el.points[1], attributes)
+                    })
+                  ],
+                  {
+                    ...Circle.parseConfig(),
+                    ...attrs,
+                    fixed: true
+                  }
+                )
+            })
+          );
+          break;
+        case window.JXG.OBJECT_TYPE_CONIC:
+          objects.push(
+            mixProps({
+              el,
+              objectCreator: attrs => {
+                const newLine = this.createElement(
+                  "ellipse",
+                  [
+                    mixProps({
+                      el: el.points[0],
+                      objectCreator: attributes => this.createAnswerPointFromConfig(el.points[0], attributes)
+                    }),
+                    mixProps({
+                      el: el.points[1],
+                      objectCreator: attributes => this.createAnswerPointFromConfig(el.points[1], attributes)
+                    }),
+                    mixProps({
+                      el: el.points[2],
+                      objectCreator: attributes => this.createAnswerPointFromConfig(el.points[2], attributes)
+                    })
+                  ],
+                  {
+                    ...Ellipse.parseConfig(),
+                    ...attrs,
+                    fixed: true
+                  }
+                );
+
+                handleSnap(newLine, Object.values(newLine.ancestors));
+                return newLine;
+              }
+            })
+          );
+          break;
+        case 90:
+          objects.push(
+            mixProps({
+              el,
+              objectCreator: attrs => {
+                const newLine = this.createElement(
+                  "hyperbola",
+                  [
+                    mixProps({
+                      el: el.points[0],
+                      objectCreator: attributes => this.createAnswerPointFromConfig(el.points[0], attributes)
+                    }),
+                    mixProps({
+                      el: el.points[1],
+                      objectCreator: attributes => this.createAnswerPointFromConfig(el.points[1], attributes)
+                    }),
+                    mixProps({
+                      el: el.points[2],
+                      objectCreator: attributes => this.createAnswerPointFromConfig(el.points[2], attributes)
+                    })
+                  ],
+                  {
+                    ...Hyperbola.parseConfig(),
+                    ...attrs,
+                    fixed: true
+                  }
+                );
+
+                handleSnap(newLine, Object.values(newLine.ancestors));
+
+                return newLine;
+              }
+            })
+          );
+          break;
+        case window.JXG.OBJECT_TYPE_POLYGON:
+          objects.push(
+            mixProps({
+              el,
+              objectCreator: attrs =>
+                this.createElement(
+                  "polygon",
+                  el.points.map(pointEl =>
+                    mixProps({
+                      el: pointEl,
+                      objectCreator: attributes => this.createAnswerPointFromConfig(pointEl, attributes)
+                    })
+                  ),
+                  {
+                    ...Polygon.parseConfig(),
+                    ...attrs,
+                    fixed: true
+                  }
+                )
+            })
+          );
+          break;
+        case window.JXG.OBJECT_TYPE_CURVE:
+          objects.push(
+            mixProps({
+              el,
+              objectCreator: attrs => {
+                const [name, [makeFn, points], props] = [Parabola, Sin][
+                  el.type === CONSTANT.TOOLS.PARABOLA ? 0 : 1
+                ].parseConfig(
+                  el.points.map(pointEl =>
+                    mixProps({
+                      el: pointEl,
+                      objectCreator: attributes => this.createAnswerPointFromConfig(pointEl, attributes)
+                    })
+                  )
+                );
+                const newElem = this.createElement(name, makeFn(points), {
+                  ...props,
+                  ...attrs,
+                  fixed: true
+                });
+                newElem.ancestors = {
+                  [points[0].id]: points[0],
+                  [points[1].id]: points[1]
+                };
+                newElem.addParents(points);
+                handleSnap(newElem, Object.values(newElem.ancestors));
+                return newElem;
+              }
+            })
+          );
+          break;
+        case 91:
+          objects.push(
+            mixProps({
+              el,
+              objectCreator: attrs => {
+                const [name, [makeFn, points], props] = Tangent.parseConfig(
+                  el.points.map(pointEl =>
+                    mixProps({
+                      el: pointEl,
+                      objectCreator: attributes => this.createAnswerPointFromConfig(pointEl, attributes)
+                    })
+                  )
+                );
+                const newElem = this.createElement(name, makeFn(points), {
+                  ...props,
+                  ...attrs,
+                  fixed: true
+                });
+                newElem.ancestors = {
+                  [points[0].id]: points[0],
+                  [points[1].id]: points[1]
+                };
+                newElem.addParents(points);
+                handleSnap(newElem, Object.values(newElem.ancestors));
+                return newElem;
+              }
+            })
+          );
+          break;
+        case 92:
+          objects.push(
+            mixProps({
+              el,
+              objectCreator: attrs => {
+                const [name, [makeFn, points], props] = Secant.parseConfig(
+                  el.points.map(pointEl =>
+                    mixProps({
+                      el: pointEl,
+                      objectCreator: attributes => this.createAnswerPointFromConfig(pointEl, attributes)
+                    })
+                  )
+                );
+                const newElem = this.createElement(name, makeFn(points), {
+                  ...props,
+                  ...attrs,
+                  fixed: true
+                });
+                newElem.ancestors = {
+                  [points[0].id]: points[0],
+                  [points[1].id]: points[1]
+                };
+                newElem.addParents(points);
+                handleSnap(newElem, Object.values(newElem.ancestors));
+                return newElem;
+              }
+            })
+          );
+          break;
+        case window.JXG.OBJECT_TYPE_TEXT:
+          objects.push(
+            mixProps({
+              el,
+              objectCreator: attrs => {
+                const [name, points, props] = Mark.parseConfig(el, this.getParameters(CONSTANT.TOOLS.MARK));
+                console.log(name, points, props, attrs);
+                return this.createElement(name, points, { ...props, ...attrs, fixed: true });
+              }
+            })
+          );
+        default:
+          throw new Error("Unknown element:", el);
+      }
+    });
+    return objects;
+  }
+
+  /**
    * Find point
    * @param {Object} el Point::getConfig
    * @param {Object} attrs provided attributes
@@ -1070,6 +1483,21 @@ class Board {
     }
     const [name, points, props] = Point.parseConfig(el, this.getParameters(CONSTANT.TOOLS.POINT));
     return this.createElement(name, points, { ...props, ...attrs });
+  }
+
+  /**
+   * Find point
+   * @param {Object} el Point::getConfig
+   * @param {Object} attrs provided attributes
+   * @see Point::getConfig
+   */
+  createAnswerPointFromConfig(el, attrs) {
+    const point = Point.findPoint(this.$board.objectsList, [1, el.x, el.y]);
+    if (point && el.x !== 0 && el.y !== 0) {
+      return point;
+    }
+    const [name, points, props] = Point.parseConfig(el, this.getParameters(CONSTANT.TOOLS.POINT));
+    return this.createElement(name, points, { ...props, ...attrs, fixed: true });
   }
 
   /**

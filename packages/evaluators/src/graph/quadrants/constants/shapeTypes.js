@@ -7,6 +7,8 @@ export const ShapeTypes = {
   CIRCLE: "circle",
   PARABOLA: "parabola",
   SINE: "sine",
+  TANGENT: "tangent",
+  SECANT: "secant",
   POLYGON: "polygon",
   ELLIPSE: "ellipse",
   HYPERBOLA: "hyperbola"
