@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
-import PropTypes from 'prop-types';
-import { grey, mainBlueColor } from '@edulastic/colors';
+import React, { Component } from "react";
+import styled from "styled-components";
+import PropTypes from "prop-types";
+import { grey, mainBlueColor, newBlue } from "@edulastic/colors";
 
 class TextField extends Component {
   state = {
@@ -14,15 +14,7 @@ class TextField extends Component {
   };
 
   render() {
-    const {
-      icon,
-      height,
-      style,
-      containerStyle,
-      onChange,
-      onBlur,
-      ...restProps
-    } = this.props;
+    const { icon, height, style, containerStyle, onChange, onBlur, ...restProps } = this.props;
     const { referenceEditable } = this.state;
     return (
       <Container height={height} style={containerStyle}>
@@ -55,7 +47,7 @@ TextField.propTypes = {
 
 TextField.defaultProps = {
   icon: null,
-  height: '45px',
+  height: "45px",
   style: {},
   containerStyle: {},
   onBlur: () => {}
@@ -71,12 +63,16 @@ const Container = styled.span`
 
 const Icon = styled.span`
   position: absolute;
-  right: 16px;
-  height: 100%;
   display: flex;
   align-items: center;
-  top: 0;
+  top: 2px;
+  right: 13px;
 
+  svg {
+    fill: ${newBlue};
+    width: 17px;
+    height: 17px;
+  }
   &:hover {
     cursor: pointer;
   }

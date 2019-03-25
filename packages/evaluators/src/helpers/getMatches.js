@@ -9,6 +9,9 @@ const getMatches = (response, answer, compareFunction) =>
 
       case evaluatorTypes.IS_EQUAL:
       case evaluatorTypes.MCQ_TYPE:
+        if (typeof answer[index] === "object" && answer[index].y) {
+          return isEqual({ ...answer[index], y: +answer[index].y.toFixed(5) }, { ...resp, y: +resp.y.toFixed(5) });
+        }
         return isEqual(answer[index], resp);
 
       default:

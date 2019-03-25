@@ -46,7 +46,7 @@ const AssessmentSummary = props => {
       <UpperContainer type="flex">
         <Col className="sub-container district-statistics" xs={24} sm={24} md={12} lg={12} xl={12}>
           <StyledCard>
-            <Stats name={state.assessmentName} data={state.metricInfo} />
+            <Stats name={state.assessmentName} data={state.metricInfo} role={props.role} />
           </StyledCard>
         </Col>
         <Col className="sub-container chart-container" xs={24} sm={24} md={12} lg={12} xl={12}>
@@ -84,17 +84,3 @@ const enhance = compose(
 );
 
 export default enhance(AssessmentSummary);
-
-// const enhance = compose(
-//   connect(
-//     state => ({
-//       assessmentSummary: getReportsAssessmentSummary(state),
-//       role: getUserRole(state)
-//     }),
-//     {
-//       getAssessmentSummaryRequestAction: getAssessmentSummaryRequestAction
-//     }
-//   )
-// );
-
-// export default enhance(AssessmentSummary);

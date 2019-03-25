@@ -14,7 +14,8 @@ const initialState = {
   items: [],
   currentItem: 0,
   title: "",
-  loading: true
+  loading: true,
+  settings: {}
 };
 
 const test = (state = initialState, { payload, type }) => {
@@ -25,7 +26,11 @@ const test = (state = initialState, { payload, type }) => {
         items: payload.items,
         title: payload.title,
         annotations: payload.annotations,
-        docUrl: payload.docUrl
+        docUrl: payload.docUrl,
+        settings: {
+          ...state.settings,
+          ...payload.settings
+        }
       };
 
     case GOTO_ITEM:

@@ -13,6 +13,7 @@ export const Label = styled.label`
   &:hover {
     border: dotted 1px ${props => props.theme.widgets.multipleChoice.labelBorderHoverColor};
     border-left: solid 3px ${props => props.theme.widgets.multipleChoice.labelBorderHoverColor};
+    background-color: rgba(39, 125, 241, 0.04);
     cursor: pointer;
   }
   &.checked {

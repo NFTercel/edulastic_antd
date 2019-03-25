@@ -564,7 +564,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "True or false"
         .getShowAnswer()
         .click()
         .then(() => {
-          cy.get("label.wrong").should("have.length", queData.choices.length - 1);
+          // cy.get("label.wrong").should("have.length", queData.choices.length - 1);
 
           cy.get("label.right")
             .should("have.length", 1)

@@ -7,6 +7,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _objectSpread2 = _interopRequireDefault(require("@babel/runtime/helpers/objectSpread"));
+
+var _typeof2 = _interopRequireDefault(require("@babel/runtime/helpers/typeof"));
+
 var _difference2 = _interopRequireDefault(require("lodash/difference"));
 
 var _includes2 = _interopRequireDefault(require("lodash/includes"));
@@ -26,6 +30,17 @@ var getMatches = function getMatches(response, answer, compareFunction) {
 
       case _constants.evaluatorTypes.IS_EQUAL:
       case _constants.evaluatorTypes.MCQ_TYPE:
+        if ((0, _typeof2.default)(answer[index]) === "object" && answer[index].y) {
+          return (0, _isEqual2.default)(
+            (0, _objectSpread2.default)({}, answer[index], {
+              y: +answer[index].y.toFixed(5)
+            }),
+            (0, _objectSpread2.default)({}, resp, {
+              y: +resp.y.toFixed(5)
+            })
+          );
+        }
+
         return (0, _isEqual2.default)(answer[index], resp);
 
       default:

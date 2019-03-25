@@ -35,14 +35,14 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Check Review Page`, ()
     // select class
     cy.get("[data-cy=selectClass]").click();
     cy.get("[data-cy=class]")
-      .contains("xmen")
+      .contains("student app")
       .click();
-    cy.get("[data-cy=class]")
+    /*  cy.get("[data-cy=class]")
       .contains("mutant ninjas")
       .click();
     cy.get("[data-cy=class]")
       .contains("mutant ninjas")
-      .click();
+      .click(); */
     cy.contains("Class/Group Section").click();
 
     // specific students

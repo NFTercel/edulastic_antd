@@ -13,7 +13,9 @@ import {
   LabelList,
   Brush
 } from "recharts";
-import { StyledSimpleBarChart, StyledChartNavButton, StyledCustomChartTooltip, QuestionTypeHeading } from "../styled";
+import { StyledSimpleBarChart, StyledChartNavButton, QuestionTypeHeading } from "../styled";
+import { StyledCustomChartTooltip } from "../../../../common/styled";
+import { Row, Col } from "antd";
 import { CustomChartXTick } from "./customChartXTick";
 import colorRange1 from "../../static/json/colorRange1.json";
 
@@ -40,7 +42,6 @@ export class SimpleBarChart extends PureComponent {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    console.log(prevState);
     let arr = SimpleBarChart.parseData(nextProps, prevState);
     return { data: [...arr] };
   }
@@ -75,7 +76,6 @@ export class SimpleBarChart extends PureComponent {
       }
 
       tmp.assessment = nextProps.assessment.testName;
-      console.log("tmp", tmp);
       return tmp;
     });
     return arr;
@@ -137,6 +137,40 @@ export class SimpleBarChart extends PureComponent {
     this.props.onBarClickCB({});
   };
 
+  getTooltipJSX = payload => {
+    if (payload && payload.length) {
+      let corr_cnt, incorr_cnt, part_cnt, skip_cnt, qCount;
+      if (payload && payload.length === 2) {
+        corr_cnt = payload[0].payload.corr_cnt;
+        incorr_cnt = payload[0].payload.incorr_cnt;
+        part_cnt = payload[0].payload.part_cnt;
+        skip_cnt = payload[0].payload.skip_cnt;
+        qCount = payload[0].payload.qCount;
+      }
+      return (
+        <div>
+          <Row type="flex" justify="start">
+            <Col className="tooltip-key">{"Avg Performance: "}</Col>
+            <Col className="tooltip-value">{payload[0].value}%</Col>
+          </Row>
+          <Row type="flex" justify="start">
+            <Col className="tooltip-key">{"Assessment: "}</Col>
+            <Col className="tooltip-value">{payload[0].payload.assessment}</Col>
+          </Row>
+          <Row type="flex" justify="start">
+            <Col className="tooltip-key">{"Total Questions: "}</Col>
+            <Col className="tooltip-value">{qCount}</Col>
+          </Row>
+          <Row type="flex" justify="start">
+            <Col className="tooltip-key">{"Question Type: "}</Col>
+            <Col className="tooltip-value">{payload[0].payload.name}</Col>
+          </Row>
+        </div>
+      );
+    }
+    return false;
+  };
+
   render() {
     return (
       <StyledSimpleBarChart className="chart-simple-bar-chart">
@@ -178,7 +212,7 @@ export class SimpleBarChart extends PureComponent {
               tickFormatter={this.yTickFormatter}
               label={this.constants.Y_AXIS_LABEL}
             />
-            <Tooltip cursor={false} content={<StyledCustomChartTooltip />} />
+            <Tooltip cursor={false} content={<StyledCustomChartTooltip getJSX={this.getTooltipJSX} />} />
             <Brush
               dataKey="name"
               height={0}

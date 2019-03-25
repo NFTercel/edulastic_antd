@@ -1,6 +1,6 @@
 import React from "react";
 import { Component } from "react";
-import { StyledCard, StyledTableData, StyledCustomTooltip } from "../styled";
+import { StyledCard, StyledTable, StyledCustomTooltip } from "../styled";
 import { Row, Col } from "antd";
 import { ResponseTag } from "./responseTag";
 
@@ -156,7 +156,7 @@ export class ResponseFrequencyTable extends Component {
   render() {
     return (
       <StyledCard className="response-frequency-table">
-        <StyledTableData columns={this.columns} dataSource={this.props.data} rowKey="uid" />
+        <StyledTable columns={this.columns} dataSource={this.props.data} rowKey="uid" />
       </StyledCard>
     );
   }

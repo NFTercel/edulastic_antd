@@ -138,9 +138,9 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Highlight Imag
           .trigger("mouseup", 200, 200);
       });
 
-      it("Shoudn't Visible Check Answer, Show Answer button", () => {
-        cy.contains("span", "Check Answer").should("not.visible");
-        cy.contains("span", "Show Answers").should("not.visible");
+      it("Shoud be visible Check Answer", () => {
+        cy.contains("span", "Check Answer").should("be.visible");
+        // cy.contains("span", "Show Answers").should("not.visible");
       });
 
       it("Click on Clear", () => {
@@ -257,7 +257,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Highlight Imag
 
   context("Edit the question created", () => {
     before("delete old question and create dummy que to edit", () => {
-      editItem.getItemWithId("5c358b480c8e6f22190d5ce0");
+      editItem.getItemWithId("5c95d4cb98393e6bddf612ae");
       editItem.deleteAllQuestion();
 
       // create new que and select type
@@ -371,9 +371,9 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Highlight Imag
           .trigger("mouseup", 200, 200);
       });
 
-      it("Shoudn't Visible Check Answer, Show Answer button", () => {
-        cy.contains("span", "Check Answer").should("not.visible");
-        cy.contains("span", "Show Answers").should("not.visible");
+      it("Should be visible Check Answer", () => {
+        cy.contains("span", "Check Answer").should("be.visible");
+        // cy.contains("span", "Show Answers").should("not.visible");
       });
 
       it("Click on Clear", () => {

@@ -62,6 +62,9 @@ function* loadTest({ payload }) {
     yield put(loadQuestionsAction(_keyBy(questions, "id")));
 
     let { testItems } = test;
+    const settings = {
+      calcType: test.calcType
+    };
 
     const { testActivity: activity, questionActivities = [] } = testActivity;
     // if questions are shuffled !!!
@@ -75,14 +78,14 @@ function* loadTest({ payload }) {
       [testItems, shuffles] = ShuffleChoices(testItems, questionActivities);
       yield put(setShuffledOptions(shuffles));
     }
-
     yield put({
       type: LOAD_TEST_ITEMS,
       payload: {
         items: testItems,
         title: test.title,
         annotations: test.annotations,
-        docUrl: test.docUrl
+        docUrl: test.docUrl,
+        settings
       }
     });
 

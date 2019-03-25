@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Row } from "antd";
-import { StyledTableData as TableData } from "../../../common/styled";
+import { StyledTable as Table, StyledCustomChartTooltip as CustomChartTooltip } from "../../../common/styled";
 import { AssessmentStatisticTable } from "./table/assessmentStatisticTable";
 import { fadedBlack, black } from "@edulastic/colors";
 import { ControlDropDown } from "./table/controlDropDown";
@@ -8,7 +8,13 @@ import { ControlDropDown } from "./table/controlDropDown";
 export const UpperContainer = styled(Row)`
   .sub-container {
     .ant-card-body {
-      height: 300px;
+      min-height: 350px;
+      display: flex;
+      flex-direction: column;
+
+      .recharts-responsive-container {
+        flex: 1;
+      }
     }
   }
 
@@ -23,7 +29,7 @@ export const TableContainer = styled(Row)``;
 
 export const StyledAssessmentStatisticTable = styled(AssessmentStatisticTable)`
   .top-area {
-    height: 50px;
+    min-height: 50px;
     font-weight: 900;
     font-size: 14px;
     color: ${fadedBlack};
@@ -46,7 +52,30 @@ export const StyledAssessmentStatisticTable = styled(AssessmentStatisticTable)`
   }
 `;
 
-export const StyledTableData = styled(TableData)``;
+export const StyledTable = styled(Table)`
+  .ant-table-body {
+    table {
+      thead {
+        tr {
+          th:first-child {
+            min-width: 250px;
+          }
+          th:nth-child(n + 2) {
+            text-align: right;
+          }
+        }
+      }
+
+      tbody {
+        tr {
+          td:nth-child(n + 2) {
+            text-align: right;
+          }
+        }
+      }
+    }
+  }
+`;
 
 export const StyledControlDropDown = styled(ControlDropDown)`
   button {
@@ -58,4 +87,9 @@ export const StyledControlDropDown = styled(ControlDropDown)`
     color: ${black};
     cursor: default;
   }
+`;
+
+export const StyledCustomChartTooltip = styled(CustomChartTooltip)`
+  min-width: 70px;
+  min-height: auto;
 `;

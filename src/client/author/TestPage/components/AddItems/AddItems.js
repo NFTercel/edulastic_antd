@@ -6,6 +6,7 @@ import { withRouter } from "react-router-dom";
 import { Select, Pagination, Spin } from "antd";
 
 import { Paper, FlexContainer, withWindowSizes } from "@edulastic/common";
+import { withNamespaces } from "@edulastic/localization";
 import { Container, TopMenu, MainList, ListItems, ItemsTableContainer, StyledButton, StyledSelect } from "./styled";
 import { getCurriculumsListSelector, getStandardsListSelector } from "../../../src/selectors/dictionaries";
 import {
@@ -154,7 +155,8 @@ class AddItems extends PureComponent {
       curriculumStandards,
       loading,
       items,
-      onAddItems
+      onAddItems,
+      t
     } = this.props;
 
     const { search, selectedTestItems } = this.state;
@@ -187,6 +189,7 @@ class AddItems extends PureComponent {
             curriculums={curriculums}
             getCurriculumStandards={getCurriculumStandards}
             curriculumStandards={curriculumStandards}
+            t={t}
           />
           <ListItems id="item-list">
             {windowWidth > 992 && this.renderPagination()}
@@ -219,6 +222,7 @@ class AddItems extends PureComponent {
 const enhance = compose(
   withRouter,
   withWindowSizes,
+  withNamespaces("author"),
   connect(
     state => ({
       items: getTestItemsSelector(state),

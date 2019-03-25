@@ -9,15 +9,13 @@ class CalculatorContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      calculateMode: this.props.calculateMode,
-      changeMode: this.props.changeMode
+      calculateMode: this.props.calculateMode
     };
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      calculateMode: nextProps.calculateMode,
-      changeMode: nextProps.changeMode
+      calculateMode: nextProps.calculateMode
     });
   }
 
@@ -80,11 +78,11 @@ class CalculatorContainer extends Component {
   }
 
   render() {
-    const { calculateMode, changeMode } = this.state;
+    const { calculateMode } = this.state;
     return (
       <Container>
         <StyledDraggable>
-          <StyledDiv visible={changeMode == 2 && calculateMode === 0}>
+          <StyledDiv visible={calculateMode === "GRAPHING_DESMOS"}>
             <StyledTitle>Desmos Graphing Calculator</StyledTitle>
             <DesmosGraphingCalculator
               ref={ref => {
@@ -95,7 +93,7 @@ class CalculatorContainer extends Component {
         </StyledDraggable>
 
         <StyledDraggable>
-          <StyledDiv visible={changeMode == 2 && calculateMode === 1}>
+          <StyledDiv visible={calculateMode === "BASIC_DESMOS"}>
             <StyledTitle>Desmos Basic Calculator</StyledTitle>
             <DesmosBasicCalculator
               ref={ref => {
@@ -106,7 +104,7 @@ class CalculatorContainer extends Component {
         </StyledDraggable>
 
         <StyledDraggable>
-          <StyledDiv visible={changeMode == 2 && calculateMode === 2}>
+          <StyledDiv visible={calculateMode === "SCIENTIFIC_DESMOS"}>
             <StyledTitle>Desmos Scientific Calculator</StyledTitle>
             <DesmosScientificCalculator
               ref={ref => {
@@ -117,21 +115,21 @@ class CalculatorContainer extends Component {
         </StyledDraggable>
 
         <StyledDraggableF>
-          <StyledDiv visible={changeMode == 2 && calculateMode === 3}>
+          <StyledDiv visible={calculateMode === "GRAPHING_GEOGEBRASCIENTIFIC"}>
             <StyledTitle>GeoGebra Graphing Calculator</StyledTitle>
             <GeoGebracalculator id="geogebra-graphingculator" />
           </StyledDiv>
         </StyledDraggableF>
 
         <StyledDraggableF>
-          <StyledDiv visible={changeMode == 2 && calculateMode === 4}>
+          <StyledDiv visible={calculateMode === "BASIC_GEOGEBRASCIENTIFIC"}>
             <StyledTitle>Basic Calculator</StyledTitle>
             <BasicCalculator id="geogebra-basiccalculator" />
           </StyledDiv>
         </StyledDraggableF>
 
         <StyledDraggableF>
-          <StyledDiv visible={changeMode == 2 && calculateMode === 5}>
+          <StyledDiv visible={calculateMode === "SCIENTIFIC_GEOGEBRASCIENTIFIC"}>
             <StyledTitle>GeoGebra Scientific Calculator</StyledTitle>
             <GeoGebracalculator id="geogebra-scientificcalculator" />
           </StyledDiv>

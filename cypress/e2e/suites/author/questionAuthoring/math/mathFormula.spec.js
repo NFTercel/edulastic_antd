@@ -1,12 +1,17 @@
+import { math } from "@edulastic/constants";
 import MathFormulaEdit from "../../../../framework/author/itemList/questionType/math/mathFormulaEdit";
 import EditItemPage from "../../../../framework/author/itemList/itemDetail/editPage";
 import FileHelper from "../../../../framework/util/fileHelper";
+import EditToolBar from "../../../../framework/author/itemList/questionType/common/editToolBar";
 
 describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Math formula" type question`, () => {
   const queData = {
     mockString: "10-5+8-4",
     group: "Math",
     queType: "Math formula",
+    extlink: "www.testdomain.com",
+    testtext: "testtext",
+    formula: "s=ar^2",
     answer: {
       value: "1234",
       ariaLabel: "test"
@@ -27,7 +32,9 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Math formula" 
       },
       setThousandsSeparator: {
         separators: ["Space", "Comma"],
-        expected: ["\\frac{1}{1 000}", "\\frac{1}{1,000}"],
+        // expected: ["\\frac{1}{1 000}", "\\frac{1}{1,000}"],
+        // expected: ["1/1000", "1/1,000"],
+        expected: ["\\frac{enter}1{downarrow}1 000", "\\frac{enter}1{downarrow}1,000"],
         input: "0.001"
       },
       significantDecimalPlaces: {
@@ -81,6 +88,33 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Math formula" 
         input: "[1, 2)"
       }
     },
+    equivSyntax: {
+      decimal: {
+        expected: "5.000",
+        input: "3"
+      },
+      simpleFraction: {
+        expected: "2/4"
+      },
+      mixedFraction: {
+        expected: "1+1/2"
+      },
+      exponent: {
+        expected: "2^2"
+      },
+      standardFormLinear: {
+        expected: "Ax+By=C"
+      },
+      standardFormQuadratic: {
+        expected: "5x^2+3x=4"
+      },
+      slopeIntercept: {
+        expected: "y=-x+1"
+      },
+      pointSlope: {
+        expected: "(y-1)=2(x+3)"
+      }
+    },
     symbols: ["units_si", "units_us"],
     decimalSeparators: ["Dot", "Comma"],
     thousandsSeparators: ["Space", "Dot", "Comma"]
@@ -91,6 +125,9 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Math formula" 
   const numpadButtons = question.virtualKeyBoardNumpad;
   const buttons = question.virtualKeyBoardButtons;
   const methods = question.answersMethods;
+  const { syntaxes } = math;
+  const ruleArguments = question.argumentMethods;
+  const editToolBar = new EditToolBar();
   let preview;
 
   before(() => {
@@ -104,6 +141,70 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Math formula" 
       // create new que and select type
 
       editItem.addNew().chooseQuestion(queData.group, queData.queType);
+    });
+
+    context("TC_429 => Enter question text in Compose Question text box", () => {
+      before("visit items page and select question type", () => {
+        editItem.getItemWithId("5c358b480c8e6f22190d5ce0");
+        editItem.deleteAllQuestion();
+        // create new que and select type
+        editItem.addNew().chooseQuestion(queData.group, queData.queType);
+      });
+      it("Write text in textbox", () => {
+        question
+          .getComposeQuestionTextBox()
+          .clear()
+          .type(queData.testtext)
+          .then($input => {
+            console.log("$input", $input[0].innerText);
+            expect($input[0].innerText).to.contain(queData.testtext);
+          });
+      });
+
+      it("give external link", () => {
+        question
+          .getComposeQuestionTextBox()
+          .clear()
+          .type(queData.testtext)
+          .then($input => {
+            expect($input[0].innerText).to.contain(queData.testtext);
+          })
+          .type("{selectall}");
+        editToolBar.link().click();
+        question.getSaveLink().click();
+        question
+          .getComposeQuestionTextBoxLink()
+          .find("a")
+          .should("have.attr", "href")
+          .and("equal", queData.testtext)
+          .then(href => {
+            expect(href).to.equal(queData.testtext);
+          });
+      });
+
+      it("insert formula", () => {
+        question
+          .getComposeQuestionTextBox()
+          .clear()
+          .type(queData.testtext)
+          .then($input => {
+            expect($input[0].innerText).to.contain(queData.testtext);
+          })
+          .clear();
+      });
+      it("Upload image to server", () => {
+        question.getComposeQuestionTextBox().focus();
+
+        cy.get(".ql-image").click();
+        cy.uploadFile("testImages/sample.jpg", "input.ql-image[type=file]").then(() =>
+          cy
+            .get(".ql-editor p")
+            .find("img")
+            .should("be.visible")
+        );
+
+        question.getComposeQuestionTextBox().clear();
+      });
     });
 
     context("TC_411 => Template", () => {
@@ -396,6 +497,27 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Math formula" 
 
       question.getAnswerAllowThousandsSeparator().uncheck({ force: true });
     });
+
+    it("Testing with thousands separators - Space and Comma", () => {
+      const { input, expected, separators } = queData.equivSymbolic.setThousandsSeparator;
+      question.getAnswerValueMathInput().type(input, { force: true });
+      separators.forEach((separator, index) => {
+        question.getAnswerAllowThousandsSeparator().check({ force: true });
+        question
+          .getThousandsSeparatorDropdown()
+          .click()
+          .then(() => {
+            question
+              .getThousandsSeparatorDropdownList(separator)
+              .should("be.visible")
+              .click();
+          });
+        question.checkCorrectAnswer(expected[index], preview, index === 0 ? 0 : input.length, true);
+
+        question.getAnswerAllowThousandsSeparator().uncheck({ force: true });
+      });
+    });
+
     it("Testing with significant decimal '3'", () => {
       const { input, expected, value } = queData.equivSymbolic.significantDecimalPlaces;
       question.getAnswerValueMathInput().type(input, { force: true });
@@ -502,6 +624,27 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Math formula" 
 
       question.getAnswerAllowThousandsSeparator().uncheck({ force: true });
     });
+
+    it("Testing with decimal separator - Comma", () => {
+      const { input, expected, separator } = queData.equivLiteral.setDecimalSeparator;
+      question.getAnswerAllowThousandsSeparator().check({ force: true });
+      question
+        .getAnswerSetDecimalSeparatorDropdown()
+        .click()
+        .then(() => {
+          question
+            .getAnswerSetDecimalSeparatorDropdownList(separator)
+            .should("be.visible")
+            .click();
+        });
+      input.forEach((item, index) => {
+        question.getAnswerValueMathInput().type(item, { force: true });
+        question.checkCorrectAnswer(expected[index], preview, item.length, false);
+      });
+
+      question.getAnswerAllowThousandsSeparator().uncheck({ force: true });
+    });
+
     it("Testing with ignoring order", () => {
       const { input, expected } = queData.equivLiteral.ignoreOrder;
       question.getAnswerValueMathInput().type(input, { force: true });
@@ -677,6 +820,87 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Math formula" 
       });
     });
   });
+
+  context("Testing equivSyntax methods", () => {
+    before("delete old question and create dummy que to edit", () => {
+      preview = editItem.header.preview();
+      editItem.getItemWithId("5c358b480c8e6f22190d5ce0");
+      editItem.deleteAllQuestion();
+
+      editItem.addNew().chooseQuestion(queData.group, queData.queType);
+      question.header.save();
+
+      editItem.getEditButton().click();
+    });
+
+    it("Testing Rule : Decimal", () => {
+      const { input, expected } = queData.equivSyntax.decimal;
+
+      question.checkEquivSyntaxMethod(methods[8], syntaxes.DECIMAL);
+
+      question
+        .getAnswerRuleArgumentInput()
+        .clear()
+        .type("{uparrow}".repeat(input), { force: true });
+
+      question.checkCorrectAnswer(expected, preview, 0, true, false, "1/1");
+    });
+    it("Testing Rule : Simple Fraction", () => {
+      const { expected } = queData.equivSyntax.simpleFraction;
+
+      question.checkEquivSyntaxMethod(methods[8], syntaxes.SIMPLE_FRACTION);
+
+      question.checkCorrectAnswer(expected, preview, 0, true, false, "1/1");
+    });
+    it("Testing Rule : mixed Fraction", () => {
+      const { expected } = queData.equivSyntax.mixedFraction;
+
+      question.checkEquivSyntaxMethod(methods[8], syntaxes.MIXED_FRACTION);
+
+      question.checkCorrectAnswer(expected, preview, 0, false, false, "1/1");
+    });
+    it("Testing Rule : Exponent", () => {
+      const { expected } = queData.equivSyntax.exponent;
+
+      question.checkEquivSyntaxMethod(methods[8], syntaxes.EXPONENT);
+
+      question.checkCorrectAnswer(expected, preview, 0, false, false, "1/1");
+    });
+    it("Testing Rule : Standard form, Argument: linear", () => {
+      const { expected } = queData.equivSyntax.standardFormLinear;
+
+      question.checkEquivSyntaxMethod(methods[8], syntaxes.STANDARD_FORM);
+
+      question
+        .getAnswerRuleArgumentSelect()
+        .click()
+        .then(() => question.getAnswerArgumentDropdownByValue(ruleArguments[0]).click());
+      question.checkCorrectAnswer(expected, preview, 0, true, false, "1/1");
+    });
+    it("Testing Rule : Standard form, Argument: quadratic", () => {
+      const { expected } = queData.equivSyntax.standardFormQuadratic;
+
+      question.checkEquivSyntaxMethod(methods[8], syntaxes.STANDARD_FORM);
+      question
+        .getAnswerRuleArgumentSelect()
+        .click()
+        .then(() => question.getAnswerArgumentDropdownByValue(ruleArguments[1]).click());
+      question.checkCorrectAnswer(expected, preview, 0, false, false, "1/1");
+    });
+    it("Testing Rule : Slope intercept form", () => {
+      const { expected } = queData.equivSyntax.slopeIntercept;
+
+      question.checkEquivSyntaxMethod(methods[8], syntaxes.SLOPE_INTERCEPT_FORM);
+      question.checkCorrectAnswer(expected, preview, 0, true, false, "1/1");
+    });
+    it("Testing Rule : point slope form", () => {
+      const { expected } = queData.equivSyntax.pointSlope;
+
+      question.checkEquivSyntaxMethod(methods[8], syntaxes.POINT_SLOPE_FORM);
+      question.checkCorrectAnswer(expected, preview, 0, true, false, "1/1");
+    });
+  });
+
   context("TC_415 => Save question", () => {
     it("Click on save button", () => {
       question.header.save();

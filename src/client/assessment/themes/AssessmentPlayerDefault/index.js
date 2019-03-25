@@ -66,7 +66,7 @@ class AssessmentPlayerDefault extends React.Component {
       isSavePauseModalVisible: false,
       history: props.scratchPad ? [props.scratchPad] : [{ points: [], pathes: [], figures: [], texts: [] }],
       currentTab: 0,
-      calculateMode: 0,
+      calculateMode: `${this.props.settings.calcType}_DESMOS`,
       changeMode: 0
     };
   }
@@ -232,9 +232,9 @@ class AssessmentPlayerDefault extends React.Component {
       itemRows,
       evaluation,
       windowWidth,
-      questions
+      questions,
+      settings
     } = this.props;
-
     const {
       testItemState,
       isToolbarModalVisible,
@@ -251,7 +251,7 @@ class AssessmentPlayerDefault extends React.Component {
       changeMode,
       calculateMode
     } = this.state;
-
+    const calcBrands = ["DESMOS", "GEOGEBRASCIENTIFIC"];
     const dropdownOptions = Array.isArray(items) ? items.map((item, index) => index) : [];
 
     const item = items[currentItem];
@@ -365,7 +365,12 @@ class AssessmentPlayerDefault extends React.Component {
                       <TestButton checkAnwser={() => this.changeTabItemState("check")} />
                     )}
                     {windowWidth >= LARGE_DESKTOP_WIDTH && (
-                      <ToolBar changeMode={this.handleModeChange} changeCaculateMode={this.handleModeCaculate} />
+                      <ToolBar
+                        changeMode={this.handleModeChange}
+                        changeCaculateMode={this.handleModeCaculate}
+                        settings={settings}
+                        calcBrands={calcBrands}
+                      />
                     )}
                     {windowWidth >= MAX_MOBILE_WIDTH && <Clock />}
                     {windowWidth >= MAX_MOBILE_WIDTH && (
@@ -393,7 +398,7 @@ class AssessmentPlayerDefault extends React.Component {
               )}
             </MainWrapper>
           </Main>
-          <CalculatorContainer changeMode={changeMode} calculateMode={calculateMode} />
+          {changeMode === 2 && <CalculatorContainer calculateMode={calculateMode} calcBrands={calcBrands} />}
         </Container>
       </ThemeProvider>
     );
@@ -410,7 +415,8 @@ const enhance = compose(
       questions: state.assessmentplayerQuestions.byId,
       scratchPad: ownProps.items[ownProps.currentItem]
         ? state.userWork[ownProps.items[ownProps.currentItem]._id] || null
-        : null
+        : null,
+      settings: state.test.settings
     }),
     {
       checkAnswer: checkAnswerAction,

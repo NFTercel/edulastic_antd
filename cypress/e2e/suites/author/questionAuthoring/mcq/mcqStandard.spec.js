@@ -18,7 +18,8 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Multiple choic
   const question = new MCQStandardPage();
   const editItem = new EditItemPage();
   const text = "testtext";
-  const formates = question.formates;
+
+  const { formates } = question;
 
   before(() => {
     cy.setToken();
@@ -133,7 +134,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Multiple choic
         .should("have.length", 0);
 
       // add new
-      const choices = queData.choices;
+      const { choices } = queData;
       choices.forEach((ch, index) => {
         question
           .addNewChoice()
@@ -425,7 +426,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Multiple choic
         .should("have.length", 0);
 
       // add new
-      const choices = queData.choices;
+      const { choices } = queData;
       choices.forEach((ch, index) => {
         question
           .addNewChoice()
@@ -623,7 +624,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Multiple choic
       });
 
       // add choices
-      const choices = queData.choices;
+      const { choices } = queData;
       choices.forEach((ch, index) => {
         question
           .addNewChoice()
@@ -654,7 +655,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Multiple choic
         .getShowAnswer()
         .click()
         .then(() => {
-          cy.get("label.wrong").should("have.length", queData.choices.length - 1);
+          // cy.get("label.wrong").should("have.length", queData.choices.length - 1);
 
           cy.get("label.right")
             .should("have.length", 1)
@@ -760,7 +761,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Multiple choic
         .getShowAnswer()
         .click()
         .then(() => {
-          cy.get("label.wrong").should("have.length", queData.choices.length - 2);
+          // cy.get("label.wrong").should("have.length", queData.choices.length - 2);
 
           cy.get("label.right")
             .should("have.length", 2)
@@ -857,7 +858,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Multiple choic
         .getShowAnswer()
         .click()
         .then(() => {
-          cy.get("label.wrong").should("have.length", queData.choices.length - 2);
+          // cy.get("label.wrong").should("have.length", queData.choices.length - 2);
 
           cy.get("label.right")
             .should("have.length", 2)
@@ -931,6 +932,232 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Multiple choic
         .then(() => {
           preview.getAntMsg().should("contain", "score: 0/0");
 
+          cy.get("label.right,label.wrong").should("have.length", 0);
+        });
+    });
+
+    it("[mcq_std_test3]:test => Testing scoring block", () => {
+      question.header
+        .edit()
+        .getEditButton()
+        .click();
+
+      // select multiple correct ans
+      question.getMultipleResponse().click();
+
+      question
+        .getAllAnsChoicesLabel()
+        .contains(queData.correct[0])
+        .click()
+        .closest("label")
+        .find("input")
+        .should("be.checked");
+
+      question
+        .addAlternate()
+        .getAllAnsChoicesLabel()
+        .contains(queData.alterate[0])
+        .click()
+        .closest("label")
+        .find("input")
+        .should("be.checked");
+
+      // advanced
+      question.clickOnAdvancedOptions();
+
+      question.getEnableAutoScoring().click();
+
+      // >> exact match
+      question.selectScoringType("Exact match");
+
+      // save
+      question.header.save();
+
+      // preview and check ans
+      const preview = question.header.preview();
+
+      // give correct ans and validate
+      cy.contains(queData.correct[0]).click();
+
+      cy.contains(queData.alterate[0]).click();
+
+      preview
+        .getCheckAnswer()
+        .click()
+        .then(() => {
+          preview.getAntMsg().should("contain", "score: 0/1");
+        });
+
+      preview
+        .getClear()
+        .click()
+        .then(() => {
+          cy.get("label.right,label.wrong").should("have.length", 0);
+        });
+
+      // give incorrect ans and validate
+      cy.contains(queData.choices[1]).click();
+
+      preview
+        .getCheckAnswer()
+        .click()
+        .then(() => {
+          preview.getAntMsg().should("contain", "score: 0/1");
+
+          cy.get("label.wrong").should("have.length", 1);
+
+          cy.get("label.right").should("have.length", 0);
+        });
+
+      preview
+        .getClear()
+        .click()
+        .then(() => {
+          cy.get("label.right,label.wrong").should("have.length", 0);
+        });
+
+      preview.header
+        .edit()
+        .getEditButton()
+        .click();
+
+      // advanced
+      question.clickOnAdvancedOptions();
+
+      question.getMinScore().type(2);
+
+      // save
+      question.header.save();
+
+      question.header.preview();
+
+      cy.contains(queData.choices[1]).click();
+
+      preview
+        .getCheckAnswer()
+        .click()
+        .then(() => {
+          preview.getAntMsg().should("contain", "score: 2/2");
+
+          cy.get("label.wrong").should("have.length", 1);
+
+          cy.get("label.right").should("have.length", 0);
+        });
+
+      preview
+        .getClear()
+        .click()
+        .then(() => {
+          cy.get("label.right,label.wrong").should("have.length", 0);
+        });
+
+      preview.header
+        .edit()
+        .getEditButton()
+        .click();
+
+      // advanced
+      question.clickOnAdvancedOptions();
+
+      question
+        .getPoints()
+        .clear()
+        .type(3);
+
+      question.getAlternates().click();
+
+      question
+        .getPoints()
+        .clear()
+        .type(4);
+
+      // save
+      question.header.save();
+
+      question.header.preview();
+
+      cy.contains(queData.choices[1]).click();
+
+      preview
+        .getCheckAnswer()
+        .click()
+        .then(() => {
+          preview.getAntMsg().should("contain", "score: 2/4");
+
+          cy.get("label.wrong").should("have.length", 1);
+
+          cy.get("label.right").should("have.length", 0);
+        });
+
+      preview
+        .getClear()
+        .click()
+        .then(() => {
+          cy.get("label.right,label.wrong").should("have.length", 0);
+        });
+
+      preview.header
+        .edit()
+        .getEditButton()
+        .click();
+
+      // advanced
+      question.clickOnAdvancedOptions();
+
+      question
+        .getPoints()
+        .clear()
+        .type(8);
+      question.selectScoringType("Partial match");
+
+      question
+        .getAllAnsChoicesLabel()
+        .contains(queData.choices[0])
+        .click()
+        .closest("label")
+        .find("input")
+        .should("be.checked");
+
+      question
+        .getAllAnsChoicesLabel()
+        .contains(queData.choices[4])
+        .click()
+        .closest("label")
+        .find("input")
+        .should("be.checked");
+
+      question
+        .getAlternates()
+        .next()
+        .click();
+
+      question.getMinScore().clear();
+
+      question.getPanalty().type(4);
+
+      // save
+      question.header.save();
+
+      question.header.preview();
+
+      cy.contains(queData.choices[1]).click();
+      cy.contains(queData.choices[0]).click();
+
+      preview
+        .getCheckAnswer()
+        .click()
+        .then(() => {
+          preview.getAntMsg().should("contain", "score: 2/8");
+
+          cy.get("label.wrong").should("have.length", 1);
+
+          cy.get("label.right").should("have.length", 1);
+        });
+
+      preview
+        .getClear()
+        .click()
+        .then(() => {
           cy.get("label.right,label.wrong").should("have.length", 0);
         });
     });

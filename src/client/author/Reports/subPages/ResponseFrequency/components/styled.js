@@ -1,8 +1,7 @@
 import styled from "styled-components";
 import { Row, Col, Button } from "antd";
-import { StyledTableData as TableData, StyledCard as Card } from "../../../common/styled";
+import { StyledTable as Table, StyledCard as Card } from "../../../common/styled";
 import { CustomTooltip } from "./customToolTip";
-import { CustomChartTooltip } from "./charts/tooltip";
 import { darkGrey, grey, lightBlue, black } from "@edulastic/colors";
 import { Text } from "@vx/text";
 
@@ -10,8 +9,6 @@ export const StyledCard = Card;
 
 export const StyledContainer = styled(Row)`
   flex-flow: column nowrap;
-  // top: 95px;
-  // position: relative;
 
   .question-area {
     min-height: 110px;
@@ -46,36 +43,8 @@ export const StyledContainer = styled(Row)`
   }
 `;
 
-export const StyledTableData = styled(TableData)`
+export const StyledTable = styled(Table)`
   .ant-table-body {
-    // Till END css written to override text align, padding properties and to make Q# align left and correct % to align right
-    .ant-table-thead > tr > th.ant-table-column-has-actions.ant-table-column-has-sorters,
-    .ant-table-thead > tr > th.ant-table-column-has-actions.ant-table-column-has-filters {
-      text-align: left;
-    }
-
-    .ant-table-thead > tr > th.ant-table-column-has-actions.ant-table-column-has-sorters:nth-child(n + 4),
-    .ant-table-thead > tr > th.ant-table-column-has-actions.ant-table-column-has-filters:nth-child(n + 4) {
-      text-align: right;
-    }
-
-    .ant-table-thead > tr > th .ant-table-column-sorters {
-      padding: 5px;
-    }
-
-    .ant-table-thead > tr > th:nth-child(1) .ant-table-column-sorters .ant-table-column-sorter {
-      display: inline-block;
-      position: relative;
-      right: unset;
-      vertical-align: middle;
-      margin-top: -4px;
-    }
-
-    .ant-table-thead > tr > th:nth-child(5) .ant-table-column-sorters .ant-table-column-sorter {
-      right: 20px;
-    }
-    // END
-
     table {
       thead {
         tr {
@@ -180,20 +149,6 @@ export const StyledChartNavButton = styled(Button)`
   border-radius: 25px;
   background-color: white;
   color: black;
-`;
-
-export const StyledCustomChartTooltip = styled(CustomChartTooltip)`
-  min-width: 200px;
-  max-width: 600px;
-  min-height: 75px;
-  background-color: #f0f0f0;
-  color: black;
-  border: solid 1px #bebebe;
-  box-shadow: 0 0 20px #c0c0c0;
-  padding: 5px;
-  font-size: 12px;
-  font-weight: 600;
-  white-space: pre;
 `;
 
 export const QuestionTypeHeading = styled.p`

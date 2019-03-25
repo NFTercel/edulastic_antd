@@ -379,9 +379,21 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Hotspot" type 
     });
   });
 
+  context("Delete the question after creation", () => {
+    context("TC_201 => Delete option", () => {
+      it("Click on delete button in Item Details page", () => {
+        editItem
+          .getDelButton()
+          .should("have.length", 1)
+          .click()
+          .should("have.length", 0);
+      });
+    });
+  });
+
   context("Advanced Options", () => {
     before("visit items page and select question type", () => {
-      editItem.getItemWithId("5c358b480c8e6f22190d5ce0");
+      editItem.getItemWithId("5c95d4cb98393e6bddf612ae");
       editItem.deleteAllQuestion();
       // create new que and select type
       editItem.addNew().chooseQuestion(queData.group, queData.queType);
@@ -524,18 +536,6 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Hotspot" type 
           .click();
 
         cy.get("@select").should("contain", Helpers.stemNumeration.lowerAlpha);
-      });
-    });
-  });
-
-  context("Delete the question after creation", () => {
-    context("TC_201 => Delete option", () => {
-      it("Click on delete button in Item Details page", () => {
-        editItem
-          .getDelButton()
-          .should("have.length", 1)
-          .click()
-          .should("have.length", 0);
       });
     });
   });

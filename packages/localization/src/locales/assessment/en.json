@@ -183,6 +183,22 @@
       "lockShadedCells": "Lock shaded cells",
       "methodSubtitle": "Method"
     },
+    "chart": {
+      "composeQuestion": "Compose Question",
+      "enterQuestion": "Enter question",
+      "chartMainBlockTitle": "Chart",
+      "width": "Width (px)",
+      "height": "Height (px)",
+      "yAxisCount": "Max Value",
+      "stepSize": "Y Axis Step",
+      "xAxisLabel": "X Axis Label",
+      "yAxisLabel": "Y Axis Label",
+      "interactive": "Interactive",
+      "addPoint": "Add Point",
+      "point": "Point",
+      "value": "Value",
+      "label": "Label"
+    },
     "hotspot": {
       "widthLabel": "Width (px)",
       "heightLabel": "Height (px)",

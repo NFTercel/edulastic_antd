@@ -41,9 +41,12 @@ import FeedbackBottom from "./FeedbackBottom";
 import FeedbackRight from "./FeedbackRight";
 import Timespent from "./Timespent";
 import { setQuestionDataAction } from "../../author/src/actions/question";
+import { Chart } from "../widgets/Charts";
 
 const getQuestion = type => {
   switch (type) {
+    case questionType.LINE_CHART:
+      return Chart;
     case questionType.DRAWING:
       return Drawing;
     case questionType.HIGHLIGHT_IMAGE:
@@ -183,16 +186,24 @@ class QuestionWrapper extends Component {
     const { main, advanced, activeTab } = this.state;
     const Question = getQuestion(type);
     const studentName = ""; // data.activity.studentName;
+    const PaperWrapperStyles = {
+      width: "-webkit-fill-available",
+      display: "flex",
+      padding: "25px 20px",
+      background: "#F8F8FB",
+      boxShadow: "none",
+      marginBottom: 30
+    };
 
     return (
       <ThemeProvider theme={themes.default}>
-        <PaperWrapper style={{ width: "-webkit-fill-available", display: "flex" }}>
+        <PaperWrapper style={PaperWrapperStyles}>
           {type === "graph" && view === "edit" && (
             <QuestionMenu activeTab={activeTab} main={main} advanced={advanced} />
           )}
           <Fragment>
             <div style={{ flex: "auto" }}>
-              <Timespent timespent={timespent} view={view} />
+              {timespent ? <Timespent timespent={timespent} view={view} /> : null}
               <Question
                 {...restProps}
                 setQuestionData={setQuestionData}

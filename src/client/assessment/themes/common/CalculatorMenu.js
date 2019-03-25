@@ -9,7 +9,7 @@ class CalculatorMenu extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      select: 0
+      select: `${this.props.calcType}_${this.props.calcBrands[0]}`
     };
     this.calculatorMenuHandler = this.calculatorMenuHandler.bind(this);
   }
@@ -23,31 +23,28 @@ class CalculatorMenu extends Component {
 
   render() {
     const { select } = this.state;
+    const { calcType, calculatorTypes, calcBrands } = this.props;
     return (
       <Container>
-        <StyledButton enable={select === 0} onClick={e => this.calculatorMenuHandler(e, 0)}>
-          <CaculatorIcon />
-        </StyledButton>
-
-        <StyledButton enable={select === 1} onClick={e => this.calculatorMenuHandler(e, 1)}>
-          <CaculatorIcon />
-        </StyledButton>
-
-        <StyledButton enable={select === 2} onClick={e => this.calculatorMenuHandler(e, 2)}>
-          <CaculatorIcon />
-        </StyledButton>
-
-        <StyledButton enable={select === 3} onClick={e => this.calculatorMenuHandler(e, 3)}>
-          <CaculatorIcon />
-        </StyledButton>
-
-        <StyledButton enable={select === 4} onClick={e => this.calculatorMenuHandler(e, 4)}>
-          <CaculatorIcon />
-        </StyledButton>
-
-        <StyledButton enable={select === 5} onClick={e => this.calculatorMenuHandler(e, 5)}>
-          <CaculatorIcon />
-        </StyledButton>
+        {Object.keys(calculatorTypes).map(
+          item =>
+            calcType === item && (
+              <React.Fragment>
+                <StyledButton
+                  enable={select === `${item}_${calcBrands[0]}`}
+                  onClick={e => this.calculatorMenuHandler(e, `${item}_${calcBrands[0]}`)}
+                >
+                  <CaculatorIcon />
+                </StyledButton>
+                <StyledButton
+                  enable={select === `${item}_${calcBrands[1]}`}
+                  onClick={e => this.calculatorMenuHandler(e, `${item}_${calcBrands[1]}`)}
+                >
+                  <CaculatorIcon />
+                </StyledButton>
+              </React.Fragment>
+            )
+        )}
       </Container>
     );
   }
@@ -65,7 +62,7 @@ const Container = styled.div`
   border-radius: 5px;
   background-color: #0288d1;
   border: 1px solid ${white};
-  left: -107px;
+  left: -24px;
   top: 50px;
   &:after {
     content: "";
@@ -76,7 +73,7 @@ const Container = styled.div`
     border-width: 0 8px 8px 8px;
     border-color: transparent transparent #0288d1 transparent;
     top: -8px;
-    left: 118px;
+    left: 34px;
   }
 
   &:before {
@@ -88,7 +85,7 @@ const Container = styled.div`
     border-width: 0 9px 9px 9px;
     border-color: transparent transparent #ffffff transparent;
     top: -10px;
-    left: 117px;
+    left: 33px;
   }
 `;
 

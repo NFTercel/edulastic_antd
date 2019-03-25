@@ -646,13 +646,13 @@ describe(`${FileHelper.getSpecName(
         .find("input")
         .should("be.checked");
 
-      question
+      /* question
         .getAllAnsChoicesLabel()
         .eq(1)
         .click()
         .closest("label")
         .find("input")
-        .should("not.be.checked");
+        .should("not.be.checked"); */
 
       // save
       question.header.save();
@@ -682,7 +682,7 @@ describe(`${FileHelper.getSpecName(
         .getShowAnswer()
         .click()
         .then(() => {
-          cy.get("label.wrong").should("have.length", queData.choices.length - 2);
+          // cy.get("label.wrong").should("have.length", queData.choices.length - 2);
 
           cy.get("label.right")
             .should("have.length", 2)

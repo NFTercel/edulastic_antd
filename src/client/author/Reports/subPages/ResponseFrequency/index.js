@@ -1,4 +1,3 @@
-// export { default } from "./components/Container/Container";
 import React, { Component } from "react";
 import { compose } from "redux";
 import queryString from "query-string";

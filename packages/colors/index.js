@@ -14,6 +14,7 @@ export const mainBgColor = "#f3f3f3";
 export const mainTextColor = "#444444";
 export const textColor = "#878282";
 export const secondaryTextColor = "#434b5d";
+export const greyDarken = "#979BA1";
 export const titleColor = "#304050";
 
 export const separatorColor = "#d6d0d0";
@@ -35,6 +36,7 @@ export const lightBlue = "#93d8f7";
 export const lightBlueSecondary = "#1774F0";
 export const darkBlue = "#0080b9";
 export const darkBlueSecondary = "#0288d1";
+export const newBlue = "#1774F0";
 export const blueButton = "#0e93dc";
 
 export const green = "#1fe3a1";
@@ -42,6 +44,8 @@ export const lightGreen = "#f5f9fe";
 export const greenDark = "#4aac8b";
 export const greenDarkSecondary = "#057750";
 export const greenSecondary = "#4CD43B";
+
+export const greenPrimary = "#0EB08D";
 export const greenThird = "#5eb500";
 export const lightGreenSecondary = "#5EB500";
 

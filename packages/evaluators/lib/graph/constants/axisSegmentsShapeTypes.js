@@ -5,8 +5,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.AxisSegmentsShapeTypes = void 0;
 var AxisSegmentsShapeTypes = {
-  SEGMENTS_POINT: "segments_point",
-  SEGMENT_BOTH_POINT_INCLUDED: "segment_both_point_included",
+  POINT: "point",
+  SEGMENT: "segment",
   SEGMENT_LEFT_POINT_HOLLOW: "segment_left_point_hollow",
   SEGMENT_RIGHT_POINT_HOLLOW: "segment_right_point_hollow",
   SEGMENT_BOTH_POINT_HOLLOW: "segment_both_points_hollow",

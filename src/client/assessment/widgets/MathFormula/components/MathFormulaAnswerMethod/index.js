@@ -319,7 +319,7 @@ const MathFormulaAnswerMethod = ({ onChange, index, onDelete, method, value, ari
               }}
             >
               {syntaxes.map(({ value: val, label }) => (
-                <Select.Option key={val} value={val}>
+                <Select.Option key={val} value={val} data-cy={`answer-rule-dropdown-${val}`}>
                   {label}
                 </Select.Option>
               ))}
@@ -333,6 +333,7 @@ const MathFormulaAnswerMethod = ({ onChange, index, onDelete, method, value, ari
                 type="number"
                 value={options.argument}
                 onChange={e => handleChangeOptions("argument", +e.target.value)}
+                data-cy="answer-rule-argument-input"
               />
             </Col>
           )}
@@ -344,9 +345,10 @@ const MathFormulaAnswerMethod = ({ onChange, index, onDelete, method, value, ari
                 value={options.argument || ""}
                 style={{ width: "100%" }}
                 onChange={val => handleChangeOptions("argument", val)}
+                data-cy="answer-rule-argument-select"
               >
                 {["linear", "quadratic"].map(val => (
-                  <Select.Option key={val} value={val}>
+                  <Select.Option key={val} value={val} data-cy={`answer-argument-dropdown-${val}`}>
                     {val}
                   </Select.Option>
                 ))}

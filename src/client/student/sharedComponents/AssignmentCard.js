@@ -55,12 +55,11 @@ const AssignmentCard = ({ startAssignment, resumeAssignment, data, theme, t, typ
   const resume = lastAttempt.status == 0;
   let newReports = resume ? reports.slice(0, reports.length - 1) : reports.slice(0);
   newReports = newReports || [];
-  const { correct = 0, wrong = 0 } = last(newReports) || {};
+  const { correct = 0, wrong = 0, maxScore = 0, score = 0 } = last(newReports) || {};
   const attempted = !!(newReports && newReports.length);
   const attemptCount = newReports && newReports.length;
-
   const totalQuestions = correct + wrong || 0;
-  const scorePercentage = (correct / totalQuestions) * 100 || 0;
+  const scorePercentage = (score / maxScore) * 100 || 0;
   const arrow = showAttempts ? "\u2193" : "\u2191";
 
   const startTest = () => {
@@ -76,17 +75,18 @@ const AssignmentCard = ({ startAssignment, resumeAssignment, data, theme, t, typ
     }
   };
 
-  const { releaseScore = true, activityReview = true } = data;
-  const showReviewButton =
-    releaseScore === releaseGradeLabels.WITH_RESPONSE || releaseScore === releaseGradeLabels.WITH_ANSWERS;
+  const { releaseScore = releaseGradeLabels.DONT_RELEASE, activityReview = true } = data;
+  const showReviewButton = releaseScore !== releaseGradeLabels.DONT_RELEASE;
   const ScoreDetail = (
     <React.Fragment>
-      <AnswerAndScore>
-        <span data-cy="score">
-          {correct}/{totalQuestions}
-        </span>
-        <Title>{t("common.correctAnswer")}</Title>
-      </AnswerAndScore>
+      {releaseScore === releaseGradeLabels.WITH_ANSWERS && (
+        <AnswerAndScore>
+          <span data-cy="score">
+            {correct}/{totalQuestions}
+          </span>
+          <Title>{t("common.correctAnswer")}</Title>
+        </AnswerAndScore>
+      )}
       <AnswerAndScore>
         <span data-cy="percent">{Math.floor(scorePercentage * 100) / 100}%</span>
         <Title>{t("common.score")}</Title>

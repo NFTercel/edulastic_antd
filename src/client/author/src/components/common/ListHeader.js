@@ -2,44 +2,42 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { compose } from "redux";
-import { Icon } from "antd";
-import { connect } from "react-redux";
-
-import { IconPlus, IconMenuOpenClose } from "@edulastic/icons";
-import { FlexContainer, Button } from "@edulastic/common";
-import { tabletWidth, darkBlueSecondary, white, lightBlueSecondary } from "@edulastic/colors";
 import { withNamespaces } from "@edulastic/localization";
-
-import { toggleSideBarAction } from "../../actions/togglemenu";
+import { FlexContainer, Button } from "@edulastic/common";
+import { tabletWidth, darkBlueSecondary, white, lightBlueSecondary, newBlue } from "@edulastic/colors";
+import { IconPlusCircle, IconMenuOpenClose } from "@edulastic/icons";
+import { connect } from "react-redux";
 import HeaderWrapper from "../../mainContent/headerWrapper";
+import { toggleSideBarAction } from "../../actions/togglemenu";
 
 const toggleMenu = toggle => {
   toggle();
 };
 
-const ListHeader = ({ onCreate, t, title, btnTitle, toggleSideBar }) => {
-  return (
-    <Container>
-      <FlexContainer>
-        <MenuIcon onClick={() => toggleMenu(toggleSideBar)} />
-        <Title>{title}</Title>
-      </FlexContainer>
+const ListHeader = ({ onCreate, t, title, btnTitle, toggleSideBar }) => (
+  <Container>
+    <FlexContainer>
+      <MenuIcon onClick={() => toggleMenu(toggleSideBar)} />
+      <Title>{title}</Title>
+    </FlexContainer>
 
-      <CreateButton
-        onClick={onCreate}
-        color="success"
-        icon={<IconPlusStyled color={white} left={-10} width={13} height={13} hoverColor={white} />}
-      >
-        {btnTitle ? btnTitle : t("component.itemlist.header.create")}
-      </CreateButton>
-    </Container>
-  );
-};
+    <CreateButton
+      onClick={onCreate}
+      color="secondary"
+      variant="create"
+      shadow="none"
+      icon={<IconPlusStyled color={newBlue} left={-40} width={20} height={20} hoverColor={newBlue} />}
+    >
+      {btnTitle && btnTitle.length ? btnTitle : t("component.itemlist.header.create")}
+    </CreateButton>
+  </Container>
+);
 ListHeader.propTypes = {
   onCreate: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
-  toggleSideBar: PropTypes.func.isRequired
+  toggleSideBar: PropTypes.func.isRequired,
+  btnTitle: PropTypes.string.isRequired
 };
 
 const enhance = compose(
@@ -84,26 +82,15 @@ const CreateButton = styled(Button)`
     span {
       display: none;
     }
+
+    svg {
+      position: static;
+    }
   }
 `;
 
-const IconPlusStyled = styled(IconPlus)`
-  position: absolute;
-  top: 12px;
-  left: 18px;
-  background: ${lightBlueSecondary};
-  border-radius: 20px;
-  padding: 4px;
-  width: 20px;
-  height: 20px;
-
-  rect {
-    fill: ${white};
-  }
-
-  @media (max-width: ${tabletWidth}) {
-    position: unset;
-  }
+const IconPlusStyled = styled(IconPlusCircle)`
+  position: relative;
 `;
 
 export const Title = styled.h1`
