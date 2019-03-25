@@ -6,9 +6,9 @@ import PropTypes from "prop-types";
 import { formatTime } from "../utils";
 
 const Attempt = ({ data, type, activityReview, releaseScore, showReviewButton, releaseGradeLabels }) => {
-  const { correct = 0, wrong = 0 } = data;
+  const { correct = 0, wrong = 0, maxScore = 0, score = 0 } = data;
   const total = correct + wrong;
-  const percentage = (correct / total) * 100 || 0;
+  const percentage = (score / maxScore) * 100 || 0;
   return (
     <AttemptsData>
       <RowData pagetype={type === "reports"}>
@@ -17,11 +17,13 @@ const Attempt = ({ data, type, activityReview, releaseScore, showReviewButton, r
         </AnswerAndScore>
         {releaseScore !== releaseGradeLabels.DONT_RELEASE && (
           <React.Fragment>
-            <AnswerAndScore>
-              <span data-cy="score">
-                {correct}/{total}
-              </span>
-            </AnswerAndScore>
+            {releaseScore === releaseGradeLabels.WITH_ANSWERS && (
+              <AnswerAndScore>
+                <span data-cy="score">
+                  {correct}/{total}
+                </span>
+              </AnswerAndScore>
+            )}
             <AnswerAndScore>
               <span data-cy="percentage">{Math.floor(percentage * 100) / 100}%</span>
             </AnswerAndScore>

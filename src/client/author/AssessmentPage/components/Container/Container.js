@@ -87,8 +87,8 @@ class Container extends React.Component {
     const { receiveItemDetailById, assessment } = this.props;
 
     if (!assessment._id && next.assessment._id) {
-      const [testItem] = next.assessment.testItems;
-      receiveItemDetailById(testItem._id);
+      const [testItemId] = next.assessment.testItems;
+      receiveItemDetailById(testItemId);
     }
   }
 
@@ -99,7 +99,7 @@ class Container extends React.Component {
 
   handleSave = (status = "draft") => () => {
     const { questions, assessment, currentTestItem, updateItemDetailById, updateTest } = this.props;
-    const [testItem] = assessment.testItems;
+    const [testItemId] = assessment.testItems;
 
     const updatedTestItem = {
       ...currentTestItem,
@@ -122,7 +122,7 @@ class Container extends React.Component {
     };
 
     updateTest(assessment._id, newAssessment, true);
-    updateItemDetailById(testItem._id, updatedTestItem, true);
+    updateItemDetailById(testItemId, updatedTestItem, true);
   };
 
   renderContent() {

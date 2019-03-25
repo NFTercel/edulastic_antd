@@ -10,6 +10,8 @@ export const TOOLS = {
   SIN: "sine",
   TANGENT: "tangent",
   SECANT: "secant",
+  EXPONENT: "exponent",
+  LOGARITHM: "logarithm",
   POLYGON: "polygon",
   PARABOLA: "parabola",
   HYPERBOLA: "hyperbola",

@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { Row, Col } from "antd";
-import { StyledTableData, StyledControlDropDown } from "../styled";
-import { groupBy } from "lodash";
+import { StyledTable, StyledControlDropDown } from "../styled";
+import { groupBy, cloneDeep } from "lodash";
 import Moment from "moment";
+import next from "immer";
 
 import { getStandatdDeviation, getVariance } from "../../../../common/util";
 
@@ -10,21 +11,6 @@ import columnData from "../../static/json/tableColumns.json";
 
 export const AssessmentStatisticTable = props => {
   const [tableType, setTableType] = useState("school");
-
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December"
-  ];
 
   const updateTable = (type, data) => {
     let arr;
@@ -80,11 +66,14 @@ export const AssessmentStatisticTable = props => {
 
         concatScores = concatScores.concat(scores);
       }
+
+      let scoreVariance = getVariance(concatScores);
+
       let result = {
         ...obj,
         avgStudentScore: Number(((sumTotalScore / sumTotalMaxScore) * 100).toFixed(0)),
-        scoreVariance: getVariance(concatScores),
-        scoreStdDeviation: getStandatdDeviation(obj.scoreVariance),
+        scoreVariance: scoreVariance,
+        scoreStdDeviation: getStandatdDeviation(scoreVariance),
         avgScore: (sumTotalScore / sumSampleCount).toFixed(2),
         assessmentDate: Moment(maxAssessmentDate).format("MMMM, DD YYYY"),
         studentsAbsent: sumStudentsAbsent,
@@ -115,21 +104,38 @@ export const AssessmentStatisticTable = props => {
   };
 
   const getColumns = tableType => {
-    let columns = [...columnData[tableType].columns];
-    columns[0].sorter = sortAlphabets("schoolId");
-    if (tableType === "school") {
-      columns[1].sorter = sortNumbers("avgStudentScore");
-    } else {
-      columns[2].sorter = sortNumbers("avgStudentScore");
-    }
-    return columns;
+    return next(columnData[tableType].columns, columns => {
+      if (props.role === "teacher") {
+        columns.splice(0, 1);
+        columns[0].sorter = sortAlphabets("groupName");
+      } else {
+        columns[0].sorter = sortAlphabets("schoolId");
+      }
+
+      if (tableType === "school" || props.role === "teacher") {
+        columns[1].sorter = sortNumbers("avgStudentScore");
+        columns[1].render = (text, record, index) => {
+          return text + "%";
+        };
+      } else {
+        columns[2].sorter = sortNumbers("avgStudentScore");
+        columns[2].render = (text, record, index) => {
+          return text + "%";
+        };
+      }
+    });
   };
 
   const table = useMemo(() => {
     if (props.data) {
+      let tt = tableType;
+      if (props.role === "teacher") {
+        setTableType("class");
+        tt = "class";
+      }
       return {
-        columns: getColumns(tableType),
-        tableData: updateTable(tableType, props.data)
+        columns: getColumns(tt),
+        tableData: updateTable(tt, props.data)
       };
     }
     return {
@@ -148,11 +154,15 @@ export const AssessmentStatisticTable = props => {
         <Col className="top-area-col table-title">
           Assessment Statistics of {props.name} by <span className="stats-grouped-by">{tableType}</span>
         </Col>
-        <Col className="top-area-col control-area">
-          <StyledControlDropDown groupby={tableType} updateTableCB={updateTableCB} />
-        </Col>
+        {props.role !== "teacher" ? (
+          <Col className="top-area-col control-area">
+            <StyledControlDropDown groupby={tableType} updateTableCB={updateTableCB} />
+          </Col>
+        ) : (
+          ""
+        )}
       </Row>
-      <StyledTableData columns={table.columns} dataSource={table.tableData} />
+      <StyledTable columns={table.columns} dataSource={table.tableData} rowKey={"groupId"} />
     </div>
   );
 };

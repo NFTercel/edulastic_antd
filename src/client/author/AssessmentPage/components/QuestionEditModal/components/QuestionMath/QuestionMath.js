@@ -28,6 +28,14 @@ export default class QuestionMath extends React.Component {
 
     nextValidation.valid_response.value[0][prop] = value;
 
+    if (prop === "value") {
+      const isNumeric = v => /^\d+$/.test(v);
+
+      if (!isNumeric(value)) {
+        delete nextValidation.valid_response.value[0].options.significantDecimalPlaces;
+      }
+    }
+
     if (
       [
         methods.IS_SIMPLIFIED,

@@ -136,6 +136,12 @@ const getColoredAnswer = answerArr => {
         case CONSTANT.TOOLS.SECANT:
           colors = Colors.yellow[CONSTANT.TOOLS.SECANT];
           break;
+        case CONSTANT.TOOLS.EXPONENT:
+          colors = Colors.yellow[CONSTANT.TOOLS.EXPONENT];
+          break;
+        case CONSTANT.TOOLS.LOGARITHM:
+          colors = Colors.yellow[CONSTANT.TOOLS.LOGARITHM];
+          break;
         default:
           break;
       }
@@ -559,6 +565,8 @@ class GraphContainer extends Component {
       hyperbola: () => "hyperbola",
       tangent: () => "tangent",
       secant: () => "secant",
+      exponent: () => "exponent",
+      logarithm: () => "logarithm",
       parabola: () => <IconParabola {...options} />,
       sine: () => {
         const newOptions = {
@@ -595,6 +603,8 @@ class GraphContainer extends Component {
     "sine",
     "tangent",
     "secant",
+    "exponent",
+    "logarithm",
     "hyperbola",
     "polygon",
     "parabola",

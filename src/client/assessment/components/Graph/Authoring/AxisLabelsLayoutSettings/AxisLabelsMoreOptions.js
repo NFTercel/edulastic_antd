@@ -330,7 +330,7 @@ class AxisLabelsMoreOptions extends Component {
                 <MoreOptionsRow>
                   <MoreOptionsLabel>{t("component.graphing.ticksoptions.tickdistance")}</MoreOptionsLabel>
                   <MoreOptionsInput
-                    type="number"
+                    type="text"
                     name="ticksDistance"
                     onChange={this.handleNumberlineInputChange}
                     value={numberlineAxis.ticksDistance}

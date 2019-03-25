@@ -107,6 +107,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Classification
 
     context("TC_59 => Row titles", () => {
       before("Should have existing titles", () => {
+        question.getRowAddButton().click();
         question.getRowTitleInptuList().should("have.length", queData.rowTitles.length);
       });
 
@@ -387,6 +388,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Classification
 
     context("TC_67 => Row titles", () => {
       before("Should have existing titles", () => {
+        question.getRowAddButton().click();
         question.getRowTitleInptuList().should("have.length", queData.rowTitles.length);
       });
 

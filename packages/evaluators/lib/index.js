@@ -107,6 +107,12 @@ Object.defineProperty(exports, "essayRichText", {
     return _essayRichText.default;
   }
 });
+Object.defineProperty(exports, "charts", {
+  enumerable: true,
+  get: function get() {
+    return _charts.default;
+  }
+});
 
 var _mcq = _interopRequireDefault(require("./mcq"));
 
@@ -141,3 +147,5 @@ var _choiceMatrix = _interopRequireDefault(require("./choiceMatrix"));
 var _clozeDragDrop = _interopRequireDefault(require("./clozeDragDrop"));
 
 var _essayRichText = _interopRequireDefault(require("./essayRichText"));
+
+var _charts = _interopRequireDefault(require("./charts"));

@@ -17,6 +17,7 @@ class MathFormulaEdit {
       "equivSyntax",
       "equivSymbolic"
     ];
+    this.argumentMethods = ["linear", "quadratic"];
     this.virtualKeyBoardNumpad = [
       { value: "7", label: "7" },
       { value: "8", label: "8" },
@@ -222,7 +223,7 @@ class MathFormulaEdit {
     }
   };
 
-  checkCorrectAnswer = (expectedValue, preview, inputLength, isCorrect, score = false) => {
+  checkCorrectAnswer = (expectedValue, preview, inputLength, isCorrect, score = false, scoreValuse = "2/2") => {
     preview.header.preview();
     this.getPreviewMathQuill().type(expectedValue, { force: true });
     preview
@@ -232,7 +233,7 @@ class MathFormulaEdit {
         cy
           .get("body")
           .children()
-          .should("contain", `score: ${isCorrect ? "2/2" : `0/${score ? "2" : "1"}`}`)
+          .should("contain", `score: ${isCorrect ? scoreValuse : `0/${score ? "2" : "1"}`}`)
       );
     preview
       .getClear()
@@ -317,6 +318,34 @@ class MathFormulaEdit {
   getAnswerTreatMultipleSpacesAsOne = () => cy.get('[data-cy="answer-treat-multipleSpacesAsOne"]');
 
   getAnswerRuleDropdown = () => cy.get('[data-cy="answer-rule-dropdown"]');
+
+  // getComposeQuestionImageInput = () => cy.get('.ql-image .ql-stroke');
+  getComposeQuestionImageInput = () => cy.get(".ql-image > svg");
+
+  getCurrentStoreQuestion = () => {
+    const storeValue = JSON.parse(window.localStorage.getItem("persist:root")).question;
+    return JSON.parse(storeValue).entity.data;
+  };
+  getComposeQuestionTextBox = () => cy.get(".ql-editor");
+  getComposeQuestionTextBoxLink = () => cy.get(".ql-editor p");
+
+  getSaveLink = () => cy.get(".ql-action");
+
+  getAnswerRuleDropdownByValue = val => cy.get(`[data-cy="answer-rule-dropdown-${val}"]`);
+  getAnswerRuleArgumentInput = () => cy.get(`[data-cy="answer-rule-argument-input"]`);
+  getAnswerRuleArgumentSelect = () => cy.get(`[data-cy="answer-rule-argument-select"]`);
+  getAnswerArgumentDropdownByValue = val => cy.get(`[data-cy="answer-argument-dropdown-${val}"]`);
+
+  checkEquivSyntaxMethod = (methods, syntax) => {
+    this.getMethodSelectionDropdow()
+      .click()
+      .then(() => {
+        this.getMethodSelectionDropdowList(methods).click();
+      });
+    this.getAnswerRuleDropdown()
+      .click()
+      .then(() => this.getAnswerRuleDropdownByValue(syntax).click());
+  };
 }
 
 export default MathFormulaEdit;

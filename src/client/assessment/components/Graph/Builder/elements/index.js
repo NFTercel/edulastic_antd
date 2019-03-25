@@ -1,9 +1,11 @@
 export { default as Circle } from "./Circle";
 export { default as Ellipse } from "./Ellipse";
+export { default as Exponent } from "./Exponent";
 export { default as Hyperbola } from "./Hyperbola";
 export { default as Input } from "./Input";
 export { default as Label } from "./Label";
 export { default as Line } from "./Line";
+export { default as Logarithm } from "./Logarithm";
 export { default as Mark } from "./Mark";
 export { default as Numberline } from "./Numberline";
 export { default as NumberlineSegment } from "./NumberlineSegment";

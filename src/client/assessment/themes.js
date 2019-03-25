@@ -556,7 +556,7 @@ export const themes = {
         multiChoiceContentFontSize: "13px",
         multiChoiceContentFontWeight: "600",
         labelBorderColor: "transparent",
-        labelBorderHoverColor: "lightgrey",
+        labelBorderHoverColor: "#277DF1",
         labelCheckedBorderColor: "#c3c055",
         labelCheckedBgColor: "#fcfbd4",
         labelRightBorderColor: "#1fe3a1", // green
@@ -566,14 +566,14 @@ export const themes = {
         labelIconFontSize: "18px",
         labelIconCheckColor: "#1fe3a1", // green
         labelIconTimesColor: "#ee1658",
-        checkboxContainerBorderColor: "#1fe3a1", // green
+        checkboxContainerBorderColor: "#277DF1",
         checkboxContainerBgColor: "transparent",
         checkboxContainerSmallFontSize: "15px",
         checkboxContainerFontSize: "20px",
         checkboxContainerFontWeight: "700",
         checkboxContainerColor: "#444444",
         checkboxContainerCheckedColor: "white",
-        checkboxContainerCheckedBgColor: "#1fe3a1", // green
+        checkboxContainerCheckedBgColor: "#277DF1",
         iconCheckColor: "#1fe3a1", // green
         iconCloseColor: "#ee1658" // red
       },

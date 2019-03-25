@@ -15,6 +15,7 @@ import {
   essayRichText,
   shading,
   choiceMatrix,
+  charts,
   graph
 } from "@edulastic/evaluators";
 
@@ -37,6 +38,7 @@ const evaluators = {
   choiceMatrix,
   matchList: sortList,
   sortList,
+  line: charts,
   hotspot,
   tokenhighlight,
   shading,

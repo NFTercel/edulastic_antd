@@ -82,6 +82,10 @@
       "header": {
         "create": "Create",
         "itemlist": "Item List"
+      },
+      "filter": {
+        "filters": "Filters",
+        "clearAll": "Clear all"
       }
     },
     "itemAdd": {

@@ -18,7 +18,9 @@ import {
   NumberlineTrash,
   Title,
   Tangent,
-  Secant
+  Secant,
+  Exponent,
+  Logarithm
 } from "./elements";
 import {
   mergeParams,
@@ -172,6 +174,12 @@ class Board {
         break;
       case CONSTANT.TOOLS.SECANT:
         this.setCreatingHandler(Secant.onHandler());
+        break;
+      case CONSTANT.TOOLS.EXPONENT:
+        this.setCreatingHandler(Exponent.onHandler());
+        break;
+      case CONSTANT.TOOLS.LOGARITHM:
+        this.setCreatingHandler(Logarithm.onHandler());
         break;
       case CONSTANT.TOOLS.LABEL:
         this.setCreatingHandler(Label.onHandler());
@@ -518,15 +526,14 @@ class Board {
           return Ellipse.getConfig(e);
         case window.JXG.OBJECT_TYPE_POLYGON:
           return Polygon.getConfig(e);
-        case window.JXG.OBJECT_TYPE_CURVE:
-          return Parabola.getConfig(e);
         case window.JXG.OBJECT_TYPE_TEXT:
           return Mark.getConfig(e);
+        case window.JXG.OBJECT_TYPE_CURVE:
         case 90:
-          return Hyperbola.getConfig(e);
         case 91:
-          return Parabola.getConfig(e);
         case 92:
+        case 93:
+        case 94:
           return Parabola.getConfig(e);
         default:
           throw new Error("Unknown element type:", e.name, e.type);
@@ -694,6 +701,18 @@ class Board {
         fillColor: "transparent",
         highlightFillColor: "transparent",
         highlightStrokeWidth: 1
+      },
+      [CONSTANT.TOOLS.EXPONENT]: {
+        ...defaultBgObjectParameters(),
+        fillColor: "transparent",
+        highlightFillColor: "transparent",
+        highlightStrokeWidth: 1
+      },
+      [CONSTANT.TOOLS.LOGARITHM]: {
+        ...defaultBgObjectParameters(),
+        fillColor: "transparent",
+        highlightFillColor: "transparent",
+        highlightStrokeWidth: 1
       }
     };
     this.bgElements.push(
@@ -769,6 +788,12 @@ class Board {
               if (type === CONSTANT.TOOLS.SECANT) {
                 return CONSTANT.TOOLS.SECANT;
               }
+              if (type === CONSTANT.TOOLS.EXPONENT) {
+                return CONSTANT.TOOLS.EXPONENT;
+              }
+              if (type === CONSTANT.TOOLS.LOGARITHM) {
+                return CONSTANT.TOOLS.LOGARITHM;
+              }
               return type;
             })(el.type)
           ],
@@ -809,6 +834,12 @@ class Board {
               }
               if (type === CONSTANT.TOOLS.SECANT) {
                 return CONSTANT.TOOLS.SECANT;
+              }
+              if (type === CONSTANT.TOOLS.EXPONENT) {
+                return CONSTANT.TOOLS.EXPONENT;
+              }
+              if (type === CONSTANT.TOOLS.LOGARITHM) {
+                return CONSTANT.TOOLS.LOGARITHM;
               }
               return type;
             })(el.type)
@@ -1177,6 +1208,62 @@ class Board {
             })
           );
           break;
+        case 93:
+          objects.push(
+            mixProps({
+              el,
+              objectCreator: attrs => {
+                const [name, [makeFn, points], props] = Exponent.parseConfig(
+                  el.points.map(pointEl =>
+                    mixProps({
+                      el: pointEl,
+                      objectCreator: attributes => this.createPointFromConfig(pointEl, attributes)
+                    })
+                  )
+                );
+                const newElem = this.createElement(name, makeFn(points), {
+                  ...props,
+                  ...attrs
+                });
+                newElem.ancestors = {
+                  [points[0].id]: points[0],
+                  [points[1].id]: points[1]
+                };
+                newElem.addParents(points);
+                handleSnap(newElem, Object.values(newElem.ancestors));
+                return newElem;
+              }
+            })
+          );
+          break;
+        case 94:
+          objects.push(
+            mixProps({
+              el,
+              objectCreator: attrs => {
+                const [name, [makeFn, points], props] = Logarithm.parseConfig(
+                  el.points.map(pointEl =>
+                    mixProps({
+                      el: pointEl,
+                      objectCreator: attributes => this.createPointFromConfig(pointEl, attributes)
+                    })
+                  )
+                );
+                const newElem = this.createElement(name, makeFn(points), {
+                  ...props,
+                  ...attrs
+                });
+                newElem.ancestors = {
+                  [points[0].id]: points[0],
+                  [points[1].id]: points[1]
+                };
+                newElem.addParents(points);
+                handleSnap(newElem, Object.values(newElem.ancestors));
+                return newElem;
+              }
+            })
+          );
+          break;
         case window.JXG.OBJECT_TYPE_TEXT:
           objects.push(
             mixProps({
@@ -1429,6 +1516,64 @@ class Board {
               el,
               objectCreator: attrs => {
                 const [name, [makeFn, points], props] = Secant.parseConfig(
+                  el.points.map(pointEl =>
+                    mixProps({
+                      el: pointEl,
+                      objectCreator: attributes => this.createAnswerPointFromConfig(pointEl, attributes)
+                    })
+                  )
+                );
+                const newElem = this.createElement(name, makeFn(points), {
+                  ...props,
+                  ...attrs,
+                  fixed: true
+                });
+                newElem.ancestors = {
+                  [points[0].id]: points[0],
+                  [points[1].id]: points[1]
+                };
+                newElem.addParents(points);
+                handleSnap(newElem, Object.values(newElem.ancestors));
+                return newElem;
+              }
+            })
+          );
+          break;
+        case 93:
+          objects.push(
+            mixProps({
+              el,
+              objectCreator: attrs => {
+                const [name, [makeFn, points], props] = Exponent.parseConfig(
+                  el.points.map(pointEl =>
+                    mixProps({
+                      el: pointEl,
+                      objectCreator: attributes => this.createAnswerPointFromConfig(pointEl, attributes)
+                    })
+                  )
+                );
+                const newElem = this.createElement(name, makeFn(points), {
+                  ...props,
+                  ...attrs,
+                  fixed: true
+                });
+                newElem.ancestors = {
+                  [points[0].id]: points[0],
+                  [points[1].id]: points[1]
+                };
+                newElem.addParents(points);
+                handleSnap(newElem, Object.values(newElem.ancestors));
+                return newElem;
+              }
+            })
+          );
+          break;
+        case 94:
+          objects.push(
+            mixProps({
+              el,
+              objectCreator: attrs => {
+                const [name, [makeFn, points], props] = Logarithm.parseConfig(
                   el.points.map(pointEl =>
                     mixProps({
                       el: pointEl,

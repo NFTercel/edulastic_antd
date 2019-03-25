@@ -414,7 +414,6 @@ const ModuleTitle = styled.div`
     padding-right: 10px;
   }
   @media only screen and (max-width: ${mobileWidth}) {
-    font-size: 12px;
     padding: 0px 0px 5px;
   }
 `;
@@ -442,6 +441,10 @@ const ModuleDataName = styled.div`
   @media only screen and (max-width: ${desktopWidth}) {
     min-width: auto;
     order: 2;
+  }
+  @media only screen and (max-width: ${mobileWidth}) {
+    font-size: 12px;
+    padding: 0px 0px 5px;
   }
 `;
 

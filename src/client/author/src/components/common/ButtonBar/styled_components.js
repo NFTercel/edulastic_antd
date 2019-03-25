@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { white, green } from "@edulastic/colors";
+import { white, green, newBlue } from "@edulastic/colors";
 
 export const Container = styled.div`
   display: flex;
@@ -114,38 +114,52 @@ export const HeadIcon = styled.div`
   margin-right: 10px;
 `;
 
-export const RightSide = styled.div``;
+export const RightSide = styled.div`
+  .ant-btn {
+    width: 86px;
+    background: #fff;
+
+    span {
+      color: ${newBlue};
+    }
+  }
+`;
 
 export const MenuItem = styled.li`
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  width: 136px;
+  width: initial;
+  padding: 0 15px;
   height: 45px;
-  border-radius: 37px;
+  border-radius: 4px;
   border: none;
-  background-color: #0e93dc;
-  margin-right: 20px;
-  font-size: 11px;
+  background-color: #277df1;
+  margin-right: 12px;
+  font-size: 13px;
   font-weight: 600;
   font-style: normal;
   font-stretch: normal;
   line-height: 1.36;
   letter-spacing: 0.2px;
   text-align: center;
-  color: #e5e5e5;
+  color: rgba(255, 255, 255, 0.7);
 
   &:last-of-type {
     margin-right: 0;
   }
 
+  svg {
+    fill: rgba(255, 255, 255, 0.7);
+  }
+
   &.active {
-    color: #434b5d;
-    background-color: #f3f3f3;
+    color: #fff;
+    background-color: #5196f3;
 
     svg {
-      fill: #434b5d;
+      fill: #fff;
     }
   }
 `;

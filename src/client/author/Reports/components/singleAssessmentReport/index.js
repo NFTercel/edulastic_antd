@@ -30,7 +30,7 @@ export const SingleAssessmentReport = props => {
         difficult items and areas of misunderstanding.
       </StyledP>
       {links.map((data, index) => {
-        return <LinkItem data={data} />;
+        return <LinkItem key={data.title} data={data} />;
       })}
     </div>
   );

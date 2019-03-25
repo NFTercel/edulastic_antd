@@ -560,7 +560,7 @@ const TopBar = styled.div`
 
 const SubheaderActions = styled.div`
   display: flex;
-  @media only screen and (max-width: ${extraDesktopWidth}) {
+  @media only screen and (max-width: 1430px) {
     flex-wrap: wrap;
   }
   @media only screen and (max-width: ${largeDesktopWidth}) {
@@ -605,6 +605,9 @@ const ModuleProgressWrapper = styled.div`
   justify-self: flex-start;
   width: 100%;
   align-items: center;
+  /* @media only screen and (min-width: ${desktopWidth}) {
+    width: 60%;
+  } */
 `;
 ModuleProgressWrapper.displayName = "ModuleProgressWrapper";
 
@@ -737,7 +740,7 @@ const AddCustomContentSubHeaderButtonStyle = styled.div`
     padding-left: 0px;
     width: 100%;
   }
-  @media only screen and (max-width: ${tabletWidth}) {
+  @media only screen and (max-width: 1430px) {
     margin-top: 5px;
   }
   @media only screen and (max-width: ${smallMobileWidth}) {
@@ -1050,6 +1053,7 @@ const CurriculumSubHeaderRow = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: ${props => props.marginBottom || "0px"};
   @media only screen and (max-width: ${tabletWidth}) {
     flex-direction: column;

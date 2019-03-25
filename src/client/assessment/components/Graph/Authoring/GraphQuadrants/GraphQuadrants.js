@@ -53,6 +53,8 @@ class GraphQuadrants extends Component {
     { value: "sine", label: "Sine" },
     { value: "tangent", label: "Tangent" },
     { value: "secant", label: "Secant" },
+    { value: "exponent", label: "Exponent" },
+    { value: "logarithm", label: "Logarithm" },
     { value: "hyperbola", label: "Hyperbola" },
     { value: "polygon", label: "Polygon" },
     { value: "label", label: "Label" }

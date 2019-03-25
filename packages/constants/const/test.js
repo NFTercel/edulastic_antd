@@ -86,6 +86,12 @@ module.exports = {
     GRAPHING: "Graphing"
   },
   calculatorKeys: ["NONE", "SCIENTIFIC", "BASIC", "GRAPHING"],
+  calculatorTypes: {
+    NONE: "NONE",
+    SCIENTIFIC: "SCIENTIFIC",
+    BASIC: "BASIC",
+    GRAPHING: "GRAPHING"
+  },
   evalTypes: {
     ALL_OR_NOTHING: "All or Nothing",
     PARTIAL_CREDIT: "Partial Credit"

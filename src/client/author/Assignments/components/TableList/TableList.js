@@ -52,6 +52,7 @@ const convertTableData = data => ({
 const convertExpandTableData = (data, totalNumber) => ({
   name: "",
   key: data.classId,
+  assignmentId: data._id,
   class: data.className,
   type: data.type,
   assigned: "Lorem Ipsum",
@@ -131,15 +132,15 @@ class TableList extends Component {
       {
         dataIndex: "action",
         width: "14%",
-        render: () => (
+        render: (_, row) => (
           <ActionsWrapper>
-            <Link to={`/author/classboard/${getInfo.key}/${getInfo.classId}`}>
+            <Link to={`/author/classboard/${row.assignmentId}/${row.classId}`}>
               <Icon src={presentationIcon} alt="Images" />
             </Link>
             <Link to="/author/expressgrader">
               <Icon src={additemsIcon} alt="Images" />
             </Link>
-            <Link to={`/author/standardsBasedReport/${getInfo.key}/${getInfo.classId}`}>
+            <Link to={`/author/standardsBasedReport/${row.assignmentId}/${row.classId}`}>
               <Icon src={piechartIcon} alt="Images" />
             </Link>
           </ActionsWrapper>

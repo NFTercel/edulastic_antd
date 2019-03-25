@@ -2,11 +2,13 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Button } from "antd";
+
+import { test } from "@edulastic/constants";
 import { white } from "@edulastic/colors";
 import CalculatorMenu from "./CalculatorMenu";
 
 import { IconCursor, IconInRuler, IconCalculator, IconClose, IconProtactor, IconScratchPad } from "@edulastic/icons";
-
+const { calculatorTypes } = test;
 class ToolBar extends Component {
   constructor(props) {
     super(props);
@@ -40,20 +42,30 @@ class ToolBar extends Component {
 
   render() {
     const { select } = this.state;
+    const { settings, calcBrands } = this.props;
+    const { calcType } = settings;
     return (
       <Container>
-        <StyledButton enable={select === 0} onClick={() => this.toolbarHandler(0)}>
+        <StyledButton enable={select === 0} GEOGEBRASCIENTIFIConClick={() => this.toolbarHandler(0)}>
           <CursorIcon />
         </StyledButton>
 
         <StyledButton enable={select === 1} onClick={() => this.toolbarHandler(1)}>
           <InRulerIcon />
         </StyledButton>
-
-        <StyledButton enable={select === 2} onClick={() => this.toolbarHandler(2)}>
-          <CaculatorIcon />
-          {select == 2 && <CalculatorMenu changeCaculateMode={this.handleCalculateMode} />}
-        </StyledButton>
+        {calcType !== calculatorTypes.NONE && (
+          <StyledButton enable={select === 2} onClick={() => this.toolbarHandler(2)}>
+            <CaculatorIcon />
+            {select == 2 && (
+              <CalculatorMenu
+                changeCaculateMode={this.handleCalculateMode}
+                calcType={calcType}
+                calculatorTypes={calculatorTypes}
+                calcBrands={calcBrands}
+              />
+            )}
+          </StyledButton>
+        )}
 
         <StyledButton enable={select === 3} onClick={() => this.toolbarHandler(3)}>
           <CloseIcon />

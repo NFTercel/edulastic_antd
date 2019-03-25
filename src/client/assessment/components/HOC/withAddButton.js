@@ -7,7 +7,7 @@ import { withNamespaces } from "@edulastic/localization";
 const withAddButton = WrappedComponent => {
   const withAddButtonHocComponent = ({ buttonText, onAdd, t, ...props }) => (
     <Fragment>
-      <WrappedComponent {...props} />
+      <WrappedComponent t={t} {...props} />
       <EduButton data-cy="addButton" onClick={onAdd} type="primary">
         {buttonText || t("component.options.addNewChoice")}
       </EduButton>

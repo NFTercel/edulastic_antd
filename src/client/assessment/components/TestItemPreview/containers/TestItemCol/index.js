@@ -46,7 +46,7 @@ class TestItemCol extends Component {
     return (
       <Tabs.TabContainer
         style={{
-          padding: 20,
+          padding: 25,
           display: !multiple && showFeedback ? "flex" : "initial"
         }}
       >

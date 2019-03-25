@@ -1,8 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import { Breadcrumb, Icon } from "antd";
+import { Breadcrumb } from "antd";
 import styled from "styled-components";
+import { secondaryTextColor } from "@edulastic/colors";
 
 const BreadCrumb = props => {
   const { data, style } = props;
@@ -12,8 +13,11 @@ const BreadCrumb = props => {
         {Array.isArray(data) &&
           data.map((breadCrumb, index) => (
             <Breadcrumb.Item key={`bread${index}`}>
-              {index === 0 && <Icon key={index} type="left" style={{ fontSize: 11 }} />}
-              {index !== data.length - 1 ? <Link to={breadCrumb.to}>{breadCrumb.title}</Link> : breadCrumb.title}
+              {index !== data.length - 1 ? (
+                <Link to={breadCrumb.to}>{breadCrumb.title.toLowerCase()}</Link>
+              ) : (
+                breadCrumb.title.toLowerCase()
+              )}
             </Breadcrumb.Item>
           ))}
       </Breadcrumb>
@@ -35,16 +39,24 @@ export default BreadCrumb;
 const Container = styled.div`
   position: fixed;
   top: 80px;
-  text-transform: uppercase;
+
+  .ant-breadcrumb-separator {
+    margin: 0 3px 0 7px;
+  }
 
   .ant-breadcrumb-link,
   .ant-breadcrumb-separator {
-    font-size: 11px;
+    font-size: 16px;
     font-weight: 600;
-    color: #00b0ff;
+    color: ${secondaryTextColor};
+    text-transform: capitalize;
+    font-weight: 700;
 
     a {
-      color: #00b0ff;
+      font-size: 16px;
+      text-transform: capitalize;
+      color: ${secondaryTextColor};
+      font-weight: normal;
     }
   }
 

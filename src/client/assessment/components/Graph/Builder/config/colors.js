@@ -65,6 +65,18 @@ export default {
       highlightStrokeColor: "#00b2ff",
       highlightFillColor: "transparent"
     },
+    [TOOLS.EXPONENT]: {
+      fillColor: "transparent",
+      strokeColor: "#00b2ff",
+      highlightStrokeColor: "#00b2ff",
+      highlightFillColor: "transparent"
+    },
+    [TOOLS.LOGARITHM]: {
+      fillColor: "transparent",
+      strokeColor: "#00b2ff",
+      highlightStrokeColor: "#00b2ff",
+      highlightFillColor: "transparent"
+    },
     [TOOLS.PARABOLA]: {
       fillColor: "transparent",
       strokeColor: "#00b2ff",
@@ -135,6 +147,18 @@ export default {
       highlightStrokeWidth: 1
     },
     [TOOLS.SECANT]: {
+      fillColor: "transparent",
+      strokeColor: "#ee1658",
+      highlightStrokeColor: "#ee1658",
+      highlightStrokeWidth: 1
+    },
+    [TOOLS.EXPONENT]: {
+      fillColor: "transparent",
+      strokeColor: "#ee1658",
+      highlightStrokeColor: "#ee1658",
+      highlightStrokeWidth: 1
+    },
+    [TOOLS.LOGARITHM]: {
       fillColor: "transparent",
       strokeColor: "#ee1658",
       highlightStrokeColor: "#ee1658",
@@ -215,6 +239,18 @@ export default {
       highlightStrokeColor: "#1fe3a1",
       highlightStrokeWidth: 1
     },
+    [TOOLS.EXPONENT]: {
+      fillColor: "transparent",
+      strokeColor: "#1fe3a1",
+      highlightStrokeColor: "#1fe3a1",
+      highlightStrokeWidth: 1
+    },
+    [TOOLS.LOGARITHM]: {
+      fillColor: "transparent",
+      strokeColor: "#1fe3a1",
+      highlightStrokeColor: "#1fe3a1",
+      highlightStrokeWidth: 1
+    },
     [TOOLS.PARABOLA]: {
       fillColor: "transparent",
       strokeColor: "#1fe3a1",
@@ -279,6 +315,18 @@ export default {
       highlightFillColor: "transparent"
     },
     [TOOLS.SECANT]: {
+      fillColor: "transparent",
+      strokeColor: "#ffcb00",
+      highlightStrokeColor: "#ffcb00",
+      highlightFillColor: "transparent"
+    },
+    [TOOLS.EXPONENT]: {
+      fillColor: "transparent",
+      strokeColor: "#ffcb00",
+      highlightStrokeColor: "#ffcb00",
+      highlightFillColor: "transparent"
+    },
+    [TOOLS.LOGARITHM]: {
       fillColor: "transparent",
       strokeColor: "#ffcb00",
       highlightStrokeColor: "#ffcb00",

@@ -70,7 +70,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Token highligh
       question.getQuestionEditor().click();
       // token
       question.goToEditToken();
-      const tokens = [{ sel: "Paragraph", count: 1 }, { sel: "Sentence", count: 5 }, { sel: "Word", count: 17 }];
+      const tokens = [{ sel: "Paragraph", count: 2 }, { sel: "Sentence", count: 5 }, { sel: "Word", count: 20 }];
 
       tokens.forEach(token => {
         const { sel, count } = token;
@@ -222,7 +222,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Token highligh
         // enter wrong ans and check
         question
           .getAllTokenOnPreview()
-          .eq(1)
+          .eq(0)
           .as("answered")
           .click()
           .should("have.class", ACTIVEWORD);
@@ -286,7 +286,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Token highligh
         // enter wrong ans and check
         question
           .getAllTokenOnPreview()
-          .eq(1)
+          .eq(0)
           .as("answered")
           .click()
           .should("have.class", ACTIVEWORD);

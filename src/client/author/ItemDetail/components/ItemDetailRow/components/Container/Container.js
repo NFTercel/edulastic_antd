@@ -102,7 +102,7 @@ class Container extends Component {
           marginRight: count - 1 === rowIndex ? "0px" : "30px"
         }}
       >
-        {row.tabs && windowWidth > MAX_MOBILE_WIDTH && (
+        {row.tabs && row.tabs.length > 0 && windowWidth > MAX_MOBILE_WIDTH && (
           <TabContainer>
             <Tabs value={tabIndex} onChange={this.handleTabChange}>
               {row.tabs.map((tab, key) => (

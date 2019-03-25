@@ -82,7 +82,7 @@ class ItemFilter extends Component {
     );
 
     const mobileSearch = (
-      <Header style={{ padding: "0 25px" }}>
+      <Header style={{ padding: "0 20px" }}>
         <SearchField>
           <TextFieldStyled
             onChange={e => onSearch(e.target.value)}
@@ -94,7 +94,7 @@ class ItemFilter extends Component {
           />
         </SearchField>
         <FilterButton>
-          <Button style={{ height: "50px", borderRadius: "4px" }} onClick={() => this.showFilterHandler()}>
+          <Button style={{ height: "48px", borderRadius: "0px" }} onClick={() => this.showFilterHandler()}>
             {!isShowFilter ? "SHOW FILTERS" : "HIDE FILTERS"}
           </Button>
         </FilterButton>
@@ -105,7 +105,7 @@ class ItemFilter extends Component {
   };
 
   render() {
-    const { windowWidth, onClearSearch, search, curriculums, onSearchFieldChange, curriculumStandards } = this.props;
+    const { windowWidth, onClearSearch, search, curriculums, onSearchFieldChange, curriculumStandards, t } = this.props;
     const { isShowFilter } = this.state;
 
     return (
@@ -113,7 +113,7 @@ class ItemFilter extends Component {
         <FixedFilters>
           <StyledModal open={isShowFilter} onClose={this.closeSearchModal} center>
             <StyledModalContainer>
-              <StyledModalTitle>Filters</StyledModalTitle>
+              <StyledModalTitle>{t("component.itemlist.filter.filters")}</StyledModalTitle>
               <Search
                 search={search}
                 curriculums={curriculums}
@@ -129,8 +129,8 @@ class ItemFilter extends Component {
               <Affix>
                 <PerfectScrollbar style={{ paddingRight: 15 }}>
                   <MainFilterHeader>
-                    <Title>Filters</Title>
-                    <Clear onClick={onClearSearch}>Clear all</Clear>
+                    <Title>{t("component.itemlist.filter.filters")}</Title>
+                    <Clear onClick={onClearSearch}>{t("component.itemlist.filter.clearAll")}</Clear>
                   </MainFilterHeader>
                   <TestFiltersNav items={items} />
                   <Search
@@ -165,7 +165,8 @@ ItemFilter.propTypes = {
   onClearSearch: PropTypes.func.isRequired,
   windowWidth: PropTypes.number.isRequired,
   getCurriculumStandards: PropTypes.func.isRequired,
-  curriculumStandards: PropTypes.array.isRequired
+  curriculumStandards: PropTypes.array.isRequired,
+  t: PropTypes.func.isRequired
 };
 
 export default ItemFilter;

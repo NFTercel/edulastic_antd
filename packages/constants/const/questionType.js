@@ -22,6 +22,7 @@ const HOTSPOT = "hotspot";
 const SHADING = "shading";
 const HIGHLIGHT_IMAGE = "highlightImage";
 const DRAWING = "drawing";
+const LINE_CHART = "line";
 
 const selectsData = [
   { value: "", text: "All Types" },
@@ -47,12 +48,14 @@ const selectsData = [
   { value: TOKEN_HIGHLIGHT, text: "Token Highlight" },
   { value: HOTSPOT, text: "Hotspot" },
   { value: SHADING, text: "Shading" },
-  { value: HIGHLIGHT_IMAGE, text: "Highlight Image" }
+  { value: HIGHLIGHT_IMAGE, text: "Highlight Image" },
+  { value: LINE_CHART, text: "Line Chart" }
 ];
 
 module.exports = {
   SHORT_TEXT,
   DRAWING,
+  LINE_CHART,
   ESSAY_PLAIN_TEXT,
   ESSAY_RICH_TEXT,
   CHOICE_MATRIX,
