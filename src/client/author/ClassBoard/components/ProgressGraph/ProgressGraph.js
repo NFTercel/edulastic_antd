@@ -4,7 +4,7 @@
 import React, { Component } from "react";
 import BarGraph from "../BarGraph/BarGraph";
 
-import { StyledProgress, StyledDiv, StyledProgressDiv, GraphText, GraphDescription } from "./styled";
+import { StyledProgress, StyledDiv, StyledDivF, StyledProgressDiv, GraphText, GraphDescription } from "./styled";
 
 // eslint-disable-next-line no-trailing-spaces
 export default class Graph extends Component {
@@ -15,7 +15,7 @@ export default class Graph extends Component {
     const percentage = Math.round((submittedNum / totalNum) * 100);
     return (
       <StyledDiv>
-        <div>
+        <StyledDivF>
           <StyledProgressDiv>
             <StyledProgress
               className="getProgress"
@@ -35,7 +35,7 @@ export default class Graph extends Component {
             </p>
             <p>({this.props.gradebook.total - this.props.gradebook.submittedNumber} Absent)</p>
           </GraphText>
-        </div>
+        </StyledDivF>
         <BarGraph gradebook={gradebook} />
       </StyledDiv>
     );

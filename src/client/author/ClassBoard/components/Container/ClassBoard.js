@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withWindowSizes } from "@edulastic/common";
 import { withNamespaces } from "@edulastic/localization";
+
 // actions
 import {
   receiveTestActivitydAction,
@@ -24,6 +25,8 @@ import DisneyCardContainer from "../DisneyCardContainer/DisneyCardContainer";
 import Graph from "../ProgressGraph/ProgressGraph";
 import ClassSelect from "../../../Shared/Components/ClassSelect/ClassSelect";
 import ClassHeader from "../../../Shared/Components/ClassHeader/ClassHeader";
+import CollapseButton from "../../../Shared/Components/CollpaseButton/CollapseButton";
+
 import HooksContainer from "../HooksContainer/HooksContainer";
 // icon images
 import More from "../../assets/more.svg";
@@ -39,11 +42,11 @@ import {
   ButtonSpace,
   AnchorLink,
   StyledAnc,
+  StyledCardContainer,
   StyledCard,
   StyledButton,
   StyledCheckbox,
   PaginationInfo,
-  CheckContainer,
   ButtonGroup,
   StyledFlexContainer,
   StudentButtonDiv,
@@ -62,7 +65,8 @@ class ClassBoard extends Component {
       flag: true,
       selectedTab: "Student",
       selectAll: false,
-      selectedQuestion: 0
+      selectedQuestion: 0,
+      style: { height: "285px" }
     };
   }
 
@@ -153,9 +157,15 @@ class ClassBoard extends Component {
     });
   };
 
+  onClickCollapse = collapsed => {
+    this.setState({
+      style: collapsed ? { height: "285px" } : { height: "5px" }
+    });
+  };
+
   render() {
     const { gradebook, testActivity, creating, match, classResponse, additionalData = { classes: [] }, t } = this.props;
-    const { selectedTab, flag, selectedQuestion, selectAll } = this.state;
+    const { selectedTab, flag, selectedQuestion, selectAll, style } = this.state;
 
     const { assignmentId, classId } = match.params;
     const testActivityId = this.getTestActivity(testActivity);
@@ -204,15 +214,17 @@ class ClassBoard extends Component {
         </StyledFlexContainer>
         {selectedTab === "Student" ? (
           <React.Fragment>
-            <StyledCard bordered={false}>
-              <Graph gradebook={gradebook} />
-            </StyledCard>
+            <StyledCardContainer>
+              <StyledCard bordered={false} style={style}>
+                <Graph gradebook={gradebook} />
+              </StyledCard>
+              <CollapseButton handleClickCollapse={this.onClickCollapse} collapsed={false} />
+            </StyledCardContainer>
+
             <StyledFlexContainer justifyContent="space-between">
-              <CheckContainer>
-                <StyledCheckbox checked={this.state.selectAll} onChange={this.onSelectAllChange}>
-                  SELECT ALL
-                </StyledCheckbox>
-              </CheckContainer>
+              <StyledCheckbox checked={this.state.selectAll} onChange={this.onSelectAllChange}>
+                SELECT ALL
+              </StyledCheckbox>
             </StyledFlexContainer>
             {flag ? (
               <DisneyCardContainer

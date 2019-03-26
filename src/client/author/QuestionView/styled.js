@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { mobileWidth } from "@edulastic/colors";
 import { FlexContainer } from "@edulastic/common";
-import { Card } from "antd";
+import { Card, Button } from "antd";
 
 export const PaginationInfo = styled.div`
   font-weight: bold;
@@ -31,6 +31,8 @@ export const StyledCard = styled(Card)`
   height: 270px;
   border-radius: 10px;
   box-shadow: 3px 2px 7px lightgray;
+  margin-bottom: 40px;
+
   ${"ant-card-body"} {
     width: 500px;
     background: red;

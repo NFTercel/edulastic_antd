@@ -12,6 +12,7 @@ export const StyledProgress = styled(Progress)`
 export const StyledDiv = styled.div`
   display: flex;
 `;
+export const StyledDivF = styled.div``;
 
 export const StyledProgressDiv = styled.div`
   display: flex;

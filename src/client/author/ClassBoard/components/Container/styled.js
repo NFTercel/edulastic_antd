@@ -14,15 +14,6 @@ export const PaginationInfo = styled.span`
   color: ${classBoardTheme.headerContainerColor}
 `;
 
-export const CheckContainer = styled.span`
-  font-weight: bold;
-  display: inline-block;
-  font-size: 15px;
-  > span {
-    margin-left: 0;
-  }
-`;
-
 export const ButtonGroup = styled.div`
   display: inline-block;
 `;
@@ -40,11 +31,16 @@ export const Anchor = styled.a`
   color: ${classBoardTheme.headerAnchorLink};
 `;
 
+export const StyledCardContainer = styled.div`
+  position: relative;
+`;
+
 export const StyledCard = styled(Card)`
   margin: auto;
   width: 95%;
   border-radius: 10px;
   box-shadow: 3px 2px 7px lightgray;
+  overflow-y: hidden;
   .ant-card-body {
     padding: 30px 30px 15px 30px;
   }
@@ -53,7 +49,6 @@ export const StyledCard = styled(Card)`
 export const StudentButtonDiv = styled.div`
   margin-left: auto;
   margin-right: 20px !important;
-
   .ant-btn-primary {
     background-color: #0e93dc;
   }
@@ -88,8 +83,9 @@ export const BarDiv = styled.div`
 `;
 
 export const StyledCheckbox = styled(Checkbox)`
-  font-size: 0.7em;
   color: ${classBoardTheme.headerCheckboxColor};
+  font-weight: bold;
+  font-size: 11px;
 `;
 
 export const SpaceDiv = styled.div`
