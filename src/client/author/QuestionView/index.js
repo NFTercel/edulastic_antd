@@ -4,7 +4,7 @@ import { compose } from "redux";
 import PropTypes from "prop-types";
 import { Bar, ComposedChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
-import { StyledCard } from "./styled";
+import { StyledCard, StyledTitle } from "./styled";
 import StudentResponse from "./component/studentResponses/studentResponse";
 import ClassQuestions from "../ClassResponses/components/Container/ClassQuestions";
 
@@ -51,7 +51,8 @@ class QuestionViewContainer extends Component {
     return (
       <React.Fragment>
         <StyledCard bordered={false} width="100%">
-          <ComposedChart barGap={1} barSize={36} data={data} width={1200} height={250}>
+          <StyledTitle>Performance by Questions</StyledTitle>
+          <ComposedChart barGap={1} barSize={36} data={data} width={1200} height={186}>
             <XAxis dataKey="name" axisLine={false} tickSize={0} />
             <YAxis
               dataKey="score"

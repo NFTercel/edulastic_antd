@@ -37,6 +37,15 @@ export const StyledCard = styled(Card)`
   }
 `;
 
+export const StyledTitle = styled.p`
+  font-size: 16px;
+  line-height: 16px;
+  color: rgba(0, 0, 0, 0.65);
+  font-weight: 600;
+  padding-left: 62px;
+  margin-bottom: 20px;
+`;
+
 export const ResponseCard = styled(Card)`
   margin: auto;
   width: 95%;
