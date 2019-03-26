@@ -27,7 +27,7 @@ export default class AddBulkModal extends React.Component {
   state = {
     number: 2,
     type: MULTIPLE_CHOICE,
-    startingIndex: 0
+    startingIndex: 1
   };
 
   handleChange = field => value =>

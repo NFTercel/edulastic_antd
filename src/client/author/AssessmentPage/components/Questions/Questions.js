@@ -3,6 +3,7 @@ import { compose } from "redux";
 import { connect } from "react-redux";
 import uuid from "uuid/v4";
 import PropTypes from "prop-types";
+import { sortBy } from "lodash";
 
 import { SHORT_TEXT, MULTIPLE_CHOICE, CLOZE_DROP_DOWN, MATH } from "@edulastic/constants/const/questionType";
 import { methods } from "@edulastic/constants/const/math";
@@ -75,8 +76,9 @@ const multipleChoiceData = {
   ui_style: { type: "horizontal" }
 };
 
-const createQuestion = type => ({
+const createQuestion = (type, index) => ({
   id: uuid(),
+  qIndex: index,
   title: `${type} - standart`,
   type,
   options: defaultQuestionOptions[type],
@@ -162,10 +164,18 @@ class Questions extends React.Component {
     currentEditQuestionIndex: -1
   };
 
-  handleAddQuestion = type => () => {
-    const { addQuestion } = this.props;
+  handleAddQuestion = (type, index) => () => {
+    const { addQuestion, list } = this.props;
 
-    const question = createQuestion(type);
+    const lastQuestion = list[list.length - 1];
+
+    const questionIndex = index
+      ? index
+      : lastQuestion && lastQuestion.qIndex
+      ? lastQuestion.qIndex + 1
+      : list.length + 1;
+
+    const question = createQuestion(type, questionIndex);
     addQuestion(question);
   };
 
@@ -230,13 +240,14 @@ class Questions extends React.Component {
     const { currentEditQuestionIndex } = this.state;
     const { list, previewMode, viewMode, noCheck, answersById, centered } = this.props;
 
+    const sortedQuestions = sortBy(list, item => item.qIndex);
     const review = viewMode === "review";
 
     return (
       <>
         <QuestionsWrapper centered={centered}>
           <div>
-            {list.map((question, i) => (
+            {sortedQuestions.map((question, i) => (
               <QuestionItem
                 key={question.id}
                 index={i}

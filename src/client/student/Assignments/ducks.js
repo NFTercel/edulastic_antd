@@ -1,4 +1,4 @@
-import { createAction, createReducer } from "redux-starter-kit";
+import { createAction, createSelector as createSelectorator } from "redux-starter-kit";
 import { maxBy as _maxBy } from "lodash";
 import { takeLatest, put, call, all, select } from "redux-saga/effects";
 import { values, groupBy, last } from "lodash";
@@ -6,7 +6,10 @@ import { createSelector } from "reselect";
 import { normalize } from "normalizr";
 import { push } from "react-router-redux";
 import { assignmentApi, reportsApi, testActivityApi } from "@edulastic/api";
-import { getCurrentGroup, getCurrentSchool, fetchUserAction, fetchUser } from "../Login/ducks";
+import { getCurrentSchool, fetchUserAction, fetchUser } from "../Login/ducks";
+
+import { getCurrentGroup } from "../Reports/ducks";
+import { partial } from "lodash";
 
 // external actions
 import {
@@ -23,6 +26,8 @@ export const FILTERS = {
   NOT_STARTED: "notStarted",
   IN_PROGRESS: "inProgress"
 };
+
+export const getCurrentUserId = createSelectorator(["user.user._id"], r => r);
 
 // types
 export const FETCH_ASSIGNMENTS_DATA = "[studentAssignments] fetch assignments";
@@ -41,16 +46,59 @@ export const resumeAssignmentAction = createAction(RESUME_ASSIGNMENT);
 export const bootstrapAssessmentAction = createAction(BOOTSTRAP_ASSESSMENT);
 export const launchAssignmentFromLinkAction = createAction(LAUNCH_ASSIGNMENT_FROM_LINK);
 
+/**
+ * get current redirect status of the assignment
+ * @param {Object} assignment
+ * @param {string} groupId
+ * @param {string} userId
+ */
+export const getRedirect = (assignment, groupId, userId) => {
+  /**
+   * @type {[]}
+   */
+  const classes = assignment.class || [];
+  const redirects = classes.filter(
+    x =>
+      x.redirect && ((x.specificStudents && x.students.includes(userId)) || (!x.specificStudents && x._id === groupId))
+  );
+  if (redirects.length === 0) {
+    return false;
+  }
+  const attempts = redirects.length;
+
+  const dueDate = Math.max.apply(Math, redirects.map(x => x.endDate));
+
+  return { attempts, dueDate };
+};
+
+const transformAssignmentForRedirect = (groupId, userId, assignment) => {
+  const redirect = getRedirect(assignment, groupId, userId);
+  if (!redirect) {
+    return assignment;
+  }
+
+  let maxAttempts = (assignment && assignment.maxAttempts) || 1;
+  let { endDate } = assignment;
+  endDate = redirect.dueDate;
+  maxAttempts += redirect.attempts;
+  return { ...assignment, endDate, maxAttempts };
+};
+
 // sagas
 // fetch and load assignments and reports for the student
 function* fetchAssignments({ payload }) {
   try {
     yield put(setAssignmentsLoadingAction());
     const groupId = yield select(getCurrentGroup);
+    const userId = yield select(getCurrentUserId);
     const [assignments, reports] = yield all([
       call(assignmentApi.fetchAssigned, payload),
       call(reportsApi.fetchReports, groupId)
     ]);
+    //transform to handle redirect
+    const transformFn = partial(transformAssignmentForRedirect, groupId, userId);
+    const assignmentsProcessed = assignments.map(transformFn);
+
     // normalize reports
     const {
       result: allReports,
@@ -62,7 +110,7 @@ function* fetchAssignments({ payload }) {
     const {
       result: allAssignments,
       entities: { assignments: assignmentObj }
-    } = normalize(assignments, [assignmentSchema]);
+    } = normalize(assignmentsProcessed, [assignmentSchema]);
 
     yield put(setAssignmentsAction({ allAssignments, assignmentObj }));
   } catch (e) {

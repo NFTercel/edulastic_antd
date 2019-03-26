@@ -1,6 +1,5 @@
 // @ts-check
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import { load } from "loaderjs";
 
 const getExtension = url => {
@@ -28,6 +27,17 @@ const cleanupResources = resources => {
       el.remove();
     }
   }
+};
+
+const NAMESPACE = "edulaticV2LoadedResources";
+
+/**
+ *
+ * @param {string|string[]} resources
+ */
+const handleLoadedResources = resources => {
+  const allResources = Array.isArray(resources) ? resources : [resources];
+  window[NAMESPACE] = window[NAMESPACE].concat();
 };
 
 /**
@@ -60,39 +70,10 @@ export function WithResourcesHOC({ resources, fallBack }) {
   };
 }
 
-export class WithResources extends React.Component {
-  state = {
-    loaded: false
-  };
-
-  static propTypes = {
-    children: PropTypes.any.isRequired,
-    fallBack: PropTypes.object.isRequired,
-    resources: PropTypes.object.isRequired,
-    onLoaded: PropTypes.func
-  };
-
-  static defaultProps = {
-    onLoaded: () => {}
-  };
-
-  componentWillMount() {
-    const { resources, onLoaded } = this.props;
-    load(resources).then(() => {
-      this.setState({
-        loaded: true
-      });
-      onLoaded();
-    });
-  }
-
-  render() {
-    const { fallBack, children } = this.props;
-    const { loaded } = this.state;
-
-    if (loaded) {
-      return children;
-    }
+export function WithResources({ resources, fallBack, children }) {
+  const loaded = useResources(resources);
+  if (!loaded) {
     return fallBack;
   }
+  return children;
 }

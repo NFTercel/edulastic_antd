@@ -37,7 +37,7 @@ var countExactMatchScores = function countExactMatchScores(compareFunction) {
       }
 
       var matches = (0, _getMatches.default)(existingResponse, answer, compareFunction) === answer.length;
-      var currentScore = matches ? totalScore : 0;
+      var currentScore = matches && existingResponse.length === answer.length ? totalScore : 0;
       score = Math.max(score, currentScore);
       maxScore = Math.max(maxScore, totalScore);
 

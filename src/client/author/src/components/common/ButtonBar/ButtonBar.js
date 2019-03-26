@@ -91,7 +91,7 @@ class ButtonBar extends Component {
               </MenuItem>
             </Menu>
             <RightSide>
-              <Button onClick={onSave}>
+              <Button data-cy="saveButton" onClick={onSave}>
                 <HeadIcon>
                   <IconSave color={newBlue} width={18} height={16} />
                 </HeadIcon>
@@ -112,7 +112,7 @@ class ButtonBar extends Component {
                   <IconPreview color={white} width={18} height={16} />
                 </HeadIcon>
               </Button>
-              <Button onClick={onSave}>
+              <Button data-cy="saveButton" onClick={onSave}>
                 <HeadIcon>
                   <IconSave color={white} width={18} height={16} />
                 </HeadIcon>

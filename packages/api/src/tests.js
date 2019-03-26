@@ -51,9 +51,20 @@ const update = ({ id, data: test }) => {
     })
     .then(result => result.data.result);
 };
+
+const shareTest = ({ data, testId }) =>
+  api
+    .callApi({
+      url: `${prefix}/${testId}/sharing`,
+      method: "post",
+      data
+    })
+    .then(result => result.data.result);
+
 export default {
   getAll,
   getById,
   create,
-  update
+  update,
+  shareTest
 };

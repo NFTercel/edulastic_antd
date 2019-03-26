@@ -624,27 +624,22 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Math formula" 
 
       question.getAnswerAllowThousandsSeparator().uncheck({ force: true });
     });
-
-    it("Testing with decimal separator - Comma", () => {
-      const { input, expected, separator } = queData.equivLiteral.setDecimalSeparator;
+    it("Testing with thousands separators - Comma, Space", () => {
+      const { separators, input, expected } = queData.equivLiteral.setThousandsSeparator;
       question.getAnswerAllowThousandsSeparator().check({ force: true });
-      question
-        .getAnswerSetDecimalSeparatorDropdown()
-        .click()
-        .then(() => {
-          question
-            .getAnswerSetDecimalSeparatorDropdownList(separator)
-            .should("be.visible")
-            .click();
-        });
-      input.forEach((item, index) => {
-        question.getAnswerValueMathInput().type(item, { force: true });
-        question.checkCorrectAnswer(expected[index], preview, item.length, false);
-      });
+      question.getAnswerValueMathInput().type(input, { force: true });
+      separators.forEach((item, index) => {
+        question
+          .getThousandsSeparatorDropdown()
+          .click()
+          .then(() => {
+            question.getThousandsSeparatorDropdownList(item).click();
+          });
 
+        question.checkCorrectAnswer(expected[index], preview, index === 0 ? 0 : input.length, true);
+      });
       question.getAnswerAllowThousandsSeparator().uncheck({ force: true });
     });
-
     it("Testing with ignoring order", () => {
       const { input, expected } = queData.equivLiteral.ignoreOrder;
       question.getAnswerValueMathInput().type(input, { force: true });

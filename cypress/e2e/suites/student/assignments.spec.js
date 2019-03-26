@@ -1,6 +1,7 @@
 import AssignmentsPage from "../../framework/student/assignmentsPage";
 import SidebarPage from "../../framework/student/sidebarPage";
 import FileHelper from "../../framework/util/fileHelper";
+import TestTypes from "./assignmentsAttempt/testTypes";
 
 describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Test Assignment Page`, () => {
   const sideBarPage = new SidebarPage();
@@ -16,11 +17,10 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Test Assignment Page`,
   before(() => {
     cy.setToken("student");
   });
-
   context("Assignment attempt and stats", () => {
     before(() => {
       cy.deleteAllAssignments();
-      cy.assignAssignment();
+      cy.assignAssignment(TestTypes.sample);
       cy.reload();
       cy.wait("@assignment");
     });
@@ -292,7 +292,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Test Assignment Page`,
       end.setSeconds(end.getSeconds() + 30);
 
       // assign assignment with 30 sec future duedate
-      cy.assignAssignment(start, end);
+      cy.assignAssignment(TestTypes.sample, start, end);
       // validate assignment entry present
       cy.reload();
       cy.wait("@asgns");

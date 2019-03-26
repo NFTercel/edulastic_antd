@@ -9,7 +9,7 @@ export const QuestionsWrapper = styled.div`
   height: calc(100vh - 62px);
   margin: ${({ centered }) => (centered ? "0 auto" : "unset")};
   padding: 30px 0;
-  padding-bottom: 155px;
+  padding-bottom: 170px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

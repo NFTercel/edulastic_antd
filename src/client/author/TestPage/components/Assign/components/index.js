@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Paper, FlexContainer } from "@edulastic/common";
@@ -18,7 +18,7 @@ import { fetchGroupsAction, getGroupsSelector, fetchMultipleGroupMembersAction }
 
 // Todo from  where we got localeCompare ?
 
-class Assign extends PureComponent {
+class Assign extends Component {
   state = {
     showModal: false
   };

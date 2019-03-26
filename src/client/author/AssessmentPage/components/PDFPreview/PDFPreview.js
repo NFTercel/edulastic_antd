@@ -42,7 +42,7 @@ const PDFPreview = ({ url, page, annotations, onDocumentLoad, onDropAnnotation }
       .filter(item => item.toolbarMode === "question" && item.page === page)
       .map(({ uuid, qIndex, x, y }) => (
         <QuestionNumber style={getNumberStyles(x, y)} key={uuid}>
-          {qIndex + 1}
+          {qIndex}
         </QuestionNumber>
       ))}
   </PDFPreviewWrapper>

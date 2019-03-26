@@ -5,10 +5,12 @@ import testItem from "./testItem";
 import dictionaries from "./dictionaries";
 import author_assignments from "./assignments";
 import { reportAssessmentSummaryReducer } from "../../Reports/subPages/AssessmentSummary/ducks";
+import { reportResponseFrequencyReducer } from "../../Reports/subPages/ResponseFrequency/ducks";
 import author_classboard_gradebook from "./gradeBook";
 import author_classboard_testActivity from "./testActivity";
 import authorGroups from "../../sharedDucks/groups";
 import authorQuestions from "../../sharedDucks/questions";
+import authorUserList from "../../sharedDucks/userDetails";
 import classResponse from "./classResponse";
 import studentResponse from "./studentResponse";
 import feedbackResponse from "./feedbackResponse";
@@ -38,6 +40,7 @@ const authorReducers = {
   authorQuestions,
   author_assignments,
   reportAssessmentSummaryReducer,
+  reportResponseFrequencyReducer,
   authorTestAssignments: testAssignmentsReducer,
   author_classboard_gradebook,
   author_classboard_testActivity,
@@ -49,7 +52,8 @@ const authorReducers = {
   assessmentCreate,
   studentQuestionResponse,
   classQuestionResponse,
-  manageClass
+  manageClass,
+  authorUserList
 };
 
 export default authorReducers;

@@ -80,6 +80,15 @@ const duplicateAssignment = testId =>
     })
     .then(result => result.data.result);
 
+const redirect = (assignmentId, data) =>
+  api
+    .callApi({
+      url: `${prefix}/${assignmentId}/redirect`,
+      method: "POST",
+      data
+    })
+    .then(result => result.data.result);
+
 export default {
   create,
   update,
@@ -89,5 +98,6 @@ export default {
   regrade,
   getById,
   fetchTestActivities,
-  duplicateAssignment
+  duplicateAssignment,
+  redirect
 };

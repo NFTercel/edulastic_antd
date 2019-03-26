@@ -8,6 +8,7 @@ import { withTheme } from "styled-components";
 import { withNamespaces } from "@edulastic/localization";
 import { Paper } from "@edulastic/common";
 
+import { Input } from "antd";
 import QuestionTextArea from "../../components/QuestionTextArea";
 import CorrectAnswers from "../../components/CorrectAnswers";
 import withPoints from "../../components/HOC/withPoints";
@@ -19,7 +20,7 @@ import ChartPreview from "./ChartPreview";
 import UiInputGroup from "./components/UiInputGroup";
 import PointsList from "./components/PointsList";
 import withGrid from "./HOC/withGrid";
-import { getGridVariables, getReCalculatedPoints } from "./helpers";
+import { getGridVariables, getReCalculatedPoints, getReCalculatedDATAPoints } from "./helpers";
 
 const OptionsList = withPoints(ChartPreview);
 
@@ -28,40 +29,38 @@ const ChartEdit = ({ item, setQuestionData, t }) => {
     chart_data: { data },
     ui_style: { yAxisCount, stepSize, height, width, margin }
   } = item;
-  const { yAxisStep } = getGridVariables(yAxisCount, stepSize, data, height, width, margin);
+  const { yAxisStep, changingStep } = getGridVariables(yAxisCount, stepSize, data, height, width, margin);
 
   const [oldStep, setOldStep] = useState(yAxisStep);
   const [correctTab, setCorrectTab] = useState(0);
+  const [localMaxValue, setLocalMaxValue] = useState(yAxisCount);
+
+  const [firstMount, setFirstMount] = useState(false);
 
   useEffect(() => {
-    const newItem = cloneDeep(item);
-    const variables = { oldStep, yAxisCount, yAxisStep, stepSize };
-    newItem.chart_data.data = getReCalculatedPoints(newItem.chart_data.data, variables);
+    if (firstMount) {
+      const newItem = cloneDeep(item);
+      const variables = { oldStep, yAxisCount, yAxisStep, changingStep };
 
-    newItem.validation.alt_responses.forEach(altResp => {
-      altResp.value = getReCalculatedPoints(altResp.value, variables);
-    });
+      newItem.chart_data.data = getReCalculatedDATAPoints(newItem.chart_data.data, variables);
 
-    newItem.validation.valid_response.value = getReCalculatedPoints(newItem.validation.valid_response.value, variables);
+      newItem.validation.alt_responses.forEach(altResp => {
+        altResp.value = getReCalculatedPoints(altResp.value, variables);
+      });
 
-    setQuestionData(newItem);
-    setOldStep(yAxisStep);
+      newItem.validation.valid_response.value = getReCalculatedPoints(
+        newItem.validation.valid_response.value,
+        variables
+      );
+
+      setQuestionData(newItem);
+      setOldStep(yAxisStep);
+    }
   }, [yAxisCount, stepSize]);
 
-  const onBlur = () => {
-    const newItem = cloneDeep(item);
-    const variables = { oldStep, yAxisCount, yAxisStep, stepSize };
-    newItem.chart_data.data = getReCalculatedPoints(newItem.chart_data.data, variables);
-
-    newItem.validation.alt_responses.forEach(altResp => {
-      altResp.value = getReCalculatedPoints(altResp.value, variables);
-    });
-
-    newItem.validation.valid_response.value = getReCalculatedPoints(newItem.validation.valid_response.value, variables);
-
-    setQuestionData(newItem);
-    setOldStep(yAxisStep);
-  };
+  useEffect(() => {
+    setFirstMount(true);
+  }, []);
 
   const handleItemChangeChange = (prop, uiStyle) => {
     const newItem = cloneDeep(item);
@@ -73,7 +72,29 @@ const ChartEdit = ({ item, setQuestionData, t }) => {
   const handleUiStyleChange = (prop, uiStyle) => {
     const newItem = cloneDeep(item);
 
-    newItem.ui_style[prop] = uiStyle;
+    if (prop === "yAxisCount") {
+      setLocalMaxValue(uiStyle);
+    } else if (prop === "stepSize" && uiStyle === 0) {
+      newItem.ui_style[prop] = 1;
+      setQuestionData(newItem);
+    } else {
+      newItem.ui_style[prop] = uiStyle;
+      setQuestionData(newItem);
+    }
+  };
+
+  const onMaxValueBlur = () => {
+    const newItem = cloneDeep(item);
+
+    newItem.ui_style.yAxisCount = localMaxValue;
+
+    setQuestionData(newItem);
+  };
+
+  const handleTitleChange = e => {
+    const newItem = cloneDeep(item);
+
+    newItem.chart_data.name = e.target.value;
 
     setQuestionData(newItem);
   };
@@ -212,6 +233,10 @@ const ChartEdit = ({ item, setQuestionData, t }) => {
 
         <Subtitle>{t("component.chart.chartMainBlockTitle")}</Subtitle>
 
+        <Subtitle>{t("component.chart.chartTitle")}</Subtitle>
+
+        <Input size="large" value={item.chart_data.name} onChange={handleTitleChange} />
+
         <UiInputGroup
           onChange={handleUiStyleChange}
           firstInputType="text"
@@ -236,15 +261,15 @@ const ChartEdit = ({ item, setQuestionData, t }) => {
           onChange={handleUiStyleChange}
           firstAttr="stepSize"
           secondAttr="yAxisCount"
+          onBlur={onMaxValueBlur}
           firstFieldValue={item.ui_style.stepSize}
-          secondFieldValue={item.ui_style.yAxisCount}
+          secondFieldValue={localMaxValue}
           t={t}
         />
 
         <PointsList
           handleChange={handlePointChange}
           ratio={yAxisStep}
-          onBlur={onBlur}
           handleDelete={handleDelete}
           points={item.chart_data.data}
           buttonText={t("component.chart.addPoint")}

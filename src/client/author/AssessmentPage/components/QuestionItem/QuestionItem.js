@@ -163,7 +163,7 @@ class QuestionItem extends React.Component {
   render() {
     const { dragging } = this.state;
     const {
-      data: { id },
+      data: { id, qIndex },
       index,
       viewMode,
       previewMode,
@@ -177,12 +177,12 @@ class QuestionItem extends React.Component {
         <AnswerForm>
           <Draggable
             type="question"
-            data={JSON.stringify({ id, index })}
+            data={JSON.stringify({ id, index: qIndex || index })}
             onDragStart={this.handleDragStart}
             onDragEnd={this.handleDragEnd}
             enabled={!review}
           >
-            <QuestionNumber dragging={dragging}>{index + 1}</QuestionNumber>
+            <QuestionNumber dragging={dragging}>{qIndex || index + 1}</QuestionNumber>
           </Draggable>
           <QuestionForm>{this.renderContent()}</QuestionForm>
           {!review && this.renderEditButton()}

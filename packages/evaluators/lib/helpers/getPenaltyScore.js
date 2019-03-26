@@ -8,7 +8,8 @@ exports.default = void 0;
 var getPenaltyScore = function getPenaltyScore(_ref) {
   var score = _ref.score,
     evaluation = _ref.evaluation,
-    penalty = _ref.penalty,
+    _ref$penalty = _ref.penalty,
+    penalty = _ref$penalty === void 0 ? 0 : _ref$penalty,
     rightLen = _ref.rightLen;
 
   if (penalty <= 0) {
@@ -23,7 +24,7 @@ var getPenaltyScore = function getPenaltyScore(_ref) {
 
     return acc;
   }, 0);
-  var result = score - (penalty / count) * wrongCount;
+  var result = penalty ? score - (penalty / count) * wrongCount : score;
   return result < 0 ? 0 : result;
 };
 

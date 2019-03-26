@@ -7,7 +7,8 @@ import {
   realtimeGradebookTestItemAddAction,
   realtimeGradebookActivitySubmitAction,
   realtimeGradebookQuestionAddMaxScoreAction,
-  realtimeGradebookQuestionsRemoveAction
+  realtimeGradebookQuestionsRemoveAction,
+  realtimeGradebookRedirectAction
 } from "../../../src/reducers/testActivity";
 import useRealtimeUpdates from "../../useRealtimeUpdates";
 
@@ -18,12 +19,14 @@ const Shell = ({
   addItem,
   submitActivity,
   removeQuestions,
-  addQuestionsMaxScore
+  addQuestionsMaxScore,
+  redirect
 }) => {
   const client = useRealtimeUpdates(`gradebook:${classId}:${assignmentId}`, {
     addActivity,
     addItem,
-    submitActivity
+    submitActivity,
+    redirect
     //TODO: need to comeback to it when we need to handle realtime impact of regrading
     // removeQuestions,
     // addQuestionsMaxScore
@@ -39,6 +42,7 @@ export default connect(
     addItem: realtimeGradebookTestItemAddAction,
     submitActivity: realtimeGradebookActivitySubmitAction,
     removeQuestions: realtimeGradebookQuestionsRemoveAction,
-    addQuestionsMaxScore: realtimeGradebookQuestionAddMaxScoreAction
+    addQuestionsMaxScore: realtimeGradebookQuestionAddMaxScoreAction,
+    redirect: realtimeGradebookRedirectAction
   }
 )(Shell);

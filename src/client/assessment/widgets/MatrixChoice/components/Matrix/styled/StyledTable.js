@@ -4,6 +4,7 @@ import { mobileWidth } from "@edulastic/colors";
 
 export const StyledTable = styled(Table)`
   table {
+    width: auto;
     font-size: ${props => props.fontSize};
     border: 1px solid ${props => props.theme.widgets.matrixChoice.styledTableBorderColor};
     tbody {
@@ -26,13 +27,13 @@ export const StyledTable = styled(Table)`
       }
     }
   }
-   @media (max-width: ${mobileWidth}) {
+  @media (max-width: ${mobileWidth}) {
     .ant-table-body {
-        overflow-x: scroll; 
-         
-        td {
-            min-width: 100px;
-        }
-     }
-   }
+      overflow-x: scroll;
+
+      td {
+        min-width: 100px;
+      }
+    }
+  }
 `;

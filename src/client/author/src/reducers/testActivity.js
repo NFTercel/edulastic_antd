@@ -14,12 +14,15 @@ export const REALTIME_GRADEBOOK_TEST_ITEM_ADD = "[gradebook] realtime test item 
 
 export const REALTIME_GRADEBOOK_TEST_QUESTION_REMOVE = "[gradebook] realtime test question remove";
 export const REALTIME_GRADEBOOK_TEST_QUESTION_ADD_MAXSCORE = "[gradebook] realtime test question add max score";
+export const REALTIME_GRADEBOOK_REDIRECT = "[gradebook] realtime assignment redirect";
 
 export const realtimeGradebookActivityAddAction = createAction(REALTIME_GRADEBOOK_TEST_ACTIVITY_ADD);
 export const realtimeGradebookActivitySubmitAction = createAction(REALTIME_GRADEBOOK_TEST_ACTIVITY_SUBMIT);
 export const realtimeGradebookTestItemAddAction = createAction(REALTIME_GRADEBOOK_TEST_ITEM_ADD);
 export const realtimeGradebookQuestionsRemoveAction = createAction(REALTIME_GRADEBOOK_TEST_QUESTION_REMOVE);
 export const realtimeGradebookQuestionAddMaxScoreAction = createAction(REALTIME_GRADEBOOK_TEST_QUESTION_ADD_MAXSCORE);
+
+export const realtimeGradebookRedirectAction = createAction(REALTIME_GRADEBOOK_REDIRECT);
 
 const initialState = {
   entities: [],
@@ -45,7 +48,6 @@ const reducer = (state = initialState, { type, payload }) => {
 
       nextState = produce(state, _st => {
         const index = _st.entities.findIndex(x => x.studentId === entity.studentId);
-        console.log("taId student index", index);
         if (index != -1) {
           _st.entities[index].status = "inProgress";
           _st.entities[index].score = 0;
@@ -105,7 +107,6 @@ const reducer = (state = initialState, { type, payload }) => {
         for (const { testActivityId, score, maxScore, ...questionItem } of payload) {
           const entityIndex = _st.entities.findIndex(x => x.testActivityId === testActivityId);
           if (entityIndex != -1) {
-            console.log("entityIndex", entityIndex);
             const itemIndex = _st.entities[entityIndex].questionActivities.findIndex(x => x._id == questionItem._id);
             if (itemIndex == -1) {
               _st.entities[entityIndex].questionActivities.push(questionItem);
@@ -118,6 +119,24 @@ const reducer = (state = initialState, { type, payload }) => {
             }
           } else {
             console.warn(`can't find any testactivity for testActivityId ${testActivityId}`);
+          }
+        }
+      });
+      return nextState;
+    case REALTIME_GRADEBOOK_REDIRECT:
+      const { specificStudents, students } = payload;
+      nextState = produce(state, _st => {
+        if (specificStudents && students.length > 0) {
+          const studentIndexes = students
+            .map(studentId => _st.entities.findIndex(x => x.studentId === studentId))
+            .filter(x => x > 0);
+          for (let index of studentIndexes) {
+            _st.entities[index].status = "redirected";
+            _st.entities[index].redirected = true;
+            _st.entities[index].questionActivities = _st.entities[index].questionActivities.map(({ _id }) => ({
+              _id,
+              notStarted: true
+            }));
           }
         }
       });

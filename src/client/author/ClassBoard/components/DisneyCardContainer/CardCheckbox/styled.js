@@ -7,6 +7,6 @@ const classBoardTheme = themes.default.classboard;
 export const StyledCheckbox = styled(Checkbox)`
   font-size: 0.7em;
   color: ${classBoardTheme.headerCheckboxColor};
-  align-self: center;
+  align-self: flex-start;
   margin-left: auto;
 `;

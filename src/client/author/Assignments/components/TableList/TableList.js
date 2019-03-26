@@ -152,10 +152,12 @@ class TableList extends Component {
     const expandTableList = [];
     assignments.forEach(expandData => {
       if (parentData.key === expandData[0]._id) {
-        expandData.forEach(data => {
-          getInfo = convertExpandTableData(data, expandData.length);
-          expandTableList.push(getInfo);
-        });
+        expandData
+          .filter(x => !x.redirect)
+          .forEach(data => {
+            getInfo = convertExpandTableData(data, expandData.length);
+            expandTableList.push(getInfo);
+          });
       }
     });
 

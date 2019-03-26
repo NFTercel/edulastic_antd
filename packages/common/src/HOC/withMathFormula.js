@@ -52,7 +52,12 @@ export const withMathFormula = WrappedComponent => {
         };
       }
       const mathRegex = /<span class="input__math" data-latex="([^"]+)"><\/span>/g;
-      const latexHtmls = dangerouslySetInnerHTML.__html.match(mathRegex);
+      let latexHtmls = [];
+
+      if (dangerouslySetInnerHTML.__html.match) {
+        latexHtmls = dangerouslySetInnerHTML.__html.match(mathRegex);
+      }
+
       if (!latexHtmls) {
         return {
           latexHtmls: [],

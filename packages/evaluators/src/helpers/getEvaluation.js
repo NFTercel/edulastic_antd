@@ -16,8 +16,6 @@ const getEvaluation = (response, answers, rightIndex, compareFunction) => {
         break;
 
       case evaluatorTypes.MCQ_TYPE:
-        evaluation[item] = answers[rightIndex].value.includes(item);
-        break;
       default:
         evaluation[i] = includes(answers[rightIndex].value, item);
         break;

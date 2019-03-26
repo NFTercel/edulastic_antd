@@ -28,6 +28,7 @@ export const SET_TEST_DATA = "[tests] set test data";
 export const SET_DEFAULT_TEST_DATA = "[tests] set default test data";
 export const SET_TEST_EDIT_ASSIGNED = "[tests] set edit assigned";
 export const REGRADE_TEST = "[regrade] set regrade data";
+export const TEST_SHARE = "[test] send test share request";
 
 // actions
 
@@ -91,6 +92,7 @@ export const setRegradeSettingsDataAction = payload => ({
   payload
 });
 
+export const sendTestShareAction = createAction(TEST_SHARE);
 // reducer
 
 export const initialTestState = {
@@ -289,7 +291,7 @@ function* updateTestSaga({ payload }) {
   }
 }
 
-function* updateRegradeData({ payload }) {
+function* updateRegradeDataSaga({ payload }) {
   try {
     yield call(assignmentApi.regrade, payload);
     yield call(message.success, "Success update");
@@ -299,12 +301,23 @@ function* updateRegradeData({ payload }) {
   }
 }
 
+function* shareTestSaga({ payload }) {
+  try {
+    yield call(testsApi.shareTest, payload);
+    yield call(message.success, "Successfully shared");
+  } catch (e) {
+    const errorMessage = "Sharing failed";
+    yield call(message.error, errorMessage);
+  }
+}
+
 export function* watcherSaga() {
   yield all([
     yield takeEvery(RECEIVE_TEST_BY_ID_REQUEST, receiveTestByIdSaga),
     yield takeEvery(CREATE_TEST_REQUEST, createTestSaga),
     yield takeEvery(UPDATE_TEST_REQUEST, updateTestSaga),
-    yield takeEvery(REGRADE_TEST, updateRegradeData)
+    yield takeEvery(REGRADE_TEST, updateRegradeDataSaga),
+    yield takeEvery(TEST_SHARE, shareTestSaga)
   ]);
 }
 

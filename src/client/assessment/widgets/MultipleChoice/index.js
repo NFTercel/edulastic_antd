@@ -124,6 +124,7 @@ class MultipleChoice extends Component {
   };
 
   handleOptionsChange = (name, value) => {
+    console.log(name, value);
     const { setQuestionData, item, saveAnswer } = this.props;
     const newItem = cloneDeep(item);
     const reduceResponses = (acc, val, index) => {
@@ -143,7 +144,7 @@ class MultipleChoice extends Component {
     }
 
     newItem[name] = value;
-
+    console.log(newItem);
     setQuestionData(newItem);
   };
 

@@ -12,7 +12,9 @@ import { testsAddItemsSaga } from "../../TestPage/components/AddItems";
 import { testsAssignSaga } from "../../TestPage/components/Assign";
 import assignmentsSaga from "./assignments";
 import { reportAssessmentSummarySaga } from "../../Reports/subPages/AssessmentSummary/ducks";
+import { reportResponseFrequencySaga } from "../../Reports/subPages/ResponseFrequency/ducks";
 import { authorGroupsWatcherSaga } from "../../sharedDucks/groups";
+import { watcherSaga as UserDetails } from "../../sharedDucks/userDetails";
 import { assessmentPageSaga } from "../../AssessmentCreate";
 
 const authorSagas = [
@@ -24,6 +26,7 @@ const authorSagas = [
   classBoardSaga(),
   assignmentsSaga(),
   reportAssessmentSummarySaga(),
+  reportResponseFrequencySaga(),
   classResponsesSaga(),
   testsListSaga(),
   testPageSaga(),
@@ -31,7 +34,8 @@ const authorSagas = [
   testsAssignSaga(),
   authorGroupsWatcherSaga(),
   assessmentPageSaga(),
-  ManageClassSaga()
+  ManageClassSaga(),
+  UserDetails()
 ];
 
 export default authorSagas;

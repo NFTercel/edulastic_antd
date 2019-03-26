@@ -71,23 +71,21 @@ Cypress.Commands.add("setToken", (role = "teacher") => {
 
 Cypress.Commands.add(
   "assignAssignment",
-  (startDt = new Date(), dueDt = new Date(new Date().setDate(startDt.getDate() + 1))) => {
+  (testId = "", startDt = new Date(), dueDt = new Date(new Date().setDate(startDt.getDate() + 1))) => {
     const accessPostData = {
       email: "auto.teacher1@snapwiz.com",
       password: "snapwiz"
     };
-
     cy.request({
       url: `${BASE_URL}/auth/login`,
       method: "POST",
       body: accessPostData
     }).then(({ body }) => {
-      console.log("Result = ", body.result);
       cy.fixture("assignments").then(asgns => {
         const postData = asgns["default"];
+        postData["assignments"][0]["testId"] = testId.valueOf();
         postData["assignments"][0]["startDate"] = startDt.valueOf();
         postData["assignments"][0]["endDate"] = dueDt.valueOf();
-        console.log("asdnDO - ", postData);
         cy.request({
           url: `${BASE_URL}/assignments`,
           method: "POST",

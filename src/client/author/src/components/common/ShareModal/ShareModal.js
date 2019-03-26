@@ -4,47 +4,69 @@ import { connect } from "react-redux";
 import Modal from "react-responsive-modal";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { Radio, Input, Button, Row, Col, Select } from "antd";
-import { cloneDeep } from "lodash";
+import { Radio, Spin, Button, Row, Col, Select, message, Typography } from "antd";
 
 import { FlexContainer } from "@edulastic/common";
 import { mainBlueColor } from "@edulastic/colors";
 import { IconClose, IconCopy } from "@edulastic/icons";
 
-import { updateTestAction, getTestSelector } from "../../../../TestPage/ducks";
+import { getTestIdSelector, sendTestShareAction } from "../../../../TestPage/ducks";
 
+import {
+  getUsersListSelector,
+  getFetchingSelector,
+  fetchUsersListAction,
+  updateUsersListAction
+} from "../../../../sharedDucks/userDetails";
+const permissions = {
+  EDIT: "Can Edit, Add/Remove Items",
+  VIEW: "Can View & Duplicate"
+};
+
+const permissionKeys = ["EDIT", "VIEW"];
+
+const shareTypes = {
+  PUBLIC: "Everyone",
+  DISTRICT: "District",
+  SCHOOL: "School",
+  INDIVIDUAL: "Individuals"
+};
+
+const sharedKeysObj = {
+  PUBLIC: "PUBLIC",
+  DISTRICT: "DISTRICT",
+  SCHOOL: "SCHOOL",
+  INDIVIDUAL: "INDIVIDUAL"
+};
+
+const shareTypeKeys = ["PUBLIC", "DISTRICT", "SCHOOL", "INDIVIDUAL"];
 class ShareModal extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      address: "",
-      shareType: "everyone",
+      shareType: sharedKeysObj.PUBLIC,
       peopleArray: [],
-      permission: "rwx"
+      currentUser: {},
+      permission: "VIEW"
     };
+    this.handleSearch = this.handleSearch.bind(this);
   }
-
-  addressHandler = e => {
-    this.setState({ address: e.target.value });
-  };
 
   radioHandler = e => {
     this.setState({ shareType: e.target.value });
+    if (e.target.value !== sharedKeysObj.INDIVIDUAL) {
+      this.setState({
+        peopleArray: [],
+        permission: "VIEW"
+      });
+    }
   };
 
   removeHandler = index => {
     const { peopleArray } = this.state;
     const temp = peopleArray.slice();
     temp.splice(index, 1);
-    this.setState({ peopleArray: temp });
-  };
-
-  onShare = () => {
-    const { address, shareType, peopleArray, permission } = this.state;
-    const temp = peopleArray.slice();
-    temp.push({ address, type: shareType, permission });
-    this.setState({ peopleArray: temp, address: "" });
+    this.setState({ peopleArray: temp, currentUser: {} });
   };
 
   permissionHandler = value => {
@@ -52,30 +74,82 @@ class ShareModal extends React.Component {
   };
 
   doneHandler = () => {
-    const { peopleArray } = this.state;
-    const { updateTest, test, onClose } = this.props;
+    const { peopleArray, shareType, permission } = this.state;
+    const { shareTest, testId } = this.props;
+    let peoplesObject = {};
+    const shapePeopleArray = peopleArray.map(item => ({
+      userName: item.userName,
+      _userId: item._userId
+    }));
+    if (shareType === sharedKeysObj.INDIVIDUAL) peoplesObject = { sharedWithUsers: shapePeopleArray };
+    const data = {
+      ...peoplesObject,
+      shareType,
+      viewType: permission
+    };
+    shareTest({ data, testId });
+  };
 
-    const updatedTest = cloneDeep(test);
-    const sharing = [];
-    peopleArray.map(data =>
-      sharing.push({
-        permission: data.permission,
-        type: data.type,
-        name: data.address
-      })
-    );
+  handleSearch(value) {
+    const { getUsers, updateShareList } = this.props;
+    const searchBody = {
+      limit: 10,
+      page: 1,
+      type: "school",
+      search: {
+        role: "student",
+        searchString: value
+      }
+    };
+    if (value.length > 1) getUsers(searchBody);
+    else updateShareList({ data: [] });
+  }
 
-    updatedTest.sharing = sharing;
-    delete updatedTest.createdDate;
-    delete updatedTest.updatedDate;
+  handleChange = value => {
+    const { permission } = this.state;
+    const [userName, email, _userId] = value.split("||");
+    const newState = {
+      userName,
+      email,
+      _userId,
+      permission
+    };
+    this.setState({
+      currentUser: newState
+    });
+  };
 
-    updateTest(test._id, updatedTest);
-    onClose();
+  handleShare = () => {
+    const { currentUser, peopleArray, shareType, permission } = this.state;
+    const isExisting = peopleArray.filter(item => item._userId === currentUser._userId);
+    const { shareTest, testId } = this.props;
+    let person = {};
+    if (shareType === sharedKeysObj.INDIVIDUAL) {
+      if (Object.keys(currentUser).length === 0) {
+        message.error("Please select any user which are not in the shared list");
+      } else if (isExisting.length > 0) {
+        message.error("This is an existing user");
+      } else {
+        const { _userId, userName } = currentUser;
+        person = { sharedWithUsers: { _userId, userName } };
+        this.setState(prevState => ({
+          peopleArray: [...prevState.peopleArray, currentUser],
+          currentUser: {}
+        }));
+      }
+    }
+    const data = {
+      ...person,
+      shareType,
+      viewType: permission
+    };
+    shareTest({ data, testId });
   };
 
   render() {
-    const { shareType, peopleArray } = this.state;
-    const { isVisible, onClose } = this.props;
+    const { shareType, peopleArray, permission } = this.state;
+    const { isVisible, onClose, userList = [], fetching } = this.props;
+
     return (
       <Modal open={isVisible} onClose={onClose} center>
         <ModalContainer>
@@ -84,11 +158,8 @@ class ShareModal extends React.Component {
             <span style={{ fontSize: 13, fontWeight: "600" }}>Share</span>
             <FlexContainer style={{ cursor: "pointer" }}>
               <ShareTitle>
-                <span>https://edulastic.com/assessment/76y8gyug-b8ug-8</span>
+                <Typography.Paragraph copyable>https://edulastic.com/assessment/76y8gyug-b8ug-8</Typography.Paragraph>
               </ShareTitle>
-              <TitleCopy>
-                <CopyIcon /> COPY
-              </TitleCopy>
             </FlexContainer>
             {peopleArray.length !== 0 && (
               <ShareList>
@@ -101,11 +172,13 @@ class ShareModal extends React.Component {
                       alignItems: "center"
                     }}
                   >
-                    <Col span={12}>{data.address}</Col>
+                    <Col span={12}>
+                      {data.userName && data.userName !== "null" ? data.userName : ""}
+                      {`, ${data.email && data.email !== "null" ? data.email : ""}`}
+                    </Col>
                     <Col span={11}>
-                      <span>{data.permission === "rwx" && "Can Edit, Assign & See Results"}</span>
-                      <span>{data.permission === "rw" && "Can Edit, Add/Remove Items"}</span>
-                      <span>{data.permission === "r" && "Can View & Duplicate"}</span>
+                      <span>{data.permission === "EDIT" && "Can Edit, Add/Remove Items"}</span>
+                      <span>{data.permission === "VIEW" && "Can View & Duplicate"}</span>
                     </Col>
                     <Col span={1}>
                       <a onClick={() => this.removeHandler(index)}>
@@ -121,25 +194,54 @@ class ShareModal extends React.Component {
             <span style={{ fontSize: 13, fontWeight: "600" }}>People</span>
             <div style={{ margin: "10px 0px" }}>
               <Radio.Group value={shareType} onChange={e => this.radioHandler(e)}>
-                <Radio value="everyone">Everyone</Radio>
-                <Radio value="district">District</Radio>
-                <Radio value="school">School</Radio>
-                <Radio value="individuals">Individuals</Radio>
+                {shareTypeKeys.map(item => (
+                  <Radio value={item} key={item}>
+                    {shareTypes[item]}
+                  </Radio>
+                ))}
               </Radio.Group>
             </div>
             <FlexContainer style={{ marginTop: 5 }}>
-              <Address placeholder="Enter names or email addresses" onChange={e => this.addressHandler(e)} />
-              <Select defaultValue="rwx" style={{ width: 650 }} onChange={e => this.permissionHandler(e)}>
-                <Select.Option value="rwx">Can Edit, Assign & See Results</Select.Option>
-                <Select.Option value="rw">Can Edit, Add/Remove Items</Select.Option>
-                <Select.Option value="r">Can View & Duplicate</Select.Option>
+              <Address
+                showSearch
+                placeholder={"Enter names or email addresses"}
+                defaultActiveFirstOption={false}
+                showArrow={false}
+                filterOption={false}
+                onSearch={this.handleSearch}
+                onChange={this.handleChange}
+                disabled={shareType !== sharedKeysObj.INDIVIDUAL}
+                notFoundContent={fetching ? <Spin size="small" /> : null}
+              >
+                {userList.map(item => (
+                  <Select.Option
+                    value={`${item._source.firstName}${"||"}${item._source.email}${"||"}${item._id}`}
+                    key={item._id}
+                  >
+                    {item._source.firstName}
+                    {", "}
+                    {item._source.email}
+                  </Select.Option>
+                ))}
+              </Address>
+              <Select
+                style={{ width: 650 }}
+                onChange={this.permissionHandler}
+                disabled={shareType !== sharedKeysObj.INDIVIDUAL}
+                value={permission}
+              >
+                {permissionKeys.map(item => (
+                  <Select.Option value={item} key={permissions[item]}>
+                    {permissions[item]}
+                  </Select.Option>
+                ))}
               </Select>
-              <ShareButton type="primary" onClick={() => this.onShare()}>
+              <ShareButton type="primary" onClick={this.handleShare}>
                 SHARE
               </ShareButton>
             </FlexContainer>
             <FlexContainer flex={1} justifyContent="center" style={{ marginTop: 20 }}>
-              <DoneButton type="primary" onClick={() => this.doneHandler()}>
+              <DoneButton type="primary" onClick={onClose}>
                 DONE
               </DoneButton>
             </FlexContainer>
@@ -153,7 +255,6 @@ class ShareModal extends React.Component {
 ShareModal.propTypes = {
   isVisible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  updateTest: PropTypes.func.isRequired,
   test: PropTypes.object
 };
 
@@ -164,10 +265,14 @@ ShareModal.defaultProps = {
 const enhance = compose(
   connect(
     state => ({
-      test: getTestSelector(state)
+      userList: getUsersListSelector(state),
+      fetching: getFetchingSelector(state),
+      testId: getTestIdSelector(state)
     }),
     {
-      updateTest: updateTestAction
+      getUsers: fetchUsersListAction,
+      updateShareList: updateUsersListAction,
+      shareTest: sendTestShareAction
     }
   )
 );
@@ -230,10 +335,10 @@ const PeopleBlock = styled.div`
   }
 `;
 
-const Address = styled(Input)`
-  padding-left: 20px;
-  height: 35px;
-
+const Address = styled(Select)`
+  min-height: 35px;
+  height: auto;
+  width: 100%;
   ::placeholder {
     font-size: 13px;
     font-style: italic;

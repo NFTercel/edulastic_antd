@@ -1,4 +1,4 @@
-import { createAction } from "redux-starter-kit";
+import { createAction, createSelector as createSelectorator } from "redux-starter-kit";
 import { takeEvery, put, call, all, select } from "redux-saga/effects";
 import { values, groupBy, last } from "lodash";
 import { createSelector } from "reselect";
@@ -12,8 +12,9 @@ import {
   setAssignmentsLoadingAction
 } from "../sharedDucks/AssignmentModule/ducks";
 import { setReportsAction, reportSchema } from "../sharedDucks/ReportsModule/ducks";
-import { getCurrentGroup } from "../Login/ducks";
+
 // constants
+export const getCurrentGroup = createSelectorator(["user.user.orgData.defaultClass"], r => r);
 export const FILTERS = {
   ALL: "all",
   SUBMITTED: "submitted",

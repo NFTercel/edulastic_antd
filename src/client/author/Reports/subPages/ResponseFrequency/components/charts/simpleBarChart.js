@@ -177,7 +177,12 @@ export class SimpleBarChart extends PureComponent {
         <QuestionTypeHeading>
           Question Type performance for Assessment: {this.props.assessment.testName}
         </QuestionTypeHeading>
-        {Object.keys(this.state.filter).length > 0 ? <a onClick={this.onResetClick}>Reset</a> : ""}
+        <a
+          onClick={this.onResetClick}
+          style={Object.keys(this.state.filter).length > 0 ? { visibility: "visible" } : { visibility: "hidden" }}
+        >
+          Reset
+        </a>
         <StyledChartNavButton
           type="primary"
           shape="circle"
@@ -220,8 +225,8 @@ export class SimpleBarChart extends PureComponent {
               startIndex={this.state.startIndex}
               endIndex={this.state.endIndex}
             />
-            <Bar dataKey="correct" stackId="a" unit={"%"} onClick={this.onBarClick.bind(this)} />
-            <Bar dataKey="incorrect" stackId="a" onClick={this.onBarClick.bind(this)}>
+            <Bar dataKey="correct" stackId="a" unit={"%"} onClick={this.onBarClick} />
+            <Bar dataKey="incorrect" stackId="a" onClick={this.onBarClick}>
               <LabelList
                 dataKey="correct"
                 position="insideBottom"

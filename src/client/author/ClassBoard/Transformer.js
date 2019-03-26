@@ -87,19 +87,29 @@ export const transformGradeBookResponse = ({
           studentId,
           studentName,
           present: true,
-          check: false,
           status: "notStarted",
           maxScore: testMaxScore,
           questionActivities: emptyQuestionActivities
         };
       }
       const testActivity = studentTestActivities[studentId];
-
+      if (testActivity.redirect) {
+        return {
+          studentId,
+          studentName,
+          present: true,
+          status: "redirected",
+          redirected: true,
+          maxScore: testMaxScore,
+          questionActivities: emptyQuestionActivities
+        };
+      }
       //TODO: for now always present
       const present = true;
       //TODO: no graded status now. using submitted as a substitute for graded
       const graded = testActivity.status == testActivityStatus.SUBMITTED;
       const submitted = testActivity.status == testActivityStatus.SUBMITTED;
+      const redirected = testActivity.redirected;
       const testActivityId = testActivity._id;
 
       const questionActivitiesRaw = testActivityQuestionActivities[studentId];
@@ -141,6 +151,7 @@ export const transformGradeBookResponse = ({
         maxScore: testMaxScore,
         score,
         testActivityId,
+        redirected,
         questionActivities
       };
     })

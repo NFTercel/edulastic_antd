@@ -32,9 +32,6 @@ var getEvaluation = function getEvaluation(response, answers, rightIndex, compar
         break;
 
       case _constants.evaluatorTypes.MCQ_TYPE:
-        evaluation[item] = answers[rightIndex].value.includes(item);
-        break;
-
       default:
         evaluation[i] = (0, _includes2.default)(answers[rightIndex].value, item);
         break;

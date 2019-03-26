@@ -127,6 +127,7 @@ const Matrix = ({ stems, options, response, isMultiple, onCheck, uiStyle, valida
         ""
       ),
       dataIndex: `${i}`,
+      width: uiStyle.option_width || "auto",
       key: i,
       render: data => getCell(i, data)
     }));
@@ -142,18 +143,17 @@ const Matrix = ({ stems, options, response, isMultiple, onCheck, uiStyle, valida
       ""
     );
 
-    const MathSpan = WithMathFormula(styled.span``);
+    const MathSpan = WithMathFormula(styled.div``);
     let columns = [
       {
         title: stemTitle,
         dataIndex: "stem",
         key: "stem",
-        width: uiStyle.stem_width || null,
+        width: uiStyle.stem_width || "auto",
         render: stem => <MathSpan dangerouslySetInnerHTML={{ __html: stem }} />
       },
       {
         title: optionRowTitle,
-        width: uiStyle.option_width || null,
         children: [...optionsData]
       }
     ];
@@ -197,6 +197,7 @@ const Matrix = ({ stems, options, response, isMultiple, onCheck, uiStyle, valida
 
   return (
     <StyledTable
+      data-cy="matrixTable"
       fontSize={fontSize}
       horizontalLines={uiStyle.horizontal_lines}
       columns={getColumns()}

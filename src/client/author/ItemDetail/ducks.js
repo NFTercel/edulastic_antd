@@ -229,7 +229,8 @@ export function* updateItemSaga({ payload }) {
       delete payload.data.data;
     }
 
-    const item = yield call(testItemsApi.updateById, payload.id, payload.data);
+    const data = _omit(payload.data, ["authors"]);
+    const item = yield call(testItemsApi.updateById, payload.id, data);
 
     yield put({
       type: UPDATE_ITEM_DETAIL_SUCCESS,

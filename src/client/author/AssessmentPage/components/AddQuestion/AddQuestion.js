@@ -18,11 +18,12 @@ class AddQuestion extends React.Component {
     }));
   };
 
-  handleApply = ({ number, type }) => {
+  handleApply = ({ number, type, startingIndex }) => {
     const { onAdd } = this.props;
 
     for (let i = 0; i < number; i++) {
-      onAdd(type)();
+      const index = startingIndex + i;
+      onAdd(type, index)();
     }
 
     this.toggleBulkModal();

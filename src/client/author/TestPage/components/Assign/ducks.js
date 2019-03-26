@@ -2,10 +2,10 @@ import * as moment from "moment";
 import { omit, keyBy } from "lodash";
 import { createReducer, createAction } from "redux-starter-kit";
 import { createSelector } from "reselect";
-import { assignmentApi } from "@edulastic/api";
-import { test } from "@edulastic/constants";
+import { assignmentApi, testsApi } from "@edulastic/api";
 import { all, call, put, takeEvery, select } from "redux-saga/effects";
-import { SET_ASSIGNMENT, getTestSelector, getTestIdSelector } from "../../ducks";
+import { replace } from "connected-react-router";
+import { SET_ASSIGNMENT, SET_TEST_DATA, getTestSelector, getTestIdSelector } from "../../ducks";
 import { generateClassData, formatAssignment } from "./utils";
 import { getStudentsSelector, getGroupsSelector } from "../../../sharedDucks/groups";
 import { getUserNameSelector, getCurrentTerm } from "../../../src/selectors/user";
@@ -76,7 +76,7 @@ export const reducer = createReducer(initialState, {
 const module = "authorTestAssignments";
 const currentSelector = state => state[module].current;
 
-export const getAssignmentsSelector = state => (state[module].isLoading ? [] : state[module].assignments);
+export const getAssignmentsSelector = state => state[module].assignments;
 export const getCurrentAssignmentSelector = createSelector(
   currentSelector,
   getAssignmentsSelector,
@@ -101,8 +101,21 @@ function* saveAssignment({ payload }) {
   try {
     const studentsList = yield select(getStudentsSelector);
     const allGroups = yield select(getGroupsSelector);
-    const testId = yield select(getTestIdSelector);
+    let testId = yield select(getTestIdSelector);
     const termId = yield select(getCurrentTerm);
+
+    if (!testId) {
+      const test = yield select(getTestSelector);
+      const entity = yield call(testsApi.create, test);
+      testId = entity._id;
+      yield put({
+        type: SET_TEST_DATA,
+        payload: {
+          data: entity
+        }
+      });
+      yield put(replace(`/author/tests/${entity._id}`));
+    }
 
     let classData = generateClassData(
       payload.class,
@@ -173,6 +186,11 @@ function* loadAssignments({ payload }) {
       testId = _id;
     } else {
       testId = payload;
+    }
+
+    // test is not yet created!
+    if (!testId) {
+      return;
     }
 
     const data = yield call(assignmentApi.fetchAssignments, testId);

@@ -18,7 +18,6 @@ const SortBar = ({ loadStudentResponses, students }) => {
           <Container>
             <StyledSelect defaultValue={students[0].studentName} onChange={onSortChange}>
               {students.map(student => {
-                console.log(student.testActivityId);
                 const testActivityId = student.testActivityId ? student.testActivityId : null;
                 const isActive = testActivityId === null;
                 return (

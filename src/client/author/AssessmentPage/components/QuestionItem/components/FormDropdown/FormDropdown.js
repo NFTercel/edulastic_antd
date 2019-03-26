@@ -41,8 +41,8 @@ export default class FormDropdown extends React.Component {
 
     const optionChunks = chunk(options[0], 4);
 
-    return optionChunks.map(items => (
-      <QuestionChunk>
+    return optionChunks.map((items, chunkKey) => (
+      <QuestionChunk key={`form-dropdown-chunk-${chunkKey}`}>
         {items.map((option, key) => (
           <QuestionOption key={`dropdown-view-${option}-${key}`}>{option}</QuestionOption>
         ))}

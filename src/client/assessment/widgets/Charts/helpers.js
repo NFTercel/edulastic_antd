@@ -13,24 +13,36 @@ export const getYAxisStep = (yAxisCount, height, margin, padding) =>
 export const getStep = (data, width, margin, padding) =>
   data && data.length > 1 ? (width - margin - padding) / (data.length - 1) : 0;
 
+export const getChangingStep = (yAxisCount, stepSize) => (Math.floor(stepSize / 5) < 1 ? 1 : Math.floor(stepSize / 5));
+
 export const getGridVariables = (yAxisCount, stepSize, data, height, width, margin) => {
   const yAxis = getYAxis(yAxisCount, stepSize);
   const padding = getPadding(yAxis);
   const yAxisStep = getYAxisStep(yAxisCount, height, margin, padding);
   const step = getStep(data, width, margin, padding);
+  const changingStep = getChangingStep(yAxisCount, stepSize);
 
-  return { yAxis, padding, yAxisStep, step };
+  return { yAxis, padding, yAxisStep, changingStep, step };
 };
 
-export const getReCalculatedPoints = (array, { oldStep, yAxisStep, yAxisCount, stepSize }) =>
+export const getReCalculatedPoints = (array, { oldStep, yAxisStep, yAxisCount, changingStep }) =>
   array.map(dot => {
     const newDot = cloneDeep(dot);
     if (newDot.y / oldStep > yAxisCount) {
       newDot.y = 0;
-    } else if ((newDot.y / oldStep) % stepSize !== 0) {
-      newDot.y = (newDot.y / oldStep - ((newDot.y / oldStep) % stepSize)) * yAxisStep;
     } else {
-      newDot.y = (newDot.y / oldStep) * yAxisStep;
+      newDot.y = Math.round(newDot.y / oldStep / changingStep) * yAxisStep * changingStep;
+    }
+    return { ...newDot };
+  });
+
+export const getReCalculatedDATAPoints = (array, { oldStep, yAxisStep, yAxisCount }) =>
+  array.map(dot => {
+    const newDot = cloneDeep(dot);
+    if (newDot.y / oldStep > yAxisCount) {
+      newDot.y = 0;
+    } else {
+      newDot.y = Math.round(newDot.y / oldStep) * yAxisStep;
     }
     return { ...newDot };
   });

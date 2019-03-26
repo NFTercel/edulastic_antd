@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Card } from "@edulastic/common";
-import { Row, Col, Button } from "antd";
+import { Row, Col, Button, Slider } from "antd";
 import { Table } from "antd";
 import { CustomChartTooltip } from "./components/tooltip";
 import { darkGrey, grey, fadedBlack, fadedGrey } from "@edulastic/colors";
@@ -93,4 +93,28 @@ export const StyledCustomChartTooltip = styled(CustomChartTooltip)`
 
 export const Capitalized = styled.span`
   text-transform: capitalize;
+`;
+
+export const StyledSlider = styled(Slider)`
+  height: 22px;
+  .ant-slider-rail {
+    height: 12px;
+    border-radius: 6px;
+    background-color: #e1e1e1;
+  }
+
+  .ant-slider-track {
+    height: 12px;
+    border-radius: 6px;
+    background-color: #69c0ff;
+  }
+
+  .ant-slider-step {
+    height: 12px;
+  }
+  .ant-slider-handle {
+    width: 22px;
+    height: 22px;
+    border: solid 4px #69c0ff;
+  }
 `;

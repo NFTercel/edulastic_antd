@@ -1,158 +1,141 @@
-import React, { Component } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { compose } from "redux";
+import { connect } from "react-redux";
 import queryString from "query-string";
-import { Slider, Row, Col } from "antd";
+import { Row, Col } from "antd";
 import { ResponseFrequencyTable } from "./components/table/responseFrequencyTable";
 import { SimpleBarChart } from "./components/charts/simpleBarChart";
 import { StyledContainer, StyledCard } from "./components/styled";
 import Breadcrumb from "../../../src/components/Breadcrumb";
 import { CustomizedHeaderWrapper } from "../../common/components/header";
-import { reportsApi } from "@edulastic/api";
+import { StyledSlider } from "../../common/styled";
 import jsonData from "./static/json/data.json";
+import { get } from "lodash";
 
-class ResponseFrequency extends Component {
-  state = {
-    difficultItems: 10,
-    misunderstoodItems: 0,
-    metaData: {},
-    data: [],
-    filteredData: [],
-    breadcrumbData: [
-      {
-        title: "REPORTS",
-        to: "/author/reports"
-      },
-      {
-        title: "RESPONSE FREQUENCY"
-      }
-    ]
-  };
+import { getResponseFrequencyRequestAction, getReportsResponseFrequency } from "./ducks";
 
-  constructor(props) {
+const filterData = (data, filter) => (Object.keys(filter).length > 0 ? data.filter(item => filter[item.qType]) : data);
+
+const ResponseFrequency = props => {
+  const breadcrumbData = [
+    {
+      title: "REPORTS",
+      to: "/author/reports"
+    },
+    {
+      title: "RESPONSE FREQUENCY"
+    }
+  ];
+  const [difficultItems, setDifficultItems] = useState(10);
+  const [misunderstoodItems, setMisunderstoodItems] = useState(0);
+
+  const [filter, setFilter] = useState({});
+
+  useEffect(() => {
     let q = queryString.parse(props.location.search);
-    super(props);
-  }
+    q.testId = props.match.params.testId;
+    props.getResponseFrequencyRequestAction(q);
+  }, []);
 
-  componentDidMount() {
-    this.fetchData();
-  }
-
-  async fetchData() {
-    let q = queryString.parse(this.props.location.search);
-    let { districtId, schoolId, teacherId } = q;
-
-    let res = await reportsApi
-      .fetchResponseFrequency({
-        testId: this.props.match.params.testId,
-        districtId: districtId,
-        schoolId: schoolId,
-        teacherId: teacherId
-      })
-      .then(result => result.data.result)
-      .catch(error => {
-        return {};
-      });
-
-    if (res.metrics) {
+  let res = get(props, "responseFrequency.data.result", false);
+  const obj = useMemo(() => {
+    let obj = {
+      metaData: {},
+      data: [],
+      filteredData: []
+    };
+    if (res) {
       let arr = Object.keys(res.metrics).map((key, i) => {
         res.metrics[key].uid = key;
         return res.metrics[key];
       });
 
-      let obj = {
+      obj = {
         data: [...arr],
-        filteredData: [...arr]
+        filteredData: [...arr],
+        metaData: res.metaData
       };
-
-      if (res.metaData) {
-        obj.metaData = res.metaData;
-      }
-      this.setState(obj);
     }
-  }
+    return obj;
+  }, [res]);
 
-  onChangeDifficultSlider = value => {
-    this.setState(state => {
-      return { difficultItems: value };
-    });
+  const filteredData = useMemo(() => filterData(obj.data, filter), [filter, obj.data]);
+
+  const onChangeDifficultSlider = value => {
+    setDifficultItems(value);
   };
 
-  onChangeMisunderstoodSlider = value => {
-    this.setState(state => {
-      return { misunderstoodItems: value };
-    });
+  const onChangeMisunderstoodSlider = value => {
+    setMisunderstoodItems(value);
   };
 
-  onBarClickCB = filter => {
-    this.setState(state => {
-      let arr = [];
-      for (let i = 0; i < state.data.length; i++) {
-        if (filter[state.data[i].qType] || Object.keys(filter).length === 0) {
-          arr.push(state.data[i]);
-        }
-      }
-      return {
-        filteredData: arr
-      };
-    });
+  const onBarClickCB = filter => {
+    setFilter(filter);
   };
 
-  render() {
-    return (
-      <div>
-        <CustomizedHeaderWrapper title="Response Frequency" />
-        <Breadcrumb data={this.state.breadcrumbData} style={{ position: "unset", padding: "10px" }} />
-        <StyledContainer type="flex">
-          <SimpleBarChart data={this.state.data} assessment={this.state.metaData} onBarClickCB={this.onBarClickCB} />
-          <StyledCard>
-            <Row type="flex" justify="center" className="question-area">
-              <Col className="question-container">
-                <p>What are the most difficult items?</p>
-                <p>Set threshold to warn if % correct falls below:</p>
-                <Row type="flex" justify="start" align="middle">
-                  <Col className="answer-slider-percentage">
-                    <span>{this.state.difficultItems}%</span>
-                  </Col>
-                  <Col className="answer-slider">
-                    <Slider
-                      data-slider-id="difficult"
-                      defaultValue={this.state.difficultItems}
-                      onChange={this.onChangeDifficultSlider}
-                    />
-                  </Col>
-                </Row>
-              </Col>
-              <Col className="question-container">
-                <p>What items are misunderstood?</p>
-                <p>Set threshold to warn if % frequency of an incorrect choice is above:</p>
-                <Row type="flex" justify="start" align="middle">
-                  <Col className="answer-slider-percentage">
-                    <span>{this.state.misunderstoodItems}%</span>
-                  </Col>
-                  <Col className="answer-slider">
-                    <Slider
-                      data-slider-id="misunderstood"
-                      defaultValue={this.state.misunderstoodItems}
-                      onChange={this.onChangeMisunderstoodSlider}
-                    />
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
-          </StyledCard>
-          <ResponseFrequencyTable
-            data={this.state.filteredData}
-            columns={jsonData.columns}
-            assessment={this.state.metaData}
-            correctThreshold={this.state.difficultItems}
-            incorrectFrequencyThreshold={this.state.misunderstoodItems}
-          />
-        </StyledContainer>
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <CustomizedHeaderWrapper title="Response Frequency" />
+      <Breadcrumb data={breadcrumbData} style={{ position: "unset", padding: "10px" }} />
+      <StyledContainer type="flex">
+        <SimpleBarChart data={obj.data} assessment={obj.metaData} onBarClickCB={onBarClickCB} />
+        <StyledCard>
+          <Row type="flex" justify="center" className="question-area">
+            <Col className="question-container">
+              <p>What are the most difficult items?</p>
+              <p>Set threshold to warn if % correct falls below:</p>
+              <Row type="flex" justify="start" align="middle">
+                <Col className="answer-slider-percentage">
+                  <span>{difficultItems}%</span>
+                </Col>
+                <Col className="answer-slider">
+                  <StyledSlider
+                    data-slider-id="difficult"
+                    defaultValue={difficultItems}
+                    onChange={onChangeDifficultSlider}
+                  />
+                </Col>
+              </Row>
+            </Col>
+            <Col className="question-container">
+              <p>What items are misunderstood?</p>
+              <p>Set threshold to warn if % frequency of an incorrect choice is above:</p>
+              <Row type="flex" justify="start" align="middle">
+                <Col className="answer-slider-percentage">
+                  <span>{misunderstoodItems}%</span>
+                </Col>
+                <Col className="answer-slider">
+                  <StyledSlider
+                    data-slider-id="misunderstood"
+                    defaultValue={misunderstoodItems}
+                    onChange={onChangeMisunderstoodSlider}
+                  />
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </StyledCard>
+        <ResponseFrequencyTable
+          data={filteredData}
+          columns={jsonData.columns}
+          assessment={obj.metaData}
+          correctThreshold={difficultItems}
+          incorrectFrequencyThreshold={misunderstoodItems}
+        />
+      </StyledContainer>
+    </div>
+  );
+};
 
-const enhance = compose();
+const enhance = compose(
+  connect(
+    state => ({
+      responseFrequency: getReportsResponseFrequency(state)
+    }),
+    {
+      getResponseFrequencyRequestAction: getResponseFrequencyRequestAction
+    }
+  )
+);
 
 export default enhance(ResponseFrequency);

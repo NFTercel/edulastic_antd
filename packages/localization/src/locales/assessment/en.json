@@ -197,7 +197,8 @@
       "addPoint": "Add Point",
       "point": "Point",
       "value": "Value",
-      "label": "Label"
+      "label": "Label",
+      "chartTitle": "Chart Title"
     },
     "hotspot": {
       "widthLabel": "Width (px)",

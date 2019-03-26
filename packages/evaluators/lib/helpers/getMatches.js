@@ -29,7 +29,6 @@ var getMatches = function getMatches(response, answer, compareFunction) {
         );
 
       case _constants.evaluatorTypes.IS_EQUAL:
-      case _constants.evaluatorTypes.MCQ_TYPE:
         if ((0, _typeof2.default)(answer[index]) === "object" && answer[index].y) {
           return (0, _isEqual2.default)(
             (0, _objectSpread2.default)({}, answer[index], {

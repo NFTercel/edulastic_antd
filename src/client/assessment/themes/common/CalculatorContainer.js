@@ -11,6 +11,10 @@ class CalculatorContainer extends Component {
     this.state = {
       calculateMode: this.props.calculateMode
     };
+
+    this.desmosGraphingRef = React.createRef();
+    this.desmosBasicRef = React.createRef();
+    this.desmosScientificRef = React.createRef();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -85,6 +89,7 @@ class CalculatorContainer extends Component {
           <StyledDiv visible={calculateMode === "GRAPHING_DESMOS"}>
             <StyledTitle>Desmos Graphing Calculator</StyledTitle>
             <DesmosGraphingCalculator
+              id="demos-graphiccalculator"
               ref={ref => {
                 this.desmosGraphingRef = ref;
               }}
@@ -203,3 +208,5 @@ const CalculatorContainerWithResources = ({ ...props }) => (
 );
 
 export default CalculatorContainerWithResources;
+
+// export default CalculatorContainer;

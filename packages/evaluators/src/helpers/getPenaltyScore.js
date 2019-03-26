@@ -1,4 +1,4 @@
-const getPenaltyScore = ({ score, evaluation, penalty, rightLen }) => {
+const getPenaltyScore = ({ score, evaluation, penalty = 0, rightLen }) => {
   if (penalty <= 0) {
     return score;
   }
@@ -11,7 +11,7 @@ const getPenaltyScore = ({ score, evaluation, penalty, rightLen }) => {
     return acc;
   }, 0);
 
-  const result = score - (penalty / count) * wrongCount;
+  const result = penalty ? score - (penalty / count) * wrongCount : score;
 
   return result < 0 ? 0 : result;
 };

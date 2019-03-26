@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Row, Col, Button } from "antd";
 import { StyledTable as Table, StyledCard as Card } from "../../../common/styled";
 import { CustomTooltip } from "./customToolTip";
-import { darkGrey, grey, lightBlue, black } from "@edulastic/colors";
+import { darkGrey, black, blue, fadedBlack } from "@edulastic/colors";
 import { Text } from "@vx/text";
 
 export const StyledCard = Card;
@@ -18,7 +18,7 @@ export const StyledContainer = styled(Row)`
       flex: 1 1 300px;
       p {
         margin: 4px 0;
-        color: ${darkGrey};
+        color: ${fadedBlack};
       }
 
       p:nth-child(1) {
@@ -32,7 +32,10 @@ export const StyledContainer = styled(Row)`
       .answer-slider-percentage {
         flex: 0 0 50px;
         text-align: center;
-        color: ${lightBlue};
+        span {
+          color: ${blue};
+          font-weight: 600;
+        }
       }
 
       .answer-slider {

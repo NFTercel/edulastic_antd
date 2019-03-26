@@ -22,17 +22,10 @@ class CorrectAnswer extends Component {
 
   constructor(props) {
     super(props);
-    const userSelections = Array(props.options.length).fill(false);
-    if (props.response) {
-      props.response.value.forEach(answer => {
-        userSelections[answer] = true;
-      });
-
-      this.state = {
-        responseScore: props.response && props.response.score,
-        userSelections
-      };
-    }
+    this.state = {
+      responseScore: props.response && props.response.score,
+      userSelections: [...props.response.value]
+    };
   }
 
   updateScore = e => {
@@ -44,16 +37,16 @@ class CorrectAnswer extends Component {
 
   handleMultiSelect = answerId => {
     const { onUpdateValidationValue, multipleResponses } = this.props;
-    let userSelections = [...this.state.userSelections];
+    let { userSelections: newUserSelection } = this.state;
 
-    userSelections = userSelections.includes(answerId)
-      ? userSelections.filter(item => item !== answerId) // remove selection if already selected
+    newUserSelection = newUserSelection.includes(answerId)
+      ? newUserSelection.filter(item => item !== answerId)
       : multipleResponses
-      ? [...userSelections, answerId]
+      ? [...newUserSelection, answerId]
       : [answerId];
 
-    this.setState({ userSelections });
-    onUpdateValidationValue(userSelections);
+    this.setState({ userSelections: newUserSelection });
+    onUpdateValidationValue(newUserSelection);
   };
 
   render() {

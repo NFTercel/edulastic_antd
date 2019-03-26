@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { compose } from "redux";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { get } from "lodash";
 import { withWindowSizes } from "@edulastic/common";
 import { withNamespaces } from "@edulastic/localization";
 
@@ -19,6 +20,14 @@ import {
   getAdditionalDataSelector,
   getClassResponseSelector
 } from "../../ducks";
+
+import {
+  gradebookSelectStudentAction,
+  gradebookUnSelectStudentAction,
+  gradebookUnSelectAllAction,
+  gradebookSetSelectedAction
+} from "../../../src/reducers/gradeBook";
+
 // components
 import Score from "../Score/Score";
 import DisneyCardContainer from "../DisneyCardContainer/DisneyCardContainer";
@@ -28,6 +37,7 @@ import ClassHeader from "../../../Shared/Components/ClassHeader/ClassHeader";
 import CollapseButton from "../../../Shared/Components/CollpaseButton/CollapseButton";
 
 import HooksContainer from "../HooksContainer/HooksContainer";
+import RedirectPopup from "../RedirectPopUp";
 // icon images
 import More from "../../assets/more.svg";
 import Stats from "../../assets/stats.svg";
@@ -54,6 +64,20 @@ import {
   QuestionButton
 } from "./styled";
 
+import { Button } from "antd";
+
+/**
+ * right side button group
+ * @param {{redirect: Function }} param0
+ */
+const StudentActions = ({ redirect }) => (
+  <Button.Group>
+    <Button>Print</Button>
+    <Button onClick={redirect}>redirect</Button>
+    <Button>more</Button>
+  </Button.Group>
+);
+
 class ClassBoard extends Component {
   constructor(props) {
     super(props);
@@ -66,6 +90,7 @@ class ClassBoard extends Component {
       selectedTab: "Student",
       selectAll: false,
       selectedQuestion: 0,
+      redirectPopup: false,
       style: { height: "285px" }
     };
   }
@@ -106,12 +131,15 @@ class ClassBoard extends Component {
   }
 
   onSelectAllChange = e => {
-    this.props.testActivity.map(student => {
-      student.check = e.target.checked;
-    });
+    const checked = e.target.checked;
     this.setState({
-      selectAll: e.target.checked
+      selectAll: checked
     });
+    if (checked) {
+      this.props.studentSelect(this.props.allStudents.map(x => x._id));
+    } else {
+      this.props.studentUnselectAll();
+    }
   };
 
   handleCreate = () => {
@@ -164,7 +192,20 @@ class ClassBoard extends Component {
   };
 
   render() {
-    const { gradebook, testActivity, creating, match, classResponse, additionalData = { classes: [] }, t } = this.props;
+    const {
+      gradebook,
+      testActivity,
+      creating,
+      match,
+      classResponse,
+      additionalData = { classes: [] },
+      t,
+      selectedStudents,
+      studentSelect,
+      studentUnselect,
+      setSelected,
+      allStudents
+    } = this.props;
     const { selectedTab, flag, selectedQuestion, selectAll, style } = this.state;
 
     const { assignmentId, classId, assignmentName } = match.params;
@@ -225,19 +266,36 @@ class ClassBoard extends Component {
 
             <StyledFlexContainer justifyContent="space-between">
               <StyledCheckbox checked={this.state.selectAll} onChange={this.onSelectAllChange}>
-                SELECT ALL
+                {selectAll ? "UNSELECT ALL" : "SELECT ALL"}
               </StyledCheckbox>
+              <StudentActions redirect={() => this.setState({ redirectPopup: true })} />
             </StyledFlexContainer>
             {flag ? (
               <DisneyCardContainer
+                selectedStudents={selectedStudents}
                 testActivity={testActivity}
                 assignmentId={assignmentId}
                 classId={classId}
                 changeCardCheck={this.changeCardCheck}
+                studentSelect={studentSelect}
+                studentUnselect={studentUnselect}
               />
             ) : (
               <Score gradebook={gradebook} assignmentId={assignmentId} classId={classId} />
             )}
+
+            <RedirectPopup
+              open={this.state.redirectPopup}
+              allStudents={allStudents}
+              selectedStudents={selectedStudents}
+              additionalData={additionalData}
+              closePopup={() => {
+                this.setState({ redirectPopup: false });
+              }}
+              setSelected={setSelected}
+              assignmentId={assignmentId}
+              groupId={classId}
+            />
           </React.Fragment>
         ) : (
           <QuestionContainer
@@ -259,12 +317,18 @@ const enhance = compose(
       gradebook: getGradeBookSelector(state),
       testActivity: getTestActivitySelector(state),
       classResponse: getClassResponseSelector(state),
-      additionalData: getAdditionalDataSelector(state)
+      additionalData: getAdditionalDataSelector(state),
+      selectedStudents: get(state, ["author_classboard_gradebook", "selectedStudents"], {}),
+      allStudents: get(state, ["author_classboard_testActivity", "data", "students"], [])
     }),
     {
       loadGradebook: receiveGradeBookdAction,
       loadTestActivity: receiveTestActivitydAction,
-      loadClassResponses: receiveClassResponseAction
+      loadClassResponses: receiveClassResponseAction,
+      studentSelect: gradebookSelectStudentAction,
+      studentUnselect: gradebookUnSelectStudentAction,
+      studentUnselectAll: gradebookUnSelectAllAction,
+      setSelected: gradebookSetSelectedAction
     }
   )
 );

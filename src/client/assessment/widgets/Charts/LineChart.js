@@ -9,10 +9,17 @@ import VerticalLines from "./components/VerticalLines";
 import Points from "./components/Points";
 import ArrowPair from "./components/ArrowPair";
 import withGrid from "./HOC/withGrid";
-import { getGridVariables } from "./helpers";
+import { getGridVariables, getReCalculatedPoints } from "./helpers";
 
 const LineChart = ({ data, saveAnswer, ui_style: { width, height, margin, yAxisCount, stepSize }, view }) => {
-  const { yAxis, padding, yAxisStep, step } = getGridVariables(yAxisCount, stepSize, data, height, width, margin);
+  const { yAxis, padding, yAxisStep, changingStep, step } = getGridVariables(
+    yAxisCount,
+    stepSize,
+    data,
+    height,
+    width,
+    margin
+  );
 
   const [active, setActive] = useState(null);
   const [activeIndex, setActiveIndex] = useState(null);
@@ -27,11 +34,15 @@ const LineChart = ({ data, saveAnswer, ui_style: { width, height, margin, yAxisC
     }
   }, [data]);
 
+  useEffect(() => {
+    setLocalData(data);
+  }, []);
+
   const getPolylinePoints = () =>
     localData.map((dot, index) => `${step * index + margin / 2 + padding},${height - margin - dot.y}`).join(" ");
 
   const getActivePoint = index =>
-    active
+    active !== null
       ? +getPolylinePoints()
           .split(" ")
           [active].split(",")[index]
@@ -40,16 +51,9 @@ const LineChart = ({ data, saveAnswer, ui_style: { width, height, margin, yAxisC
   const onMouseMove = e => {
     const newLocalData = cloneDeep(localData);
     if (isMouseDown && cursorY) {
-      if (stepSize * yAxisStep <= Math.abs(e.pageY - cursorY)) {
-        if (e.pageY - cursorY > 0) {
-          newLocalData[activeIndex].y -= stepSize * yAxisStep;
-          setCursorY(e.pageY);
-        } else {
-          newLocalData[activeIndex].y += stepSize * yAxisStep;
-          setCursorY(e.pageY);
-        }
-        setLocalData(newLocalData);
-      }
+      newLocalData[activeIndex].y -= e.pageY - cursorY;
+      setCursorY(e.pageY);
+      setLocalData(newLocalData);
     }
   };
 
@@ -64,7 +68,7 @@ const LineChart = ({ data, saveAnswer, ui_style: { width, height, margin, yAxisC
     setActiveIndex(null);
     setActive(null);
     setIsMouseDown(false);
-    saveAnswer(localData);
+    saveAnswer(getReCalculatedPoints(localData, { oldStep: yAxisStep, yAxisStep, yAxisCount, changingStep }));
   };
 
   return (

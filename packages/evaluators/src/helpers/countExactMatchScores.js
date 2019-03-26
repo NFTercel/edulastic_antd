@@ -21,7 +21,7 @@ const countExactMatchScores = compareFunction => ({ answers, userResponse = [] }
 
     const matches = getMatches(existingResponse, answer, compareFunction) === answer.length;
 
-    const currentScore = matches ? totalScore : 0;
+    const currentScore = matches && existingResponse.length === answer.length ? totalScore : 0;
 
     score = Math.max(score, currentScore);
     maxScore = Math.max(maxScore, totalScore);

@@ -87,7 +87,7 @@ function Options({ onChange, uiStyle, t, theme }) {
 
         <Row gutter={36}>
           <Col md={12}>
-            <Label>{t("component.options.stemColumnTitle")}</Label>
+            <Label data-cy="stemColumnTitle">{t("component.options.stemColumnTitle")}</Label>
             <CustomQuillComponent
               toolbarId="stemColumnTitle"
               style={inputStyle}
@@ -97,7 +97,7 @@ function Options({ onChange, uiStyle, t, theme }) {
             />
           </Col>
           <Col md={12}>
-            <Label>{t("component.options.optionRowTitle")}</Label>
+            <Label data-cy="optionRowTitle">{t("component.options.optionRowTitle")}</Label>
             <CustomQuillComponent
               toolbarId="optionRowTitle"
               style={inputStyle}
@@ -112,6 +112,7 @@ function Options({ onChange, uiStyle, t, theme }) {
           <Col md={12}>
             <Label>{t("component.options.stemWidth")}</Label>
             <Input
+              data-cy="stemWidth"
               size="large"
               type="number"
               onChange={e => changeUiStyle("stem_width", +e.target.value)}
@@ -122,6 +123,7 @@ function Options({ onChange, uiStyle, t, theme }) {
           <Col md={12}>
             <Label>{t("component.options.optionWidth")}</Label>
             <Input
+              data-cy="optionWidth"
               size="large"
               type="number"
               onChange={e => changeUiStyle("option_width", +e.target.value)}
@@ -137,6 +139,7 @@ function Options({ onChange, uiStyle, t, theme }) {
           </Col>
           <Col md={12}>
             <Checkbox
+              data-cy="dividersCheckbox"
               size="large"
               checked={uiStyle.horizontal_lines}
               onChange={e => changeUiStyle("horizontal_lines", e.target.checked)}
