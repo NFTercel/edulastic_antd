@@ -115,12 +115,17 @@ export default class DisneyCardContainer extends Component {
       testActivity.map(student => {
         //TODO: use constants
         let status = "NOT STARTED";
+        let isDisabled = false;
+
         if (student.status === "notStarted") {
+          isDisabled = true;
         } else if (student.status === "inProgress") {
           status = "IN PROGRESS";
         } else if (student.status === "submitted") {
           status = "SUBMITTED";
         }
+
+        if (!student.present) isDisabled = true;
 
         let correctAnswers = 0;
         const questions = student.questionActivities.length;
@@ -178,9 +183,15 @@ export default class DisneyCardContainer extends Component {
             </PaginationInfoT>
             <StyledDivLine />
             <PagInfo>
-              <Link to={`/author/classresponses/${student.testActivityId}`}>
-                VIEW RESPONSES <GSpan>&gt;&gt;</GSpan>
-              </Link>
+              {isDisabled ? (
+                <Link to={`/author/classresponses/${student.testActivityId}`} disabled>
+                  VIEW RESPONSES <GSpan>&gt;&gt;</GSpan>
+                </Link>
+              ) : (
+                <Link to={`/author/classresponses/${student.testActivityId}`}>
+                  VIEW RESPONSES <GSpan>&gt;&gt;</GSpan>
+                </Link>
+              )}
             </PagInfo>
           </StyledCard>
         );
