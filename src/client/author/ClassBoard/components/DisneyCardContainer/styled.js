@@ -11,24 +11,7 @@ export const StyledCardContiner = styled.div`
 
 export const DisneyCard = styled.div``;
 
-export const StyledPagination = styled(Pagination)`
-  display: flex;
-  justify-content: flex-end;
-  padding: 20px 0;
-`;
-
-export const MainDiv = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-export const MainDivLeft = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  .ant-card {
-    margin-right: 4%;
-  }
-`;
+export const MainDiv = styled.div``;
 
 export const PerfomanceSection = styled.div`
   display: flex;
@@ -42,7 +25,7 @@ export const StyledCard = styled(Card)`
   border-radius: 10px;
   box-shadow: 3px 2px 7px lightgray;
   display: inline-block;
-  margin: 0;
+  margin: 0 32px 32px 0;
   .ant-card-body {
     padding: 19px 22px;
   }
