@@ -48,7 +48,7 @@ export default class MobileAssignment extends React.Component {
   handleToggleExpandItems = () => this.setState(({ expandItems }) => ({ expandItems: !expandItems }));
 
   static renderExpandRowIcons(item) {
-    const itemLink = `${item._id}/${item.classId}`;
+    const itemLink = `${item._id}/${item.classId}/${item.testName}`;
 
     return (
       <AssignmentNavigation>

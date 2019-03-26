@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
-import { Dropdown, message, Menu } from "antd";
+import { message, Menu } from "antd";
 import moment from "moment";
 import { withNamespaces } from "@edulastic/localization";
 import Assigned from "../../Assets/assigned.svg";
@@ -11,6 +11,7 @@ import {
   Container,
   StyledTitle,
   StyledLink,
+  StyledAssignName,
   StyledParaFirst,
   SpaceD,
   StyledParaSecond,
@@ -18,9 +19,9 @@ import {
   StyledDiv,
   StyledTabs,
   StyledAnchor,
-  StyledButton,
+  StyledAnchorA,
   Img,
-  MenuWrapper
+  StyledDropdown
 } from "./styled";
 
 import { releaseScoreAction } from "../../../src/actions/classBoard";
@@ -30,8 +31,7 @@ class ClassHeader extends Component {
     super(props);
     this.state = {
       visible: false,
-      condition: true, // Whether meet the condition, if not show popconfirm.
-      showDropdown: false
+      condition: true // Whether meet the condition, if not show popconfirm.
     };
   }
 
@@ -62,10 +62,6 @@ class ClassHeader extends Component {
     }
   };
 
-  toggleDropdown = () => {
-    this.setState(state => ({ showDropdown: !state.showDropdown }));
-  };
-
   handleReleaseScore = () => {
     const { classId, assignmentId, setReleaseScore, showScore } = this.props;
     const isReleaseScore = !showScore;
@@ -74,12 +70,36 @@ class ClassHeader extends Component {
   };
 
   render() {
-    const { t, active, assignmentId, classId, testActivityId, additionalData = {}, showScore } = this.props;
+    const {
+      t,
+      active,
+      assignmentId,
+      classId,
+      assignmentName,
+      testActivityId,
+      additionalData = {},
+      showScore
+    } = this.props;
     const endDate = additionalData.endDate;
     const dueDate = isNaN(endDate) ? new Date(endDate) : new Date(parseInt(endDate));
+
+    const menu = (
+      <Menu>
+        <Menu.Item key={"1"}>Mark as Done</Menu.Item>
+        <Menu.Item
+          key={"2"}
+          onClick={this.handleReleaseScore}
+          style={{ textDecoration: showScore ? "line-through" : "none" }}
+        >
+          Release Score
+        </Menu.Item>
+      </Menu>
+    );
+
     return (
       <Container>
         <StyledTitle>
+          <StyledAssignName>{assignmentName}</StyledAssignName>
           <StyledParaFirst>{additionalData.className || "loading..."}</StyledParaFirst>
           <StyledParaSecond>
             Done(Due on {additionalData.endDate && moment(dueDate).format("D MMMM YYYY")})
@@ -129,21 +149,11 @@ class ClassHeader extends Component {
             okText="Yes"
             cancelText="No"
           />
-          <StyledButton onClick={this.toggleDropdown}>... More</StyledButton>
-          {this.state.showDropdown && (
-            <MenuWrapper>
-              <Menu>
-                <Menu.Item key={"1"}>Mark as Done</Menu.Item>
-                <Menu.Item
-                  key={"2"}
-                  onClick={this.handleReleaseScore}
-                  style={{ textDecoration: showScore ? "line-through" : "none" }}
-                >
-                  Release Score
-                </Menu.Item>
-              </Menu>
-            </MenuWrapper>
-          )}
+          <StyledDropdown overlay={menu} trigger={["click"]}>
+            <StyledAnchorA className="ant-dropdown-link" href="#">
+              ... More
+            </StyledAnchorA>
+          </StyledDropdown>
         </StyledDiv>
       </Container>
     );
@@ -163,4 +173,5 @@ const enhance = compose(
     }
   )
 );
+
 export default enhance(ClassHeader);
