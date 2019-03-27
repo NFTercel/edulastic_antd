@@ -332,6 +332,7 @@ class AxisLabelsMoreOptions extends Component {
                   <MoreOptionsInput
                     type="text"
                     name="ticksDistance"
+                    placeholder="1, 1/2, 1 1/2"
                     onChange={this.handleNumberlineInputChange}
                     value={numberlineAxis.ticksDistance}
                   />
@@ -360,7 +361,12 @@ class AxisLabelsMoreOptions extends Component {
               <MoreOptionsColumn>
                 <MoreOptionsRow>
                   <MoreOptionsLabel>{t("component.graphing.labelsoptions.frequency")}</MoreOptionsLabel>
-                  <MoreOptionsInput name="frequency" type="number" defaultValue="1" />
+                  <MoreOptionsInput
+                    value={numberlineAxis.labelsFrequency === 0 ? null : numberlineAxis.labelsFrequency}
+                    onChange={this.handleNumberlineInputChange}
+                    name="labelsFrequency"
+                    type="number"
+                  />
                 </MoreOptionsRow>
                 <MoreOptionsRow>
                   <Checkbox

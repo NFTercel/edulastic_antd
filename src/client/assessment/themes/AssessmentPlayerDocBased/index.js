@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { ThemeProvider } from "styled-components";
-import { isEmpty } from "lodash";
+import { isEmpty, sortBy } from "lodash";
 
 import { withNamespaces } from "@edulastic/localization";
 
@@ -28,7 +28,6 @@ class AssessmentPlayerDocBased extends React.Component {
     theme: PropTypes.object,
     history: PropTypes.object.isRequired,
     changeView: PropTypes.func.isRequired,
-    questions: PropTypes.array.isRequired,
     questionsById: PropTypes.object.isRequired,
     answers: PropTypes.array.isRequired,
     saveProgress: PropTypes.func.isRequired,
@@ -75,6 +74,14 @@ class AssessmentPlayerDocBased extends React.Component {
     saveProgress();
   };
 
+  get assessmentQuestions() {
+    const { items } = this.props;
+    const itemData = items[0].data;
+    const questionsWithSections = itemData.questions.concat(itemData.resources);
+
+    return sortBy(questionsWithSections, item => item.qIndex);
+  }
+
   render() {
     const { showExitPopup } = this.state;
     const {
@@ -112,7 +119,7 @@ class AssessmentPlayerDocBased extends React.Component {
             <Worksheet
               docUrl={docUrl}
               annotations={annotations}
-              questions={items[0].data.questions}
+              questions={this.assessmentQuestions}
               questionsById={questionsById}
               answersById={answersById}
               review

@@ -36,12 +36,14 @@ export default class FormMath extends React.Component {
 
   renderView = () => {
     const {
-      question: {
-        validation: {
-          valid_response: { value }
-        }
-      }
+      question: { validation }
     } = this.props;
+
+    if (!validation) return this.renderForm();
+
+    const {
+      valid_response: { value }
+    } = validation;
     const answer = value[0];
 
     if (!answer || !answer.value) return null;

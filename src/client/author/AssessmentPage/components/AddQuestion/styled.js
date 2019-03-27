@@ -12,16 +12,17 @@ export const AddQuestionWrapper = styled.div`
 `;
 
 export const ContentWrapper = styled.div`
-  padding: 19px 21px 15px 18px;
+  padding: 19px 18px 15px 18px;
   background: ${white};
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
   box-sizing: border-box;
+  width: 288px;
 `;
 
 export const QuestionTypes = styled.div`
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
 
   &:last-child {
     margin-top: 20px;

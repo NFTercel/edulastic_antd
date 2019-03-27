@@ -54,6 +54,7 @@ class GraphQuadrants extends Component {
     { value: "tangent", label: "Tangent" },
     { value: "secant", label: "Secant" },
     { value: "exponent", label: "Exponent" },
+    { value: "polynom", label: "Polynom" },
     { value: "logarithm", label: "Logarithm" },
     { value: "hyperbola", label: "Hyperbola" },
     { value: "polygon", label: "Polygon" },

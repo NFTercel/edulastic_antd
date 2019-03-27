@@ -19,11 +19,11 @@ class AddQuestion extends React.Component {
   };
 
   handleApply = ({ number, type, startingIndex }) => {
-    const { onAdd } = this.props;
+    const { onAddQuestion } = this.props;
 
     for (let i = 0; i < number; i++) {
       const index = startingIndex + i;
-      onAdd(type, index)();
+      onAddQuestion(type, index)();
     }
 
     this.toggleBulkModal();
@@ -31,26 +31,27 @@ class AddQuestion extends React.Component {
 
   render() {
     const { bulkModalVisible } = this.state;
-    const { onAdd } = this.props;
+    const { onAddQuestion, onAddSection } = this.props;
     return (
       <AddQuestionWrapper>
         <ContentWrapper>
           <QuestionTypes>
-            <AddQuestionIcon onClick={onAdd(MULTIPLE_CHOICE)}>
+            <AddQuestionIcon onClick={onAddQuestion(MULTIPLE_CHOICE)}>
               <IconNewList />
             </AddQuestionIcon>
-            <AddQuestionIcon onClick={onAdd(SHORT_TEXT)}>
+            <AddQuestionIcon onClick={onAddQuestion(SHORT_TEXT)}>
               <IconPencilEdit />
             </AddQuestionIcon>
-            <AddQuestionIcon onClick={onAdd(CLOZE_DROP_DOWN)}>
+            <AddQuestionIcon onClick={onAddQuestion(CLOZE_DROP_DOWN)}>
               <IconCaretDown />
             </AddQuestionIcon>
-            <AddQuestionIcon onClick={onAdd(MATH)}>
+            <AddQuestionIcon onClick={onAddQuestion(MATH)}>
               <IconMath />
             </AddQuestionIcon>
           </QuestionTypes>
           <QuestionTypes>
             <AddButton onClick={this.toggleBulkModal}>Add Bulk</AddButton>
+            <AddButton onClick={onAddSection}>Add Section</AddButton>
           </QuestionTypes>
           <AddBulkModal visible={bulkModalVisible} onCancel={this.toggleBulkModal} onApply={this.handleApply} />
         </ContentWrapper>
@@ -60,7 +61,8 @@ class AddQuestion extends React.Component {
 }
 
 AddQuestion.propTypes = {
-  onAdd: PropTypes.func.isRequired
+  onAddQuestion: PropTypes.func.isRequired,
+  onAddSection: PropTypes.func.isRequired
 };
 
 export default AddQuestion;

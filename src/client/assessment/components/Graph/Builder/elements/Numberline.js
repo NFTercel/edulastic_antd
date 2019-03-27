@@ -44,7 +44,7 @@ const onHandler = (board, xMin, xMax, settings, lineSettings) => {
   );
 
   let { ticksDistance } = settings;
-  const { fractionsFormat, showLabels, labelShowMax, labelShowMin, minorTicks } = settings;
+  const { fractionsFormat, showLabels, labelShowMax, labelShowMin, minorTicks, labelsFrequency } = settings;
   let fracTicksDistance = null;
   if (isString(ticksDistance) && ticksDistance.indexOf("/") !== -1) {
     fracTicksDistance = getFraction(ticksDistance);
@@ -171,6 +171,15 @@ const onHandler = (board, xMin, xMax, settings, lineSettings) => {
     labels = labels.map(t => toFractionHTML(t, fracTicksDistance.denominator, fractionsFormat));
   }
 
+  if (labelsFrequency) {
+    labels.forEach((label, index) => {
+      if (index % labelsFrequency === 0) {
+      } else if (index !== 0 && index !== labels.length - 1) {
+        labels[index] = "";
+      }
+    });
+  }
+
   board.$board.create("ticks", [newAxis, ticks], {
     straightFirst: false,
     straightLast: false,
@@ -178,13 +187,13 @@ const onHandler = (board, xMin, xMax, settings, lineSettings) => {
     lastArrow: settings.rightArrow === true ? { size: 10 } : false,
     strokeColor: "#d6d6d6",
     highlightStrokeColor: "#d6d6d6",
-    visible: settings.showTicks,
+    visible: true,
     anchor: "middle",
     insertTicks: false,
     drawZero: false,
     tickEndings: [1, 1],
-    majorHeight: 25,
-    minorHeight: 15,
+    majorHeight: settings.showTicks ? 25 : 0,
+    minorHeight: settings.showTicks ? 15 : 0,
     drawLabels: true,
     ticksDistance,
     label: {

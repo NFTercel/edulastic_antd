@@ -113,7 +113,7 @@ class GraphingNumberLineStandardPage extends GraphingStandardPage {
   }
 
   getLabelsFrequency() {
-    return cy.get('input[name="frequency"]');
+    return cy.get('input[name="labelsFrequency"]');
   }
 
   getLabelsSpecificPoints() {
