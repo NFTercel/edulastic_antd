@@ -44,6 +44,7 @@ export const StyledCard = styled(Card)`
   .ant-card-body {
     padding: 30px 30px 15px 30px;
   }
+  height: ${props => (props.isCollapsed ? "5px" : "285px")};
 `;
 
 export const StudentButtonDiv = styled.div`

@@ -18,8 +18,9 @@ class QuestionViewContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      style: { height: "270px" }
+      isCollapsed: false
     };
+    this.onClickCollapse = this.onClickCollapse.bind(this);
   }
 
   componentDidMount() {
@@ -29,7 +30,7 @@ class QuestionViewContainer extends Component {
 
   onClickCollapse = collapsed => {
     this.setState({
-      style: collapsed ? { height: "270px" } : { height: "5px" }
+      isCollapsed: collapsed
     });
   };
 
@@ -40,6 +41,8 @@ class QuestionViewContainer extends Component {
       question,
       classQuestion
     } = this.props;
+    const { isCollapsed } = this.state;
+
     const filterdItems = testItems.filter(item => item.data.questions.filter(q => q.id === question.id).length > 0);
     filterdItems.forEach(item => {
       item.data.questions = item.data.questions.filter(({ id }) => id === question.id);
@@ -64,7 +67,7 @@ class QuestionViewContainer extends Component {
     }
     return (
       <React.Fragment>
-        <StyledCard bordered={false} style={this.state.style}>
+        <StyledCard bordered={false} isCollapsed={isCollapsed}>
           <StyledTitle>Performance by Questions</StyledTitle>
           <ComposedChart barGap={1} barSize={36} data={data} width={1200} height={186}>
             <XAxis dataKey="name" axisLine={false} tickSize={0} />
@@ -96,7 +99,7 @@ class QuestionViewContainer extends Component {
             <Bar stackId="a" dataKey="score" fill="#1fe3a0" onClick={this.onClickChart} />
             <Bar stackId="a" dataKey="time" fill="#ee1b82" onClick={this.onClickChart} />
           </ComposedChart>
-          <CollapseButton handleClickCollapse={this.onClickCollapse} collapsed={false} />
+          <CollapseButton handleClickCollapse={this.onClickCollapse} collapsed={isCollapsed} />
         </StyledCard>
         <StudentResponse testActivity={testActivity} />
         {testActivity &&

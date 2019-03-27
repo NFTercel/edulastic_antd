@@ -28,7 +28,7 @@ export const StyledCard = styled(Card)`
   width: 95%;
   display: flex;
   justify-content: spance-between;
-  height: 270px;
+  height: ${props => (props.isCollapsed ? "5px" : "270px")}
   border-radius: 10px;
   box-shadow: 3px 2px 7px lightgray;
   margin-bottom: 40px;

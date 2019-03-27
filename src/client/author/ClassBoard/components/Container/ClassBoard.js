@@ -91,8 +91,10 @@ class ClassBoard extends Component {
       selectAll: false,
       selectedQuestion: 0,
       redirectPopup: false,
-      style: { height: "285px" }
+      isCollapsed: false
     };
+
+    this.onClickCollapse = this.onClickCollapse.bind(this);
   }
 
   componentDidMount() {
@@ -187,7 +189,7 @@ class ClassBoard extends Component {
 
   onClickCollapse = collapsed => {
     this.setState({
-      style: collapsed ? { height: "285px" } : { height: "5px" }
+      isCollapsed: collapsed
     });
   };
 
@@ -206,7 +208,7 @@ class ClassBoard extends Component {
       setSelected,
       allStudents
     } = this.props;
-    const { selectedTab, flag, selectedQuestion, selectAll, style } = this.state;
+    const { selectedTab, flag, selectedQuestion, selectAll, isCollapsed } = this.state;
 
     const { assignmentId, classId, assignmentName } = match.params;
     const testActivityId = this.getTestActivity(testActivity);
@@ -258,7 +260,7 @@ class ClassBoard extends Component {
         {selectedTab === "Student" ? (
           <React.Fragment>
             <StyledCardContainer>
-              <StyledCard bordered={false} style={style}>
+              <StyledCard bordered={false} isCollapsed={isCollapsed}>
                 <Graph gradebook={gradebook} />
               </StyledCard>
               <CollapseButton handleClickCollapse={this.onClickCollapse} collapsed={false} />
