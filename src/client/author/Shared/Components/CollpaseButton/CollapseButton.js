@@ -12,10 +12,10 @@ class CollapseButton extends Component {
   }
 
   handleClickButton = e => {
+    this.props.handleClickCollapse(!this.state.collapsed);
     this.setState({
       collapsed: !this.state.collapsed
     });
-    this.props.handleClickCollapse(this.state.collapsed);
   };
 
   render() {

@@ -153,7 +153,7 @@ class ClassBoard extends Component {
     let id = null;
     data.forEach(item => {
       if (item.testActivityId) {
-        id = item.testActivityId;
+        if (!id) id = item.testActivityId;
       }
     });
     return id;
