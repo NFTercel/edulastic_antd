@@ -5,17 +5,11 @@ import { StyledCollapseButton } from "./styled";
 class CollapseButton extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      collapsed: this.props.collapsed
-    };
-    this.handleClickButton = this.handleClickButton.bind(this);
   }
 
   handleClickButton = e => {
-    this.setState({
-      collapsed: !this.state.collapsed
-    });
-    this.props.handleClickCollapse(this.state.collapsed);
+    const isCollapse = !this.props.collapsed;
+    this.props.handleClickCollapse(isCollapse);
   };
 
   render() {

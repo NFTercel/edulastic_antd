@@ -93,8 +93,6 @@ class ClassBoard extends Component {
       redirectPopup: false,
       isCollapsed: false
     };
-
-    this.onClickCollapse = this.onClickCollapse.bind(this);
   }
 
   componentDidMount() {
@@ -183,7 +181,7 @@ class ClassBoard extends Component {
       if (student.check) nCountTrue++;
     });
     this.setState({
-      selectAll: nCountTrue == this.props.testActivity.length ? true : false
+      selectAll: nCountTrue == this.props.testActivity.length > 0 ? true : false
     });
   };
 
@@ -262,7 +260,7 @@ class ClassBoard extends Component {
               <StyledCard bordered={false} isCollapsed={isCollapsed}>
                 <Graph gradebook={gradebook} />
               </StyledCard>
-              <CollapseButton handleClickCollapse={this.onClickCollapse} collapsed={false} />
+              <CollapseButton handleClickCollapse={this.onClickCollapse} collapsed={isCollapsed} />
             </StyledCardContainer>
 
             <StyledFlexContainer justifyContent="space-between">
