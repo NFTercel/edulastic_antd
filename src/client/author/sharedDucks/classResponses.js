@@ -39,7 +39,6 @@ function* receiveClassResponseSaga({ payload }) {
 }
 
 function* receiveStudentResponseSaga({ payload }) {
-  console.log("ReceiveStudentResponseSaga");
   try {
     const studentResponse = yield call(classResponseApi.studentResponse, payload);
 
