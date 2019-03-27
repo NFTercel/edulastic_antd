@@ -51,27 +51,30 @@ class PrintPreview extends Component {
     const { testActivityId } = match.params;
     loadStudentResponses({ testActivityId, groupId: classId });
     loadClassResponses({ testId });
+
     setTimeout(() => {
-      // const textAreas = (ReactDOM.findDOMNode(this.printpreviewRef)).getElementsByTagName('textarea');
-      // for(let i=0; i< textAreas.length; i++){
-      //   let value = textAreas[i].value;
-      //   let className = textAreas[i].className + " textarea-div";
-      //   textAreas[i].replaceWith("<div class='" + className + "'>"+value+"</div>")
-      // }
+      const textAreas = ReactDOM.findDOMNode(this.printpreviewRef).getElementsByTagName("textarea");
+      for (let i = 0; i < textAreas.length; i++) {
+        let value = textAreas[i].value;
+        let parent = textAreas[i].parentNode;
+        $(parent).append("<div>" + value + "</div>");
+      }
 
       let printPreviewInput = ReactDOM.findDOMNode(this.printpreviewRef);
       html2canvas(printPreviewInput).then(canvas => {
-        const imgData = canvas.toDataURL("image/png");
+        const imgData = canvas.toDataURL("image/jpeg");
+
+        var pageMargins = { top: 40, bottom: 60, left: 40, right: 40 };
 
         let imgWidth = 210;
         let pageHeight = 295;
         let imgHeight = (canvas.height * imgWidth) / canvas.width;
         let heightLeft = imgHeight;
 
-        let doc = new jsPDF("p", "mm");
+        let doc = new jsPDF();
         let position = 0;
 
-        doc.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+        doc.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
         heightLeft -= pageHeight;
 
         while (heightLeft >= 0) {
@@ -172,11 +175,6 @@ class PrintPreview extends Component {
             />
           )}
         </Container>
-        <div
-          ref={ref => {
-            this.testRef = ref;
-          }}
-        />
       </PrintContainer>
     );
   }

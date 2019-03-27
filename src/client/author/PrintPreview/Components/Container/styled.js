@@ -19,13 +19,20 @@ export const Container = styled.div`
     font-variant: normal !important;
   }
 
+  .sc-bblaLu {
+    page-break-before: always;
+  }
+
   textarea.ant-input {
-    resize: none;
-    pointer-events: none;
+    display: none;
   }
 
   input[type="text"] {
     pointer-events: none;
+  }
+
+  .ant-card {
+    max-width: 40%;
   }
 `;
 
