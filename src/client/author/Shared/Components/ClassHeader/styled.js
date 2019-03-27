@@ -32,6 +32,10 @@ export const StyledLink = styled(Link)``;
 export const StyledAssignName = styled.p`
   font-size: 1.3em;
   line-height: 1.3em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 300px;
 `;
 
 export const StyledParaFirst = styled.p`
@@ -141,47 +145,4 @@ export const StyledAnchorA = styled.a`
   line-height: 25px;
   text-align: center;
   text-decoration: none !important;
-`;
-
-export const StyledPrintContiner = styled.div`
-  display: none;
-`;
-
-export const StyledPrintPanel = styled.div`
-  width: 100%;
-`;
-
-export const StyledPrintDiv = styled.div`
-  padding: 10px;
-`;
-
-export const StyledRow = styled.div`
-  display: flex;
-  padding: 5px 0;
-`;
-
-export const StyledH2 = styled.div`
-  margin: 20px 0 0 0;
-  font-size: 25px;
-  padding: 0;
-`;
-
-export const StyledP = styled.p`
-  font-size: 15px;
-`;
-
-export const StyledPR = styled.p`
-  font-size: 15px;
-  margin-left: auto;
-`;
-
-export const StyledStatus = styled.div`
-  display: inline-flex;
-  color: #fff;
-  font-weight: bold;
-  font-size: 13px;
-  border-radius: 6.5px;
-  background-color: #f39c12;
-  text-transform: uppercase;
-  -webkit-print-color-adjust: exact;
 `;

@@ -134,7 +134,7 @@ class TableList extends Component {
         width: "14%",
         render: (_, row) => (
           <ActionsWrapper>
-            <Link to={`/author/classboard/${row.assignmentId}/${row.classId}/${row.name}`}>
+            <Link to={`/author/classboard/${row.assignmentId}/${row.classId}`}>
               <Icon src={presentationIcon} alt="Images" />
             </Link>
             <Link to="/author/expressgrader">

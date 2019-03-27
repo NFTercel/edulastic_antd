@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
-import { message, Menu } from "antd";
+import { Dropdown, message, Menu } from "antd";
 import moment from "moment";
 import { withNamespaces } from "@edulastic/localization";
 import Assigned from "../../Assets/assigned.svg";
 import classBoard from "../../Assets/presentation.svg";
+import { Link } from "react-router-dom";
 
 import {
   Container,
@@ -26,6 +27,7 @@ import {
 
 import { releaseScoreAction } from "../../../src/actions/classBoard";
 import { showScoreSelector } from "../../../ClassBoard/ducks";
+
 class ClassHeader extends Component {
   constructor(props) {
     super(props);
@@ -69,17 +71,12 @@ class ClassHeader extends Component {
     this.toggleDropdown();
   };
 
+  handlePrintStudentResponse = () => {
+    this.props.printStudentResponse();
+  };
+
   render() {
-    const {
-      t,
-      active,
-      assignmentId,
-      classId,
-      assignmentName,
-      testActivityId,
-      additionalData = {},
-      showScore
-    } = this.props;
+    const { t, active, assignmentId, classId, testActivityId, additionalData = {}, showScore } = this.props;
     const endDate = additionalData.endDate;
     const dueDate = isNaN(endDate) ? new Date(endDate) : new Date(parseInt(endDate));
 
@@ -93,13 +90,16 @@ class ClassHeader extends Component {
         >
           Release Score
         </Menu.Item>
+        <Menu.Item key="3">
+          <Link to={`/author/printpreview/${testActivityId}`}>Print</Link>
+        </Menu.Item>
       </Menu>
     );
 
     return (
       <Container>
         <StyledTitle>
-          <StyledAssignName>{assignmentName}</StyledAssignName>
+          <StyledAssignName>{additionalData.testName}</StyledAssignName>
           <StyledParaFirst>{additionalData.className || "loading..."}</StyledParaFirst>
           <StyledParaSecond>
             Done(Due on {additionalData.endDate && moment(dueDate).format("D MMMM YYYY")})

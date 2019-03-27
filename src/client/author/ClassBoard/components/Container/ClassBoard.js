@@ -210,7 +210,7 @@ class ClassBoard extends Component {
     } = this.props;
     const { selectedTab, flag, selectedQuestion, selectAll, isCollapsed } = this.state;
 
-    const { assignmentId, classId, assignmentName } = match.params;
+    const { assignmentId, classId } = match.params;
     const testActivityId = this.getTestActivity(testActivity);
     const classname = additionalData ? additionalData.classes : [];
     const questions = this.getQuestions();
@@ -226,7 +226,6 @@ class ClassBoard extends Component {
           assignmentId={assignmentId}
           additionalData={additionalData}
           testActivityId={testActivityId}
-          assignmentName={assignmentName}
         />
         <StyledFlexContainer justifyContent="space-between">
           <PaginationInfo>
