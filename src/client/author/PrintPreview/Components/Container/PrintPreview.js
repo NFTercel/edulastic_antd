@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import StudentQuestions from "../StudentQuestions/StudentQuestions";
-import Page from "../Page/Page";
 const html2canvas = require("html2canvas");
 import jsPDF from "jspdf";
 
