@@ -90,9 +90,6 @@ class ClassHeader extends Component {
         >
           Release Score
         </Menu.Item>
-        <Menu.Item key="3">
-          <Link to={`/author/printpreview/${testActivityId}`}>Print</Link>
-        </Menu.Item>
       </Menu>
     );
 

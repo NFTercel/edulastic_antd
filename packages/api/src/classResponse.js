@@ -22,30 +22,16 @@ const studentResponse = ({ testActivityId, groupId }) =>
     })
     .then(result => result.data.result);
 
-const classStudentResponse = ({ testActivityIds, groupId }) => {
-  let isLoading = false;
-  let classStudentResponseData = [];
-  let i = 0;
-  setInterval(() => {
-    isLoading = true;
-    api
-      .callApi({
-        url: `/test-activity/${testActivityId[i]}/report`,
-        method: "get",
-        params: {
-          groupId
-        }
-      })
-      .then(result => {
-        classStudentResponseData.push(result.data.result);
-        isLoading = false;
-        i++;
-        if (i == testActivityIds.length - 1) {
-          return classStudentResponseData;
-        }
-      });
-  }, 300);
-};
+const classStudentResponse = ({ testActivityId, groupId }) =>
+  api
+    .callApi({
+      url: `/test-activity/${testActivityId}/report`,
+      method: "get",
+      params: {
+        groupId
+      }
+    })
+    .then(result => result.data.result);
 
 const feedbackResponse = ({ body, testActivityId, questionId }) =>
   api

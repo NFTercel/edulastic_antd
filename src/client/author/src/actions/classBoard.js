@@ -1,6 +1,7 @@
 import {
   RECEIVE_CLASS_RESPONSE_REQUEST,
   RECEIVE_STUDENT_RESPONSE_REQUEST,
+  RECEIVE_CLASSSTUDENT_RESPONSE_REQUEST,
   RECEIVE_FEEDBACK_RESPONSE_REQUEST,
   RECEIVE_GRADEBOOK_REQUEST,
   RECEIVE_TESTACTIVITY_REQUEST,
@@ -17,6 +18,11 @@ export const receiveClassResponseAction = data => ({
 
 export const receiveStudentResponseAction = data => ({
   type: RECEIVE_STUDENT_RESPONSE_REQUEST,
+  payload: data
+});
+
+export const receiveClassStudentResponseAction = data => ({
+  type: RECEIVE_CLASSSTUDENT_RESPONSE_REQUEST,
   payload: data
 });
 

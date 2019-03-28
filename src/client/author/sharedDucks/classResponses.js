@@ -9,6 +9,9 @@ import {
   RECEIVE_STUDENT_RESPONSE_REQUEST,
   RECEIVE_STUDENT_RESPONSE_SUCCESS,
   RECEIVE_STUDENT_RESPONSE_ERROR,
+  RECEIVE_CLASSSTUDENT_RESPONSE_REQUEST,
+  RECEIVE_CLASSSTUDENT_RESPONSE_SUCCESS,
+  RECEIVE_CLASSSTUDENT_RESPONSE_ERROR,
   RECEIVE_FEEDBACK_RESPONSE_REQUEST,
   RECEIVE_FEEDBACK_RESPONSE_SUCCESS,
   RECEIVE_FEEDBACK_RESPONSE_ERROR,
@@ -51,6 +54,32 @@ function* receiveStudentResponseSaga({ payload }) {
     yield call(message.error, errorMessage);
     yield put({
       type: RECEIVE_STUDENT_RESPONSE_ERROR,
+      payload: { error: errorMessage }
+    });
+  }
+}
+
+function* receiveClassStudentResponseSaga({ payload }) {
+  try {
+    let classStudentResponse = [];
+    for (let i = 0; i < payload.selectedActivities.length; i++) {
+      classStudentResponse.push(
+        yield call(classResponseApi.classStudentResponse, {
+          testActivityId: payload.selectedActivities[i],
+          groupId: payload.groupId
+        })
+      );
+    }
+
+    yield put({
+      type: RECEIVE_CLASSSTUDENT_RESPONSE_SUCCESS,
+      payload: classStudentResponse
+    });
+  } catch (err) {
+    const errorMessage = "Receive tests is failing";
+    yield call(message.error, errorMessage);
+    yield put({
+      type: RECEIVE_CLASSSTUDENT_RESPONSE_ERROR,
       payload: { error: errorMessage }
     });
   }
@@ -112,6 +141,7 @@ export function* watcherSaga() {
   yield all([
     yield takeEvery(RECEIVE_CLASS_RESPONSE_REQUEST, receiveClassResponseSaga),
     yield takeEvery(RECEIVE_STUDENT_QUESTION_REQUEST, receiveStudentQuestionSaga),
+    yield takeEvery(RECEIVE_CLASSSTUDENT_RESPONSE_REQUEST, receiveClassStudentResponseSaga),
     yield takeEvery(RECEIVE_CLASS_QUESTION_REQUEST, receiveClassQuestionSaga),
     yield takeEvery(RECEIVE_STUDENT_RESPONSE_REQUEST, receiveStudentResponseSaga),
     yield takeEvery(RECEIVE_FEEDBACK_RESPONSE_REQUEST, receiveFeedbackResponseSaga)

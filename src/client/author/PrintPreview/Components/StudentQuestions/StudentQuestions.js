@@ -1,9 +1,10 @@
 import React, { Component } from "react";
+import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import { keyBy as _keyBy } from "lodash";
 import TestItemPreview from "../../../../assessment/components/TestItemPreview";
 import { getRows } from "../../../sharedDucks/itemDetail";
-import { Content } from "./styled";
+import { QuestionDiv, Content } from "./styled";
 
 function Preview({ item }) {
   const rows = getRows(item);
@@ -30,6 +31,17 @@ Preview.propTypes = {
 };
 
 class StudentQuestions extends Component {
+  componentDidMount() {
+    setTimeout(() => {
+      const textAreas = ReactDOM.findDOMNode(this.printpreviewRef).getElementsByTagName("textarea");
+      for (let i = 0; i < textAreas.length; i++) {
+        let value = textAreas[i].value;
+        let parent = textAreas[i].parentNode;
+        $(parent).append("<div>" + value + "</div>");
+      }
+    }, 2000);
+  }
+
   getTestItems() {
     const { currentStudent, questionActivities } = this.props;
     let {
@@ -72,7 +84,16 @@ class StudentQuestions extends Component {
 
   render() {
     const testItems = this.getTestItems();
-    return testItems.map(item => <Preview item={item} />);
+    let testItemsRender = testItems.map(item => <Preview item={item} />);
+    return (
+      <QuestionDiv
+        ref={ref => {
+          this.printpreviewRef = ref;
+        }}
+      >
+        {testItemsRender}
+      </QuestionDiv>
+    );
   }
 }
 

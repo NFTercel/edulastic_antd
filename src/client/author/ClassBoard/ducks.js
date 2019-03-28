@@ -160,6 +160,7 @@ export const getAssignmentClassIdSelector = createSelector(
 
 export const stateClassResponseSelector = state => state.classResponse;
 export const stateStudentResponseSelector = state => state.studentResponse;
+export const stateClassStudentResponseSelector = state => state.classStudentResponse;
 export const stateFeedbackResponseSelector = state => state.feedbackResponse;
 export const stateStudentAnswerSelector = state => state.studentQuestionResponse;
 export const stateQuestionAnswersSelector = state => state.classQuestionResponse;
@@ -176,6 +177,11 @@ export const showScoreSelector = createSelector(
 
 export const getStudentResponseSelector = createSelector(
   stateStudentResponseSelector,
+  state => state.data
+);
+
+export const getClassStudentResponseSelector = createSelector(
+  stateClassStudentResponseSelector,
   state => state.data
 );
 
