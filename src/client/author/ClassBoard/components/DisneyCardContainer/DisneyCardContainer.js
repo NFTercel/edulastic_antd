@@ -54,10 +54,6 @@ export default class DisneyCardContainer extends Component {
     };
   }
 
-  changeCardCheck = (isCheck, studentId) => {
-    this.props.changeCardCheck(isCheck, studentId);
-  };
-
   getAvatarName = studentName => {
     let firstLetter = "";
     let secondLetter = "";
@@ -147,6 +143,7 @@ export default class DisneyCardContainer extends Component {
                         } else {
                           this.props.studentUnselect(student.studentId);
                         }
+                        this.props.changeCardCheck(e.target.checked, student.studentId);
                       }}
                       studentId={student.studentId}
                     />

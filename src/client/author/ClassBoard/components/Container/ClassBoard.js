@@ -175,13 +175,17 @@ class ClassBoard extends Component {
   };
 
   changeCardCheck = (isCheck, studentId) => {
-    let nCountTrue = 0;
-    this.props.testActivity.map(student => {
-      if (student.studentId === studentId) student.check = isCheck;
-      if (student.check) nCountTrue++;
-    });
+    let selectedStudents = this.props.selectedStudents;
+    let nCountTrue = Object.keys(selectedStudents).length;
+
+    if (isCheck) {
+      nCountTrue++;
+    } else {
+      nCountTrue--;
+    }
+
     this.setState({
-      selectAll: nCountTrue == this.props.testActivity.length > 0 ? true : false
+      selectAll: nCountTrue == this.props.testActivity.length ? true : false
     });
   };
 
