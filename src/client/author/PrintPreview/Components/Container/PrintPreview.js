@@ -64,8 +64,6 @@ class PrintPreview extends Component {
       html2canvas(printPreviewInput).then(canvas => {
         const imgData = canvas.toDataURL("image/jpeg");
 
-        var pageMargins = { top: 40, bottom: 60, left: 40, right: 40 };
-
         let imgWidth = 210;
         let pageHeight = 295;
         let imgHeight = (canvas.height * imgWidth) / canvas.width;
@@ -73,7 +71,6 @@ class PrintPreview extends Component {
 
         let doc = new jsPDF();
         let position = 0;
-
         doc.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
         heightLeft -= pageHeight;
 
@@ -83,6 +80,7 @@ class PrintPreview extends Component {
           doc.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
           heightLeft -= pageHeight;
         }
+
         doc.save(testId + ".pdf");
       });
     }, 5000);
