@@ -163,7 +163,7 @@ class AxisLabelsContainer extends Component {
       } else {
         this._graph.removeAnswers();
       }
-      console.log(elements);
+
       if (checkAnswer) {
         this.mapElementsToGraph();
       }

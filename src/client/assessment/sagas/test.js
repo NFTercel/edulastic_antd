@@ -2,6 +2,7 @@ import { testActivityApi, testsApi } from "@edulastic/api";
 import { takeEvery, call, all, put, select } from "redux-saga/effects";
 import { push } from "react-router-redux";
 import { keyBy as _keyBy } from "lodash";
+import { test as testContants } from "@edulastic/constants";
 import { ShuffleChoices } from "../utils/test";
 import { getCurrentGroup } from "../../student/Login/ducks";
 import {
@@ -62,9 +63,6 @@ function* loadTest({ payload }) {
     yield put(loadQuestionsAction(_keyBy(questions, "id")));
 
     let { testItems } = test;
-    const settings = {
-      calcType: test.calcType
-    };
 
     const { testActivity: activity, questionActivities = [] } = testActivity;
     // if questions are shuffled !!!
@@ -72,7 +70,9 @@ function* loadTest({ payload }) {
       const itemsByKey = _keyBy(testItems, "_id");
       testItems = (activity.shuffledTestItems || []).map(id => itemsByKey[id]).filter(item => !!item);
     }
-
+    const settings = {
+      calcType: activity.calcType || testContants.calculatorTypes.NONE
+    };
     let shuffles;
     if (activity.shuffledTestItems) {
       [testItems, shuffles] = ShuffleChoices(testItems, questionActivities);

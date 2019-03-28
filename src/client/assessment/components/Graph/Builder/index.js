@@ -20,7 +20,8 @@ import {
   Tangent,
   Secant,
   Exponent,
-  Logarithm
+  Logarithm,
+  Polynom
 } from "./elements";
 import {
   mergeParams,
@@ -180,6 +181,9 @@ class Board {
         break;
       case CONSTANT.TOOLS.LOGARITHM:
         this.setCreatingHandler(Logarithm.onHandler());
+        break;
+      case CONSTANT.TOOLS.POLYNOM:
+        this.setCreatingHandler(Polynom.onHandler());
         break;
       case CONSTANT.TOOLS.LABEL:
         this.setCreatingHandler(Label.onHandler());
@@ -535,12 +539,13 @@ class Board {
         case 93:
         case 94:
           return Parabola.getConfig(e);
+        case 95:
+          return Polynom.getConfig(e);
         default:
           throw new Error("Unknown element type:", e.name, e.type);
       }
     });
     const flatCfg = Object.values(flatConfig(config));
-    // console.log(JSON.stringify(flatCfg, null, 2));
     return flatCfg;
   }
 
@@ -794,6 +799,9 @@ class Board {
               if (type === CONSTANT.TOOLS.LOGARITHM) {
                 return CONSTANT.TOOLS.LOGARITHM;
               }
+              if (type === CONSTANT.TOOLS.POLYNOM) {
+                return CONSTANT.TOOLS.POLYNOM;
+              }
               return type;
             })(el.type)
           ],
@@ -840,6 +848,9 @@ class Board {
               }
               if (type === CONSTANT.TOOLS.LOGARITHM) {
                 return CONSTANT.TOOLS.LOGARITHM;
+              }
+              if (type === CONSTANT.TOOLS.POLYNOM) {
+                return CONSTANT.TOOLS.POLYNOM;
               }
               return type;
             })(el.type)
@@ -1122,6 +1133,31 @@ class Board {
             })
           );
           break;
+        case 95:
+          objects.push(
+            mixProps({
+              el,
+              objectCreator: attrs => {
+                const [name, [makeFn, points], props] = Polynom.parseConfig(
+                  el.points.map(pointEl =>
+                    mixProps({
+                      el: pointEl,
+                      objectCreator: attributes => this.createPointFromConfig(pointEl, attributes)
+                    })
+                  )
+                );
+                const newElem = this.createElement(name, makeFn(points), {
+                  ...props,
+                  ...attrs
+                });
+                newElem.ancestors = Polynom.flatConfigPoints(points);
+                newElem.addParents(points);
+                handleSnap(newElem, Object.values(newElem.ancestors));
+                return newElem;
+              }
+            })
+          );
+          break;
         case window.JXG.OBJECT_TYPE_CURVE:
           objects.push(
             mixProps({
@@ -1270,7 +1306,6 @@ class Board {
               el,
               objectCreator: attrs => {
                 const [name, points, props] = Mark.parseConfig(el, this.getParameters(CONSTANT.TOOLS.MARK));
-                console.log(name, points, props, attrs);
                 return this.createElement(name, points, { ...props, ...attrs });
               }
             })
@@ -1450,6 +1485,31 @@ class Board {
             })
           );
           break;
+        case 95:
+          objects.push(
+            mixProps({
+              el,
+              objectCreator: attrs => {
+                const [name, [makeFn, points], props] = Polynom.parseConfig(
+                  el.points.map(pointEl =>
+                    mixProps({
+                      el: pointEl,
+                      objectCreator: attributes => this.createAnswerPointFromConfig(pointEl, attributes)
+                    })
+                  )
+                );
+                const newElem = this.createElement(name, makeFn(points), {
+                  ...props,
+                  ...attrs
+                });
+                newElem.ancestors = Polynom.flatConfigPoints(points);
+                newElem.addParents(points);
+                handleSnap(newElem, Object.values(newElem.ancestors));
+                return newElem;
+              }
+            })
+          );
+          break;
         case window.JXG.OBJECT_TYPE_CURVE:
           objects.push(
             mixProps({
@@ -1603,7 +1663,6 @@ class Board {
               el,
               objectCreator: attrs => {
                 const [name, points, props] = Mark.parseConfig(el, this.getParameters(CONSTANT.TOOLS.MARK));
-                console.log(name, points, props, attrs);
                 return this.createElement(name, points, { ...props, ...attrs, fixed: true });
               }
             })

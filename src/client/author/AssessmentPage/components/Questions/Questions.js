@@ -16,6 +16,7 @@ import { addQuestionAction, updateQuestionAction } from "../../../sharedDucks/qu
 import AddQuestion from "../AddQuestion/AddQuestion";
 import QuestionItem from "../QuestionItem/QuestionItem";
 import QuestionEditModal from "../QuestionEditModal/QuestionEditModal";
+import Section from "../Section/Section";
 import { QuestionsWrapper, AnswerActionsWrapper, AnswerAction } from "./styled";
 
 const defaultQuestionValue = {
@@ -97,6 +98,16 @@ const createQuestion = (type, index) => ({
   ...(type === MATH ? mathData : {})
 });
 
+const createSection = (qIndex = 0, title = "") => ({
+  id: uuid(),
+  type: "sectionLabel",
+  stimulus: "Section Label - Text",
+  width: 0,
+  height: 0,
+  title,
+  qIndex
+});
+
 const updateQuesionData = (question, data) => ({
   ...question,
   ...data
@@ -166,17 +177,39 @@ class Questions extends React.Component {
 
   handleAddQuestion = (type, index) => () => {
     const { addQuestion, list } = this.props;
+    const questions = list.filter(q => q.type !== "sectionLabel");
 
-    const lastQuestion = list[list.length - 1];
+    const lastQuestion = questions[questions.length - 1];
 
     const questionIndex = index
       ? index
       : lastQuestion && lastQuestion.qIndex
       ? lastQuestion.qIndex + 1
-      : list.length + 1;
+      : questions.length + 1;
 
     const question = createQuestion(type, questionIndex);
     addQuestion(question);
+  };
+
+  handleAddSection = () => {
+    const { addQuestion, list } = this.props;
+    const sectionIndex = list.length;
+    const section = createSection(sectionIndex);
+
+    addQuestion(section);
+  };
+
+  handleUpdateSection = (sectionId, title) => {
+    const { questionsById, updateQuestion } = this.props;
+    const section = questionsById[sectionId];
+
+    if (section) {
+      const updatedSection = {
+        ...section,
+        title
+      };
+      updateQuestion(updatedSection);
+    }
   };
 
   handleCreateOptions = (questionId, type) => ({ target: { value } }) => {
@@ -200,10 +233,22 @@ class Questions extends React.Component {
     updateQuestion(nextQuestion);
   };
 
-  handleOpenEditModal = questionIndex => () =>
+  handleOpenEditModal = questionIndex => () => {
+    const { currentEditQuestionIndex } = this.state;
+    const nextQuestion = this.questionList[questionIndex];
+    let nextIndex = questionIndex;
+
+    const isNextQuestionSection = nextQuestion && nextQuestion.type === "sectionLabel";
+
+    if (isNextQuestionSection) {
+      const offset = questionIndex > currentEditQuestionIndex ? 1 : -1;
+      nextIndex += offset;
+    }
+
     this.setState({
-      currentEditQuestionIndex: questionIndex
+      currentEditQuestionIndex: nextIndex
     });
+  };
 
   handleCloseEditModal = () =>
     this.setState({
@@ -228,7 +273,9 @@ class Questions extends React.Component {
     const { currentEditQuestionIndex } = this.state;
     const { list } = this.props;
 
-    return list[currentEditQuestionIndex];
+    const questions = list.filter(q => q.type !== "sectionLabel");
+
+    return this.questionList[currentEditQuestionIndex];
   }
 
   get editModalVisible() {
@@ -236,32 +283,40 @@ class Questions extends React.Component {
     return currentEditQuestionIndex > -1;
   }
 
+  get questionList() {
+    const { list } = this.props;
+    return sortBy(list, item => item.qIndex);
+  }
+
   render() {
     const { currentEditQuestionIndex } = this.state;
-    const { list, previewMode, viewMode, noCheck, answersById, centered } = this.props;
+    const { previewMode, viewMode, noCheck, answersById, centered } = this.props;
 
-    const sortedQuestions = sortBy(list, item => item.qIndex);
     const review = viewMode === "review";
 
     return (
       <>
         <QuestionsWrapper centered={centered}>
           <div>
-            {sortedQuestions.map((question, i) => (
-              <QuestionItem
-                key={question.id}
-                index={i}
-                data={question}
-                onCreateOptions={this.handleCreateOptions}
-                onOpenEdit={this.handleOpenEditModal(i)}
-                previewMode={previewMode}
-                viewMode={viewMode}
-                answer={answersById[question.id]}
-                centered={centered}
-              />
-            ))}
+            {this.questionList.map((question, i) =>
+              question.type === "sectionLabel" ? (
+                <Section section={question} handleUpdate={this.handleUpdateSection} />
+              ) : (
+                <QuestionItem
+                  key={question.id}
+                  index={i}
+                  data={question}
+                  onCreateOptions={this.handleCreateOptions}
+                  onOpenEdit={this.handleOpenEditModal(i)}
+                  previewMode={previewMode}
+                  viewMode={viewMode}
+                  answer={answersById[question.id]}
+                  centered={centered}
+                />
+              )
+            )}
           </div>
-          {!review && <AddQuestion onAdd={this.handleAddQuestion} />}
+          {!review && <AddQuestion onAddQuestion={this.handleAddQuestion} onAddSection={this.handleAddSection} />}
           {review && !noCheck && (
             <AnswerActionsWrapper>
               <AnswerAction active={previewMode === "check"} onClick={this.handleCheckAnswer}>

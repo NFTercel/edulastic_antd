@@ -14,6 +14,7 @@ export { default as NumberlinePoint } from "./NumberlinePoint";
 export { default as NumberlineVector } from "./NumberlineVector";
 export { default as Point } from "./Point";
 export { default as Polygon } from "./Polygon";
+export { default as Polynom } from "./Polynom";
 export { default as Parabola } from "./Parabola";
 export { default as Ray } from "./Ray";
 export { default as Secant } from "./Secant";

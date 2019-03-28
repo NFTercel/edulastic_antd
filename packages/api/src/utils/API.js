@@ -2,6 +2,11 @@ import axios from "axios";
 import config from "../config";
 import Storage from "./Storage";
 
+const getCurrentPath = () => {
+  const location = window.location;
+  return `${location.path}${location.search}${location.hash}`;
+};
+
 export default class API {
   constructor(baseURL = config.api) {
     this.baseURL = baseURL;
@@ -25,6 +30,7 @@ export default class API {
       data => {
         if (data && data.response && data.response.status) {
           if (data.response.status === 401) {
+            window.localStorage.setItem("loginRedirectUrl", getCurrentPath());
             window.location.href = "/login";
           }
         }

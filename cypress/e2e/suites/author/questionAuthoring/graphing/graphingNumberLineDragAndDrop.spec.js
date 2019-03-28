@@ -229,16 +229,16 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Number line wi
     it("Edit ticks", () => {
       question
         .getTicksDistance()
-        .type("{uparrow}")
-        .should("have.value", "2")
-        .blur();
+        .clear()
+        .type("2")
+        .should("have.value", "2");
       question.getVisibleTickLabelsOnBoard().should("have.length", 6);
 
       question
         .getTicksDistance()
-        .type("{downarrow}")
-        .should("have.value", "1")
-        .blur();
+        .clear()
+        .type("1")
+        .should("have.value", "1");
       question.getVisibleTickLabelsOnBoard().should("have.length", 10);
 
       // todo: add tests for:

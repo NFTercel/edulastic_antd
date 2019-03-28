@@ -1,19 +1,31 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import { questionType } from "@edulastic/constants";
 import { FlexContainer } from "@edulastic/common";
-import { getYAxis, getPadding } from "../helpers";
+
+import { getYAxis, getPadding, getStep } from "../helpers";
 
 const withGrid = WrappedComponent => {
   const hocComponent = props => {
     const {
+      data,
       name,
-      ui_style: { width, margin, yAxisCount, stepSize, xAxisLabel, yAxisLabel }
+      ui_style: { width, margin, yAxisCount, stepSize, xAxisLabel, yAxisLabel, chart_type }
     } = props;
 
     const yAxis = getYAxis(yAxisCount, stepSize);
 
     const padding = getPadding(yAxis);
+
+    const calculateWidth = () => {
+      switch (chart_type) {
+        case questionType.BAR_CHART:
+          return width + getStep(data, width, margin, padding);
+        default:
+          return width;
+      }
+    };
 
     return (
       <FlexContainer>
@@ -21,11 +33,14 @@ const withGrid = WrappedComponent => {
           {yAxisLabel}
         </FlexContainer>
         <div>
-          <FlexContainer style={{ width, marginBottom: 20 }} justifyContent="center">
+          <FlexContainer style={{ width: calculateWidth(), marginBottom: 20 }} justifyContent="center">
             {name}
           </FlexContainer>
           <WrappedComponent {...props} />
-          <FlexContainer style={{ width, marginTop: 10, marginLeft: padding / 2 }} justifyContent="center">
+          <FlexContainer
+            style={{ width: calculateWidth(), marginTop: 10, marginLeft: padding / 2 }}
+            justifyContent="center"
+          >
             {xAxisLabel}
           </FlexContainer>
         </div>

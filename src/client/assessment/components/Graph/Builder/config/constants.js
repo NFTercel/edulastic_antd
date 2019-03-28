@@ -12,6 +12,7 @@ export const TOOLS = {
   SECANT: "secant",
   EXPONENT: "exponent",
   LOGARITHM: "logarithm",
+  POLYNOM: "polynom",
   POLYGON: "polygon",
   PARABOLA: "parabola",
   HYPERBOLA: "hyperbola",

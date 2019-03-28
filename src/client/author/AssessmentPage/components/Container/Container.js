@@ -54,7 +54,7 @@ const buttons = [
 ];
 
 const createWidget = ({ id, type, title }) => ({
-  widgetType: "question",
+  widgetType: type === "sectionLabel" ? "resource" : "question",
   type,
   title,
   reference: id,
@@ -99,21 +99,32 @@ class Container extends React.Component {
   };
 
   handleSave = (status = "draft") => () => {
-    const { questions, assessment, currentTestItem, updateItemDetailById, updateTest } = this.props;
+    const {
+      questions: assessmentQuestions,
+      assessment,
+      currentTestItem,
+      updateItemDetailById,
+      updateTest
+    } = this.props;
     const [testItem] = assessment.testItems;
     const testItemId = typeof testItem === "object" ? testItem._id : testItem;
 
+    const resources = assessmentQuestions.filter(q => q.type === "sectionLabel");
+    const questions = assessmentQuestions.filter(q => q.type !== "sectionLabel");
+
     const updatedTestItem = {
       ...currentTestItem,
+      authors: undefined,
       data: {
         ...currentTestItem.data,
-        questions
+        questions,
+        resources
       },
       rows: [
         {
           tabs: [],
           dimension: "100%",
-          widgets: questions.map(createWidget)
+          widgets: assessmentQuestions.map(createWidget)
         }
       ]
     };

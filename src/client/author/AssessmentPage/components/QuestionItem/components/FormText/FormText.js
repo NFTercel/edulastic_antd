@@ -35,12 +35,14 @@ export default class FormText extends React.Component {
 
   renderView = () => {
     const {
-      question: {
-        validation: {
-          valid_response: { value }
-        }
-      }
+      question: { validation }
     } = this.props;
+
+    if (!validation) return this.renderForm();
+
+    const {
+      valid_response: { value }
+    } = validation;
 
     if (!value || !value.length) return this.renderAnswerCreateForm();
 

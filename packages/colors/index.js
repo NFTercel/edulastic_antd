@@ -17,6 +17,8 @@ export const secondaryTextColor = "#434b5d";
 export const greyDarken = "#979BA1";
 export const titleColor = "#304050";
 
+export const whiteSmoke = "#f5f5f5";
+
 export const separatorColor = "#d6d0d0";
 export const dashBorderColor = "#e6e6e6";
 export const dashBorderColorOpacity = "#e6e6e633";

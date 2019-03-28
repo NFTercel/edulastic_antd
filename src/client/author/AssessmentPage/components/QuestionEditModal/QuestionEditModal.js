@@ -74,13 +74,13 @@ export default class QuestionEditModal extends React.Component {
       return null;
     }
 
-    const { type } = question;
+    const { type, qIndex } = question;
 
     return (
       <Modal open={visible} onClose={onClose} styles={modalStyles} center>
         <ModalWrapper>
           <ModalHeader>
-            <QuestionNumber>{index + 1}</QuestionNumber>
+            <QuestionNumber>{qIndex || index + 1}</QuestionNumber>
             <ModalTitle>{questionTypeTitles[type]}</ModalTitle>
           </ModalHeader>
           {this.renderForm(type)}

@@ -2,34 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { load } from "loaderjs";
 
-const getExtension = url => {
-  const parts = url.split(".");
-  return parts[parts.length - 1];
-};
-
-/**
- * cleaning up during unmounting
- * @param {string|string[]} resources
- */
-const cleanupResources = resources => {
-  const resourcesArray = Array.isArray(resources) ? resources : [resources];
-  for (const res of resourcesArray) {
-    let entries = null;
-    if (getExtension(res) === "js") {
-      entries = document.body.querySelectorAll(`script[src="${res}"]`).entries();
-    } else if (getExtension(res) === "css") {
-      entries = document.head.querySelectorAll(`link[href="${res}"]`).entries();
-    }
-    if (!entries) {
-      continue;
-    }
-    for (const [, el] of entries) {
-      el.remove();
-    }
-  }
-};
-
 const NAMESPACE = "edulaticV2LoadedResources";
+window[NAMESPACE] = {};
 
 /**
  *
@@ -37,22 +11,44 @@ const NAMESPACE = "edulaticV2LoadedResources";
  */
 const handleLoadedResources = resources => {
   const allResources = Array.isArray(resources) ? resources : [resources];
-  window[NAMESPACE] = window[NAMESPACE].concat();
+  for (let r of resources) {
+    window[NAMESPACE][r] = true;
+  }
 };
 
 /**
  *
  * @param {string|string[]} resources
  */
-export const useResources = resources => {
+const getResourcesNotLoaded = resources => {
+  const allResources = Array.isArray(resources) ? resources : [resources];
+  return allResources.filter(x => !window[NAMESPACE][x]);
+};
+
+/**
+ *
+ * @param {string|string[]} resources
+ * @param {Function=} onLoaded
+ */
+export const useResources = (resources, onLoaded) => {
   const [loaded, setLoaded] = useState(false);
+
   useEffect(() => {
-    load(resources).then(() => {
+    const resourcesToLoad = getResourcesNotLoaded(resources);
+    if (resourcesToLoad.length > 0) {
+      load(resources).then(() => {
+        setLoaded(true);
+        handleLoadedResources(resources);
+        if (onLoaded) {
+          onLoaded();
+        }
+      });
+    } else {
       setLoaded(true);
-    });
-    return () => {
-      cleanupResources(resources);
-    };
+      if (onLoaded) {
+        onLoaded();
+      }
+    }
   }, []);
   return loaded;
 };
@@ -70,8 +66,8 @@ export function WithResourcesHOC({ resources, fallBack }) {
   };
 }
 
-export function WithResources({ resources, fallBack, children }) {
-  const loaded = useResources(resources);
+export function WithResources({ resources, fallBack, children, onLoaded }) {
+  const loaded = useResources(resources, onLoaded);
   if (!loaded) {
     return fallBack;
   }

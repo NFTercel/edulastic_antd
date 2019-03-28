@@ -46,6 +46,7 @@ import { Chart } from "../widgets/Charts";
 const getQuestion = type => {
   switch (type) {
     case questionType.LINE_CHART:
+    case questionType.BAR_CHART:
       return Chart;
     case questionType.DRAWING:
       return Drawing;

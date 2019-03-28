@@ -32,8 +32,11 @@ function* login({ payload }) {
     localStorage.setItem("access_token", result.token);
     const user = pick(result, ["_id", "firstName", "lastName", "email", "role", "orgData"]);
     yield put(setUserAction(user));
-
-    if (user.role === roleuser.STUDENT) yield put(push("/home/assignments"));
+    const redirectUrl = localStorage.getItem("loginRedirectUrl");
+    if (redirectUrl) {
+      localStorage.removeItem("loginRedirectUrl");
+      yield put(push(redirectUrl));
+    } else if (user.role === roleuser.STUDENT) yield put(push("/home/assignments"));
     else if (user.role === roleuser.ADMIN) yield put(push("/author/items"));
     else if (user.role === roleuser.TEACHER) yield put(push("/author/items"));
   } catch (err) {
