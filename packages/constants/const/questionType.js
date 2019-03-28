@@ -23,6 +23,7 @@ const SHADING = "shading";
 const HIGHLIGHT_IMAGE = "highlightImage";
 const DRAWING = "drawing";
 const LINE_CHART = "line";
+const BAR_CHART = "bar";
 
 const selectsData = [
   { value: "", text: "All Types" },
@@ -49,7 +50,8 @@ const selectsData = [
   { value: HOTSPOT, text: "Hotspot" },
   { value: SHADING, text: "Shading" },
   { value: HIGHLIGHT_IMAGE, text: "Highlight Image" },
-  { value: LINE_CHART, text: "Line Chart" }
+  { value: LINE_CHART, text: "Line Chart" },
+  { value: BAR_CHART, text: "Bar Chart" }
 ];
 
 module.exports = {
@@ -78,5 +80,6 @@ module.exports = {
   HOTSPOT,
   SHADING,
   HIGHLIGHT_IMAGE,
+  BAR_CHART,
   selectsData
 };

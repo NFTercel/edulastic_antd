@@ -74,6 +74,91 @@ export const getCards = onSelectQuestionType => {
       type: "charts",
       cardImage: CMSortList,
       data: {
+        title: "Bar chart",
+        firstMount: true,
+        type: "bar",
+        stimulus: "Sort the sine and cosine values from lower to higher.",
+        chart_data: {
+          data: [
+            {
+              x: "Bar 1",
+              y: 0
+            },
+            {
+              x: "Bar 2",
+              y: 0
+            },
+            {
+              x: "Bar 3",
+              y: 0
+            },
+            {
+              x: "Bar 4",
+              y: 0
+            },
+            {
+              x: "Bar 5",
+              y: 0
+            },
+            {
+              x: "Bar 6",
+              y: 0
+            }
+          ],
+          name: "Chart title"
+        },
+        ui_style: {
+          xAxisLabel: "X Axis Label",
+          yAxisLabel: "Y Axis Label",
+          yAxisCount: 70,
+          width: 640,
+          height: 440,
+          margin: 40,
+          stepSize: 5,
+          chart_type: "bar"
+        },
+        validation: {
+          scoring_type: EXACT_MATCH,
+          valid_response: {
+            score: 1,
+            value: [
+              {
+                x: "Bar 1",
+                y: 0
+              },
+              {
+                x: "Bar 2",
+                y: 0
+              },
+              {
+                x: "Bar 3",
+                y: 0
+              },
+              {
+                x: "Bar 4",
+                y: 0
+              },
+              {
+                x: "Bar 5",
+                y: 0
+              },
+              {
+                x: "Bar 6",
+                y: 0
+              }
+            ]
+          },
+          alt_responses: []
+        },
+        x_axis_label: "X Axis",
+        y_axis_label: "Y Axis"
+      },
+      onSelectQuestionType
+    },
+    {
+      type: "charts",
+      cardImage: CMSortList,
+      data: {
         title: "Line chart",
         firstMount: true,
         type: "line",

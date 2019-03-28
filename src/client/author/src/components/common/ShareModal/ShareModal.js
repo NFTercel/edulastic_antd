@@ -7,8 +7,8 @@ import styled from "styled-components";
 import { Radio, Spin, Button, Row, Col, Select, message, Typography } from "antd";
 
 import { FlexContainer } from "@edulastic/common";
-import { mainBlueColor } from "@edulastic/colors";
-import { IconClose, IconCopy } from "@edulastic/icons";
+import { mainBlueColor, whiteSmoke, greenDark, fadedGrey, white } from "@edulastic/colors";
+import { IconClose, IconShare } from "@edulastic/icons";
 
 import { getTestIdSelector, sendTestShareAction } from "../../../../TestPage/ducks";
 
@@ -18,6 +18,9 @@ import {
   fetchUsersListAction,
   updateUsersListAction
 } from "../../../../sharedDucks/userDetails";
+
+const { Paragraph } = Typography;
+
 const permissions = {
   EDIT: "Can Edit, Add/Remove Items",
   VIEW: "Can View & Duplicate"
@@ -56,7 +59,6 @@ class ShareModal extends React.Component {
     this.setState({ shareType: e.target.value });
     if (e.target.value !== sharedKeysObj.INDIVIDUAL) {
       this.setState({
-        peopleArray: [],
         permission: "VIEW"
       });
     }
@@ -71,23 +73,6 @@ class ShareModal extends React.Component {
 
   permissionHandler = value => {
     this.setState({ permission: value });
-  };
-
-  doneHandler = () => {
-    const { peopleArray, shareType, permission } = this.state;
-    const { shareTest, testId } = this.props;
-    let peoplesObject = {};
-    const shapePeopleArray = peopleArray.map(item => ({
-      userName: item.userName,
-      _userId: item._userId
-    }));
-    if (shareType === sharedKeysObj.INDIVIDUAL) peoplesObject = { sharedWithUsers: shapePeopleArray };
-    const data = {
-      ...peoplesObject,
-      shareType,
-      viewType: permission
-    };
-    shareTest({ data, testId });
   };
 
   handleSearch(value) {
@@ -127,13 +112,26 @@ class ShareModal extends React.Component {
     if (shareType === sharedKeysObj.INDIVIDUAL) {
       if (Object.keys(currentUser).length === 0) {
         message.error("Please select any user which are not in the shared list");
+        return;
       } else if (isExisting.length > 0) {
         message.error("This is an existing user");
+        return;
       } else {
         const { _userId, userName } = currentUser;
         person = { sharedWithUsers: { _userId, userName } };
         this.setState(prevState => ({
           peopleArray: [...prevState.peopleArray, currentUser],
+          currentUser: {}
+        }));
+      }
+    } else {
+      const isTypeExisting = peopleArray.filter(item => item.userName === shareTypes[shareType]).length > 0;
+      if (isTypeExisting) {
+        message.error(`You have shared with ${shareTypes[shareType]} try other option`);
+        return;
+      } else {
+        this.setState(prevState => ({
+          peopleArray: [...prevState.peopleArray, { userName: shareTypes[shareType], email: null, permission: "VIEW" }],
           currentUser: {}
         }));
       }
@@ -151,15 +149,17 @@ class ShareModal extends React.Component {
     const { isVisible, onClose, userList = [], fetching } = this.props;
 
     return (
-      <Modal open={isVisible} onClose={onClose} center>
+      <Modal open={isVisible} onClose={onClose} center styles={{ modal: { borderRadius: 5 } }}>
         <ModalContainer>
           <h2 style={{ fontWeight: "bold", fontSize: 20 }}>Share with others</h2>
           <ShareBlock>
-            <span style={{ fontSize: 13, fontWeight: "600" }}>Share</span>
-            <FlexContainer style={{ cursor: "pointer" }}>
-              <ShareTitle>
-                <Typography.Paragraph copyable>https://edulastic.com/assessment/76y8gyug-b8ug-8</Typography.Paragraph>
-              </ShareTitle>
+            <ShareLabel>Share</ShareLabel>
+            <FlexContainer>
+              <ShareTitle>https://edulastic.com/assessment/76y8gyug-b8ug-8</ShareTitle>
+              <CopyWrapper>
+                <TitleCopy copyable={{ text: "https://edulastic.com/assessment/76y8gyug-b8ug-8" }} />
+                <span>COPY</span>
+              </CopyWrapper>
             </FlexContainer>
             {peopleArray.length !== 0 && (
               <ShareList>
@@ -174,7 +174,7 @@ class ShareModal extends React.Component {
                   >
                     <Col span={12}>
                       {data.userName && data.userName !== "null" ? data.userName : ""}
-                      {`, ${data.email && data.email !== "null" ? data.email : ""}`}
+                      {` ${data.email && data.email !== "null" ? `, ${data.email}` : ""}`}
                     </Col>
                     <Col span={11}>
                       <span>{data.permission === "EDIT" && "Can Edit, Add/Remove Items"}</span>
@@ -191,8 +191,8 @@ class ShareModal extends React.Component {
             )}
           </ShareBlock>
           <PeopleBlock>
-            <span style={{ fontSize: 13, fontWeight: "600" }}>People</span>
-            <div style={{ margin: "10px 0px" }}>
+            <PeopleLabel>People</PeopleLabel>
+            <RadioBtnWrapper>
               <Radio.Group value={shareType} onChange={e => this.radioHandler(e)}>
                 {shareTypeKeys.map(item => (
                   <Radio value={item} key={item}>
@@ -200,7 +200,7 @@ class ShareModal extends React.Component {
                   </Radio>
                 ))}
               </Radio.Group>
-            </div>
+            </RadioBtnWrapper>
             <FlexContainer style={{ marginTop: 5 }}>
               <Address
                 showSearch
@@ -237,7 +237,7 @@ class ShareModal extends React.Component {
                 ))}
               </Select>
               <ShareButton type="primary" onClick={this.handleShare}>
-                SHARE
+                <IconShare color={white} /> SHARE
               </ShareButton>
             </FlexContainer>
             <FlexContainer flex={1} justifyContent="center" style={{ marginTop: 20 }}>
@@ -280,8 +280,8 @@ const enhance = compose(
 export default enhance(ShareModal);
 
 const ModalContainer = styled.div`
-  width: 600px;
-
+  width: 100%;
+  padding: 20px 30px;
   .anticon-down {
     svg {
       fill: ${mainBlueColor};
@@ -294,35 +294,33 @@ const ShareBlock = styled.div`
   flex-direction: column;
   margin-top: 40px;
   padding-bottom: 25px;
-  border-bottom: 1px solid #d9d6d6;
+  border-bottom: 1px solid ${fadedGrey};
 `;
 
+const ShareLabel = styled.span`
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 10px;
+`;
 const ShareTitle = styled.div`
-  height: 35px;
-  background-color: #f5f5f5;
-  margin-top: 10px;
+  background-color: ${whiteSmoke};
   border-radius: 4px;
-  padding-left: 20px;
   display: flex;
-  align-items: center;
-  flex: 1;
-
-  span {
-    font-size: 13px;
-    font-weight: 600;
-  }
+  padding: 10px;
+  border: 1px solid ${fadedGrey};
+  width: 100%;
 `;
 
 const ShareList = styled.div`
-  margin-top: 20px;
   padding: 10px 20px;
-  background-color: #f5f5f5;
   border-radius: 4px;
   font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
   max-height: 110px;
   overflow: auto;
+  width: 88%;
+  margin-top: 10px;
 `;
 
 const PeopleBlock = styled.div`
@@ -350,9 +348,12 @@ const ShareButton = styled(Button)`
   width: 160px;
   background: ${mainBlueColor};
   border: none;
+  display: flex;
+  align-items: center;
   span {
     font-size: 12px;
     font-weight: 600;
+    margin-left: 30px;
   }
 `;
 
@@ -366,30 +367,38 @@ const DoneButton = styled(Button)`
     font-weight: 600;
   }
 `;
-
+const RadioBtnWrapper = styled.div`
+  font-weight: 600;
+  margin: 10px 0px;
+`;
+const PeopleLabel = styled.span`
+  font-size: 13;
+  font-weight: 600;
+`;
 const CloseIcon = styled(IconClose)`
   width: 11px;
   height: 16px;
   margin-top: 4px;
-  fill: #4aac8b;
+  fill: ${greenDark};
 `;
 
-const TitleCopy = styled.div`
-  font-size: 11px;
-  font-weight: 600;
-  height: 30px;
-  margin-top: 8px;
-  color: ${mainBlueColor};
+const CopyWrapper = styled.div`
   display: flex;
+  color: ${mainBlueColor};
+  font-weight: 600;
   align-items: center;
+  font-size: 12px;
 `;
-
-const CopyIcon = styled(IconCopy)`
-  width: 16px;
-  height: 16px;
-  fill: ${mainBlueColor};
-  margin-right: 8px;
-  &:hover {
-    fill: ${mainBlueColor};
+const TitleCopy = styled(Paragraph)`
+  &.ant-typography {
+    margin: 0;
+  }
+  button {
+    margin-right: 10px;
+  }
+  svg {
+    width: 20px;
+    height: 20px;
+    color: ${mainBlueColor};
   }
 `;
