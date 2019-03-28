@@ -65,14 +65,15 @@ import {
 } from "./styled";
 
 import { Button } from "antd";
+import { Link } from "react-router-dom";
 
 /**
  * right side button group
  * @param {{redirect: Function }} param0
  */
-const StudentActions = ({ redirect }) => (
+const StudentActions = ({ redirect, printRedirect }) => (
   <Button.Group>
-    <Button>Print</Button>
+    <Button onClick={printRedirect}>Print</Button>
     <Button onClick={redirect}>redirect</Button>
     <Button>more</Button>
   </Button.Group>
@@ -201,6 +202,7 @@ class ClassBoard extends Component {
       testActivity,
       creating,
       match,
+      history,
       classResponse,
       additionalData = { classes: [] },
       t,
@@ -208,7 +210,8 @@ class ClassBoard extends Component {
       studentSelect,
       studentUnselect,
       setSelected,
-      allStudents
+      allStudents,
+      additionalData: { testId } = {}
     } = this.props;
     const { selectedTab, flag, selectedQuestion, selectAll, isCollapsed } = this.state;
 
@@ -271,7 +274,10 @@ class ClassBoard extends Component {
               <StyledCheckbox checked={this.state.selectAll} onChange={this.onSelectAllChange}>
                 {selectAll ? "UNSELECT ALL" : "SELECT ALL"}
               </StyledCheckbox>
-              <StudentActions redirect={() => this.setState({ redirectPopup: true })} />
+              <StudentActions
+                redirect={() => this.setState({ redirectPopup: true })}
+                printRedirect={() => history.push(`/author/printpreview/` + testId)}
+              />
             </StyledFlexContainer>
             {flag ? (
               <DisneyCardContainer
