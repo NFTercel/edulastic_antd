@@ -29,9 +29,6 @@ import {
   getAssignmentClassIdSelector
 } from "../../../ClassBoard/ducks";
 
-const PRINT_PAGE_WIDTH = 210;
-const PRINT_PAGE_HEIGHT = 295;
-
 class PrintPreview extends Component {
   constructor(props) {
     super(props);
@@ -68,13 +65,11 @@ class PrintPreview extends Component {
 
   render() {
     const { testActivity, classResponse, classStudentResponse, additionalData } = this.props;
-    const classname = additionalData ? additionalData.className : "";
-    const classnames = [{ name: classname }];
     const testName = additionalData ? additionalData.testName : "";
     const { assignmentIdClassId } = this.props;
 
     const nDueDate = additionalData ? additionalData.endDate : "";
-    const dueDate = moment(dueDate).format("MMMM DD, YYYY | hh:mm A");
+    const dueDate = moment(nDueDate).format("MMMM DD, YYYY | hh:mm A");
 
     let renderClassStudentsResponse = [];
     if (classStudentResponse && Object.keys(classStudentResponse).length > 0) {

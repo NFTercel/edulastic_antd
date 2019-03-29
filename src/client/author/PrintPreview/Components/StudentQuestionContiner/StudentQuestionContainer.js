@@ -45,9 +45,7 @@ class StudentQuestionContainer extends Component {
 
     let assignmentId = testActivity ? testActivity.assignmentId : "";
     let groupId = testActivity ? testActivity.groupId : "";
-    const testActivityId = testActivity ? testActivity._id : "";
     const userId = testActivity ? testActivity.userId : "";
-    const classassignment = classResponse ? classResponse.title : "";
     const classname = additionalData ? additionalData.className : "";
     const currentStudent = studentItems.find(({ studentId }) => studentId === userId);
     const studentName = currentStudent ? currentStudent.studentName : "";
