@@ -9,7 +9,7 @@ export const StudentInformation = styled.div`
 `;
 
 export const InfoItem = styled.p`
-  font-size: 1.5em;
+  font-size: 0.9em;
   font-weight: bold;
 `;
 

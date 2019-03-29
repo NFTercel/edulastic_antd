@@ -4,11 +4,20 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import { get } from "lodash";
+import * as moment from "moment";
 import StudentQuestionContainer from "../StudentQuestionContiner/StudentQuestionContainer";
 const html2canvas = require("html2canvas");
 import jsPDF from "jspdf";
 
-import { PrintPreviewBack, PrintPreviewContainer, StyledTitle, Color } from "./styled";
+import {
+  PrintPreviewBack,
+  PrintPreviewContainer,
+  PagePrinterHeader,
+  TestInfo,
+  InfoItem,
+  StyledTitle,
+  Color
+} from "./styled";
 
 // actions
 import { receiveClassStudentResponseAction, receiveClassResponseAction } from "../../../src/actions/classBoard";
@@ -56,45 +65,11 @@ class PrintPreview extends Component {
 
     loadClassStudentResponse({ selectedActivities, groupId: classId });
     loadClassResponses({ testId });
-
-    // setTimeout(() => {
-    //   const textAreas = ReactDOM.findDOMNode(this.printpreviewRef).getElementsByTagName("textarea");
-    //   for (let i = 0; i < textAreas.length; i++) {
-    //     let value = textAreas[i].value;
-    //     let parent = textAreas[i].parentNode;
-    //     $(parent).append("<div>" + value + "</div>");
-    //   }
-
-    //   let printPreviewInput = ReactDOM.findDOMNode(this.printpreviewRef);
-    //   html2canvas(printPreviewInput).then(canvas => {
-    //     const imgData = canvas.toDataURL("image/jpeg");
-
-    //     let imgWidth = 210;
-    //     let pageHeight = 295;
-    //     let imgHeight = (canvas.height * imgWidth) / canvas.width;
-    //     let heightLeft = imgHeight;
-
-    //     let doc = new jsPDF();
-    //     let position = 0;
-    //     doc.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
-    //     heightLeft -= pageHeight;
-
-    //     while (heightLeft >= 0) {
-    //       position = heightLeft - imgHeight;
-    //       doc.addPage();
-    //       doc.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-    //       heightLeft -= pageHeight;
-    //     }
-
-    //     doc.save(testId + ".pdf");
-    //   });
-    // }, 5000);
   }
 
   render() {
     const { testActivity, classResponse, classStudentResponse, additionalData } = this.props;
 
-    // const testActivity = classStudentResponse ? classStudentResponse.testActivity : null;
     // const questionActivities = classStudentResponse ? classStudentResponse.questionActivities : null;
     // const showClassQuestions = !!testActivity;
 
@@ -117,11 +92,15 @@ class PrintPreview extends Component {
     // const testActivityId = testActivity ? testActivity._id : "";
     // const userId = testActivity ? testActivity.userId : "";
     // const classassignment = classResponse ? classResponse.title : "";
-    // const classname = additionalData ? additionalData.className : "";
-    // const classnames = [{ name: classname }];
+    const classname = additionalData ? additionalData.className : "";
+    const classnames = [{ name: classname }];
     // const currentStudent = studentItems.find(({ studentId }) => studentId === userId);
     // const studentName = currentStudent ? currentStudent.studentName : "";
+    const testName = additionalData ? additionalData.testName : "";
     const { assignmentIdClassId } = this.props;
+
+    const nDueDate = additionalData ? additionalData.endDate : "";
+    const dueDate = moment(dueDate).format("MMMM DD, YYYY | hh:mm A");
 
     let renderClassStudentsResponse = [];
     if (classStudentResponse && Object.keys(classStudentResponse).length > 0) {
@@ -148,6 +127,18 @@ class PrintPreview extends Component {
             </b>
             lastic
           </StyledTitle>
+          <PagePrinterHeader>
+            <TestInfo>
+              <InfoItem>
+                <Color>TestName : </Color>
+                {testName}
+              </InfoItem>
+              <InfoItem>
+                <Color>Due : </Color>
+                {dueDate}
+              </InfoItem>
+            </TestInfo>
+          </PagePrinterHeader>
           {renderClassStudentsResponse}
           {/* <StyledTitle>Edulastic</StyledTitle>
           <StudentQuestionHeader>

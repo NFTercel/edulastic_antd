@@ -45,6 +45,19 @@ export const StyledTitle = styled.p`
   margin: 0;
 `;
 
+export const PagePrinterHeader = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  padding: 15px 25px 15px 25px;
+`;
+
+export const TestInfo = styled.div``;
+
+export const InfoItem = styled.p`
+  font-size: 1em;
+  font-weight: bold;
+`;
+
 export const Color = styled.span`
   color: #58b294;
 `;
