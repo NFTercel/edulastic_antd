@@ -1,33 +1,74 @@
-import { Pagination, Card } from "antd";
+import { Pagination, Card, Col } from "antd";
 import styled from "styled-components";
+import { FlexContainer } from "@edulastic/common";
+import { mobileWidth } from "@edulastic/colors";
+
 import { themes } from "../../../../student/themes";
 
 const classBoardTheme = themes.default.classboard;
 
-export const StyledCardContiner = styled.div`
-  margin: 0 auto;
+export const StyledFlexContainer = styled(FlexContainer)`
+  width: 100%;
+  margin: 0px auto;
+`;
+
+export const StyledCardContiner = styled(FlexContainer)`
+  margin: auto;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
   width: 95%;
+  justify-content: flex-start;
 `;
 
 export const DisneyCard = styled.div``;
 
-export const MainDiv = styled.div``;
+export const StyledPagination = styled(Pagination)`
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px 0;
+`;
 
-export const PerfomanceSection = styled.div`
+export const MainDiv = styled.div`
   display: flex;
   justify-content: space-between;
-  max-width: 185px;
+`;
+
+export const MainDivLeft = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  .ant-card {
+    margin-right: 4%;
+  }
+`;
+
+export const PerfomanceSection = styled(StyledFlexContainer)`
+  align-items: baseline;
+  justify-content: space-between;
 `;
 
 export const StyledCard = styled(Card)`
-  margin: auto;
-  width: 22%;
+  margin-top: 20px;
+  margin-right: 20px;
   border-radius: 10px;
-  box-shadow: 3px 2px 7px lightgray;
-  display: inline-block;
-  margin: 0 32px 32px 0;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
+  max-width: calc((100% - 80px) / 4);
+  min-width: calc((100% - 80px) / 4);
   .ant-card-body {
     padding: 19px 22px;
+  }
+  @media only screen and (max-width: 1440px) {
+    max-width: calc((100% - 80px) / 3);
+    min-width: calc((100% - 80px) / 3);
+  }
+  @media only screen and (max-width: 1024px) {
+    max-width: calc((100% - 80px) / 2);
+    min-width: calc((100% - 80px) / 2);
+  }
+  @media only screen and (max-width: ${mobileWidth}) {
+    max-width: 100%;
+  }
+  &:last-child {
+    margin-right: 20px;
   }
 `;
 
@@ -37,50 +78,47 @@ export const Space = styled.div`
 `;
 
 export const PagInfo = styled.span`
-  font-weight: bold;
-  font-size: 10px;
-  display: block;
-  color: ${classBoardTheme.CardPageColor};
-  text-align: center;
-  padding-top: 20px;
+  font-weight: 600;
+  font-size: 12px;
+  color: #1774f0;
 `;
 
 export const GSpan = styled.span`
   font-size: 10px;
 `;
 
-export const PaginationInfoF = styled.div`
-  display: flex;
+export const PaginationInfoF = styled(StyledFlexContainer)`
+  flex: 100%;
+  align-items: center;
+  margin-bottom: 28px;
 `;
 
-export const PaginationInfoS = styled.div`
-  display: inline-block;
-  margin-left: -5px;
-  margin-top: 25px;
-  width: 100%;
+export const PaginationInfoS = styled(StyledFlexContainer)`
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 15px;
 `;
 
-export const PaginationInfoT = styled.div`
-  display: inline-block;
-  margin-left: -5px;
-  margin-top: 25px;
-  width: 100%;
+export const PaginationInfoT = styled(StyledFlexContainer)`
+  flex-wrap: wrap;
 `;
 
 export const CircularDiv = styled.div`
   width: 42px;
   height: 42px;
-  border: 2px solid #5cb497;
-  display: block;
   border-radius: 50%;
-  text-align: center;
-  color: ${classBoardTheme.CardCircularColor};
+  color: #1774f0;
   font-weight: 600;
   line-height: 38px;
+  background-color: #e7f1fd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
-export const StyledDiv = styled.div`
-  display: inline-block;
+export const StyledFlexDiv = styled.div`
+  display: flex;
+  align-items: baseline;
 `;
 
 export const StyledName = styled.div`
@@ -96,50 +134,31 @@ export const StyledName = styled.div`
 //   margin-left: auto;
 // `;
 
-export const SquareColorDivGreen = styled.div`
+const SquareColorDiv = styled.div`
   display: inline-block;
   width: 23px;
-  height: 23px;
-  border-radius: 3px;
-  background-color: ${classBoardTheme.CardSqurebgColor};
-  margin: 10px 8px 0px 0px;
+  height: 8px;
+  margin: 1px 1px 0px 0px;
 `;
 
-export const SquareColorDivGray = styled.div`
-  display: inline-block;
-  width: 23px;
-  height: 23px;
-  border-radius: 3px;
+export const SquareColorDivGreen = styled(SquareColorDiv)`
+  background-color: #5eb500;
+`;
+
+export const SquareColorDivGray = styled(SquareColorDiv)`
   background-color: ${classBoardTheme.CardColor};
-  margin: 10px 8px 0px 0px;
 `;
 
-export const SquareColorDisabled = styled.div`
-  display: inline-block;
-  width: 23px;
-  height: 23px;
-  border-radius: 3px;
+export const SquareColorDisabled = styled(SquareColorDiv)`
   background-color: ${classBoardTheme.CardColor};
-  opacity: 0.6;
-  margin: 10px 8px 0px 0px;
 `;
 
-export const SquareColorDivPink = styled.div`
-  display: inline-block;
-  width: 23px;
-  height: 23px;
-  border-radius: 3px;
-  background-color: ${classBoardTheme.CardSqare};
-  margin: 10px 8px 0px 0px;
+export const SquareColorDivPink = styled(SquareColorDiv)`
+  background-color: #f35f5f;
 `;
 
-export const SquareColorDivYellow = styled.div`
-  display: inline-block;
-  width: 23px;
-  height: 23px;
-  border-radius: 3px;
-  background-color: ${classBoardTheme.CardSquareDivColor};
-  margin: 10px 8px 0px 0px;
+export const SquareColorDivYellow = styled(SquareColorDiv)`
+  background-color: #fdcc3b;
 `;
 
 export const StyledParaF = styled.p`
@@ -147,6 +166,7 @@ export const StyledParaF = styled.p`
   line-height: 16px;
   font-weight: 600;
   margin-bottom: 5px;
+  color: #434b5d;
 `;
 
 export const StyledParaS = styled.p`
@@ -165,29 +185,28 @@ export const StyledColorParaS = styled.p`
 export const StyledParaFF = styled.p`
   font-size: 13px;
   font-weight: 600;
-  color: #434b5d;
+  color: #7c848e;
 `;
 export const ColorSpan = styled.span`
   color: ${classBoardTheme.CardCircularColor};
 `;
 
 export const StyledParaSS = styled.p`
-  font-size: 1.12em;
+  font-size: 20px;
   font-weight: bold;
-  margin-top: 5px;
+  color: #434b5d;
 `;
 
 export const StyledParaSSS = styled.p`
-  font-size: 1.12em;
-  font-weight: bold;
-  margin-top: 5px;
-  color: ${classBoardTheme.CardCircularColor};
-  display: inline-block;
+  font-size: 16px;
+  font-weight: 600;
+  margin-left: 18px;
+  color: #5eb500;
 `;
 
 export const SpaceDiv = styled.div`
-  display:inline-block
-  width:20px;
+  display: inline-block;
+  width: 20px;
 `;
 
 export const StyledDivLine = styled.div`
@@ -195,4 +214,11 @@ export const StyledDivLine = styled.div`
   height: 0.03em;
   border: 1px solid #f4f3f3;
   margin-top: 20px;
+`;
+
+export const RightAlignedCol = styled(Col)`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-left: auto;
 `;

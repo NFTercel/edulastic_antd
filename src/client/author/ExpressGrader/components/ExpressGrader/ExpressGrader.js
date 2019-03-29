@@ -74,15 +74,15 @@ class ExpressGrader extends Component {
   };
 
   render() {
-    const { creating, testActivity, studentResponse, additionalData, match } = this.props;
+    const { testActivity, studentResponse, additionalData, match } = this.props;
     const { isVisibleModal, record, tableData } = this.state;
     const { assignmentId, classId } = match.params;
     const questionActivities = studentResponse !== undefined ? studentResponse.questionActivities : [];
+    console.log(this.props);
     return (
       <div>
         <ClassHeader
           classId={classId}
-          creating={creating}
           active="expressgrader"
           assignmentId={assignmentId}
           onCreate={this.handleCreate}
@@ -142,4 +142,15 @@ ExpressGrader.propTypes = {
   loadGradebook: PropTypes.func,
   loadTestActivity: PropTypes.func,
   loadStudentResponses: PropTypes.func
+};
+
+ExpressGrader.defaultProps = {
+  history: {},
+  match: {},
+  testActivity: [],
+  additionalData: {},
+  studentResponse: {},
+  loadGradebook: () => {},
+  loadTestActivity: () => {},
+  loadStudentResponses: () => {}
 };

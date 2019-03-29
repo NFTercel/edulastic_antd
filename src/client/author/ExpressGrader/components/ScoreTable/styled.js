@@ -6,59 +6,72 @@ export const StyledCard = styled(Card)`
   margin: 0px auto 60px auto;
   width: 95%;
   height: auto;
-  background-color: transparent;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
   .ant-card-body {
-    padding: 0 !important;
+    padding: 30px 24px 24px;
   }
+`;
+
+export const TableTitle = styled.div`
+  color: #434b5d;
+  font-size: 21px;
+  line-height: 30px;
+  font-weight: bold;
 `;
 
 export const TableData = styled(Table)`
   text-align: center;
-  background-color: ${white};
-  border-radius: 16px;
-  box-shadow: 3px 3px 3px lightgray;
+  .ant-table td {
+    white-space: nowrap;
+  }
   .ant-table-thead > tr > th {
+    background-color: white;
     text-align: center;
-    font-size: 0.9em;
+    font-size: 16px;
+    line-height: 22px;
+    color: #434b5d;
     font-weight: bold;
-    color: ${lightGreen};
-    background-color: ${lightGreen};
-    border-right: 2px solid ${lightGrey};
-    &:first-child {
-      color: #75b39b;
+    /* padding: 16px 16px; */
+  }
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td {
+    padding: 13px 16px;
+    border-bottom: 0px;
+  }
+  .ant-table-tbody > tr > td {
+    background-color: #f8f8f8;
+  }
+  .ant-table-tbody > tr {
+    border-bottom: 20px white solid;
+    &:last-child {
+      border-bottom: 0px;
     }
   }
-  .ant-table-thead > tr {
-    border-radius: 16px;
+  .ant-table-fixed {
+    .ant-table-thead {
+      tr {
+        height: unset !important;
+      }
+    }
   }
-  .ant-table-thead > tr > th {
-    font-family: Open Sans;
-    font-weight: 600;
+
+  th.sub-thead-th {
+    background-color: #f8f8f8 !important;
   }
-  .ant-table-thead > tr:first-child > th {
-    background: ${lightGreen};
+  th.th-border-bottom {
+    border-bottom: 20px white solid !important;
   }
-  .ant-table-thead > tr:last-child > th {
-    background: #fff;
-    border-color: ${lightGrey};
+
+  .ant-table-thead > tr > th .ant-table-column-sorters {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-  .ant-table-thead > tr:last-child > th:first-child {
-    color: ${secondaryTextColor};
-  }
-  .ant-table-thead > tr > th:first-child {
-    background: ${lightGreen} !important;
-    border-bottom: 2px solid ${lightGrey};
-  }
-  .ant-table-thead > tr > th:nth-child(2) {
-    background: ${lightGreen};
-    color: ${secondaryTextColor};
-  }
-  .ant-table-tbody tr td {
-    margin: 0px;
-    border-radius: 5px;
-    border: 2px solid ${lightGrey};
-    font-family: Open Sans;
-    font-weight: 600;
+  .ant-table-thead > tr > th .ant-table-column-sorter {
+    position: relative;
+    top: 3px;
+    left: 10px;
   }
 `;
 
@@ -83,29 +96,32 @@ export const StyledDivColor = styled.span`
 `;
 
 export const StyledDivMid = styled.div`
-  width: 80%;
-  margin: 0px auto;
-  font-size: 0.9em;
-  color: ${secondaryTextColor};
+  width: 100px;
+  font-size: 14px;
+  color: #434b5d;
+  font-weight: 600;
   text-align: center;
+  img {
+    margin-left: 18px;
+  }
 `;
 
 export const StyledDivPartOne = styled.div`
-  width:49.9%;
-  display:inline-block
-  font-weight:bold;
-  border-right:0.1em solid ${lightGreen};
+  width: 49.9%;
+  display: inline-block;
+  font-weight: bold;
+  border-right: 0.1em solid ${lightGreen};
 `;
 
 export const StyledDivPartTwo = styled.div`
-  width:49.9%;
-  display:inline-block
-  color:${greenDark};
-  padding:3px 0px;
-  text-align:right;
-  font-size:1em;
-  font-weight:800;
-  margin:auto;
+  width: 49.9%;
+  display: inline-block;
+  color: ${greenDark};
+  padding: 3px 0px;
+  text-align: right;
+  font-size: 1em;
+  font-weight: 800;
+  margin: auto;
 `;
 
 export const StyledTitle = styled.div`
@@ -126,5 +142,18 @@ export const StyledTag = styled(Tag)`
 
 export const StyledText = styled.span`
   font-family: Open Sans;
+  font-weight: 600;
+  font-size: 14px;
+  margin-right: 7px;
   color: ${props => props.color};
 `;
+
+const TitleText = styled.div`
+  color: #aaafb5;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+`;
+
+export const StudentsTitle = styled(TitleText)``;
+export const ScoreTitle = styled(TitleText)``;

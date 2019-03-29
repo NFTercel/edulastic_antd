@@ -2,11 +2,13 @@ import styled from "styled-components";
 import { FlexContainer } from "@edulastic/common";
 
 export const PaginationInfo = styled.span`
-  font-weight: bold;
-  font-size: 10px;
-  word-spacing: 5px;
+  font-weight: 600;
   display: inline-block;
-  color: #1890ffd9;
+  font-size: 11px;
+  word-spacing: 5px;
+  a {
+    color: #69727e;
+  }
 `;
 
 export const StyledFlexContainer = styled(FlexContainer)`

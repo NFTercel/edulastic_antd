@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Card } from "antd";
 import { connect } from "react-redux";
 import { compose } from "redux";
 
@@ -10,6 +9,7 @@ import ClassHeader from "../Shared/Components/ClassHeader/ClassHeader";
 import TableDisplay from "./components/TableDisplay";
 import { receiveTestActivitydAction } from "../src/actions/classBoard";
 import { getTestActivitySelector, getAdditionalDataSelector } from "../ClassBoard/ducks";
+import { Anchor, AnchorLink, PaginationInfo, StyledFlexContainer, DivWrapper } from "./components/styled";
 
 class StandardsBasedReport extends Component {
   componentDidMount() {
@@ -45,14 +45,21 @@ class StandardsBasedReport extends Component {
           active="standard_report"
           creating={creating}
           assignmentId={assignmentId}
-          additionalData={additionalData}
+          additionalData={additionalData || {}}
           testActivityId={testActivityId}
         />
         <HooksContainer classId={classId} assignmentId={assignmentId} />
-        <Card>
-          <h3>Standards performance</h3>
+
+        <StyledFlexContainer justifyContent="space-between">
+          <PaginationInfo>
+            &lt; <AnchorLink to="/author/assignments">RECENTS ASSIGNMENTS</AnchorLink> /{" "}
+            <Anchor>{additionalData.testName}</Anchor> / <Anchor>{additionalData.className}</Anchor>
+          </PaginationInfo>
+        </StyledFlexContainer>
+
+        <DivWrapper>
           <TableDisplay testActivity={testActivity} />
-        </Card>
+        </DivWrapper>
       </React.Fragment>
     );
   }
@@ -79,4 +86,8 @@ StandardsBasedReport.propTypes = {
   additionalData: PropTypes.object,
   loadTestActivity: PropTypes.func,
   creating: PropTypes.object
+};
+
+StandardsBasedReport.defaultProps = {
+  additionalData: {}
 };

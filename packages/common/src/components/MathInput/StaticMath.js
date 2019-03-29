@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent, forwardRef, useRef, useImperativeHandle } from "react";
 import PropTypes from "prop-types";
 import { isEqual } from "lodash";
 import { MathKeyboard } from "@edulastic/common";
@@ -110,6 +110,7 @@ class StaticMath extends PureComponent {
 
   setLatex = latex => {
     const { mathField } = this.state;
+    const { onInput } = this.props;
 
     if (!mathField) return;
     mathField.latex(latex);
@@ -119,22 +120,25 @@ class StaticMath extends PureComponent {
       mathField.innerFields[i].el().addEventListener("click", () => {
         this.onFocus(mathField.innerFields[i]);
       });
+      mathField.innerFields[i].el().addEventListener("keydown", () => {
+        setTimeout(() => {
+          onInput(this.getLatex());
+        }, 0);
+      });
     }
 
     this.setInnerFieldsFocuses();
   };
 
   setInnerFieldValues = values => {
-    for (let i = 0; i < values.length; i++) {
-      this.setInnerFieldValue(values[i], i);
-    }
-  };
-
-  setInnerFieldValue = (latex, index) => {
     const { mathField } = this.state;
-
-    if (!mathField || !mathField.innerFields[index]) return;
-    mathField.innerFields[index].write(latex);
+    if (!mathField || !mathField.innerFields) return;
+    for (let i = 0; i < mathField.innerFields.length; i++) {
+      if (!mathField.innerFields[i]) continue;
+      mathField.innerFields[i].latex("");
+      if (!values[i]) continue;
+      mathField.innerFields[i].write(values[i]);
+    }
   };
 
   getLatex = () => {
@@ -229,20 +233,26 @@ StaticMath.defaultProps = {
 
 // export default StaticMath;
 
-const StaticMathWithResources = ({ ...props }) => (
-  <WithResources
-    resources={[
-      "https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css",
-      "https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js",
-      "https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js",
-      "https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js",
-      "https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js",
-      "https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css"
-    ]}
-    fallBack={<h2>Loading...</h2>}
-  >
-    <StaticMath {...props} />
-  </WithResources>
-);
+const StaticMathWithResources = (props, ref) => {
+  const mathRef = useRef();
+  useImperativeHandle(ref, () => ({
+    getLatex: () => mathRef.current.getLatex()
+  }));
+  return (
+    <WithResources
+      resources={[
+        "https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css",
+        "https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js",
+        "https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js",
+        "https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js",
+        "https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js",
+        "https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css"
+      ]}
+      fallBack={<h2>Loading...</h2>}
+    >
+      <StaticMath ref={mathRef} {...props} />
+    </WithResources>
+  );
+};
 
-export default StaticMathWithResources;
+export default forwardRef(StaticMathWithResources);

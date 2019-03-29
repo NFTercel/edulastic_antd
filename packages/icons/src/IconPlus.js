@@ -4,10 +4,9 @@ import withIconStyles from "./HOC/withIconStyles";
 import SVG from "./common/SVG";
 
 const IconPlus = props => (
-  <SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 13.35 13.347" {...props}>
-    <g id="plus">
-      <rect width="2.541" height="13.347" rx="1" transform="translate(5.404)" />
-      <rect width="2.541" height="13.35" rx="1" transform="rotate(-90 3.972 3.972)" />
+  <SVG xmlns="http://www.w3.org/2000/svg" width="15.032" height="15.032" viewBox="0 0 15.032 15.032" {...props}>
+    <g transform="translate(7.516) rotate(45)">
+      <path d="M10.629,1.063,9.566,0,5.315,4.252,1.063,0,0,1.063,4.252,5.315,0,9.566l1.063,1.063L5.315,6.377l4.252,4.252,1.063-1.063L6.377,5.315Z" />
     </g>
   </SVG>
 );

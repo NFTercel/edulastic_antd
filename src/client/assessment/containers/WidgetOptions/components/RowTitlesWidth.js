@@ -8,7 +8,7 @@ import CommonInput from "./common/CommonInput";
 const RowTitlesWidth = ({ t, type, ...restProps }) => (
   <Fragment>
     <Label>{t("component.options.rowTitlesWidth")}</Label>
-    <CommonInput type={type} {...restProps} />
+    <CommonInput data-cy="rowTitlesWidthInput" type={type} {...restProps} />
   </Fragment>
 );
 

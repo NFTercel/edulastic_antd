@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { compose } from "redux";
+import { get } from "lodash";
 import { Link, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -227,7 +228,7 @@ const enhance = compose(
   connect(
     ({ authorUi, user }) => ({
       isSidebarCollapsed: authorUi.isSidebarCollapsed,
-      firstName: user.user.firstName || ""
+      firstName: get(user, "user.user.firstName", "")
     }),
     { toggleSideBar: toggleSideBarAction, logout: logoutAction }
   )

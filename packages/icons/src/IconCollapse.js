@@ -15,6 +15,7 @@ const IconCollapse = props => (
         </g>
         <rect width="4.394" height="2.96" transform="translate(4.626 5.193)" />
       </g>
+      <rect width="4.394" height="2.96" transform="translate(4.626 5.193)" />
     </g>
   </SVG>
 );

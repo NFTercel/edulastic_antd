@@ -23,12 +23,8 @@ class FeedbackRight extends Component {
     let score = 0;
     let maxScore = 1;
     if (activity) {
-      const {
-        feedback: { text: _feedback },
-        score: _score,
-        maxScore: _maxScore
-      } = activity;
-      feedback = _feedback;
+      const { score: _score, maxScore: _maxScore } = activity;
+      feedback = activity.feedback ? feedback.text : "";
       score = _score;
       maxScore = _maxScore;
     }
@@ -84,10 +80,7 @@ class FeedbackRight extends Component {
     if (isStudentName) {
       title = (
         <TitleDiv style={{ marginTop: 0 }}>
-          <Avatar
-            style={{ verticalAlign: "middle", background: "#fff", color: "green", border: "1px solid green" }}
-            size="small"
-          >
+          <Avatar style={{ verticalAlign: "middle", background: "#E7F1FD", color: "#1774F0" }} size={34}>
             {studentName.charAt(0)}
           </Avatar>
           &nbsp;
@@ -103,10 +96,10 @@ class FeedbackRight extends Component {
         <StyledDivSec>
           <ScoreInputWrapper>
             <ScoreInput onChange={this.onChangeScore} onBlur={this.onFeedbackSubmit} value={score} />
-            <TextPara> / {maxScore}</TextPara>
+            <TextPara> {maxScore}</TextPara>
           </ScoreInputWrapper>
         </StyledDivSec>
-        <LeaveDiv>{isError ? "Score is to large" : "Leave a Feedback!"}</LeaveDiv>
+        <LeaveDiv>{isError ? "Score is to large" : "Live a feedback:"}</LeaveDiv>
         {!isError && (
           <Fragment>
             <FeedbackInput
@@ -117,6 +110,7 @@ class FeedbackRight extends Component {
             />
           </Fragment>
         )}
+        <UpdateButton>UPDATE</UpdateButton>
       </StyledCardTwo>
     );
   }
@@ -147,10 +141,11 @@ export default enhance(FeedbackRight);
 
 const StyledCardTwo = styled(Card)`
   border-radius: 10px;
-  box-shadow: 3px 2px 7px lightgray;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
   display: inline-block;
-  margin: 0px 0 auto 32px;
+  margin: 0px 0px 0px 20px;
   min-width: 250px;
+  min-height: 100%;
 `;
 
 const StyledDivSec = styled.div`
@@ -164,64 +159,69 @@ const ScoreInputWrapper = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
+  text-align: center;
 `;
 
 const ScoreInput = styled(Input)`
   width: 70%;
-  height: 40px;
-  border: 1px solid #eaeaea;
-  border-radius: 5px;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  font-size: 1.8em;
-  font-weight: bold;
+  height: 47px;
+  border: 0px;
+  background-color: #f8f8f8;
+  border-radius: 2px;
+  font-size: 32px;
+  font-weight: 600;
+  text-align: center;
   display: inline-block;
 `;
 
 const TextPara = styled.p`
   padding-left: 10px;
   padding-right: 15px;
-  font-size: 1.8em;
-  font-weight: bold;
-  display: inline-block;
-  background: #f0f2f5;
-  height: 40px;
+  font-size: 32px;
+  background-color: #ececec;
+  font-weight: 600;
+  height: 47px;
   width: 30%;
-  border: 1px solid #eaeaea;
-  border-left: 0;
-  border-bottom-right-radius: 5px;
-  border-top-right-radius: 5px;
+  border-radius: 0px 2px 2px 0px;
+  display: inline-block;
 `;
 
 const LeaveDiv = styled.div`
   margin: 20px 0px;
-  font-weight: bold;
-  color: #545b6b;
-  font-size: 0.9em;
+  font-weight: 600;
+  color: #7c848e;
+  font-size: 13px;
 `;
 
 const TitleDiv = styled.div`
-  font-weight: bold;
-  color: #545b6b;
-  font-size: 1em;
+  font-weight: 600;
+  color: #7c848e;
+  font-size: 13px;
   display: flex;
+  align-items: center;
 `;
 
 const FeedbackInput = styled(TextArea)`
   width: 100%;
   height: 160px;
-  border: 1px solid #eaeaea;
-  border-radius: 5px;
+  border: 0;
+  border-radius: 2px;
   display: inline-block;
+  background: #f8f8f8;
 `;
 
-const SolutionButton = styled(Button)`
-  font-size: 1em;
-  margin: 10px 0px;
+const UpdateButton = styled(Button)`
+  font-size: 11px;
+  margin: 20px 0px 0px;
   width: 100%;
-  padding: 13px 5px 20px;
-  color: white;
-  height: 45px;
-  background-color: #00b0ff;
-  font-weight: bold;
+  height: 32px;
+  font-weight: 600;
+  color: #1774f0;
+  background-color: #ffffff;
+  border: 1px #1774f0 solid;
+  text-transform: uppercase;
+  &:hover {
+    color: #ffffff;
+    background-color: #1774f0;
+  }
 `;

@@ -1,5 +1,4 @@
 import API from "./utils/API";
-import { omit } from "lodash";
 
 const api = new API();
 const prefix = "/testitem";
@@ -34,7 +33,7 @@ const getById = (id, params = {}) =>
     .then(result => result.data.result);
 
 const updateById = (id, item) => {
-  const { updatedAt, createdAt, authors, ...data } = formatData(item);
+  const { updatedAt, createdAt, authors, autoGrade, ...data } = formatData(item);
   return api
     .callApi({
       url: `${prefix}/${id}`,

@@ -4,6 +4,8 @@ import styled from "styled-components";
 export const StyledProgress = styled(Progress)`
   margin: 0 30px 15px 30px;
   .ant-progress-text {
+    color: #434b5d;
+    font-size: 35px;
     margin-top: -7px !important;
     font-weight: bold;
   }
@@ -22,7 +24,7 @@ export const StyledProgressDiv = styled.div`
 export const GraphDescription = styled.p`
   text-align: center;
   font-weight: 600;
-  font-size: 10px;
+  font-size: 11px;
   color: #b1b1b1;
   margin: 3px 0 0 0;
   padding: 0;
@@ -32,8 +34,12 @@ export const GraphDescription = styled.p`
   top: 50%;
 `;
 
-export const GraphText = styled.div`
+export const GraphInfo = styled.div`
   text-align: center;
-  font-weight: bold;
-  font-size: 1em;
+  color: #434b5d;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 6px 17px;
+  border-radius: 10px;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
 `;

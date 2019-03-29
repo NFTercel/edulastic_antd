@@ -47,7 +47,7 @@ class ShareModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      shareType: sharedKeysObj.PUBLIC,
+      sharedType: sharedKeysObj.PUBLIC,
       peopleArray: [],
       currentUser: {},
       permission: "VIEW"
@@ -56,7 +56,7 @@ class ShareModal extends React.Component {
   }
 
   radioHandler = e => {
-    this.setState({ shareType: e.target.value });
+    this.setState({ sharedType: e.target.value });
     if (e.target.value !== sharedKeysObj.INDIVIDUAL) {
       this.setState({
         permission: "VIEW"
@@ -105,11 +105,11 @@ class ShareModal extends React.Component {
   };
 
   handleShare = () => {
-    const { currentUser, peopleArray, shareType, permission } = this.state;
+    const { currentUser, peopleArray, sharedType, permission } = this.state;
     const isExisting = peopleArray.filter(item => item._userId === currentUser._userId);
     const { shareTest, testId } = this.props;
     let person = {};
-    if (shareType === sharedKeysObj.INDIVIDUAL) {
+    if (sharedType === sharedKeysObj.INDIVIDUAL) {
       if (Object.keys(currentUser).length === 0) {
         message.error("Please select any user which are not in the shared list");
         return;
@@ -118,34 +118,37 @@ class ShareModal extends React.Component {
         return;
       } else {
         const { _userId, userName } = currentUser;
-        person = { sharedWithUsers: { _userId, userName } };
+        person = { sharedWith: [{ _id: _userId, name: userName }] };
         this.setState(prevState => ({
           peopleArray: [...prevState.peopleArray, currentUser],
           currentUser: {}
         }));
       }
     } else {
-      const isTypeExisting = peopleArray.filter(item => item.userName === shareTypes[shareType]).length > 0;
+      const isTypeExisting = peopleArray.filter(item => item.userName === shareTypes[sharedType]).length > 0;
       if (isTypeExisting) {
-        message.error(`You have shared with ${shareTypes[shareType]} try other option`);
+        message.error(`You have shared with ${shareTypes[sharedType]} try other option`);
         return;
       } else {
         this.setState(prevState => ({
-          peopleArray: [...prevState.peopleArray, { userName: shareTypes[shareType], email: null, permission: "VIEW" }],
+          peopleArray: [
+            ...prevState.peopleArray,
+            { userName: shareTypes[sharedType], email: null, permission: "VIEW" }
+          ],
           currentUser: {}
         }));
       }
     }
     const data = {
       ...person,
-      shareType,
-      viewType: permission
+      sharedType,
+      permission
     };
     shareTest({ data, testId });
   };
 
   render() {
-    const { shareType, peopleArray, permission } = this.state;
+    const { sharedType, peopleArray, permission } = this.state;
     const { isVisible, onClose, userList = [], fetching } = this.props;
 
     return (
@@ -193,7 +196,7 @@ class ShareModal extends React.Component {
           <PeopleBlock>
             <PeopleLabel>People</PeopleLabel>
             <RadioBtnWrapper>
-              <Radio.Group value={shareType} onChange={e => this.radioHandler(e)}>
+              <Radio.Group value={sharedType} onChange={e => this.radioHandler(e)}>
                 {shareTypeKeys.map(item => (
                   <Radio value={item} key={item}>
                     {shareTypes[item]}
@@ -210,7 +213,7 @@ class ShareModal extends React.Component {
                 filterOption={false}
                 onSearch={this.handleSearch}
                 onChange={this.handleChange}
-                disabled={shareType !== sharedKeysObj.INDIVIDUAL}
+                disabled={sharedType !== sharedKeysObj.INDIVIDUAL}
                 notFoundContent={fetching ? <Spin size="small" /> : null}
               >
                 {userList.map(item => (
@@ -227,7 +230,7 @@ class ShareModal extends React.Component {
               <Select
                 style={{ width: 650 }}
                 onChange={this.permissionHandler}
-                disabled={shareType !== sharedKeysObj.INDIVIDUAL}
+                disabled={sharedType !== sharedKeysObj.INDIVIDUAL}
                 value={permission}
               >
                 {permissionKeys.map(item => (

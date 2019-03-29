@@ -19,15 +19,25 @@ export const Circle = styled.circle`
 export const Bar = styled.rect`
   cursor: pointer;
   z-index: 0;
-  stroke: ${mainBlueColor};
-  fill: ${mainBlueColor};
+  stroke: ${({ color }) => color || mainBlueColor};
+  fill: ${({ color }) => color || mainBlueColor};
 `;
+
+const getRightColor = (hoverState, color) => (hoverState ? darkBlue : color || mainBlueColor);
 
 export const ActiveBar = styled.rect`
   cursor: pointer;
   z-index: 10;
-  stroke: ${({ hoverState }) => (hoverState ? darkBlue : mainBlueColor)};
-  fill: ${({ hoverState }) => (hoverState ? darkBlue : mainBlueColor)};
+  stroke: ${({ hoverState, color }) => getRightColor(hoverState, color)};
+  fill: ${({ hoverState, color }) => getRightColor(hoverState, color)};
+`;
+
+export const StrokedRect = styled.rect`
+  z-index: 1;
+  stroke: ${({ hoverState }) => (hoverState ? "black" : "none")};
+  stroke-width: 2;
+  stroke-dasharray: 10 5;
+  fill: none;
 `;
 
 export const Text = styled.text`

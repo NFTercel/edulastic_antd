@@ -257,13 +257,6 @@ const MatchListEdit = ({ item, setQuestionData, t }) => {
     setQuestionData(newItem);
   };
 
-  const handleUiStyleChange = (prop, uiStyle) => {
-    const newItem = cloneDeep(item);
-
-    newItem.ui_style[prop] = uiStyle;
-    setQuestionData(newItem);
-  };
-
   const handleGroupChange = ind => (index, value) => {
     const newItem = cloneDeep(item);
 

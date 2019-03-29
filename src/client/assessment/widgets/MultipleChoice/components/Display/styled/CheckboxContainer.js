@@ -5,9 +5,7 @@ export const CheckboxContainer = styled.div`
   width: ${props => (props.smallSize ? 22 : 40)}px;
   height: ${props => (props.smallSize ? 22 : 40)}px;
   padding: ${props => (props.smallSize ? 0 : 0)}px;
-  // border: solid 2px ${props => props.theme.widgets.multipleChoice.checkboxContainerBorderColor};
-  background: #fff;
-  box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.1);
+  /* border: solid 2px ${props => props.theme.widgets.multipleChoice.checkboxContainerBorderColor}; */
   border-radius: 50%;
   box-sizing: border-box;
   margin-right: 13px;
@@ -36,7 +34,8 @@ export const CheckboxContainer = styled.div`
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    background-color: ${props => props.theme.widgets.multipleChoice.checkboxContainerBgColor};
+    /* background-color: ${props => props.theme.widgets.multipleChoice.checkboxContainerBgColor}; */
+    background-color: #F8F8F8;
     -webkit-transition: backgroundColor 0.6s;
     transition: backgroundColor 0.6s;
     text-align: center;
@@ -45,8 +44,8 @@ export const CheckboxContainer = styled.div`
         ? props.theme.widgets.multipleChoice.checkboxContainerSmallFontSize
         : props.theme.widgets.multipleChoice.checkboxContainerFontSize};
     font-weight: ${props => props.theme.widgets.multipleChoice.checkboxContainerFontWeight};
-    color: ${newBlue};
-    font-weight: 700;
+    color:#444444;
+    /* color: ${props => props.theme.widgets.multipleChoice.checkboxContainerColor}; */
   }
 
   & div {

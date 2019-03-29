@@ -5,14 +5,14 @@ import { keyBy as _keyBy } from "lodash";
 import TestItemPreview from "../../../../assessment/components/TestItemPreview";
 import { getRows } from "../../../sharedDucks/itemDetail";
 // styled wrappers
-import { Content } from "./styled";
+import { StyledFlexContainer } from "./styled";
 
 function Preview({ item }) {
   const rows = getRows(item);
   const questions = (item.data && item.data.questions) || [];
   const questionsKeyed = _keyBy(questions, "id");
   return (
-    <Content key={item._id}>
+    <StyledFlexContainer key={item._id}>
       <TestItemPreview
         showFeedback
         cols={rows}
@@ -23,7 +23,7 @@ function Preview({ item }) {
         scrolling={item.scrolling}
         style={{ width: "100%" }}
       />
-    </Content>
+    </StyledFlexContainer>
   );
 }
 
@@ -74,7 +74,7 @@ class ClassQuestions extends Component {
 
   render() {
     const testItems = this.getTestItems();
-    return testItems.map(item => <Preview item={item} />);
+    return testItems.map((item, index) => <Preview key={index} item={item} />);
   }
 }
 

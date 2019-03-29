@@ -4,6 +4,7 @@ import { Select } from "antd";
 import { FlexContainer } from "@edulastic/common";
 import { Container, StyledSelect } from "./styled";
 
+// eslint-disable-next-line react/prop-types
 const SortBar = ({ loadStudentResponses, students }) => {
   const onSortChange = testActivityId => {
     if (testActivityId !== undefined) {
@@ -14,14 +15,14 @@ const SortBar = ({ loadStudentResponses, students }) => {
   return (
     <Fragment>
       {students && students.length !== 0 && (
-        <FlexContainer>
+        <FlexContainer justifyContent="flex-end">
           <Container>
             <StyledSelect defaultValue={students[0].studentName} onChange={onSortChange}>
-              {students.map(student => {
+              {students.map((student, index) => {
                 const testActivityId = student.testActivityId ? student.testActivityId : null;
                 const isActive = testActivityId === null;
                 return (
-                  <Select.Option value={testActivityId} disabled={isActive}>
+                  <Select.Option key={index} value={testActivityId} disabled={isActive}>
                     {student.studentName}
                   </Select.Option>
                 );

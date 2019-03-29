@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Select } from "antd";
 import { themes } from "../../../../student/themes";
+
 const classBoardTheme = themes.default.classboard;
 
 export const Container = styled.div`
@@ -8,11 +9,12 @@ export const Container = styled.div`
   align-items: center;
 
   .ant-select {
-    width: 168px;
+    width: 120px;
   }
 
   svg {
     width: 18px !important;
+    fill: #434b5d;
   }
 
   .ant-select-selection__rendered {
@@ -47,7 +49,14 @@ export const StyledClassID = styled.div`
 
 export const StyledSelect = styled(Select)`
   width: 120px;
-  display:inline-block @media (max-width: 550px) {
+  display: inline-block;
+  .ant-select-selection {
+    border: 0px;
+    &:focus {
+      box-shadow: unset;
+    }
+  }
+  @media (max-width: 550px) {
     display: none;
   }
   @media (max-width: 1000px) {

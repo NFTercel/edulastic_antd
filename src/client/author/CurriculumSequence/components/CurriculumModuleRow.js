@@ -64,15 +64,21 @@ class ModuleRow extends Component {
       removeItemFromUnit,
       removeUnit
     } = this.props;
-    const { completed, data, name, id } = module;
+    const { completed, name, id } = module;
+    let { data } = module;
     const { assignModule } = this;
+
+    // module.data should exists and default to empty array
+    if (!data) {
+      data = [];
+    }
 
     const totalAssigned = data.length;
     const numberOfAssigned = data.filter(item => item.assigned).length;
     const [whichModule, moduleName] = name.split(":");
 
     return (
-      <ModuleWrapper data-cy="curriculumModuleRow" key={`${module.data.length}-${module.id}`} padding={padding}>
+      <ModuleWrapper data-cy="curriculumModuleRow" key={`${data.length}-${module.id}`} padding={padding}>
         <Container>
           <Module>
             <ModuleHeader
@@ -229,7 +235,7 @@ class ModuleRow extends Component {
 }
 
 ModuleRow.propTypes = {
-  setSelectedItemsForAssign: PropTypes.array.isRequired,
+  setSelectedItemsForAssign: PropTypes.func.isRequired,
   module: PropTypes.object.isRequired,
   onCollapseExpand: PropTypes.func.isRequired,
   collapsed: PropTypes.bool.isRequired,

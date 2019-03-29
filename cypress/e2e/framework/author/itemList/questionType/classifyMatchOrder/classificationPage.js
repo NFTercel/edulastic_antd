@@ -1,5 +1,7 @@
+/* eslint-disable class-methods-use-this */
 import EditToolBar from "../common/editToolBar";
 import Header from "../../itemDetail/header";
+import Helpers from "../../../../util/Helpers";
 
 class ClassificationPage {
   constructor() {
@@ -99,6 +101,179 @@ class ClassificationPage {
   };
 
   getAddedAlternate = () => cy.get('[data-cy="del-alter"]');
+
+  getLayout() {
+    return Helpers.getElement("layout").should("be.visble");
+  }
+
+  getFontSizeSelect() {
+    return Helpers.getElement("fontSizeSelect");
+  }
+
+  getSmallFontSizeOption() {
+    return Helpers.getElement("small");
+  }
+
+  getNormalFontSizeOption() {
+    return Helpers.getElement("normal");
+  }
+
+  getLargeFontSizeOption() {
+    return Helpers.getElement("large");
+  }
+
+  getExtraLargeFontSizeOption() {
+    return Helpers.getElement("xlarge");
+  }
+
+  getHugeFontSizeOption() {
+    return Helpers.getElement("xxlarge");
+  }
+
+  getClassificationPreview() {
+    return Helpers.getElement("classificationPreview");
+  }
+
+  getClassificationPreviewWrapper() {
+    return this.getClassificationPreview().find('[data-cy="classificationPreviewWrapper"]');
+  }
+
+  getResponseContainerPositionSelect() {
+    return Helpers.getElement("responseContainerPositionSelect");
+  }
+
+  getTopResContainerOption() {
+    return Helpers.getElement("top");
+  }
+
+  getBottomResContainerOption() {
+    return Helpers.getElement("bottom");
+  }
+
+  getLeftResContainerOption() {
+    return Helpers.getElement("left");
+  }
+
+  getRightResContainerOption() {
+    return Helpers.getElement("right");
+  }
+
+  getStemNumerationSelect() {
+    return Helpers.getElement("stemNumerationSelect");
+  }
+
+  getNumericalOption() {
+    return Helpers.getElement("numerical");
+  }
+
+  getUppercaseAlphabetOption() {
+    return Helpers.getElement("upper-alpha");
+  }
+
+  getLowercaseAlphabetOption() {
+    return Helpers.getElement("lower-alpha");
+  }
+
+  getRowTitlesWidthInput() {
+    return Helpers.getElement("rowTitlesWidthInput");
+  }
+
+  getRowHeaderInput() {
+    return Helpers.getElement("rowHeaderInput")
+      .next()
+      .find(".ql-editor");
+  }
+
+  getMaximumResponsesPerCellInput() {
+    return Helpers.getElement("maximumResponsesPerCellInput");
+  }
+
+  getRowMinHeightInput() {
+    return Helpers.getElement("rowMinHeightInput");
+  }
+
+  checkFontSize(fontSize) {
+    this.header.preview();
+
+    this.getClassificationPreview()
+      .should("have.css", "font-size")
+      .and("eq", fontSize);
+
+    this.header.edit();
+  }
+
+  checkRowTitlesWidth(width) {
+    this.header.preview();
+
+    this.getClassificationPreview()
+      .find('div[data-cy="drag-drop-board-0"]')
+      .should("have.css", "width")
+      .and("eq", width);
+
+    this.getClassificationPreview()
+      .find('div[data-cy="drag-drop-board-1"]')
+      .should("have.css", "width")
+      .and("eq", width);
+
+    this.header.edit();
+  }
+
+  checkRowTitlesMinHeight(height) {
+    this.header.preview();
+
+    this.getClassificationPreview()
+      .find('div[data-cy="drag-drop-board-0"]')
+      .should("have.css", "min-height")
+      .and("eq", height);
+
+    this.getClassificationPreview()
+      .find('div[data-cy="drag-drop-board-1"]')
+      .should("have.css", "min-height")
+      .and("eq", height);
+
+    this.header.edit();
+  }
+
+  checkRowHeader(text) {
+    this.header.preview();
+
+    this.getClassificationPreview()
+      .find('[data-cy="rowHeader"]')
+      .should("contain", text);
+
+    this.header.edit();
+  }
+
+  checkResponseContainerPosition(position) {
+    this.header.preview();
+
+    switch (position) {
+      case "top":
+        this.getClassificationPreviewWrapper()
+          .should("have.css", "flex-direction")
+          .and("eq", "column-reverse");
+        break;
+      case "bottom":
+        this.getClassificationPreviewWrapper()
+          .should("have.css", "flex-direction")
+          .and("eq", "column");
+        break;
+      case "left":
+        this.getClassificationPreviewWrapper()
+          .should("have.css", "flex-direction")
+          .and("eq", "row-reverse");
+        break;
+      case "right":
+        this.getClassificationPreviewWrapper()
+          .should("have.css", "flex-direction")
+          .and("eq", "row");
+        break;
+      default:
+        break;
+    }
+
+    this.header.edit();
+  }
 }
 
 export default ClassificationPage;

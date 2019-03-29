@@ -69,6 +69,7 @@ class MathInput extends React.PureComponent {
       () => ({ mathField }),
       () => {
         const textarea = mathField.el().querySelector(".mq-textarea textarea");
+        textarea.setAttribute("data-cy", `answer-input-math-textarea`);
         textarea.addEventListener("keyup", this.handleChangeField);
         document.addEventListener("click", this.handleClick, false);
       }
@@ -145,7 +146,7 @@ class MathInput extends React.PureComponent {
           }}
           className="input"
         >
-          <div onKeyDown={onKeyDown} className="input__math" style={style}>
+          <div onKeyDown={onKeyDown} className="input__math" style={style} data-cy="answer-math-input-field">
             <span
               className="input__math__field"
               ref={this.mathFieldRef}

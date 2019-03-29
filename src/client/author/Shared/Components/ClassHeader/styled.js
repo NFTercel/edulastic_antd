@@ -1,10 +1,9 @@
-import { Popconfirm, Switch, Menu, Dropdown } from "antd";
+import { Popconfirm, Switch } from "antd";
 import styled from "styled-components";
 import { darkBlueSecondary, white } from "@edulastic/colors";
 import { Link } from "react-router-dom";
 import HeaderWrapper from "../../../src/mainContent/headerWrapper";
 import { themes } from "../../../../student/themes";
-import {} from "antd";
 
 const classBoardTheme = themes.default.classboard;
 
@@ -27,25 +26,19 @@ export const StyledTitle = styled.h1`
   padding: 0;
 `;
 
-export const StyledLink = styled(Link)``;
-
-export const StyledAssignName = styled.p`
-  font-size: 1.3em;
-  line-height: 1.3em;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 300px;
+export const StyledLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
 `;
 
 export const StyledParaFirst = styled.p`
-  font-size: 0.9em;
-  line-height: 1em;
+  /* font-size: 0.9em; */
 `;
 
-export const SpaceD = styled.div`
-  display: inline-block;
-  width: 10px;
+export const LinkLabel = styled.div`
+  padding-left: 22px;
+  padding-right: 15px;
 `;
 
 export const StyledParaSecond = styled.p`
@@ -75,23 +68,36 @@ export const StyledTabs = styled.div`
   height: 62px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 `;
 
-export const StyledAnchor = styled.a`
-  display: flex;
+export const StyledAnchorA = styled.a`
+  display: inline-block;
   font-size: 0.8em;
   font-weight: 600;
-  align-items: center;
-  justify-content: center;
-  color: #e5e5e5;
+  color: ${white};
+  padding: 17px 12px 15px 12px;
   width: auto;
   padding: 0px 15px;
   text-align: center;
+  border-bottom: 4px solid lightgray;
+  background-color: #3393dc;
+`;
+
+export const StyledAnchor = styled.div`
+  display: flex;
+  font-size: 11px;
+  font-weight: 600;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  width: auto;
+  padding: 0px 18px;
+  text-align: center;
   height: 45px;
   margin: 0 10px;
-  border-radius: 20px;
-  background-color: ${props => (props.isActive ? "#f3f3f3" : "#0e93dc")};
+  border-radius: 4px;
+  background-color: ${props => (props.isActive ? "#5196F3" : "#277DF1")};
   -webkit-transition: background-color 0.3s;
   transition: background-color 0.3s;
 
@@ -100,13 +106,16 @@ export const StyledAnchor = styled.a`
   }
   :hover {
     color: ${props => (props.isActive ? "#0288d1" : "#e5e5e5")};
-    background-color: ${props => (props.isActive ? "#f3f3f3" : "#f3f3f3")};
+    background-color: ${props => (props.isActive ? "#277DF1" : "#5196F3")};
     a {
-      color: ${props => (props.isActive ? "#0288d1" : "#434b5d")};
+      color: ${props => (props.isActive ? "#BED8FA" : "#FFFFFF")};
+      svg {
+        fill: ${props => (props.isActive ? "#BED8FA" : "#FFFFFF")};
+      }
     }
   }
   a {
-    color: ${props => (props.isActive ? "#434b5d" : "#e5e5e5")};
+    color: ${props => (props.isActive ? "#FFFFFF" : "#BED8FA")};
   }
 `;
 
@@ -116,33 +125,25 @@ export const Img = styled.img`
 `;
 
 export const StyledButton = styled.button`
-  width: 100%;
-  height: 100%;
-  color: #fff;
-  border: 0;
-  font-size: 14px;
-  border-radius: 0;
-  outline: none;
+  width: 31px;
+  height: 45px;
   background: transparent;
-  color: rgba(0, 0, 0, 0.65);
-  margin: 0;
-  padding: 0;
-  cursor: pointer;
-  text-align: left;
+  color: #fff;
+  font-size: 12px;
+  border: 0px;
+  :hover {
+    svg {
+      fill: #bed8fa;
+    }
+  }
+  :focus {
+    outline: none;
+  }
 `;
 
-export const StyledDropdown = styled(Dropdown)``;
-
-export const StyledAnchorA = styled.a`
-  width: 90px;
-  height: 27px;
-  background: transparent;
-  color: #fff;
-  border: 1px solid #45aaf3;
-  font-size: 12px;
-  border-radius: 3px;
-  display: block;
-  line-height: 25px;
-  text-align: center;
-  text-decoration: none !important;
+export const MenuWrapper = styled.div`
+  top: 46px;
+  position: absolute;
+  min-width: 90px;
+  right: 10px;
 `;

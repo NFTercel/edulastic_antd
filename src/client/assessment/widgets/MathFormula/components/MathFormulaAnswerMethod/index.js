@@ -227,7 +227,7 @@ const MathFormulaAnswerMethod = ({ onChange, index, onDelete, method, value, ari
               onChange={val => handleChangeOptions("field", val)}
             >
               {fields.map(val => (
-                <Select.Option key={val} value={val}>
+                <Select.Option key={val} value={val} data-cy={`answer-field-dropdown-list-${val}`}>
                   {val}
                 </Select.Option>
               ))}

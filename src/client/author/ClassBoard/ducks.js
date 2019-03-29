@@ -139,7 +139,7 @@ export const getGradeBookSelector = createSelector(
       avgScore: submittedScoresAverage,
       itemsSummary
     };
-    console.log("classboard gradebook data", result);
+    console.log("classboard gradebook data", state);
     return result;
   }
 );
@@ -198,4 +198,16 @@ export const getStudentQuestionSelector = createSelector(
 export const getClassQuestionSelector = createSelector(
   stateQuestionAnswersSelector,
   state => state.data
+);
+
+export const stateTestQuestionActivitiesSelector = state => state.author_classboard_testActivity;
+
+export const getTestQuestionActivitiesSelector = createSelector(
+  stateTestQuestionActivitiesSelector,
+  state => {
+    if (state.data) {
+      return state.data.testQuestionActivities;
+    }
+    return [];
+  }
 );

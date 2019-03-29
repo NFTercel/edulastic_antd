@@ -20,17 +20,6 @@ import {
 } from "./styled";
 
 class StudentQuestionContainer extends Component {
-  // componentDidMount() {
-  //   setTimeout(() => {
-  //     const textAreas = ReactDOM.findDOMNode(this.printpreviewRef).getElementsByTagName("textarea");
-  //     for (let i = 0; i < textAreas.length; i++) {
-  //       let value = textAreas[i].value;
-  //       let parent = textAreas[i].parentNode;
-  //       $(parent).append("<div>" + value + "</div>");
-  //     }
-  //   }, 2000);
-  // }
-
   render() {
     let totalScore = 0;
     let totalMaxScore = 0;

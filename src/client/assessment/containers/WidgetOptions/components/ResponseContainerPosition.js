@@ -9,7 +9,7 @@ const ResponseContainerPosition = ({ t, onChange, value, size, options, ...restP
   <Fragment>
     <Label>{t("component.options.responseContainerPositionOption")}</Label>
     <Select
-      data-cy="responseContainerPositionOption"
+      data-cy="responseContainerPositionSelect"
       size="large"
       value={value}
       style={{ width: "100%" }}

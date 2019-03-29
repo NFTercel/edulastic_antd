@@ -1,15 +1,17 @@
 import React, { Fragment } from "react";
 import PropTypes from "prop-types";
-import { CircularDiv, ResponseCard } from "../../styled";
+import { CircularDiv, ResponseCard, StyledFlexContainer, ResponseCardTitle } from "../../styled";
 
-const StudentResponse = props => (
+const StudentResponse = ({ testActivity }) => (
   <Fragment>
-    <ResponseCard>
-      Student Response
-      {props.testActivity.map(student => (
-        <CircularDiv>{student.studentName.toUpperCase().substr(0, 2)}</CircularDiv>
-      ))}
-    </ResponseCard>
+    <StyledFlexContainer>
+      <ResponseCard>
+        <ResponseCardTitle>Student Response</ResponseCardTitle>
+        {testActivity.map((student, index) => (
+          <CircularDiv key={index}>{student.studentName.toUpperCase().substr(0, 2)}</CircularDiv>
+        ))}
+      </ResponseCard>
+    </StyledFlexContainer>
   </Fragment>
 );
 

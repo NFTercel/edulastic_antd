@@ -7,16 +7,28 @@ import { formatTime } from "../utils";
 
 const { ASSESSMENT } = test.type;
 
-const AssessmentDetails = ({ test, theme, testType, t, started, resume, dueDate, type, startDate, safeBrowser }) => (
+const AssessmentDetails = ({
+  title,
+  thumbnail,
+  theme,
+  testType,
+  t,
+  started,
+  resume,
+  dueDate,
+  type,
+  startDate,
+  safeBrowser
+}) => (
   <Wrapper>
     <Col>
       <ImageWrapper>
-        <Thumbnail src={test && test.thumbnail} alt="" />
+        <Thumbnail src={thumbnail} alt="" />
       </ImageWrapper>
     </Col>
     <CardDetails>
       <CardTitle>
-        {test && test.title}
+        {title}
         <TestType type={testType}>{testType === ASSESSMENT ? t("common.assessment") : t("common.practice")}</TestType>
       </CardTitle>
       <CardDate>

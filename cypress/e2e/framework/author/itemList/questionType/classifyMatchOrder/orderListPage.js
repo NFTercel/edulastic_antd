@@ -1,5 +1,7 @@
+/* eslint-disable class-methods-use-this */
 import EditToolBar from "../common/editToolBar";
 import Header from "../../itemDetail/header";
+import Helpers from "../../../../util/Helpers";
 
 class OrderListPage {
   constructor() {
@@ -36,6 +38,112 @@ class OrderListPage {
   };
 
   getAddedAlternate = () => cy.get('[data-cy="del-alter"]');
+
+  getLayout() {
+    return Helpers.getElement("layout").should("be.visble");
+  }
+
+  getFontSizeSelect() {
+    return Helpers.getElement("fontSizeSelect");
+  }
+
+  getSmallFontSizeOption() {
+    return Helpers.getElement("small");
+  }
+
+  getNormalFontSizeOption() {
+    return Helpers.getElement("normal");
+  }
+
+  getLargeFontSizeOption() {
+    return Helpers.getElement("large");
+  }
+
+  getExtraLargeFontSizeOption() {
+    return Helpers.getElement("xlarge");
+  }
+
+  getListStyleSelect() {
+    return Helpers.getElement("listStyleOption");
+  }
+
+  getButtonListStyleOption() {
+    return Helpers.getElement("button");
+  }
+
+  getListStyleOption() {
+    return Helpers.getElement("list");
+  }
+
+  getInlineStyleOption() {
+    return Helpers.getElement("inline");
+  }
+
+  getHugeFontSizeOption() {
+    return Helpers.getElement("xxlarge");
+  }
+
+  getPreview() {
+    return Helpers.getElement("order-preview-container");
+  }
+
+  getStemNumerationSelect() {
+    return Helpers.getElement("stemNumerationSelect");
+  }
+
+  getNumericalOption() {
+    return Helpers.getElement("numerical");
+  }
+
+  getUppercaseAlphabetOption() {
+    return Helpers.getElement("upper-alpha");
+  }
+
+  getLowercaseAlphabetOption() {
+    return Helpers.getElement("lower-alpha");
+  }
+
+  getSortableListContainer() {
+    return Helpers.getElement("order-preview-container");
+  }
+
+  checkListStyle(type) {
+    this.header.preview();
+
+    // eslint-disable-next-line default-case
+    switch (type) {
+      case "button":
+      case "list":
+        this.getSortableListContainer()
+          .children("div")
+          .each($el => {
+            cy.wrap($el)
+              .should("have.css", "width")
+              .and("gt", "400px");
+          });
+        break;
+      case "inline":
+        this.getSortableListContainer()
+          .children("div")
+          .each($el => {
+            cy.wrap($el)
+              .should("have.css", "width")
+              .and("lt", "400px");
+          });
+    }
+
+    this.header.edit();
+  }
+
+  checkFontSize(fontSize) {
+    this.header.preview();
+
+    this.getPreview()
+      .should("have.css", "font-size")
+      .and("eq", fontSize);
+
+    this.header.edit();
+  }
 }
 
 export default OrderListPage;

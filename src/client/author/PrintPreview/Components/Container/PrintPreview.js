@@ -69,33 +69,8 @@ class PrintPreview extends Component {
 
   render() {
     const { testActivity, classResponse, classStudentResponse, additionalData } = this.props;
-
-    // const questionActivities = classStudentResponse ? classStudentResponse.questionActivities : null;
-    // const showClassQuestions = !!testActivity;
-
-    // if (questionActivities) {
-    //   questionActivities.forEach((item, i) => {
-    //     totalScore += item.score || 0;
-    //     totalMaxScore += item.maxScore || 1;
-    //     data.push({
-    //       id: item._id,
-    //       name: `Q${i + 1}`,
-    //       red: (item.maxScore || 1) - (item.score || 0),
-    //       green: item.score || 0,
-    //       all: item.maxScore || 1
-    //     });
-    //   });
-    // }
-
-    // let assignmentId = testActivity ? testActivity.assignmentId : "";
-    // let groupId = testActivity ? testActivity.groupId : "";
-    // const testActivityId = testActivity ? testActivity._id : "";
-    // const userId = testActivity ? testActivity.userId : "";
-    // const classassignment = classResponse ? classResponse.title : "";
     const classname = additionalData ? additionalData.className : "";
     const classnames = [{ name: classname }];
-    // const currentStudent = studentItems.find(({ studentId }) => studentId === userId);
-    // const studentName = currentStudent ? currentStudent.studentName : "";
     const testName = additionalData ? additionalData.testName : "";
     const { assignmentIdClassId } = this.props;
 
@@ -140,49 +115,6 @@ class PrintPreview extends Component {
             </TestInfo>
           </PagePrinterHeader>
           {renderClassStudentsResponse}
-          {/* <StyledTitle>Edulastic</StyledTitle>
-          <StudentQuestionHeader>
-            <StudentInformation>
-              <InfoItem>
-                <Color>StudentName: </Color>
-                {studentName}
-              </InfoItem>
-              <InfoItem>
-                <Color>Classname: </Color>
-                {classname}
-              </InfoItem>
-            </StudentInformation>
-            <TimeContainer>
-              <TimeItem>
-                <Color>Time:</Color> 1:54
-
-              </TimeItem>
-              <TimeItem>
-                <Color>Status:</Color> Graded
-              </TimeItem>
-              <TimeItem>
-                <Color>Submitted on:</Color> 19 October,2018
-              </TimeItem>
-              <TimeItem>
-                <Color>Hour:</Color> 03:13
-              </TimeItem>
-            </TimeContainer>
-
-            <ScoreContainer>
-              <ScoreLabel>TOTAL SCORE</ScoreLabel>
-              <TotalScore>{totalScore}</TotalScore>
-              <FractionLine />
-              <TotalScore>{totalMaxScore}</TotalScore>
-            </ScoreContainer>
-          </StudentQuestionHeader>
-
-          {showClassQuestions && (
-            <StudentQuestions
-              currentStudent={currentStudent || []}
-              questionActivities={studentResponse.questionActivities}
-              classResponse={classResponse}
-            />
-          )} */}
         </PrintPreviewContainer>
       </PrintPreviewBack>
     );

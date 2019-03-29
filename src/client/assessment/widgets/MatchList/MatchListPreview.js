@@ -177,11 +177,11 @@ const MatchListPreview = ({
   };
 
   return (
-    <Paper style={{ fontSize }} padding={smallSize} boxShadow={smallSize ? "none" : ""}>
+    <Paper data-cy="matchListPreview" style={{ fontSize }} padding={smallSize} boxShadow={smallSize ? "none" : ""}>
       <InstructorStimulus>{item.instructor_stimulus}</InstructorStimulus>
       {!smallSize && view === PREVIEW && <Stimulus dangerouslySetInnerHTML={{ __html: stimulus }} />}
 
-      <div style={wrapperStyle}>
+      <div data-cy="previewWrapper" style={wrapperStyle}>
         <FlexContainer style={{ flexGrow: 10 }} flexDirection="column" alignItems="flex-start">
           {list.map((ite, i) => (
             <FlexContainer

@@ -4,6 +4,7 @@ import styled from "styled-components";
 export const Container = styled.div`
   display: flex;
   align-items: center;
+  margin-bottom: 5px;
 
   .ant-select {
     margin-right: 23px;
@@ -22,6 +23,10 @@ export const Container = styled.div`
     color: #434b5d;
   }
 
+  .ant-select-selection {
+    border: 0px;
+  }
+
   .ant-select-arrow-icon {
     svg {
       fill: #00b0ff;
@@ -31,7 +36,14 @@ export const Container = styled.div`
 `;
 
 export const StyledSelect = styled(Select)`
-  display:inline-block @media (max-width: 550px) {
+  display: inline-block;
+  .ant-select-selection {
+    border: 0px;
+    &:focus {
+      box-shadow: unset;
+    }
+  }
+  @media (max-width: 550px) {
     display: none;
   }
   @media (max-width: 1000px) {

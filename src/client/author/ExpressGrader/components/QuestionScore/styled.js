@@ -7,5 +7,7 @@ export const StyledWrapper = styled.div`
 `;
 
 export const StyledText = styled.span`
-  color: ${props => props.color};
+  color: #434b5d;
+  font-size: 14px;
+  font-weight: 600;
 `;

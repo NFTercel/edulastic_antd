@@ -147,7 +147,7 @@ class HotspotPage {
   }
 
   getStemNumeration() {
-    return Helpers.getElement("responseContainerPositionOption");
+    return Helpers.getElement("stemNumerationSelect");
   }
 
   getNumericalStemOption() {

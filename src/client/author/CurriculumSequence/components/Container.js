@@ -159,6 +159,11 @@ class CurriculumContainer extends Component {
     return { sourceCurriculumSequence, destinationCurriculumSequence };
   };
 
+  /** @param {CurriculumSequence} curriculumSequence */
+  setSourceCurriculumSequence = curriculumSequence => {
+    this.setState({ sourceCurriculumSequence: curriculumSequence });
+  };
+
   render() {
     const { windowWidth, curriculumSequences, isContentExpanded } = this.props;
     const { expandedModules } = this.state;
