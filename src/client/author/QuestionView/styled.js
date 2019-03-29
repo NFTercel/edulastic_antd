@@ -6,13 +6,14 @@ import { Card, Button } from "antd";
 export const PaginationInfo = styled.div`
   font-weight: bold;
   font-size: 10px;
-  word-spacing:5px;
-  display:inline-block
-  margin-left:30px;
-  color:#1890ffd9;
+  word-spacing: 5px;
+  display: inline-block;
+  margin-left: 30px;
+  color: #1890ffd9;
 `;
 export const StyledFlexContainer = styled(FlexContainer)`
-  margin: 20px 35px 20px 15px;
+  width: 95%;
+  margin: 20px auto;
 `;
 
 export const LabelContainer = styled.div`
@@ -24,18 +25,11 @@ export const LabelContainer = styled.div`
 `;
 
 export const StyledCard = styled(Card)`
-  margin: auto;
-  width: 95%;
-  display: flex;
-  justify-content: spance-between;
-  height: ${props => (props.isCollapsed ? "5px" : "270px")}
+  width: 100%;
   border-radius: 10px;
-  box-shadow: 3px 2px 7px lightgray;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
   margin-bottom: 40px;
-
-  ${"ant-card-body"} {
-    width: 500px;
-    background: red;
+  .ant-card-body {
   }
 `;
 
@@ -49,27 +43,38 @@ export const StyledTitle = styled.p`
 `;
 
 export const ResponseCard = styled(Card)`
-  margin: auto;
-  width: 95%;
-  display: flex;
+  width: 100%;
   border-radius: 10px;
-  box-shadow: 3px 2px 7px lightgray;
-  align-items: center;
-  margin-top: 15px;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
+  .ant-card-body {
+    padding: 7px 35px;
+    display: flex;
+    align-items: center;
+  }
+`;
+
+export const ResponseCardTitle = styled.span`
+  color: #7c848e;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 15px;
+  margin-right: 35px;
 `;
 
 export const CircularDiv = styled.div`
-  width: 47px;
-  height: 47px;
-  border: 2px solid #5cb497;
-  display: inline-block;
-  border-radius: 128px;
-  text-align: center;
-  padding-top: 14px;
-  color: #343434;
-  padding-bottom: 28px;
-  margin: 0px 15px 0px 15px;
-  font-weight: bold;
+  background-color: #e7f1fd;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  color: #1774f0;
+  font-weight: 600;
+  margin-right: 20px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  &:last-child {
+    margin-right: 0px;
+  }
 `;
 
 export const Content = styled.div`
@@ -97,4 +102,31 @@ export const OptionDiv = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 15px;
+`;
+
+export const LegendContainer = styled.div`
+  display: flex;
+  position: absolute;
+  top: 24px;
+`;
+export const LegendItem = styled.div`
+  display: flex;
+  align-items: center;
+  margin-right: 25px;
+  &:last-child {
+    margin-right: 0px;
+  }
+`;
+export const LegendIcon = styled.div`
+  height: 15px;
+  width: 15px;
+  background-color: ${({ color = "#1FE3A1" }) => color};
+  border-radius: 2px;
+`;
+export const LegendLabel = styled.div`
+  margin-left: 8px;
+  color: #b1b1b1;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 8px;
 `;

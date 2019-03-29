@@ -1,6 +1,7 @@
 import EditItemPage from "../../../../framework/author/itemList/itemDetail/editPage";
 import MatchListPage from "../../../../framework/author/itemList/questionType/classifyMatchOrder/matchListPage";
 import FileHelper from "../../../../framework/util/fileHelper";
+import Helpers from "../../../../framework/util/Helpers";
 
 describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Match list" type question`, () => {
   const queData = {
@@ -29,10 +30,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Match list" ty
 
   context("User creates question", () => {
     before("visit items page and select question type", () => {
-      editItem.getItemWithId("5c358b480c8e6f22190d5ce0");
-      editItem.deleteAllQuestion();
-      // create new que and select type
-      editItem.addNew().chooseQuestion(queData.group, queData.queType);
+      cy.selectQuestionType({ editItem, queData });
     });
 
     context("TC_74 => List", () => {
@@ -222,14 +220,8 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Match list" ty
 
   context("Edit the questin created", () => {
     before("delete old question and create dummy que to edit", () => {
-      editItem.getItemWithId("5c358b480c8e6f22190d5ce0");
-      editItem.deleteAllQuestion();
-
-      // create new que and select type
-      editItem.addNew().chooseQuestion(queData.group, queData.queType);
-      question.header.save();
-      // edit
-      editItem.getEditButton().click();
+      cy.deleteOldQuestion({ editItem });
+      cy.selectQuestionType({ editItem, queData });
     });
 
     context("TC_81 => List", () => {
@@ -378,6 +370,182 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Match list" ty
           .should("have.length", 1)
           .click()
           .should("have.length", 0);
+      });
+    });
+  });
+
+  context("Advanced Options", () => {
+    before("visit items page and select question type", () => {
+      cy.selectQuestionType({ editItem, queData });
+    });
+
+    beforeEach(() => {
+      editItem.header.edit();
+      editItem.showAdvancedOptions();
+    });
+
+    afterEach(() => {
+      editItem.header.edit();
+    });
+
+    describe("Layout", () => {
+      it("should be able to select top response container position", () => {
+        const select = question.getResponseContainerPositionSelect();
+
+        select.should("be.visible").click();
+
+        question
+          .getTopResContainerOption()
+          .should("be.visible")
+          .click();
+
+        select.should("contain", "Top");
+        question.checkResponseContainerPosition("top");
+      });
+      it("should be able to select bottom response container position", () => {
+        const select = question.getResponseContainerPositionSelect();
+
+        select.should("be.visible").click();
+
+        question
+          .getBottomResContainerOption()
+          .should("be.visible")
+          .click();
+
+        select.should("contain", "Bottom");
+        question.checkResponseContainerPosition("bottom");
+      });
+      it("should be able to select left response container position", () => {
+        const select = question.getResponseContainerPositionSelect();
+
+        select.should("be.visible").click();
+
+        question
+          .getLeftResContainerOption()
+          .should("be.visible")
+          .click();
+
+        select.should("contain", "Left");
+        question.checkResponseContainerPosition("left");
+      });
+      it("should be able to select right response container position", () => {
+        const select = question.getResponseContainerPositionSelect();
+
+        select.should("be.visible").click();
+
+        question
+          .getRightResContainerOption()
+          .should("be.visible")
+          .click();
+
+        select.should("contain", "Right");
+        question.checkResponseContainerPosition("right");
+      });
+      it("should be able to select numerical stem numeration", () => {
+        const select = question.getStemNumerationSelect();
+
+        select.should("be.visible").click();
+
+        question
+          .getNumericalOption()
+          .should("be.visible")
+          .click();
+
+        select.should("contain", "Numerical");
+      });
+      it("should be able to select Uppercase Alphabet stem numeration", () => {
+        const select = question.getStemNumerationSelect();
+
+        select.should("be.visible").click();
+
+        question
+          .getUppercaseAlphabetOption()
+          .should("be.visible")
+          .click();
+
+        select.should("contain", "Uppercase Alphabet");
+      });
+      it("should be able to select Lowercase Alphabet stem numeration", () => {
+        const select = question.getStemNumerationSelect();
+
+        select.should("be.visible").click();
+
+        question
+          .getLowercaseAlphabetOption()
+          .should("be.visible")
+          .click();
+
+        select.should("contain", "Lowercase Alphabet");
+      });
+      it("should be able to select small font size", () => {
+        const select = question.getFontSizeSelect();
+        const { name, font } = Helpers.fontSize("small");
+
+        select.should("be.visible").click();
+
+        question
+          .getSmallFontSizeOption()
+          .should("be.visible")
+          .click();
+
+        select.should("contain", name);
+        question.checkFontSize(font);
+      });
+      it("should be able to select normal font size", () => {
+        const select = question.getFontSizeSelect();
+        const { name, font } = Helpers.fontSize("normal");
+
+        select.should("be.visible").click();
+
+        question
+          .getNormalFontSizeOption()
+          .should("be.visible")
+          .click();
+
+        select.should("contain", name);
+        question.checkFontSize(font);
+      });
+      it("should be able to select large font size", () => {
+        const select = question.getFontSizeSelect();
+        const { name, font } = Helpers.fontSize("large");
+
+        select.should("be.visible").click();
+
+        question
+          .getLargeFontSizeOption()
+          .should("be.visible")
+          .click();
+
+        select.should("contain", name);
+        question.checkFontSize(font);
+      });
+      it("should be able to select extra large font size", () => {
+        const select = question.getFontSizeSelect();
+        const { name, font } = Helpers.fontSize("xlarge");
+
+        select.should("be.visible").click();
+
+        question
+          .getExtraLargeFontSizeOption()
+          .should("be.visible")
+          .click();
+
+        select.should("contain", name);
+        question.checkFontSize(font);
+      });
+      it("should be able to select huge font size", () => {
+        const select = question.getFontSizeSelect();
+        const { name, font } = Helpers.fontSize("xxlarge");
+
+        select.should("be.visible").click();
+
+        question
+          .getHugeFontSizeOption()
+          .should("be.visible")
+          .click();
+
+        select.should("contain", name);
+        question.checkFontSize(font);
       });
     });
   });

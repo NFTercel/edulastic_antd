@@ -1,5 +1,6 @@
 {
   "common": {
+    "summaryBoard": "Summary",
     "liveClassBoard": "LIVE CLASS BOARD",
     "expressGrader": "EXPRESS GRADER",
     "reports": "REPORTS",

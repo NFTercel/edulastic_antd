@@ -51,10 +51,10 @@ class ClassResponses extends Component {
     if (testActivity.length === 0) {
       history.goBack();
     }
-    const { testId, classId } = additionalData;
-    const { testActivityId } = match.params;
-    loadStudentResponses({ testActivityId, groupId: classId });
-    loadClassResponses({ testId });
+    // const { testId, classId } = additionalData;
+    // const { testActivityId } = match.params;
+    // loadStudentResponses({ testActivityId, groupId: classId });
+    // loadClassResponses({ testId });
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -97,7 +97,7 @@ class ClassResponses extends Component {
     const testActivity = studentResponse ? studentResponse.testActivity : null;
     const questionActivities = studentResponse ? studentResponse.questionActivities : null;
     const showClassQuestions = !!testActivity && !showFeedbackForm;
-
+    console.log("&&&&&", testActivity);
     if (questionActivities) {
       questionActivities.forEach((item, i) => {
         totalScore += item.score || 0;

@@ -259,13 +259,19 @@ class CurriculumSequence extends Component {
     const { handleSaveClick } = this;
 
     // Options for add unit
-    const options1 = destinationCurriculumSequence.modules.map(module => ({ value: module.id, label: module.name }));
+    const options1 = destinationCurriculumSequence.modules.map(module => ({
+      value: module.id,
+      label: module.name
+    }));
 
     // TODO: change options2 to something more meaningful
     const options2 = [{ value: "Lesson", label: "Lesson" }, { value: "Lesson 2", label: "Lesson 2" }];
 
     // Dropdown options for guides
-    const guidesDropdownOptions = curriculumGuides.map(item => ({ value: item._id, label: item.title }));
+    const guidesDropdownOptions = curriculumGuides.map(item => ({
+      value: item._id,
+      label: item.title
+    }));
 
     const { title } = destinationCurriculumSequence;
 
@@ -504,7 +510,7 @@ class CurriculumSequence extends Component {
 CurriculumSequence.propTypes = {
   publisher: PropTypes.string,
   guide: PropTypes.string,
-  expandedModules: PropTypes.bool,
+  expandedModules: PropTypes.array,
   curriculumList: PropTypes.array,
   windowWidth: PropTypes.number.isRequired,
   saveCurriculumSequence: PropTypes.func.isRequired,
@@ -519,12 +525,12 @@ CurriculumSequence.propTypes = {
   onCollapseExpand: PropTypes.func.isRequired,
   sourceCurriculumSequence: PropTypes.object.isRequired,
   onSourceCurriculumSequenceChange: PropTypes.func.isRequired,
-  selectContent: PropTypes.object.isRequired,
+  selectContent: PropTypes.bool.isRequired,
   onDrop: PropTypes.func.isRequired,
   onBeginDrag: PropTypes.func.isRequired,
   isContentExpanded: PropTypes.bool.isRequired,
   setSelectedItemsForAssign: PropTypes.func.isRequired,
-  group: PropTypes.object.isRequired,
+  group: PropTypes.array.isRequired,
   createAssignment: PropTypes.func.isRequired,
   selectedItemsForAssign: PropTypes.array.isRequired,
   dataForAssign: PropTypes.object.isRequired,

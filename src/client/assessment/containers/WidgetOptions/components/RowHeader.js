@@ -7,7 +7,7 @@ import CommonQuillInput from "./common/CommonQuillInput";
 
 const RowHeader = ({ t, onChange, value, size, ...restProps }) => (
   <Fragment>
-    <Label>{t("component.options.rowHeader")}</Label>
+    <Label data-cy="rowHeaderInput">{t("component.options.rowHeader")}</Label>
     <CommonQuillInput toolbarId="row_header" onChange={onChange} showResponseBtn={false} value={value} {...restProps} />
   </Fragment>
 );

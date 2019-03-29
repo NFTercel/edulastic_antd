@@ -4,7 +4,7 @@ import Storage from "./Storage";
 
 const getCurrentPath = () => {
   const location = window.location;
-  return `${location.path}${location.search}${location.hash}`;
+  return `${location.pathname}${location.search}${location.hash}`;
 };
 
 export default class API {

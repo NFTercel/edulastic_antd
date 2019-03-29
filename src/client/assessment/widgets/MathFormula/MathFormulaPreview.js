@@ -26,8 +26,12 @@ const MathFormulaPreview = ({
   const [innerValues, setInnerValues] = useState([]);
 
   const onUserResponse = latexv => {
+    if (isStatic) {
+      saveAnswer(studentRef.current.getLatex());
+      return;
+    }
     setLatex(latexv);
-    saveAnswer(isStatic ? studentRef.current.getLatex() : latexv);
+    saveAnswer(latexv);
   };
 
   const onBlur = () => {
@@ -38,11 +42,19 @@ const MathFormulaPreview = ({
 
   const escapeRegExp = string => string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-  const setUserResponse = () => {
+  const updateStaticMathFromUserAnswer = clear => {
     if (!userAnswer) {
       setLatex(studentTemplate);
+      setInnerValues([]);
       return;
     }
+
+    if (clear) {
+      setInnerValues([]);
+      return;
+    }
+
+    if (!isStatic) return;
 
     const regexTemplate = new RegExp(
       escapeRegExp(studentTemplate).replace(/\\\\MathQuillMathField\\\{\\\}/g, "(.*)"),
@@ -57,7 +69,7 @@ const MathFormulaPreview = ({
         setLatex(userAnswer || studentTemplate);
         return;
       }
-      setUserResponse();
+      updateStaticMathFromUserAnswer(true);
     }
   }, [studentTemplate, previewType, userAnswer]);
 
@@ -67,7 +79,7 @@ const MathFormulaPreview = ({
         setLatex(userAnswer || studentTemplate);
         return;
       }
-      setUserResponse();
+      updateStaticMathFromUserAnswer(false);
     }, 0);
   }, [studentTemplate, userAnswer]);
 

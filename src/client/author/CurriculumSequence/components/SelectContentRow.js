@@ -34,7 +34,7 @@ class ModuleRow extends Component {
   };
 
   handleChecked = id => {
-    console.log("handleChecked", id);
+    // console.log("handleChecked", id);
   };
 
   handleUnitExpandCollapse = () => {
@@ -52,7 +52,6 @@ class ModuleRow extends Component {
   };
 
   handleAddContentNowClick = () => {
-    console.log("lll");
     const { createAssignmentNow } = this.props;
     const { selectedContent } = { ...this.state };
     createAssignmentNow(selectedContent);

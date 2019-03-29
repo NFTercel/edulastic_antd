@@ -12,7 +12,7 @@ export const greyishDarker1 = "#a7b1c2";
 export const greyishDarker2 = "#cccccc";
 export const mainBgColor = "#f3f3f3";
 export const mainTextColor = "#444444";
-export const textColor = "#878282";
+export const textColor = "#848993";
 export const secondaryTextColor = "#434b5d";
 export const greyDarken = "#979BA1";
 export const titleColor = "#304050";
@@ -33,7 +33,7 @@ export const red = "#ee1658";
 export const lightRed = "#fbdfe7";
 export const redDark = "#dd2e44";
 
-export const blue = "#12a6e8";
+export const blue = "#1774F0";
 export const lightBlue = "#93d8f7";
 export const lightBlueSecondary = "#1774F0";
 export const darkBlue = "#0080b9";

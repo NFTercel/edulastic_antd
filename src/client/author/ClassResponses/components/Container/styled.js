@@ -67,17 +67,18 @@ export const GraphContainer = styled.div`
 `;
 
 export const StyledFlexContainer = styled(FlexContainer)`
-  margin: 20px 13px;
+  width: 95%;
+  margin: 20px auto;
 `;
 
 export const StyledCard = styled(Card)`
-  margin:auto;
-  width:95%;
-  display:flex:
-  justify-content:spance-between;
-  height:270px;
-  border-radius:10px;
-  box-shadow:3px 2px 7px lightgray;
+  margin: auto;
+  width: 95%;
+  display: flex;
+  justify-content: spance-between;
+  height: 270px;
+  border-radius: 10px;
+  box-shadow: 3px 2px 7px lightgray;
 `;
 
 export const FeedbackButton = styled(Button)`

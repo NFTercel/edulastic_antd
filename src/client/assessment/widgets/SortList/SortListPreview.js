@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
-import { cloneDeep, isEqual } from "lodash";
+import { cloneDeep, isEqual, get } from "lodash";
 
 import { Paper, FlexContainer, Stimulus, InstructorStimulus, MathFormulaDisplay } from "@edulastic/common";
 import { withNamespaces } from "@edulastic/localization";
@@ -19,6 +19,7 @@ import { IconRight } from "./styled/IconRight";
 import { FlexCol } from "./styled/FlexCol";
 import { IconUp } from "./styled/IconUp";
 import { IconDown } from "./styled/IconDown";
+import { getFontSize } from "../../utils/helpers";
 
 const styles = {
   dropContainerStyles: smallSize => ({
@@ -175,6 +176,10 @@ class SortListPreview extends PureComponent {
       item: { validation }
     } = this.props;
 
+    const fontSize = getFontSize(get(item, "ui_style.fontsize"));
+    const orientation = get(item, "ui_style.orientation");
+    const flexDirection = orientation === "vertical" ? "column" : "row";
+
     let valid_response = validation && validation.valid_response && validation.valid_response.value;
     valid_response = valid_response || [];
     let alt_responses = validation && validation.alt_responses && validation.alt_responses;
@@ -199,14 +204,19 @@ class SortListPreview extends PureComponent {
     });
 
     return (
-      <Paper padding={smallSize} boxShadow={smallSize ? "none" : ""}>
+      <Paper data-cy="sortListPreview" style={{ fontSize }} padding={smallSize} boxShadow={smallSize ? "none" : ""}>
         <InstructorStimulus>{item.instructor_stimulus}</InstructorStimulus>
         {item && item.stimulus && !smallSize && (
           <Stimulus>
             <MathFormulaDisplay dangerouslySetInnerHTML={{ __html: item.stimulus }} />
           </Stimulus>
         )}
-        <FlexContainer alignItems="flex-start" style={styles.wrapperStyles(smallSize)}>
+        <FlexContainer
+          data-cy="sortListComponent"
+          flexDirection={flexDirection}
+          alignItems="flex-start"
+          style={styles.wrapperStyles(smallSize)}
+        >
           <FullWidthContainer>
             {!smallSize && <Title smallSize={smallSize}>{t("component.sortList.containerSourcePreview")}</Title>}
             {items.map((draggableItem, i) => (

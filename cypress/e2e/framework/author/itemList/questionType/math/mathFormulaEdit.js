@@ -5,18 +5,6 @@ class MathFormulaEdit {
   constructor() {
     this.editToolBar = new EditToolBar();
     this.header = new Header();
-    this.answersMethods = [
-      "equivLiteral",
-      "equivValue",
-      "isSimplified",
-      "isFactorised",
-      "isExpanded",
-      "isUnit",
-      "isTrue",
-      "stringMatch",
-      "equivSyntax",
-      "equivSymbolic"
-    ];
     this.argumentMethods = ["linear", "quadratic"];
     this.virtualKeyBoardNumpad = [
       { value: "7", label: "7" },
@@ -223,6 +211,8 @@ class MathFormulaEdit {
     }
   };
 
+  getAnswerMathInputField = () => cy.get('[data-cy="answer-math-input-field"]');
+
   checkCorrectAnswer = (expectedValue, preview, inputLength, isCorrect, score = false, scoreValuse = "2/2") => {
     preview.header.preview();
     this.getPreviewMathQuill().type(expectedValue, { force: true });
@@ -235,6 +225,8 @@ class MathFormulaEdit {
           .children()
           .should("contain", `score: ${isCorrect ? scoreValuse : `0/${score ? "2" : "1"}`}`)
       );
+
+    this.checkAttr(isCorrect);
     preview
       .getClear()
       .click()
@@ -243,8 +235,17 @@ class MathFormulaEdit {
           .children()
           .should("not.contain", "Correct Answers");
       });
+
     preview.header.edit();
     if (inputLength > 0) this.clearAnswerValueInput(inputLength);
+  };
+
+  checkAttr = isCorrect => {
+    if (isCorrect) {
+      this.getAnswerMathInputField().should("have.attr", "style", "background: rgb(225, 251, 242);");
+    } else {
+      this.getAnswerMathInputField().should("have.attr", "style", "background: rgb(252, 224, 232);");
+    }
   };
 
   getMethodSelectionDropdow = () => cy.get('[data-cy="method-selection-dropdown"]');
@@ -326,25 +327,59 @@ class MathFormulaEdit {
     const storeValue = JSON.parse(window.localStorage.getItem("persist:root")).question;
     return JSON.parse(storeValue).entity.data;
   };
+
   getComposeQuestionTextBox = () => cy.get(".ql-editor");
+
   getComposeQuestionTextBoxLink = () => cy.get(".ql-editor p");
 
   getSaveLink = () => cy.get(".ql-action");
 
   getAnswerRuleDropdownByValue = val => cy.get(`[data-cy="answer-rule-dropdown-${val}"]`);
+
   getAnswerRuleArgumentInput = () => cy.get(`[data-cy="answer-rule-argument-input"]`);
+
   getAnswerRuleArgumentSelect = () => cy.get(`[data-cy="answer-rule-argument-select"]`);
+
   getAnswerArgumentDropdownByValue = val => cy.get(`[data-cy="answer-argument-dropdown-${val}"]`);
 
-  checkEquivSyntaxMethod = (methods, syntax) => {
+  getAnswerFieldDropdownListValue = val => cy.get(`[data-cy="answer-field-dropdown-list-${val}"]`);
+
+  getAnswerInputMathTextarea = () => cy.get(`[data-cy="answer-input-math-textarea"]`);
+
+  setMethod = (methods, setFunction = false, argument, setChecBox) => {
     this.getMethodSelectionDropdow()
       .click()
       .then(() => {
         this.getMethodSelectionDropdowList(methods).click();
       });
+    if (setFunction instanceof Function) setFunction(argument);
+    if (setChecBox instanceof Function) setChecBox();
+  };
+
+  setValue = input => {
+    this.getMathFormulaAnswers()
+      .find(`[data-cy="answer-input-math-textarea"]`)
+      .then(element => {
+        cy.get("[mathquill-block-id]").then(elements => {
+          const { length } = elements[1].innerText;
+          cy.wrap(element)
+            .type("{del}".repeat(length === 0 ? 1 : length), { force: true })
+            .type(input, { force: true });
+        });
+      });
+  };
+
+  setRule = rule => {
     this.getAnswerRuleDropdown()
       .click()
-      .then(() => this.getAnswerRuleDropdownByValue(syntax).click());
+      .then(() => this.getAnswerRuleDropdownByValue(rule).click());
+  };
+
+  setSeparator = checBoxName => () => {
+    cy.get("input[type='checkbox']").uncheck({ force: true });
+    this[checBoxName]()
+      .check({ force: true })
+      .should("be.checked");
   };
 }
 

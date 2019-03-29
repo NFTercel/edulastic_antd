@@ -115,6 +115,101 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Math formula" 
         expected: "(y-1)=2(x+3)"
       }
     },
+    isSimplified: {
+      simplifiedVersion: {
+        expected: "4x+1"
+      },
+      decimalMarks: {
+        expected: "23"
+      }
+    },
+    isFactorised: {
+      decimalMarks: {
+        expected: "25"
+      },
+      inverseResult: {
+        expected: "(x−1)(x−2)"
+      }
+    },
+    isExpanded: {
+      expandedForm: {
+        expected: "x^2+5x+6"
+      },
+      decimalMarks: {
+        expected: "24"
+      }
+    },
+    isUnit: {
+      expectedUnits: {
+        expected: "5mi",
+        input: "5mi",
+        units: "mi"
+      },
+      allowedUnits: {
+        expected: "12km",
+        units: "km"
+      },
+      decimalMarks: {
+        expected: "26"
+      }
+    },
+    isTrue: {
+      comparison: {
+        expected: "5<6"
+      },
+      significantDecimal: {
+        expected: "0.33",
+        input: 2
+      },
+      decimalMarks: {
+        expected: "25"
+      }
+    },
+    stringMatch: {
+      literalStringComparison: {
+        expected: "abc",
+        input: "abc"
+      },
+      leadingAndTrailing: {
+        expected: " a ",
+        input: "a"
+      },
+      multipleSpaces: {
+        expected: "a   b",
+        input: "a b"
+      }
+    },
+    equivValue: {
+      numericalForm: {
+        input: "1m",
+        expected: "100cm"
+      },
+      inverse: {
+        expected: "44",
+        input: "44"
+      },
+      ignoreText: {
+        expected: "33sdf",
+        input: "33"
+      },
+      significantDecimal: {
+        input: "1\\div3",
+        expected: "0.33",
+        decimalPlaces: 2
+      },
+      compareSides: {
+        expected: "4+5=9",
+        input: "4+5=9"
+      },
+      tolerance: {
+        input: "10",
+        expected: "8.5",
+        tolerance: "±1.5"
+      },
+      decimalMarks: {
+        expected: "25"
+      }
+    },
     symbols: ["units_si", "units_us"],
     decimalSeparators: ["Dot", "Comma"],
     thousandsSeparators: ["Space", "Dot", "Comma"]
@@ -124,8 +219,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Math formula" 
   const editItem = new EditItemPage();
   const numpadButtons = question.virtualKeyBoardNumpad;
   const buttons = question.virtualKeyBoardButtons;
-  const methods = question.answersMethods;
-  const { syntaxes } = math;
+  const { syntaxes, fields, methods } = math;
   const ruleArguments = question.argumentMethods;
   const editToolBar = new EditToolBar();
   let preview;
@@ -144,12 +238,6 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Math formula" 
     });
 
     context("TC_429 => Enter question text in Compose Question text box", () => {
-      before("visit items page and select question type", () => {
-        editItem.getItemWithId("5c358b480c8e6f22190d5ce0");
-        editItem.deleteAllQuestion();
-        // create new que and select type
-        editItem.addNew().chooseQuestion(queData.group, queData.queType);
-      });
       it("Write text in textbox", () => {
         question
           .getComposeQuestionTextBox()
@@ -326,12 +414,12 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Math formula" 
         question.returnToCorrectTab();
       });
       it("Change answer methods", () => {
-        methods.forEach(item => {
+        Object.values(methods).forEach(item => {
           question
             .getMethodSelectionDropdow()
-            .click()
+            .click({ force: true })
             .then(() => {
-              question.getMethodSelectionDropdowList(item).click();
+              question.getMethodSelectionDropdowList(item).click({ force: true });
             });
           question.getMethodSelectionDropdow().contains("div", item);
         });
@@ -341,7 +429,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Math formula" 
         question.getAnswerValueMathOutput().should("have.length", 4);
         question
           .getAnswerAriaLabel()
-          .click()
+          .click({ force: true })
           .type(queData.answer.ariaLabel)
           .should("contain", queData.answer.ariaLabel);
 
@@ -688,7 +776,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Math formula" 
           .getMethodSelectionDropdow()
           .click()
           .then(() => {
-            question.getMethodSelectionDropdowList(methods[0]).click();
+            question.getMethodSelectionDropdowList(methods.EQUIV_LITERAL).click();
           });
         question.getAnswerValueMathInput().should("be.visible");
         question.getAnswerAriaLabel().should("be.visible");
@@ -726,7 +814,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Math formula" 
           .getMethodSelectionDropdow()
           .click()
           .then(() => {
-            question.getMethodSelectionDropdowList(methods[1]).click();
+            question.getMethodSelectionDropdowList(methods.EQUIV_VALUE).click();
           });
         question.getAnswerValueMathInput().should("be.visible");
         question.getAnswerAriaLabel().should("be.visible");
@@ -743,7 +831,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Math formula" 
           .getMethodSelectionDropdow()
           .click()
           .then(() => {
-            question.getMethodSelectionDropdowList(methods[2]).click();
+            question.getMethodSelectionDropdowList(methods.IS_SIMPLIFIED).click();
           });
         question.getAnswerInverseResult().should("be.visible");
         question.getAnswerAllowThousandsSeparator().should("be.visible");
@@ -754,7 +842,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Math formula" 
           .getMethodSelectionDropdow()
           .click()
           .then(() => {
-            question.getMethodSelectionDropdowList(methods[3]).click();
+            question.getMethodSelectionDropdowList(methods.IS_FACTORISED).click();
           });
         question.getAnswerFieldDropdown().should("be.visible");
         question.getAnswerInverseResult().should("be.visible");
@@ -765,7 +853,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Math formula" 
           .getMethodSelectionDropdow()
           .click()
           .then(() => {
-            question.getMethodSelectionDropdowList(methods[4]).click();
+            question.getMethodSelectionDropdowList(methods.IS_EXPANDED).click();
           });
         question.getAnswerAllowThousandsSeparator().should("be.visible");
       });
@@ -774,7 +862,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Math formula" 
           .getMethodSelectionDropdow()
           .click()
           .then(() => {
-            question.getMethodSelectionDropdowList(methods[5]).click();
+            question.getMethodSelectionDropdowList(methods.IS_UNIT).click();
           });
         question.getAnswerValueMathInput().should("be.visible");
         question.getAnswerAriaLabel().should("be.visible");
@@ -786,7 +874,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Math formula" 
           .getMethodSelectionDropdow()
           .click()
           .then(() => {
-            question.getMethodSelectionDropdowList(methods[6]).click();
+            question.getMethodSelectionDropdowList(methods.IS_TRUE).click();
           });
         question.getAnswerSignificantDecimalPlaces().should("be.visible");
         question.getAnswerAllowThousandsSeparator().should("be.visible");
@@ -796,7 +884,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Math formula" 
           .getMethodSelectionDropdow()
           .click()
           .then(() => {
-            question.getMethodSelectionDropdowList(methods[7]).click();
+            question.getMethodSelectionDropdowList(methods.STRING_MATCH).click();
           });
         question.getAnswerValueMathInput().should("be.visible");
         question.getAnswerAriaLabel().should("be.visible");
@@ -808,7 +896,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Math formula" 
           .getMethodSelectionDropdow()
           .click()
           .then(() => {
-            question.getMethodSelectionDropdowList(methods[8]).click();
+            question.getMethodSelectionDropdowList(methods.EQUIV_SYNTAX).click();
           });
         question.getAnswerRuleDropdown().should("be.visible");
         question.getAnswerIgnoreTextCheckox().should("be.visible");
@@ -831,7 +919,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Math formula" 
     it("Testing Rule : Decimal", () => {
       const { input, expected } = queData.equivSyntax.decimal;
 
-      question.checkEquivSyntaxMethod(methods[8], syntaxes.DECIMAL);
+      question.setMethod(methods.EQUIV_SYNTAX, question.setRule, syntaxes.DECIMAL);
 
       question
         .getAnswerRuleArgumentInput()
@@ -843,28 +931,28 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Math formula" 
     it("Testing Rule : Simple Fraction", () => {
       const { expected } = queData.equivSyntax.simpleFraction;
 
-      question.checkEquivSyntaxMethod(methods[8], syntaxes.SIMPLE_FRACTION);
+      question.setMethod(methods.EQUIV_SYNTAX, question.setRule, syntaxes.SIMPLE_FRACTION);
 
       question.checkCorrectAnswer(expected, preview, 0, true, false, "1/1");
     });
     it("Testing Rule : mixed Fraction", () => {
       const { expected } = queData.equivSyntax.mixedFraction;
 
-      question.checkEquivSyntaxMethod(methods[8], syntaxes.MIXED_FRACTION);
+      question.setMethod(methods.EQUIV_SYNTAX, question.setRule, syntaxes.MIXED_FRACTION);
 
       question.checkCorrectAnswer(expected, preview, 0, false, false, "1/1");
     });
     it("Testing Rule : Exponent", () => {
       const { expected } = queData.equivSyntax.exponent;
 
-      question.checkEquivSyntaxMethod(methods[8], syntaxes.EXPONENT);
+      question.setMethod(methods.EQUIV_SYNTAX, question.setRule, syntaxes.EXPONENT);
 
       question.checkCorrectAnswer(expected, preview, 0, false, false, "1/1");
     });
     it("Testing Rule : Standard form, Argument: linear", () => {
       const { expected } = queData.equivSyntax.standardFormLinear;
 
-      question.checkEquivSyntaxMethod(methods[8], syntaxes.STANDARD_FORM);
+      question.setMethod(methods.EQUIV_SYNTAX, question.setRule, syntaxes.STANDARD_FORM);
 
       question
         .getAnswerRuleArgumentSelect()
@@ -875,7 +963,7 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Math formula" 
     it("Testing Rule : Standard form, Argument: quadratic", () => {
       const { expected } = queData.equivSyntax.standardFormQuadratic;
 
-      question.checkEquivSyntaxMethod(methods[8], syntaxes.STANDARD_FORM);
+      question.setMethod(methods.EQUIV_SYNTAX, question.setRule, syntaxes.STANDARD_FORM);
       question
         .getAnswerRuleArgumentSelect()
         .click()
@@ -885,14 +973,266 @@ describe(`${FileHelper.getSpecName(Cypress.spec.name)} >> Author "Math formula" 
     it("Testing Rule : Slope intercept form", () => {
       const { expected } = queData.equivSyntax.slopeIntercept;
 
-      question.checkEquivSyntaxMethod(methods[8], syntaxes.SLOPE_INTERCEPT_FORM);
+      question.setMethod(methods.EQUIV_SYNTAX, question.setRule, syntaxes.SLOPE_INTERCEPT_FORM);
       question.checkCorrectAnswer(expected, preview, 0, true, false, "1/1");
     });
     it("Testing Rule : point slope form", () => {
       const { expected } = queData.equivSyntax.pointSlope;
 
-      question.checkEquivSyntaxMethod(methods[8], syntaxes.POINT_SLOPE_FORM);
+      question.setMethod(methods.EQUIV_SYNTAX, question.setRule, syntaxes.POINT_SLOPE_FORM);
       question.checkCorrectAnswer(expected, preview, 0, true, false, "1/1");
+    });
+  });
+
+  context("Testing isSimplified method", () => {
+    it("Testing simplified version", () => {
+      const { expected } = queData.isSimplified.simplifiedVersion;
+
+      question.setMethod(methods.IS_SIMPLIFIED);
+      question.checkCorrectAnswer(expected, preview, 0, true, true, "1/1");
+    });
+    it("Testing inverse result", () => {
+      const { expected } = queData.isSimplified.decimalMarks;
+
+      question.setMethod(methods.IS_SIMPLIFIED, question.setSeparator("getAnswerInverseResult"));
+
+      question.checkCorrectAnswer(expected, preview, 0, false);
+    });
+
+    it("Testing with allow decimal marks", () => {
+      const { expected } = queData.isSimplified.decimalMarks;
+
+      question.setMethod(methods.IS_SIMPLIFIED, question.setSeparator("getAnswerAllowThousandsSeparator"));
+
+      question.checkCorrectAnswer(expected, preview, 0, true, true, "1/1");
+    });
+  });
+
+  context("Testing isFactorised method", () => {
+    it("Testing that a mathematical expression is in factorised form", () => {
+      const { expected } = queData.isSimplified.decimalMarks;
+
+      question.setMethod(methods.IS_FACTORISED);
+
+      question.checkCorrectAnswer(expected, preview, 0, false);
+    });
+    it("Testing with field", () => {
+      question.setMethod(methods.IS_FACTORISED);
+
+      Object.values(fields).forEach(field =>
+        question
+          .getAnswerFieldDropdown()
+          .click()
+          .then(() =>
+            question
+              .getAnswerFieldDropdownListValue(field)
+              .click()
+              .should("be.visible")
+          )
+      );
+    });
+    it("Testing inverse result", () => {
+      const { expected } = queData.isFactorised.inverseResult;
+
+      question.setMethod(methods.IS_FACTORISED, question.setSeparator("getAnswerInverseResult"));
+
+      question.checkCorrectAnswer(expected, preview, 0, false);
+    });
+    it("Testing with allow decimal marks", () => {
+      const { expected } = queData.isFactorised.decimalMarks;
+
+      question.setMethod(methods.IS_FACTORISED, question.setSeparator("getAnswerAllowThousandsSeparator"));
+
+      question.checkCorrectAnswer(expected, preview, 0, false);
+    });
+  });
+
+  context("Testing isExpanded method", () => {
+    it("Testing that a mathematical expression is in factorised form", () => {
+      const { expected } = queData.isExpanded.expandedForm;
+
+      question.setMethod(methods.IS_EXPANDED);
+
+      question.checkCorrectAnswer(expected, preview, 0, false);
+    });
+    it("Testing with allow decimal marks", () => {
+      const { expected } = queData.isFactorised.decimalMarks;
+
+      question.setMethod(methods.IS_EXPANDED, question.setSeparator("getAnswerAllowThousandsSeparator"));
+
+      question.checkCorrectAnswer(expected, preview, 0, true, true, "1/1");
+    });
+  });
+
+  context("Testing isTrue method", () => {
+    it("Testing that an expression has a comparison, or equality", () => {
+      const { expected } = queData.isTrue.comparison;
+
+      question.setMethod(methods.IS_TRUE);
+
+      question.checkCorrectAnswer(expected, preview, 0, true, true, "1/1");
+    });
+
+    it("Testing significant decimal places", () => {
+      const { input, expected } = queData.isTrue.significantDecimal;
+
+      question.setMethod(methods.IS_TRUE);
+      question
+        .getAnswerSignificantDecimalPlaces()
+        .clear()
+        .type("{uparrow}".repeat(input), { force: true });
+      question.checkCorrectAnswer(expected, preview, 0, false);
+    });
+
+    it("Testing with allow decimal marks", () => {
+      const { expected } = queData.isTrue.decimalMarks;
+
+      question.setMethod(methods.IS_TRUE, question.setSeparator("getAnswerAllowThousandsSeparator"));
+
+      question.checkCorrectAnswer(expected, preview, 0, true, true, "1/1");
+    });
+  });
+
+  context("Testing stringMatch method", () => {
+    it("Testing with literal string comparison", () => {
+      const { input, expected } = queData.stringMatch.literalStringComparison;
+
+      question.setMethod(methods.STRING_MATCH, question.setValue, input);
+
+      question.checkCorrectAnswer(expected, preview, 0, true, true, "1/1");
+    });
+
+    it("Testing ignores spaces before and after a value", () => {
+      const { input, expected } = queData.stringMatch.leadingAndTrailing;
+
+      question.setMethod(
+        methods.STRING_MATCH,
+        question.setValue,
+        input,
+        question.setSeparator("getAnswerIgnoreLeadingAndTrailingSpaces")
+      );
+
+      question.checkCorrectAnswer(expected, preview, 0, true, true, "1/1");
+    });
+
+    it("Testing multiple spaces will be ignored and treated as one", () => {
+      const { input, expected } = queData.stringMatch.multipleSpaces;
+
+      question.setMethod(
+        methods.STRING_MATCH,
+        question.setValue,
+        input,
+        question.setSeparator("getAnswerTreatMultipleSpacesAsOne")
+      );
+
+      question.checkCorrectAnswer(expected, preview, 0, true, true, "1/1");
+    });
+  });
+
+  context("Testing isUnit method", () => {
+    it("Testing with expression contains the expected units", () => {
+      const { input, expected, units } = queData.isUnit.expectedUnits;
+
+      question.setMethod(methods.IS_UNIT, question.setValue, input);
+
+      question
+        .getAnswerAllowedUnits()
+        .clear({ force: true })
+        .type(units, { force: true });
+
+      question.checkCorrectAnswer(expected, preview, 0, false);
+    });
+    it("Testing with allowed units", () => {
+      const { expected, units } = queData.isUnit.allowedUnits;
+
+      question.setMethod(methods.IS_UNIT);
+
+      question
+        .getAnswerAllowedUnits()
+        .clear({ force: true })
+        .type(units, { force: true });
+
+      question.checkCorrectAnswer(expected, preview, 0, false);
+    });
+    it("Testing with allow decimal marks", () => {
+      const { expected } = queData.isUnit.decimalMarks;
+
+      question.setMethod(methods.IS_UNIT, question.setSeparator("getAnswerAllowThousandsSeparator"));
+
+      question.checkCorrectAnswer(expected, preview, 0, false);
+    });
+  });
+
+  context("Testing equivValue method", () => {
+    it("Testing with evaluate the expression to a numerical form for comparison", () => {
+      const { expected, input } = queData.equivValue.numericalForm;
+
+      question.setMethod(methods.EQUIV_VALUE, question.setValue, input);
+
+      question.checkCorrectAnswer(expected, preview, 0, false);
+    });
+    it("Testing with inverse result", () => {
+      const { expected, input } = queData.equivValue.inverse;
+
+      question.setMethod(
+        methods.EQUIV_VALUE,
+        question.setValue,
+        input,
+        question.setSeparator("getAnswerInverseResult")
+      );
+
+      question.checkCorrectAnswer(expected, preview, 0, false);
+    });
+    it("Testing with ignore text", () => {
+      const { expected, input } = queData.equivValue.ignoreText;
+
+      question.setMethod(
+        methods.EQUIV_VALUE,
+        question.setValue,
+        input,
+        question.setSeparator("getAnswerIgnoreTextCheckox")
+      );
+
+      question.checkCorrectAnswer(expected, preview, 0, true, true, "1/1");
+    });
+    it("Testing with significant decimal places", () => {
+      const { expected, input, decimalPlaces } = queData.equivValue.significantDecimal;
+
+      question.setMethod(methods.EQUIV_VALUE, question.setValue, input);
+      question
+        .getAnswerSignificantDecimalPlaces()
+        .clear({ force: true })
+        .type("{uparrow}".repeat(decimalPlaces), { force: true });
+
+      question.checkCorrectAnswer(expected, preview, 0, true, true, "1/1");
+      question.getAnswerSignificantDecimalPlaces().clear({ force: true });
+    });
+    it("Testing with compare sides", () => {
+      const { expected, input } = queData.equivValue.compareSides;
+
+      question.setMethod(methods.EQUIV_VALUE, question.setValue, input, question.setSeparator("getAnswerCompareSides"));
+
+      question.checkCorrectAnswer(expected, preview, 0, false);
+    });
+    it("Testing with tolerance that will be deemed as correct", () => {
+      const { expected, input, tolerance } = queData.equivValue.tolerance;
+
+      question.setMethod(methods.EQUIV_VALUE, question.setValue, input);
+
+      question
+        .getAnswerTolerance()
+        .clear({ force: true })
+        .type(tolerance, { force: true });
+
+      question.checkCorrectAnswer(expected, preview, 0, true, true, "1/1");
+      question.getAnswerTolerance().clear({ force: true });
+    });
+    it("Testing with allow decimal marks", () => {
+      const { expected } = queData.equivValue.decimalMarks;
+
+      question.setMethod(methods.EQUIV_VALUE, question.setSeparator("getAnswerAllowThousandsSeparator"));
+
+      question.checkCorrectAnswer(expected, preview, 0, true, true, "1/1");
     });
   });
 

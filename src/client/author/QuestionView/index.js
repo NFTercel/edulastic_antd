@@ -4,10 +4,9 @@ import { compose } from "redux";
 import PropTypes from "prop-types";
 import { Bar, ComposedChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
-import { StyledCard, StyledTitle } from "./styled";
+import { StyledFlexContainer, StyledCard, LegendContainer, LegendItem, LegendIcon, LegendLabel } from "./styled";
 import StudentResponse from "./component/studentResponses/studentResponse";
 import ClassQuestions from "../ClassResponses/components/Container/ClassQuestions";
-import CollapseButton from "../Shared/Components/CollpaseButton/CollapseButton";
 
 // actions
 import { receiveAnswersAction } from "../src/actions/classBoard";
@@ -15,35 +14,22 @@ import { receiveAnswersAction } from "../src/actions/classBoard";
 import { getAssignmentClassIdSelector, getClassQuestionSelector } from "../ClassBoard/ducks";
 
 class QuestionViewContainer extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isCollapsed: false
-    };
-    this.onClickCollapse = this.onClickCollapse.bind(this);
-  }
-
   componentDidMount() {
     const { loadClassQuestionResponses, assignmentIdClassId: { assignmentId, classId } = {}, question } = this.props;
     loadClassQuestionResponses(assignmentId, classId, question.id);
   }
-
-  onClickCollapse = collapsed => {
-    this.setState({
-      isCollapsed: collapsed
-    });
-  };
 
   render() {
     const {
       testActivity,
       classResponse: { testItems, ...others },
       question,
-      classQuestion
+      classQuestion,
+      children
     } = this.props;
-    const { isCollapsed } = this.state;
 
     const filterdItems = testItems.filter(item => item.data.questions.filter(q => q.id === question.id).length > 0);
+
     filterdItems.forEach(item => {
       item.data.questions = item.data.questions.filter(({ id }) => id === question.id);
       item.rows = item.rows.map(row => ({
@@ -67,48 +53,74 @@ class QuestionViewContainer extends Component {
     }
     return (
       <React.Fragment>
-        <StyledCard bordered={false} isCollapsed={isCollapsed}>
-          <StyledTitle>Performance by Questions</StyledTitle>
-          <ComposedChart barGap={1} barSize={36} data={data} width={1200} height={186}>
-            <XAxis dataKey="name" axisLine={false} tickSize={0} />
-            <YAxis
-              dataKey="score"
-              yAxisId={0}
-              tickCount={4}
-              allowDecimals={false}
-              tick={{ strokeWidth: 0, fill: "#999" }}
-              tickSize={6}
-              label={{ value: "PERFORMANCE", angle: -90, fill: "#999" }}
-              stroke="#999"
-            />
-            <YAxis
-              dataKey="time"
-              yAxisId={1}
-              tickCount={4}
-              allowDecimals={false}
-              tick={{ strokeWidth: 0, fill: "#999" }}
-              tickSize={6}
-              label={{
-                value: "AVG TIME (SECONDS)",
-                angle: -90,
-                fill: "#999"
-              }}
-              orientation="right"
-              stroke="#999"
-            />
-            <Bar stackId="a" dataKey="score" fill="#1fe3a0" onClick={this.onClickChart} />
-            <Bar stackId="a" dataKey="time" fill="#ee1b82" onClick={this.onClickChart} />
-          </ComposedChart>
-          <CollapseButton handleClickCollapse={this.onClickCollapse} collapsed={isCollapsed} />
-        </StyledCard>
+        <StyledFlexContainer>
+          <StyledCard bordered={false}>
+            {children}
+            <LegendContainer>
+              <LegendItem>
+                <LegendIcon color="#1FE3A1" />
+                <LegendLabel>CORRECT</LegendLabel>
+              </LegendItem>
+              <LegendItem>
+                <LegendIcon color="#F35F5F" />
+                <LegendLabel>INCORRECT</LegendLabel>
+              </LegendItem>
+              <LegendItem>
+                <LegendIcon color="#ebaa28" />
+                <LegendLabel>PARTIALLY CORRECT</LegendLabel>
+              </LegendItem>
+              <LegendItem>
+                <LegendIcon color="#B1B1B1" />
+                <LegendLabel>SKIPPED</LegendLabel>
+              </LegendItem>
+              <LegendItem>
+                <LegendIcon color="#7BC0DF" />
+                <LegendLabel>MANUALLY GRADED</LegendLabel>
+              </LegendItem>
+            </LegendContainer>
+            <ResponsiveContainer width="100%" height={250}>
+              <ComposedChart barGap={1} barSize={36} data={data}>
+                <XAxis dataKey="name" axisLine={false} tickSize={0} />
+                <YAxis
+                  dataKey="score"
+                  yAxisId={0}
+                  tickCount={4}
+                  allowDecimals={false}
+                  tick={{ strokeWidth: 0, fill: "#999" }}
+                  tickSize={6}
+                  label={{ value: "PERFORMANCE", angle: -90, fill: "#999" }}
+                  stroke="#999"
+                />
+                <YAxis
+                  dataKey="time"
+                  yAxisId={1}
+                  tickCount={4}
+                  allowDecimals={false}
+                  tick={{ strokeWidth: 0, fill: "#999" }}
+                  tickSize={6}
+                  label={{
+                    value: "AVG TIME (SECONDS)",
+                    angle: -90,
+                    fill: "#999"
+                  }}
+                  orientation="right"
+                  stroke="#999"
+                />
+                <Bar stackId="a" dataKey="score" fill="#1fe3a0" onClick={this.onClickChart} />
+                <Bar stackId="a" dataKey="time" fill="#ee1b82" onClick={this.onClickChart} />
+              </ComposedChart>
+            </ResponsiveContainer>
+          </StyledCard>
+        </StyledFlexContainer>
         <StudentResponse testActivity={testActivity} />
         {testActivity &&
-          testActivity.map(student => {
+          testActivity.map((student, index) => {
             if (!student.testActivityId || classQuestion.length === 0) {
               return null;
             }
             return (
               <ClassQuestions
+                key={index}
                 currentStudent={student}
                 classResponse={{ testItems: filterdItems, ...others }}
                 questionActivities={classQuestion.filter(({ userId }) => userId === student.studentId)}
@@ -139,9 +151,11 @@ QuestionViewContainer.propTypes = {
   question: PropTypes.object.isRequired,
   testActivity: PropTypes.array.isRequired,
   classQuestion: PropTypes.array,
-  loadClassQuestionResponses: PropTypes.func
+  loadClassQuestionResponses: PropTypes.func,
+  children: PropTypes.node
 };
 QuestionViewContainer.defaultProps = {
   classQuestion: [],
+  children: null,
   loadClassQuestionResponses: () => {}
 };

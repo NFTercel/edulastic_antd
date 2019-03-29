@@ -46,7 +46,7 @@ class TestItemCol extends Component {
     return (
       <Tabs.TabContainer
         style={{
-          padding: 25,
+          padding: 0,
           display: !multiple && showFeedback ? "flex" : "initial"
         }}
       >
@@ -104,7 +104,7 @@ class TestItemCol extends Component {
           </MobileLeftSide>
         )}
         {col.widgets.map((widget, i) => (
-          <React.Fragment key={i}>
+          <React.Fragment>
             {col.tabs && !!col.tabs.length && value === widget.tabIndex && this.renderTabContent(widget, i)}
             {col.tabs && !col.tabs.length && this.renderTabContent(widget, i)}
           </React.Fragment>

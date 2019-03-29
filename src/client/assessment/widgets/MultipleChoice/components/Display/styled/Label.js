@@ -4,17 +4,21 @@ import { green } from "@edulastic/colors";
 export const Label = styled.label`
   position: relative;
   display: inline-block;
-  padding-left: ${props => (props.smallSize ? 5 : 20)}px;
+  padding: 9px 0px;
+  padding-left: 25px;
+  /* padding-left: ${props => (props.smallSize ? 5 : 20)}px; */
   border: dotted 1px ${props => props.theme.widgets.multipleChoice.labelBorderColor};
   border-left: solid 3px ${props => props.theme.widgets.multipleChoice.labelBorderColor};
-  margin: ${props => (props.setAnswers ? "5px 0" : "10px 0")};
-  width: ${props => props.width || "100%"};
+  background-color: ${props => props.color};
+  max-width: 320px;
+  border-radius: 0px 10px 10px 0px;
+  /* margin: ${props => (props.setAnswers ? "5px 0" : "10px 0")}; */
+  /* width: ${props => props.width || "100%"}; */
 
   &:hover {
-    border: dotted 1px ${props => props.theme.widgets.multipleChoice.labelBorderHoverColor};
+    /* border: dotted 1px ${props => props.theme.widgets.multipleChoice.labelBorderHoverColor};
     border-left: solid 3px ${props => props.theme.widgets.multipleChoice.labelBorderHoverColor};
-    background-color: rgba(39, 125, 241, 0.04);
-    cursor: pointer;
+    cursor: pointer; */
   }
   &.checked {
     background-color: ${props => props.theme.widgets.multipleChoice.labelCheckedBgColor};

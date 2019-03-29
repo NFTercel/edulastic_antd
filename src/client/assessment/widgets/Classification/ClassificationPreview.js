@@ -222,16 +222,16 @@ const ClassificationPreview = ({
   };
 
   return (
-    <Paper style={{ fontSize }} padding={smallSize} boxShadow={smallSize ? "none" : ""}>
+    <Paper data-cy="classificationPreview" style={{ fontSize }} padding={smallSize} boxShadow={smallSize ? "none" : ""}>
       <InstructorStimulus>{item.instructor_stimulus}</InstructorStimulus>
       {!smallSize && view === PREVIEW && <Stimulus dangerouslySetInnerHTML={{ __html: stimulus }} />}
 
-      <div style={wrapperStyle}>
+      <div data-cy="classificationPreviewWrapper" style={wrapperStyle}>
         <table style={{ width: "100%", flexGrow: 2 }}>
           <thead>
             {rowHeader && (
               <tr>
-                <th colSpan={2} dangerouslySetInnerHTML={{ __html: rowHeader }} />
+                <th data-cy="rowHeader" colSpan={2} dangerouslySetInnerHTML={{ __html: rowHeader }} />
               </tr>
             )}
             <tr>

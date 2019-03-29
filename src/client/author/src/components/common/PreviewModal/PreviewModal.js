@@ -13,7 +13,7 @@ import {
   getItemDetailRowsSelector,
   getItemDetailSelector
 } from "../../../../ItemDetail/ducks";
-
+import { getQuestionsSelector } from "../../../../sharedDucks/questions";
 class PreviewModal extends React.Component {
   constructor(props) {
     super(props);
@@ -39,7 +39,7 @@ class PreviewModal extends React.Component {
   };
 
   render() {
-    const { isVisible, loading, item, rows } = this.props;
+    const { isVisible, loading, item, rows, questions } = this.props;
     return (
       <Modal styles={{ minWidth: 200 }} open={isVisible} onClose={this.closeModal} center>
         <h2 style={{ fontWeight: "bold", fontSize: 20 }}>Preview</h2>
@@ -54,6 +54,7 @@ class PreviewModal extends React.Component {
             verticalDivider={item.verticalDivider}
             scrolling={item.scrolling}
             style={{ width: "100%" }}
+            questions={questions}
           />
         )}
       </Modal>
@@ -81,7 +82,8 @@ const enhance = compose(
     state => ({
       rows: getItemDetailRowsSelector(state),
       loading: getItemDetailLoadingSelector(state),
-      item: getItemDetailSelector(state)
+      item: getItemDetailSelector(state),
+      questions: getQuestionsSelector(state)
     }),
     {
       getItemDetailById: getItemDetailByIdAction

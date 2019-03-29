@@ -9,7 +9,7 @@ const StemNumeration = ({ t, onChange, value, size, options, ...restProps }) => 
   <Fragment>
     <Label>{t("component.options.stemNumerationReviewOnly")}</Label>
     <Select
-      data-cy="responseContainerPositionOption"
+      data-cy="stemNumerationSelect"
       size="large"
       value={value}
       style={{ width: "100%" }}

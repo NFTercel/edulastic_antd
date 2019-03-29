@@ -120,7 +120,11 @@ const ChartEdit = ({ item, setQuestionData, t }) => {
 
     switch (prop) {
       case "interactive": {
-        newItem.chart_data.data[index].notInteractive = value;
+        if (newItem.chart_data.data[index].notInteractive === undefined) {
+          newItem.chart_data.data[index].notInteractive = true;
+        } else {
+          delete newItem.chart_data.data[index].notInteractive;
+        }
         break;
       }
       case "label": {

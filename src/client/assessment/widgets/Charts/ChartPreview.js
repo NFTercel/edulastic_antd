@@ -11,6 +11,8 @@ import { CLEAR, PREVIEW } from "../../constants/constantsForQuestions";
 import { getFontSize } from "../../utils/helpers";
 import LineChart from "./LineChart";
 import BarChart from "./BarChart";
+import Histogram from "./Histogram";
+import DotPlot from "./DotPlot";
 
 const ChartPreview = ({ item, smallSize, saveAnswer, userAnswer, view }) => {
   const fontSize = getFontSize(get(item, "ui_style.fontsize"));
@@ -26,6 +28,12 @@ const ChartPreview = ({ item, smallSize, saveAnswer, userAnswer, view }) => {
       break;
     case questionType.BAR_CHART:
       CurrentChart = BarChart;
+      break;
+    case questionType.HISTOGRAM:
+      CurrentChart = Histogram;
+      break;
+    case questionType.DOT_PLOT:
+      CurrentChart = DotPlot;
       break;
     default:
   }

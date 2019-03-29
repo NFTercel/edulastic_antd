@@ -48,8 +48,11 @@ const AssignmentCard = ({ startAssignment, resumeAssignment, data, theme, t, typ
     _id: assignmentId,
     safeBrowser,
     testType,
-    maxAttempts
+    maxAttempts,
+    title,
+    thumbnail
   } = data;
+  console.log("data here is", data);
   const lastAttempt = last(reports) || {};
   // if last test attempt was not *submitted*, user should be able to resume it.
   const resume = lastAttempt.status == 0;
@@ -97,7 +100,8 @@ const AssignmentCard = ({ startAssignment, resumeAssignment, data, theme, t, typ
   return (
     <CardWrapper>
       <AssessmentDetails
-        test={test}
+        title={title}
+        thumbnail={thumbnail}
         theme={theme}
         testType={testType}
         t={t}

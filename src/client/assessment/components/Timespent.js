@@ -6,15 +6,18 @@ import clockIcon from "../assets/clock-circular-outline.svg";
 
 const Timespent = ({ timespent, view }) => {
   const showTimespent = view === "preview";
-  const time = timespent ? timespen : "-";
+  const time = timespent || "-";
 
   return (
     <Fragment>
       {showTimespent && (
-        <StyledDivSec>
-          <img alt="icon" src={clockIcon} />
-          <TextPara>{time}</TextPara>
-        </StyledDivSec>
+        <React.Fragment>
+          <StyledDivSec>
+            <img alt="icon" src={clockIcon} />
+            <TextPara>{time}</TextPara>
+          </StyledDivSec>
+          <StyledDived />
+        </React.Fragment>
       )}
     </Fragment>
   );
@@ -25,18 +28,30 @@ Timespent.propTypes = {
   view: PropTypes.string.isRequired
 };
 
+Timespent.defaultProps = {
+  timespent: ""
+};
+
 export default Timespent;
 
 const StyledDivSec = styled.div`
   height: 45px;
   display: flex;
-  alignitems: "center";
-  border-bottom: 1.4px solid #f7f7f7;
+  align-items: "center";
+`;
+
+const StyledDived = styled.div`
+  height: 1px;
+  border-bottom: 1.4px solid #e9eef3;
+  margin: 8px -25px 15px;
 `;
 
 const TextPara = styled.p`
   margin-left: 10px;
-  font-size: 14px;
+  font-size: 13px;
   display: flex;
   align-items: center;
+  color: #7c848e;
+  font-weight: 600;
+  line-height: 18px;
 `;

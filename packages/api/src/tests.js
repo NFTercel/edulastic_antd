@@ -1,5 +1,5 @@
 import API from "./utils/API";
-
+import { omit } from "lodash";
 const api = new API();
 const prefix = "/test";
 const prefixElasticSearch = "/search/tests";
@@ -17,11 +17,7 @@ const getAll = data =>
       return { items, count };
     });
 
-const formatData = data => {
-  const item = JSON.parse(JSON.stringify(data));
-  delete item._id;
-  return item;
-};
+const formatData = data => omit(data, ["_id", "autoGrade"]);
 
 const getById = (id, params = {}) =>
   api

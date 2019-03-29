@@ -47,7 +47,7 @@ Curriculum.propTypes = {
   onDrop: PropTypes.func.isRequired,
   curriculum: PropTypes.object.isRequired,
   expandedModules: PropTypes.array.isRequired,
-  padding: PropTypes.string.isRequired,
+  padding: PropTypes.bool.isRequired,
   onCollapseExpand: PropTypes.func.isRequired
 };
 

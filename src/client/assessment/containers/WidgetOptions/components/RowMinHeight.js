@@ -8,7 +8,7 @@ import CommonInput from "./common/CommonInput";
 const RowMinHeight = ({ t, type, ...restProps }) => (
   <Fragment>
     <Label>{t("component.options.rowMinHeight")}</Label>
-    <CommonInput type={type} {...restProps} />
+    <CommonInput data-cy="rowMinHeightInput" type={type} {...restProps} />
   </Fragment>
 );
 

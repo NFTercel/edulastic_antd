@@ -1,8 +1,10 @@
+/* eslint-disable no-shadow */
 import { userBuilder } from "./generate";
-import LoginPage from "../e2e/framework/student/loginPage.js";
+import LoginPage from "../e2e/framework/student/loginPage";
 
 Cypress.LocalStorage.clear = () => {};
 const BASE_URL = Cypress.config("API_URL");
+const ITEM_ID = "5c358b480c8e6f22190d5ce0";
 
 Cypress.Commands.add("createUser", overrides => {
   const user = userBuilder(overrides);
@@ -34,7 +36,7 @@ Cypress.Commands.add("assertHome", () => {
 
 Cypress.Commands.add("setToken", (role = "teacher") => {
   const postData =
-    role == "teacher"
+    role === "teacher"
       ? {
           email: "auto.teacher1@snapwiz.com",
           password: "snapwiz"
@@ -61,7 +63,7 @@ Cypress.Commands.add("setToken", (role = "teacher") => {
   cy.route("GET", "**assignments**").as("assignment");
   login.fillLoginForm(postData.email, postData.password);
   login.onClickSignin().then(() => {
-    if (role == "teacher") {
+    if (role === "teacher") {
       cy.wait("@apiLoad");
     } else {
       cy.wait("@assignment");
@@ -82,10 +84,10 @@ Cypress.Commands.add(
       body: accessPostData
     }).then(({ body }) => {
       cy.fixture("assignments").then(asgns => {
-        const postData = asgns["default"];
-        postData["assignments"][0]["testId"] = testId.valueOf();
-        postData["assignments"][0]["startDate"] = startDt.valueOf();
-        postData["assignments"][0]["endDate"] = dueDt.valueOf();
+        const postData = asgns.default;
+        postData.assignments[0].testId = testId.valueOf();
+        postData.assignments[0].startDate = startDt.valueOf();
+        postData.assignments[0].endDate = dueDt.valueOf();
         cy.request({
           url: `${BASE_URL}/assignments`,
           method: "POST",
@@ -113,7 +115,7 @@ Cypress.Commands.add("deleteAllAssignments", () => {
     password: "snapwiz"
   };
 
-  let asgnIds = [];
+  const asgnIds = [];
 
   cy.request({
     url: `${BASE_URL}/auth/login`,
@@ -128,7 +130,7 @@ Cypress.Commands.add("deleteAllAssignments", () => {
         "Content-Type": "application/json"
       }
     }).then(({ body }) => {
-      body.result.forEach((asgnDO, i) => {
+      body.result.forEach(asgnDO => {
         asgnIds.push(asgnDO._id);
       });
       console.log("All Assignments = ", asgnIds);
@@ -213,8 +215,8 @@ Cypress.Commands.add("uploadImage", base64Image => {
     url: `${BASE_URL}/auth/login`,
     method: "POST",
     body: teacherPostData
-  }).then(({ body }) => {
-    return cy
+  }).then(({ body }) =>
+    cy
       .server()
       .route("POST", `${BASE_URL}/file/upload`)
       .as("formRequest")
@@ -225,8 +227,8 @@ Cypress.Commands.add("uploadImage", base64Image => {
         xhr.setRequestHeader("authorization", body.result.token);
         xhr.send(formData);
       })
-      .wait("@formRequest");
-  });
+      .wait("@formRequest")
+  );
 });
 
 class DndSimulatorDataTransfer {
@@ -267,8 +269,6 @@ class DndSimulatorDataTransfer {
 
     return "";
   }
-
-  setDragImage(img, xOffset, yOffset) {}
 }
 
 Cypress.Commands.add(
@@ -326,3 +326,15 @@ Cypress.Commands.add("uploadFile", (fileName, selector) =>
       })
   )
 );
+
+Cypress.Commands.add("selectQuestionType", ({ editItem, queData, itemId = ITEM_ID }) => {
+  // create new que and select type
+  editItem.getItemWithId(itemId);
+  editItem.deleteAllQuestion();
+  editItem.addNew().chooseQuestion(queData.group, queData.queType);
+});
+
+Cypress.Commands.add("deleteOldQuestion", ({ editItem, itemId = ITEM_ID }) => {
+  editItem.getItemWithId(itemId);
+  editItem.deleteAllQuestion();
+});

@@ -45,7 +45,7 @@ export const Subtitle = styled.div`
 `;
 
 export const StyledTextField = styled(TextField)`
-  width: ${props => (props.width ? `${props.width}` : "100px")}
+  width: ${props => (props.width ? `${props.width}` : "100px")};
   padding: 0 0 0 40px;
   margin-right: 3em;
   height: 40px;
@@ -347,14 +347,15 @@ export const Row = styled.div`
 export const Col = styled.div`
   display: flex;
   flex-direction: column;
-  padding-right: ${props => (props.paddingRight ? props.paddingRight : "0")}
-  padding-left: ${props => (props.paddingLeft ? props.paddingLeft : "0")}
+  padding-right: ${props => (props.paddingRight ? props.paddingRight : "0")};
+  padding-left: ${props => (props.paddingLeft ? props.paddingLeft : "0")};
   margin-bottom: ${props => (props.marginBottom ? props.marginBottom : "0")}px;
   width: ${({ md }) => (100 / 12) * md}%;
-  display: block; 
+  display: block;
 `;
 
 export const PaperWrapper = styled(Paper)`
+  padding: 15px 25px;
   @media (max-width: ${mobileWidth}) {
     padding: 8px;
   }

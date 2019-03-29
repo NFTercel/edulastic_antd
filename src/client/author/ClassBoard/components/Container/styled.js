@@ -6,12 +6,28 @@ import { themes } from "../../../../student/themes";
 
 const classBoardTheme = themes.default.classboard;
 
+export const Anchor = styled.a`
+  color: #69727e;
+`;
+export const AnchorLink = styled(Link)`
+  color: #69727e;
+`;
+
 export const PaginationInfo = styled.span`
   font-weight: 600;
-  display: inline-block
+  display: inline-block;
   font-size: 11px;
-  word-spacing:5px;
-  color: ${classBoardTheme.headerContainerColor}
+  word-spacing: 5px;
+  color: #69727e;
+`;
+
+export const CheckContainer = styled.span`
+  font-weight: bold;
+  display: inline-block;
+  font-size: 15px;
+  > span {
+    margin-left: 0;
+  }
 `;
 
 export const ButtonGroup = styled.div`
@@ -23,56 +39,68 @@ export const StyledFlexContainer = styled(FlexContainer)`
   margin: 20px auto;
 `;
 
-export const AnchorLink = styled(Link)`
-  color: ${classBoardTheme.headerAnchorLink};
+export const GraphContainer = styled(FlexContainer)`
+  width: 95%;
+  margin: 20px auto;
+  padding-right: 20px;
 `;
 
-export const Anchor = styled.a`
-  color: ${classBoardTheme.headerAnchorLink};
-`;
-
-export const StyledCardContainer = styled.div`
-  position: relative;
+export const StudentGrapContainer = styled(FlexContainer)`
+  width: 95%;
+  margin: 20px auto;
 `;
 
 export const StyledCard = styled(Card)`
-  margin: auto;
-  width: 95%;
+  width: 100%;
   border-radius: 10px;
-  box-shadow: 3px 2px 7px lightgray;
-  overflow-y: hidden;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
   .ant-card-body {
     padding: 30px 30px 15px 30px;
+    padding-top: ${({ paddingTop }) => paddingTop}px;
   }
-  height: ${props => (props.isCollapsed ? "5px" : "285px")};
 `;
 
 export const StudentButtonDiv = styled.div`
-  margin-left: auto;
   margin-right: 20px !important;
   .ant-btn-primary {
     background-color: #0e93dc;
   }
 `;
 
-export const StudentButton = styled(Button)`
-  border-bottom-right-radius: 0px;
-  border-top-right-radius: 0px;
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-  padding: 0px 30px;
+const StyledTabButton = styled.a`
+  height: 28px;
+  padding: 6px 35px;
   font-size: 11px;
   font-weight: 600;
+  background-color: ${({ active }) => (active ? "#1774f0" : "#FFFFFF")};
+  color: ${({ active }) => (active ? "#FFFFFF" : "#1774f0")};
+  &:hover {
+    background-color: #1774f0;
+    color: #ffffff;
+  }
+`;
+export const BothButton = styled(StyledTabButton)`
+  border-radius: 4px 0px 0px 4px;
 `;
 
-export const QuestionButton = styled(Button)`
-  border-bottom-right-radius: 4px;
-  border-top-right-radius: 4px;
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px;
-  padding: 0px 30px;
-  font-size: 11px;
-  font-weight: 600;
+export const StudentButton = styled(StyledTabButton)`
+  border-radius: 0px;
+  margin: 0px 2px;
+`;
+
+export const QuestionButton = styled(StyledTabButton)`
+  border-radius: 0px 4px 4px 0px;
+`;
+
+export const RedirectButton = styled(StyledTabButton)`
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+  padding-right: 25px;
+  img {
+    margin-right: 10px;
+  }
 `;
 
 export const BarDiv = styled.div`
@@ -84,19 +112,18 @@ export const BarDiv = styled.div`
 `;
 
 export const StyledCheckbox = styled(Checkbox)`
-  color: ${classBoardTheme.headerCheckboxColor};
-  font-weight: bold;
-  font-size: 11px;
+  font-size: 0.7em;
+  color: #1774f0;
 `;
 
 export const SpaceDiv = styled.div`
-  display:inline-block
-  width:20px;
+  display: inline-block;
+  width: 20px;
 `;
 
 export const ButtonSpace = styled.div`
-  display:inline-block
-  width:13px;
+  display: inline-block;
+  width: 13px;
 `;
 
 export const StyledButton = styled(Button)`

@@ -176,7 +176,7 @@ const EditSortList = ({ item, setQuestionData, t }) => {
           onCloseTab={handleCloseTab}
         />
       </Paper>
-      <AdvancedOptions onUiChange={handleUiStyleChange} />
+      <AdvancedOptions item={item} onUiChange={handleUiStyleChange} />
     </Fragment>
   );
 };
