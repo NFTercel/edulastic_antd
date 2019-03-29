@@ -1,6 +1,6 @@
 import API from "./utils/API";
 
-const api = new API("https://4uwpei20if.execute-api.us-east-1.amazonaws.com/development/api/");
+const api = new API("https://1nz4dq81w6.execute-api.us-east-1.amazonaws.com/dev/");
 
 const evaluate = data =>
   api
@@ -11,6 +11,16 @@ const evaluate = data =>
     })
     .then(result => result.data);
 
+const calculate = data =>
+  api
+    .callApi({
+      method: "post",
+      url: "/calculate",
+      data
+    })
+    .then(result => result.data);
+
 export default {
-  evaluate
+  evaluate,
+  calculate
 };

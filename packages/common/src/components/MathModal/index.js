@@ -1,32 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components";
-import { Button, Icon, Modal } from "antd";
+import { Modal } from "antd";
 import MathInput from "../MathInput";
-
-const MathModalHeader = styled.div`
-  width: 100%;
-  height: 30px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-bottom: 10px;
-`;
-
-const MathModalFooter = styled.div`
-  width: 100%;
-  height: 30px;
-  margin-top: 15px;
-`;
-
-const CancelButton = styled(Button)`
-  float: right;
-  margin-right: 15px;
-`;
-
-const OKButton = styled(Button)`
-  float: right;
-`;
 
 class MathModal extends React.Component {
   state = {

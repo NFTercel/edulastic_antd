@@ -4,7 +4,7 @@ import { arrayMove } from "react-sortable-hoc";
 import { compose } from "redux";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { cloneDeep } from "lodash";
+import produce from "immer";
 import "react-quill/dist/quill.snow.css";
 import { Checkbox, Input, Select, Upload, message } from "antd";
 import { ChromePicker } from "react-color";
@@ -14,6 +14,7 @@ import { API_CONFIG } from "@edulastic/api";
 import { PaddingDiv } from "@edulastic/common";
 import { withNamespaces } from "@edulastic/localization";
 import { setQuestionDataAction } from "../../../author/QuestionEditor/ducks";
+import { updateVariables } from "../../utils/variables";
 
 import DropArea from "../../containers/DropArea";
 import { AddNewChoiceBtn } from "../../styled/AddNewChoiceBtn";
@@ -56,59 +57,74 @@ class Authoring extends Component {
     isColorPickerVisible: false
   };
 
-  getNewItem() {
-    const { item } = this.props;
-    return cloneDeep(item);
-  }
-
-  onChangeQuesiton = html => {
-    const stimulus = html;
+  onChangeQuestion = stimulus => {
     const { item, setQuestionData } = this.props;
-    setQuestionData({ ...item, stimulus });
+    setQuestionData(
+      produce(item, draft => {
+        draft.stimulus = stimulus;
+        updateVariables(draft);
+      })
+    );
   };
 
   onSortEnd = (index, { oldIndex, newIndex }) => {
-    const { setQuestionData } = this.props;
-    const newItem = this.getNewItem();
-    newItem.options[index] = arrayMove(newItem.options[index], oldIndex, newIndex);
-    setQuestionData(newItem);
+    const { item, setQuestionData } = this.props;
+    setQuestionData(
+      produce(item, draft => {
+        draft.options[index] = arrayMove(draft.options[index], oldIndex, newIndex);
+      })
+    );
   };
 
   remove = (index, itemIndex) => {
-    const { setQuestionData } = this.props;
-    const newItem = this.getNewItem();
-    newItem.options[index].splice(itemIndex, 1);
-    setQuestionData(newItem);
+    const { item, setQuestionData } = this.props;
+    setQuestionData(
+      produce(item, draft => {
+        draft.options[index].splice(itemIndex, 1);
+        updateVariables(draft);
+      })
+    );
   };
 
   editOptions = (index, itemIndex, e) => {
-    const { setQuestionData } = this.props;
-    const newItem = this.getNewItem();
-    if (newItem.options[index] === undefined) newItem.options[index] = [];
-    newItem.options[index][itemIndex] = e.target.value;
-    setQuestionData(newItem);
+    const { item, setQuestionData } = this.props;
+    setQuestionData(
+      produce(item, draft => {
+        if (draft.options[index] === undefined) draft.options[index] = [];
+        draft.options[index][itemIndex] = e.target.value;
+        updateVariables(draft);
+      })
+    );
   };
 
   addNewChoiceBtn = index => {
-    const { setQuestionData, t } = this.props;
-    const newItem = this.getNewItem();
-    if (newItem.options[index] === undefined) newItem.options[index] = [];
-    newItem.options[index].push(t("component.cloze.imageText.newChoice"));
-    setQuestionData(newItem);
+    const { item, setQuestionData, t } = this.props;
+    setQuestionData(
+      produce(item, draft => {
+        if (draft.options[index] === undefined) draft.options[index] = [];
+        draft.options[index].push(t("component.cloze.imageText.newChoice"));
+      })
+    );
   };
 
   onItemPropChange = (prop, value) => {
-    const { setQuestionData } = this.props;
-    const newItem = this.getNewItem();
-    newItem[prop] = value;
-    setQuestionData({ ...newItem });
+    const { item, setQuestionData } = this.props;
+    setQuestionData(
+      produce(item, draft => {
+        draft[prop] = value;
+        updateVariables(draft);
+      })
+    );
   };
 
   onResponseLabelChange = (index, value) => {
-    const { setQuestionData } = this.props;
-    const newItem = this.getNewItem();
-    newItem.responses[index].label = value;
-    setQuestionData({ ...newItem });
+    const { item, setQuestionData } = this.props;
+    setQuestionData(
+      produce(item, draft => {
+        draft.responses[index].label = value;
+        updateVariables(draft);
+      })
+    );
   };
 
   showColorPicker = status => {
@@ -121,13 +137,18 @@ class Authoring extends Component {
 
   handlePointersChange = value => {
     const { item, setQuestionData } = this.props;
-    const newResponses = item.responses.map(it => {
-      if (it.active) {
-        it.pointerPosition = value;
-      }
-      return it;
-    });
-    setQuestionData({ ...item, responses: newResponses });
+    setQuestionData(
+      produce(item, draft => {
+        draft.responses = draft.responses.map(it => {
+          if (it.active) {
+            it.pointerPosition = value;
+          }
+          return it;
+        });
+
+        updateVariables(draft);
+      })
+    );
   };
 
   handleImageUpload = info => {
@@ -167,7 +188,7 @@ class Authoring extends Component {
               this.stimulus = instance;
             }}
             placeholder={t("component.cloze.imageText.thisisstem")}
-            onChange={this.onChangeQuesiton}
+            onChange={this.onChangeQuestion}
             showResponseBtn={false}
             value={item.stimulus}
           />

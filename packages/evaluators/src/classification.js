@@ -1,4 +1,4 @@
-import { includes } from "lodash";
+import { includes, reduce } from "lodash";
 import { ScoringType } from "./const/scoring";
 import partialMatchTemplate from "./helpers/partialMatchTemplate";
 import exactMatchTemplate from "./helpers/exactMatchTemplate";
@@ -15,11 +15,21 @@ const exactCompareFunction = ({ answers, userResponse = [] }) => {
     }
 
     let matches = 0;
-    let totalMatches = 0;
+    const totalMatches = reduce(
+      answer,
+      (acc, array) => {
+        let sum = 0;
+        array.forEach(() => {
+          sum++;
+        });
+
+        return acc + sum;
+      },
+      0
+    );
 
     userResponse.forEach((col, colIndex) => {
       col.forEach(ans => {
-        totalMatches++;
         if (includes(answer[colIndex], ans)) {
           matches++;
         }

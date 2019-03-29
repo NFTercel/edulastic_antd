@@ -1,11 +1,13 @@
 import React, { Fragment, useState } from "react";
 import PropTypes from "prop-types";
-import { cloneDeep } from "lodash";
 import Dropzone from "react-dropzone";
+import produce from "immer";
 
 import { withNamespaces } from "@edulastic/localization";
 import { Paper, Image } from "@edulastic/common";
 import { fileApi } from "@edulastic/api";
+
+import { updateVariables } from "../../../utils/variables";
 
 import QuestionTextArea from "../../../components/QuestionTextArea";
 import DropZoneToolbar from "../../../components/DropZoneToolbar";
@@ -30,17 +32,21 @@ const HighlightImageEdit = ({ item, setQuestionData, t }) => {
   const file = image ? image.source : "";
 
   const handleItemChangeChange = (prop, uiStyle) => {
-    const newItem = cloneDeep(item);
-
-    newItem[prop] = uiStyle;
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft[prop] = uiStyle;
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleImageToolbarChange = prop => val => {
-    const newItem = cloneDeep(item);
-
-    newItem.image[prop] = val;
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.image[prop] = val;
+        updateVariables(draft);
+      })
+    );
   };
 
   const onDrop = ([files]) => {
@@ -72,24 +78,27 @@ const HighlightImageEdit = ({ item, setQuestionData, t }) => {
   };
 
   const colorChange = i => obj => {
-    const newItem = cloneDeep(item);
-    newItem.line_color[i] = hexToRGB(obj.color, (obj.alpha ? obj.alpha : 1) / 100);
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.line_color[i] = hexToRGB(obj.color, (obj.alpha ? obj.alpha : 1) / 100);
+      })
+    );
   };
 
   const handleAddLineColor = () => {
-    const newItem = cloneDeep(item);
-
-    newItem.line_color.push("#000000");
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.line_color.push("#000000");
+      })
+    );
   };
 
   const handleRemove = i => () => {
-    const newItem = cloneDeep(item);
-
-    newItem.line_color.splice(i, 1);
-
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.line_color.splice(i, 1);
+      })
+    );
   };
 
   const thumb = file && <Image width={width} height={height} src={file} alt={altText} />;

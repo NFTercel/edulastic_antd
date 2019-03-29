@@ -1,24 +1,25 @@
-import React, { Fragment, Component } from "react";
+import React, { Fragment, useMemo } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { setQuestionDataAction } from "../../../author/QuestionEditor/ducks";
+import { replaceVariables } from "../../utils/variables";
 
 import { PREVIEW, EDIT, CLEAR } from "../../constants/constantsForQuestions";
 
 import HotspotPreview from "./HotspotPreview";
 import HotspotEdit from "./HotspotEdit";
 
-class Hotspot extends Component {
-  render() {
-    const { view } = this.props;
-    return (
-      <Fragment>
-        {view === PREVIEW && <HotspotPreview {...this.props} />}
-        {view === EDIT && <HotspotEdit {...this.props} />}
-      </Fragment>
-    );
-  }
-}
+const Hotspot = props => {
+  const { item, view } = props;
+  const itemForPreview = useMemo(() => replaceVariables(item), [item]);
+
+  return (
+    <Fragment>
+      {view === PREVIEW && <HotspotPreview {...props} item={itemForPreview} />}
+      {view === EDIT && <HotspotEdit {...props} />}
+    </Fragment>
+  );
+};
 
 Hotspot.propTypes = {
   view: PropTypes.string.isRequired,

@@ -6,6 +6,7 @@ import { withRouter } from "react-router-dom";
 import { cloneDeep, shuffle } from "lodash";
 import styled from "styled-components";
 import { Checkbox } from "antd";
+import produce from "immer";
 
 import { PaddingDiv, Paper } from "@edulastic/common";
 import { withNamespaces } from "@edulastic/localization";
@@ -16,6 +17,7 @@ import Options from "./components/Options";
 import Authoring from "./components/Authoring";
 import Display from "./components/Display";
 import CorrectAnswers from "./CorrectAnswers";
+import { replaceVariables, replaceValues } from "../../utils/variables";
 
 const EmptyWrapper = styled.div``;
 
@@ -29,25 +31,26 @@ class MultipleChoice extends Component {
 
     if (!nextProps.item.shuffle_options) {
       this.setState({
-        shuffledOptions: nextProps.item.options
+        shuffledOptions: replaceValues(cloneDeep(nextProps.item.options), nextProps.item.variable)
       });
     } else if (nextProps.item.shuffle_options !== item.shuffle_options && nextProps.item.shuffle_options) {
       this.setState({
-        shuffledOptions: shuffle(nextProps.item.options)
+        shuffledOptions: replaceValues(cloneDeep(shuffle(nextProps.item.options)), nextProps.item.variable)
       });
     }
   }
 
   componentDidMount() {
     const { item } = this.props;
-
     this.setState({
-      shuffledOptions: shuffle(item.options)
+      shuffledOptions: replaceValues(cloneDeep(shuffle(item.options)), item.variable)
     });
   }
 
   getRenderData = () => {
-    const { item, history } = this.props;
+    const { item: templateItem, history, view } = this.props;
+    const item = view === EDIT ? templateItem : replaceVariables(templateItem);
+
     const locationState = history.location.state;
     const isDetailPage = locationState !== undefined ? locationState.itemDetail : false;
     let previewDisplayOptions;
@@ -56,15 +59,15 @@ class MultipleChoice extends Component {
     if (item.smallSize || isDetailPage) {
       previewStimulus = item.stimulus;
       previewDisplayOptions = item.options;
-      itemForEdit = item;
+      itemForEdit = templateItem;
     } else {
       previewStimulus = item.stimulus;
       previewDisplayOptions = item.options;
       itemForEdit = {
-        ...item,
-        stimulus: item.stimulus,
-        list: item.options,
-        validation: item.validation
+        ...templateItem,
+        stimulus: templateItem.stimulus,
+        list: templateItem.options,
+        validation: templateItem.validation
       };
     }
     return {
@@ -79,31 +82,31 @@ class MultipleChoice extends Component {
 
   handleAddAltResponses = () => {
     const { setQuestionData, item } = this.props;
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        const response = {
+          score: 1,
+          value: []
+        };
 
-    const response = {
-      score: 1,
-      value: []
-    };
-
-    if (newItem.validation.alt_responses && newItem.validation.alt_responses.length) {
-      newItem.validation.alt_responses.push(response);
-    } else {
-      newItem.validation.alt_responses = [response];
-    }
-
-    setQuestionData(newItem);
+        if (draft.validation.alt_responses && draft.validation.alt_responses.length) {
+          draft.validation.alt_responses.push(response);
+        } else {
+          draft.validation.alt_responses = [response];
+        }
+      })
+    );
   };
 
   handleRemoveAltResponses = index => {
     const { setQuestionData, item } = this.props;
-    const newItem = cloneDeep(item);
-
-    if (newItem.validation.alt_responses && newItem.validation.alt_responses.length) {
-      newItem.validation.alt_responses = newItem.validation.alt_responses.filter((response, i) => i !== index);
-    }
-
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        if (draft.validation.alt_responses && draft.validation.alt_responses.length) {
+          draft.validation.alt_responses = draft.validation.alt_responses.filter((response, i) => i !== index);
+        }
+      })
+    );
   };
 
   handleAddAnswer = qid => {
@@ -126,26 +129,28 @@ class MultipleChoice extends Component {
   handleOptionsChange = (name, value) => {
     console.log(name, value);
     const { setQuestionData, item, saveAnswer } = this.props;
-    const newItem = cloneDeep(item);
-    const reduceResponses = (acc, val, index) => {
-      if (index === 0) {
-        acc.push(val);
-      }
-      return acc;
-    };
+    setQuestionData(
+      produce(item, draft => {
+        const reduceResponses = (acc, val, index) => {
+          if (index === 0) {
+            acc.push(val);
+          }
+          return acc;
+        };
 
-    if (name === "multiple_responses" && value === false) {
-      newItem.validation.valid_response.value = newItem.validation.valid_response.value.reduce(reduceResponses, []);
-      newItem.validation.alt_responses = newItem.validation.alt_responses.map(res => {
-        res.value = res.value.reduce(reduceResponses, []);
-        return res;
-      });
-      saveAnswer([]);
-    }
+        if (name === "multiple_responses" && value === false) {
+          draft.validation.valid_response.value = draft.validation.valid_response.value.reduce(reduceResponses, []);
+          draft.validation.alt_responses = draft.validation.alt_responses.map(res => {
+            res.value = res.value.reduce(reduceResponses, []);
+            return res;
+          });
+          saveAnswer([]);
+        }
 
-    newItem[name] = value;
-    console.log(newItem);
-    setQuestionData(newItem);
+        draft[name] = value;
+        console.log(draft);
+      })
+    );
   };
 
   render() {
@@ -200,7 +205,6 @@ class MultipleChoice extends Component {
               {previewTab === CHECK && (
                 <Display
                   checkAnswer
-                  data={item}
                   view={view}
                   onChange={this.handleAddAnswer}
                   smallSize={smallSize}
@@ -237,11 +241,10 @@ class MultipleChoice extends Component {
                   smallSize={smallSize}
                   options={shuffledOptions}
                   question={previewStimulus}
-                  data={item}
-                  validation={item.validation}
                   userSelections={userAnswer}
-                  onChange={this.handleAddAnswer}
                   uiStyle={uiStyle}
+                  validation={item.validation}
+                  onChange={this.handleAddAnswer}
                   qIndex={qIndex}
                   instructorStimulus={item.instructor_stimulus}
                 />

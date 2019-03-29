@@ -74,6 +74,91 @@ export const getCards = onSelectQuestionType => {
       type: "charts",
       cardImage: CMSortList,
       data: {
+        title: "Line plot",
+        firstMount: true,
+        type: "linePlot",
+        stimulus: "Sort the sine and cosine values from lower to higher.",
+        chart_data: {
+          data: [
+            {
+              x: "Bar 1",
+              y: 0
+            },
+            {
+              x: "Bar 2",
+              y: 0
+            },
+            {
+              x: "Bar 3",
+              y: 0
+            },
+            {
+              x: "Bar 4",
+              y: 0
+            },
+            {
+              x: "Bar 5",
+              y: 0
+            },
+            {
+              x: "Bar 6",
+              y: 0
+            }
+          ],
+          name: "Chart title"
+        },
+        ui_style: {
+          xAxisLabel: "X Axis Label",
+          yAxisLabel: "Y Axis Label",
+          yAxisCount: 10,
+          width: 640,
+          height: 440,
+          margin: 40,
+          stepSize: 1,
+          chart_type: "linePlot"
+        },
+        validation: {
+          scoring_type: EXACT_MATCH,
+          valid_response: {
+            score: 1,
+            value: [
+              {
+                x: "Bar 1",
+                y: 0
+              },
+              {
+                x: "Bar 2",
+                y: 0
+              },
+              {
+                x: "Bar 3",
+                y: 0
+              },
+              {
+                x: "Bar 4",
+                y: 0
+              },
+              {
+                x: "Bar 5",
+                y: 0
+              },
+              {
+                x: "Bar 6",
+                y: 0
+              }
+            ]
+          },
+          alt_responses: []
+        },
+        x_axis_label: "X Axis",
+        y_axis_label: "Y Axis"
+      },
+      onSelectQuestionType
+    },
+    {
+      type: "charts",
+      cardImage: CMSortList,
+      data: {
         title: "Dot plot",
         firstMount: true,
         type: "dots",

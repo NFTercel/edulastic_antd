@@ -1,24 +1,25 @@
-import React, { Fragment, Component } from "react";
+import React, { Fragment, useMemo } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { setQuestionDataAction } from "../../../author/QuestionEditor/ducks";
+import { replaceVariables } from "../../utils/variables";
 
 import { PREVIEW, EDIT, CLEAR } from "../../constants/constantsForQuestions";
 
 import HighlightImagePreview from "./HighlightImagePreview";
 import HighlightImageEdit from "./components/HighlightImageEdit";
 
-class HighlightImage extends Component {
-  render() {
-    const { view } = this.props;
-    return (
-      <Fragment>
-        {view === PREVIEW && <HighlightImagePreview {...this.props} />}
-        {view === EDIT && <HighlightImageEdit {...this.props} />}
-      </Fragment>
-    );
-  }
-}
+const HighlightImage = props => {
+  const { item, view } = props;
+  const itemForPreview = useMemo(() => replaceVariables(item), [item]);
+
+  return (
+    <Fragment>
+      {view === PREVIEW && <HighlightImagePreview {...props} item={itemForPreview} />}
+      {view === EDIT && <HighlightImageEdit {...props} />}
+    </Fragment>
+  );
+};
 
 HighlightImage.propTypes = {
   view: PropTypes.string.isRequired,

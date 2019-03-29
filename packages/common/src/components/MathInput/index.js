@@ -129,6 +129,7 @@ class MathInput extends React.PureComponent {
       showResponse,
       style,
       onFocus,
+      onBlur,
       onKeyDown,
       symbols,
       numberPad,
@@ -143,6 +144,9 @@ class MathInput extends React.PureComponent {
           onFocus={() => {
             onFocus(true);
             this.setState({ mathFieldFocus: true });
+          }}
+          onBlur={() => {
+            onBlur();
           }}
           className="input"
         >
@@ -178,6 +182,7 @@ MathInput.propTypes = {
   value: PropTypes.string,
   style: PropTypes.object,
   onFocus: PropTypes.func,
+  onBlur: PropTypes.func,
   onKeyDown: PropTypes.func,
   fullWidth: PropTypes.bool,
   className: PropTypes.string
@@ -189,6 +194,7 @@ MathInput.defaultProps = {
   showResponse: false,
   style: {},
   onFocus: () => {},
+  onBlur: () => {},
   onKeyDown: () => {},
   fullWidth: false,
   className: ""

@@ -11,6 +11,7 @@ const drawTools = require("./const/drawTools");
 const rounding = require("./const/rounding");
 const test = require("./const/test");
 const evaluatorTypes = require("./const/evaluatorTypes");
+const variableTypes = require("./const/variableTypes");
 
 module.exports = {
   questionType,
@@ -25,5 +26,6 @@ module.exports = {
   typedList,
   drawTools,
   rounding,
+  variableTypes,
   test
 };

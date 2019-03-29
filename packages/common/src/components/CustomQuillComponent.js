@@ -74,7 +74,7 @@ function formula() {
   const cursorPosition = this.quill.getSelection().index;
   this.quill.insertEmbed(cursorPosition, "MathInput", "");
   this.quill.insertText(cursorPosition + 2, " ", {
-    width: "1px"
+    width: "2px"
   });
   this.quill.setSelection(cursorPosition + 1);
 }
@@ -162,7 +162,7 @@ const CustomToolbar = ({ showResponseBtn, active, id, maxWidth }) => {
 };
 
 CustomToolbar.propTypes = {
-  maxWidth: PropTypes.any,
+  maxWidth: PropTypes.any.isRequired,
   showResponseBtn: PropTypes.bool,
   active: PropTypes.bool,
   id: PropTypes.string
@@ -216,15 +216,22 @@ class CustomQuillComponent extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state.quillVal = props.value;
+    this.state = {
+      quillVal: props.value,
+      modules: CustomQuillComponent.modules(props.toolbarId)
+    };
   }
 
   componentDidUpdate(prevProps) {
-    const { value } = this.props;
+    const { value, toolbarId } = this.props;
 
     if (prevProps.value !== value) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ quillVal: value });
+    }
+    if (prevProps.toolbarId !== toolbarId) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ modules: CustomQuillComponent.modules(toolbarId) });
     }
   }
 
@@ -260,7 +267,8 @@ class CustomQuillComponent extends React.Component {
         .map(line => {
           if (line instanceof MathInputCmp) {
             if (line.state.mathField) {
-              return `<span class="input__math" data-latex="${line.state.mathField.latex()}"></span>`;
+              const latex = line.state.mathField.latex();
+              return `<span class="input__math" data-latex="${latex}"></span>`;
             }
             return '<span class="input__math"></span>';
           }
@@ -332,7 +340,7 @@ class CustomQuillComponent extends React.Component {
   };
 
   render() {
-    const { active, quillVal, showMath, selLatex } = this.state;
+    const { active, quillVal, showMath, selLatex, modules } = this.state;
     const { placeholder, showResponseBtn, toolbarId, style, readOnly } = this.props;
     const symbols = ["basic", "matrices", "general", "units_si", "units_us"];
     const numberPad = [
@@ -369,7 +377,7 @@ class CustomQuillComponent extends React.Component {
         <ReactQuill
           ref={el => (this.quillRef = el)}
           readOnly={readOnly}
-          modules={CustomQuillComponent.modules(toolbarId)}
+          modules={modules}
           onChange={this.handleChange}
           onFocus={this.onFocus}
           onKeyDown={this.onKeyDownHandler}

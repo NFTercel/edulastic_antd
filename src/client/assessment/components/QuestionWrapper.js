@@ -45,6 +45,7 @@ import { Chart } from "../widgets/Charts";
 
 const getQuestion = type => {
   switch (type) {
+    case questionType.LINE_PLOT:
     case questionType.DOT_PLOT:
     case questionType.HISTOGRAM:
     case questionType.LINE_CHART:

@@ -14,11 +14,13 @@ import {
   UPDATE_TEST_ITEM_ERROR,
   SHOW_ANSWER,
   CHECK_ANSWER,
-  ADD_ITEM_EVALUATION
+  ADD_ITEM_EVALUATION,
+  CHANGE_VIEW
 } from "../constants/actions";
 
 import { history } from "../../../configureStore";
 import { getQuestionsSelector } from "../../sharedDucks/questions";
+import { SET_ANSWER } from "../../../assessment/constants/actions";
 
 function* createTestItemSaga({ payload }) {
   try {
@@ -59,6 +61,19 @@ function* updateTestItemSaga({ payload }) {
 
 function* evaluateAnswers() {
   try {
+    const oldAnswers = yield select(state => state.answers);
+    const id = yield select(state => state.question.entity.data.id);
+
+    if (!oldAnswers[id]) {
+      yield put({
+        type: SET_ANSWER,
+        payload: {
+          id,
+          data: []
+        }
+      });
+    }
+
     const answers = yield select(state => state.answers);
     const validations = yield select(getQuestionsSelector);
     const { evaluation, score, maxScore } = yield evaluateItem(answers, validations);
@@ -98,11 +113,27 @@ function* showAnswers() {
   }
 }
 
+function* setAnswerSaga() {
+  const answers = yield select(state => state.answers);
+  const id = yield select(state => state.question.entity.data.id);
+
+  if (!answers[id]) {
+    yield put({
+      type: SET_ANSWER,
+      payload: {
+        id,
+        data: []
+      }
+    });
+  }
+}
+
 export default function* watcherSaga() {
   yield all([
     yield takeEvery(CREATE_TEST_ITEM_REQUEST, createTestItemSaga),
     yield takeEvery(UPDATE_TEST_ITEM_REQUEST, updateTestItemSaga),
     yield takeEvery(CHECK_ANSWER, evaluateAnswers),
+    yield takeEvery(CHANGE_VIEW, setAnswerSaga),
     yield takeEvery(SHOW_ANSWER, showAnswers)
   ]);
 }

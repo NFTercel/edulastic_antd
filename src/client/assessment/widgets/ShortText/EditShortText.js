@@ -1,11 +1,12 @@
 import React, { Fragment, useState } from "react";
 import PropTypes from "prop-types";
-import { cloneDeep } from "lodash";
+import produce from "immer";
 
 import { withNamespaces } from "@edulastic/localization";
 import { Paper } from "@edulastic/common";
 
 import { EXACT_MATCH, CONTAINS } from "../../constants/constantsForQuestions";
+import { updateVariables } from "../../utils/variables";
 
 import withPoints from "../../components/HOC/withPoints";
 import QuestionTextArea from "../../components/QuestionTextArea";
@@ -21,70 +22,81 @@ const EditShortText = ({ item, setQuestionData, t }) => {
   const [correctTab, setCorrectTab] = useState(0);
 
   const handleItemChangeChange = (prop, uiStyle) => {
-    const newItem = cloneDeep(item);
-
-    newItem[prop] = uiStyle;
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft[prop] = uiStyle;
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleAddAnswer = () => {
-    const newItem = cloneDeep(item);
-
-    if (!newItem.validation.alt_responses) {
-      newItem.validation.alt_responses = [];
-    }
-    newItem.validation.alt_responses.push({
-      score: 1,
-      matching_rule: EXACT_MATCH,
-      value: ""
-    });
-
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        if (!draft.validation.alt_responses) {
+          draft.validation.alt_responses = [];
+        }
+        draft.validation.alt_responses.push({
+          score: 1,
+          matching_rule: EXACT_MATCH,
+          value: ""
+        });
+      })
+    );
     setCorrectTab(correctTab + 1);
   };
 
   const handleCloseTab = tabIndex => {
-    const newItem = cloneDeep(item);
-    newItem.validation.alt_responses.splice(tabIndex, 1);
+    setQuestionData(
+      produce(item, draft => {
+        draft.validation.alt_responses.splice(tabIndex, 1);
 
-    setCorrectTab(0);
-    setQuestionData(newItem);
+        setCorrectTab(0);
+        updateVariables(draft);
+      })
+    );
   };
 
   const handlePointsChange = val => {
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        if (correctTab === 0) {
+          draft.validation.valid_response.score = val;
+        } else {
+          draft.validation.alt_responses[correctTab - 1].score = val;
+        }
 
-    if (correctTab === 0) {
-      newItem.validation.valid_response.score = val;
-    } else {
-      newItem.validation.alt_responses[correctTab - 1].score = val;
-    }
-
-    setQuestionData(newItem);
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleScoringTypeChange = value => {
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        if (correctTab === 0) {
+          draft.validation.valid_response.matching_rule = value;
+        } else {
+          draft.validation.alt_responses[correctTab - 1].matching_rule = value;
+        }
 
-    if (correctTab === 0) {
-      newItem.validation.valid_response.matching_rule = value;
-    } else {
-      newItem.validation.alt_responses[correctTab - 1].matching_rule = value;
-    }
-
-    setQuestionData(newItem);
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleValueChange = value => {
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        if (correctTab === 0) {
+          draft.validation.valid_response.value = value;
+        } else {
+          draft.validation.alt_responses[correctTab - 1].value = value;
+        }
 
-    if (correctTab === 0) {
-      newItem.validation.valid_response.value = value;
-    } else {
-      newItem.validation.alt_responses[correctTab - 1].value = value;
-    }
-
-    setQuestionData(newItem);
+        updateVariables(draft);
+      })
+    );
   };
 
   const renderOptions = () => (

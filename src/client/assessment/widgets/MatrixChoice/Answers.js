@@ -1,6 +1,6 @@
 import React, { useState, Fragment } from "react";
 import PropTypes from "prop-types";
-import { cloneDeep } from "lodash";
+import produce from "immer";
 import { Checkbox } from "antd";
 
 import { FlexContainer } from "@edulastic/common";
@@ -17,67 +17,72 @@ const Answers = ({ item, setQuestionData, t }) => {
   const [correctTab, setCorrectTab] = useState(0);
 
   const handleAddAnswer = () => {
-    const newItem = cloneDeep(item);
-
-    if (!newItem.validation.alt_responses) {
-      newItem.validation.alt_responses = [];
-    }
-    newItem.validation.alt_responses.push({
-      score: 1,
-      value: item.validation.valid_response.value.map(() => null)
-    });
-
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        if (!draft.validation.alt_responses) {
+          draft.validation.alt_responses = [];
+        }
+        draft.validation.alt_responses.push({
+          score: 1,
+          value: item.validation.valid_response.value.map(() => null)
+        });
+      })
+    );
     setCorrectTab(correctTab + 1);
   };
 
   const handleCheck = (field, altIndex) => ({ rowIndex, columnIndex, checked }) => {
-    const newItem = cloneDeep(item);
-    let findIndex;
-    let value;
+    setQuestionData(
+      produce(item, draft => {
+        let findIndex;
+        let value;
 
-    if (field === "valid_response") {
-      value = newItem.validation.valid_response.value[rowIndex];
-    }
+        if (field === "valid_response") {
+          value = draft.validation.valid_response.value[rowIndex];
+        }
 
-    if (field === "alt_responses") {
-      value = newItem.validation.alt_responses[altIndex].value[rowIndex];
-    }
+        if (field === "alt_responses") {
+          value = draft.validation.alt_responses[altIndex].value[rowIndex];
+        }
 
-    if (value) {
-      findIndex = value.findIndex(i => i === columnIndex);
-    }
+        if (value) {
+          findIndex = value.findIndex(i => i === columnIndex);
+        }
 
-    if (!checked) {
-      value.splice(findIndex, 1);
-    } else if (!value || !newItem.multiple_responses) {
-      value = [];
-      value.push(columnIndex);
-    } else {
-      value.push(columnIndex);
-    }
+        if (!checked) {
+          value.splice(findIndex, 1);
+        } else if (!value || !draft.multiple_responses) {
+          value = [];
+          value.push(columnIndex);
+        } else {
+          value.push(columnIndex);
+        }
 
-    if (field === "valid_response") {
-      newItem.validation.valid_response.value[rowIndex] = value;
-    }
+        if (field === "valid_response") {
+          draft.validation.valid_response.value[rowIndex] = value;
+        }
 
-    if (field === "alt_responses") {
-      newItem.validation.alt_responses[altIndex].value[rowIndex] = value;
-    }
-
-    setQuestionData(newItem);
+        if (field === "alt_responses") {
+          draft.validation.alt_responses[altIndex].value[rowIndex] = value;
+        }
+      })
+    );
   };
 
   const handleChangeValidPoints = points => {
-    const newItem = cloneDeep(item);
-    newItem.validation.valid_response.score = points;
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.validation.valid_response.score = points;
+      })
+    );
   };
 
   const handleChangeAltPoints = (points, i) => {
-    const newItem = cloneDeep(item);
-    newItem.validation.alt_responses[i].score = points;
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.validation.alt_responses[i].score = points;
+      })
+    );
   };
 
   const reduceResponse = value =>
@@ -91,28 +96,30 @@ const Answers = ({ item, setQuestionData, t }) => {
 
   const handleChangeMultiple = e => {
     const { checked } = e.target;
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        draft.multiple_responses = checked;
 
-    newItem.multiple_responses = checked;
+        if (!checked) {
+          draft.validation.valid_response.value = reduceResponse(draft.validation.valid_response.value);
 
-    if (!checked) {
-      newItem.validation.valid_response.value = reduceResponse(newItem.validation.valid_response.value);
-
-      if (newItem.validation.alt_responses && newItem.validation.alt_responses.length) {
-        newItem.validation.alt_responses.map(res => {
-          res.value = reduceResponse(res.value);
-          return res;
-        });
-      }
-    }
-
-    setQuestionData(newItem);
+          if (draft.validation.alt_responses && draft.validation.alt_responses.length) {
+            draft.validation.alt_responses.map(res => {
+              res.value = reduceResponse(res.value);
+              return res;
+            });
+          }
+        }
+      })
+    );
   };
 
   const handleCloseTab = tabIndex => {
-    const newItem = cloneDeep(item);
-    newItem.validation.alt_responses.splice(tabIndex, 1);
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.validation.alt_responses.splice(tabIndex, 1);
+      })
+    );
   };
 
   const renderOptions = () => (

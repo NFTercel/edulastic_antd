@@ -1,24 +1,25 @@
-import React, { Fragment, Component } from "react";
+import React, { Fragment, useMemo } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { setQuestionDataAction } from "../../../author/QuestionEditor/ducks";
 
 import { PREVIEW, EDIT, CLEAR } from "../../constants/constantsForQuestions";
+import { replaceVariables } from "../../utils/variables";
 
 import TokenHighlightPreview from "./TokenHighlightPreview";
 import TokenHighlightEdit from "./TokenHighlightEdit";
 
-class TokenHighlight extends Component {
-  render() {
-    const { view } = this.props;
-    return (
-      <Fragment>
-        {view === PREVIEW && <TokenHighlightPreview {...this.props} />}
-        {view === EDIT && <TokenHighlightEdit {...this.props} />}
-      </Fragment>
-    );
-  }
-}
+const TokenHighlight = props => {
+  const { item, view } = props;
+  const itemForPreview = useMemo(() => replaceVariables(item), [item]);
+
+  return (
+    <Fragment>
+      {view === PREVIEW && <TokenHighlightPreview {...props} item={itemForPreview} />}
+      {view === EDIT && <TokenHighlightEdit {...props} />}
+    </Fragment>
+  );
+};
 
 TokenHighlight.propTypes = {
   view: PropTypes.string.isRequired,

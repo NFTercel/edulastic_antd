@@ -4,6 +4,7 @@ import { values as _values, groupBy as _groupBy, intersection as _intersection, 
 
 // actions types
 export const LOAD_QUESTIONS = "[author questions] load questions";
+export const ADD_ITEMS_QUESTION = "[author question] load question";
 export const UPDATE_QUESTION = "[author questions] update questions";
 export const SET_FIRST_MOUNT = "[author questions] set first mount";
 export const CHANGE_ITEM = "[author questions] change item";
@@ -15,6 +16,7 @@ export const REMOVE_ALIGNMENT = "[author questions] remove alignment";
 
 // actions creators
 export const loadQuestionsAction = createAction(LOAD_QUESTIONS);
+export const addItemsQuestionAction = createAction(ADD_ITEMS_QUESTION);
 export const addQuestionAction = createAction(ADD_QUESTION);
 export const updateQuestionAction = createAction(UPDATE_QUESTION);
 export const changeItemAction = createAction(CHANGE_ITEM);
@@ -35,6 +37,9 @@ const loadQuestions = (state, { payload }) => {
   state.byId = payload;
 };
 
+const addQuestions = (state, { payload }) => {
+  state.byId = { ...state.byId, ...payload };
+};
 // update question by id
 const updateQuestion = (state, { payload }) => {
   state.byId[payload.id] = payload;
@@ -109,6 +114,7 @@ const removeAlignment = (state, { payload }) => {
 // reducer
 export default createReducer(initialState, {
   [LOAD_QUESTIONS]: loadQuestions,
+  [ADD_ITEMS_QUESTION]: addQuestions,
   [UPDATE_QUESTION]: updateQuestion,
   [CHANGE_ITEM]: changeItem,
   [CHANGE_ITEM_UI_STYLE]: changeUIStyle,

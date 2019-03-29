@@ -1,4 +1,4 @@
-import React, { memo, Component } from "react";
+import React, { memo, useMemo } from "react";
 import PropTypes from "prop-types";
 import { compose } from "redux";
 import { connect } from "react-redux";
@@ -7,6 +7,7 @@ import styled from "styled-components";
 import { Paper } from "@edulastic/common";
 import { withNamespaces } from "@edulastic/localization";
 import { setQuestionDataAction } from "../../../author/QuestionEditor/ducks";
+import { replaceVariables } from "../../utils/variables";
 
 import { Subtitle } from "../../styled/Subtitle";
 
@@ -15,33 +16,30 @@ import PassageView from "./PassageView";
 
 const EmptyWrapper = styled.div``;
 
-class Passage extends Component {
-  render() {
-    const { item, view, smallSize, setQuestionData, t } = this.props;
+const Passage = ({ item, view, smallSize, setQuestionData, t }) => {
+  const Wrapper = smallSize ? EmptyWrapper : Paper;
+  const itemForPreview = useMemo(() => replaceVariables(item), [item]);
 
-    const Wrapper = smallSize ? EmptyWrapper : Paper;
-
-    if (view === "edit") {
-      return (
-        <Paper style={{ marginBottom: 30 }}>
-          <Subtitle>{t("component.passage.details")}</Subtitle>
-          <Options setQuestionData={setQuestionData} item={item} />
-          <Paper>
-            <PassageView item={item} />
-          </Paper>
-        </Paper>
-      );
-    }
-
-    if (view === "preview") {
-      return (
-        <Wrapper>
+  if (view === "edit") {
+    return (
+      <Paper style={{ marginBottom: 30 }}>
+        <Subtitle>{t("component.passage.details")}</Subtitle>
+        <Options setQuestionData={setQuestionData} item={item} />
+        <Paper>
           <PassageView item={item} />
-        </Wrapper>
-      );
-    }
+        </Paper>
+      </Paper>
+    );
   }
-}
+
+  if (view === "preview") {
+    return (
+      <Wrapper>
+        <PassageView item={itemForPreview} />
+      </Wrapper>
+    );
+  }
+};
 
 Passage.propTypes = {
   item: PropTypes.object.isRequired,

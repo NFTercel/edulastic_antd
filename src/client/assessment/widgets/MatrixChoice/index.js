@@ -1,9 +1,9 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useMemo } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { compose } from "redux";
 import { connect } from "react-redux";
-import { cloneDeep } from "lodash";
+import produce from "immer";
 import { arrayMove } from "react-sortable-hoc";
 import { withRouter } from "react-router-dom";
 
@@ -11,6 +11,7 @@ import { Paper } from "@edulastic/common";
 import { withNamespaces } from "@edulastic/localization";
 
 import { setQuestionDataAction } from "../../../author/QuestionEditor/ducks";
+import { replaceVariables, updateVariables } from "../../utils/variables";
 
 import withAddButton from "../../components/HOC/withAddButton";
 import QuestionTextArea from "../../components/QuestionTextArea";
@@ -41,37 +42,45 @@ const MatrixChoice = ({
   const Wrapper = testItem ? EmptyWrapper : Paper;
 
   const handleSortEndStems = ({ oldIndex, newIndex }) => {
-    const newItem = cloneDeep(item);
-
-    newItem.stems = arrayMove(item.stems, oldIndex, newIndex);
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.stems = arrayMove(item.stems, oldIndex, newIndex);
+      })
+    );
   };
 
   const handleRemoveStem = index => {
-    const newItem = cloneDeep(item);
-    newItem.stems.splice(index, 1);
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.stems.splice(index, 1);
+      })
+    );
   };
 
   const handleAddStem = () => {
-    const newItem = cloneDeep(item);
-
-    newItem.stems.push("");
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.stems.push("");
+      })
+    );
   };
 
   const handleChangeStem = (index, value) => {
-    const newItem = cloneDeep(item);
-
-    newItem.stems[index] = value;
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.stems[index] = value;
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleChangeOption = (index, value) => {
-    const newItem = cloneDeep(item);
-
-    newItem.options[index] = value;
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.options[index] = value;
+        updateVariables(draft);
+      })
+    );
   };
 
   const reduceResponseValue = (val, index) => {
@@ -86,40 +95,45 @@ const MatrixChoice = ({
   };
 
   const handleRemoveOption = index => {
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        draft.options.splice(index, 1);
+        draft.validation.valid_response.value = draft.validation.valid_response.value.map(val =>
+          reduceResponseValue(val, index)
+        );
 
-    newItem.options.splice(index, 1);
-    newItem.validation.valid_response.value = newItem.validation.valid_response.value.map(val =>
-      reduceResponseValue(val, index)
+        if (draft.validation.alt_responses && draft.validation.alt_responses.length) {
+          draft.validation.alt_responses.map(res => {
+            res.value = res.value.map(val => reduceResponseValue(val, index));
+            return res;
+          });
+        }
+        updateVariables(draft);
+      })
     );
-
-    if (newItem.validation.alt_responses && newItem.validation.alt_responses.length) {
-      newItem.validation.alt_responses.map(res => {
-        res.value = res.value.map(val => reduceResponseValue(val, index));
-        return res;
-      });
-    }
-
-    setQuestionData(newItem);
   };
 
   const handleAddOption = () => {
-    const newItem = cloneDeep(item);
-
-    newItem.options.push("");
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.options.push("");
+      })
+    );
   };
   const handleSortEndOptions = ({ oldIndex, newIndex }) => {
-    const newItem = cloneDeep(item);
-
-    newItem.options = arrayMove(item.options, oldIndex, newIndex);
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.options = arrayMove(item.options, oldIndex, newIndex);
+      })
+    );
   };
   const handleItemChangeChange = (prop, uiStyle) => {
-    const newItem = cloneDeep(item);
-
-    newItem[prop] = uiStyle;
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft[prop] = uiStyle;
+        updateVariables(draft);
+      })
+    );
   };
 
   let answer = userAnswer;
@@ -142,6 +156,8 @@ const MatrixChoice = ({
     setFeedbackAttempts(feedbackAttempts - 1);
     checkAnswer();
   };
+
+  const itemForPreview = useMemo(() => replaceVariables(item), [item]);
 
   return (
     <Fragment>
@@ -187,7 +203,7 @@ const MatrixChoice = ({
               type="check"
               saveAnswer={saveAnswer}
               userAnswer={answer}
-              item={item}
+              item={itemForPreview}
               feedbackAttempts={feedbackAttempts}
               onCheckAnswer={_checkAnswer}
             />
@@ -198,7 +214,7 @@ const MatrixChoice = ({
               type="show"
               saveAnswer={saveAnswer}
               userAnswer={answer}
-              item={item}
+              item={itemForPreview}
               feedbackAttempts={feedbackAttempts}
               onCheckAnswer={_checkAnswer}
             />
@@ -210,7 +226,7 @@ const MatrixChoice = ({
               type="clear"
               saveAnswer={saveAnswer}
               userAnswer={answer}
-              item={item}
+              item={itemForPreview}
               feedbackAttempts={feedbackAttempts}
               onCheckAnswer={_checkAnswer}
             />

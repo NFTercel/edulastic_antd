@@ -1,10 +1,11 @@
 import React, { Fragment, useState } from "react";
 import PropTypes from "prop-types";
-import { cloneDeep } from "lodash";
+import produce from "immer";
 import { arrayMove } from "react-sortable-hoc";
 
 import { Paper } from "@edulastic/common";
 import { withNamespaces } from "@edulastic/localization";
+import { updateVariables } from "../../utils/variables";
 
 import withAddButton from "../../components/HOC/withAddButton";
 import withPoints from "../../components/HOC/withPoints";
@@ -23,107 +24,123 @@ const EditSortList = ({ item, setQuestionData, t }) => {
   const [correctTab, setCorrectTab] = useState(0);
 
   const handleItemChangeChange = (prop, uiStyle) => {
-    const newItem = cloneDeep(item);
-
-    newItem[prop] = uiStyle;
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft[prop] = uiStyle;
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleUiStyleChange = (prop, uiStyle) => {
-    const newItem = cloneDeep(item);
-
-    newItem.ui_style[prop] = uiStyle;
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.ui_style[prop] = uiStyle;
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleAdd = () => {
-    const newItem = cloneDeep(item);
-
-    newItem.source.push("");
-    newItem.validation.valid_response.value.push(newItem.source.length - 1);
-    newItem.validation.alt_responses.forEach(ite => {
-      ite.value.push(newItem.source.length - 1);
-    });
-
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.source.push("");
+        draft.validation.valid_response.value.push(draft.source.length - 1);
+        draft.validation.alt_responses.forEach(ite => {
+          ite.value.push(draft.source.length - 1);
+        });
+      })
+    );
   };
 
   const handleRemove = index => {
-    const newItem = cloneDeep(item);
-    newItem.source.splice(index, 1);
-    newItem.validation.valid_response.value.splice(
-      newItem.validation.valid_response.value.indexOf(newItem.source.length),
-      1
-    );
-    newItem.validation.alt_responses.forEach(ite => {
-      ite.value.splice(ite.value.indexOf(newItem.source.length), 1);
-    });
+    setQuestionData(
+      produce(item, draft => {
+        draft.source.splice(index, 1);
+        draft.validation.valid_response.value.splice(
+          draft.validation.valid_response.value.indexOf(draft.source.length),
+          1
+        );
+        draft.validation.alt_responses.forEach(ite => {
+          ite.value.splice(ite.value.indexOf(draft.source.length), 1);
+        });
 
-    setQuestionData(newItem);
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleSortEnd = ({ oldIndex, newIndex }) => {
-    const newItem = cloneDeep(item);
-
-    newItem.source = arrayMove(item.source, oldIndex, newIndex);
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.source = arrayMove(item.source, oldIndex, newIndex);
+      })
+    );
   };
 
   const handleChange = (index, value) => {
-    const newItem = cloneDeep(item);
-
-    newItem.source[index] = value;
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.source[index] = value;
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleAddAnswer = () => {
-    const newItem = cloneDeep(item);
-
-    if (!newItem.validation.alt_responses) {
-      newItem.validation.alt_responses = [];
-    }
-    newItem.validation.alt_responses.push({
-      score: 1,
-      value: item.validation.valid_response.value
-    });
-
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        if (!draft.validation.alt_responses) {
+          draft.validation.alt_responses = [];
+        }
+        draft.validation.alt_responses.push({
+          score: 1,
+          value: item.validation.valid_response.value
+        });
+      })
+    );
     setCorrectTab(correctTab + 1);
   };
 
   const handleCloseTab = tabIndex => {
-    const newItem = cloneDeep(item);
-    newItem.validation.alt_responses.splice(tabIndex, 1);
+    setQuestionData(
+      produce(item, draft => {
+        draft.validation.alt_responses.splice(tabIndex, 1);
 
-    setCorrectTab(0);
-    setQuestionData(newItem);
+        setCorrectTab(0);
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleCorrectSortEnd = ({ oldIndex, newIndex }) => {
-    const newItem = cloneDeep(item);
-    if (correctTab === 0) {
-      newItem.validation.valid_response.value = arrayMove(newItem.validation.valid_response.value, oldIndex, newIndex);
-    } else {
-      newItem.validation.alt_responses[correctTab - 1].value = arrayMove(
-        newItem.validation.alt_responses[correctTab - 1].value,
-        oldIndex,
-        newIndex
-      );
-    }
-
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        if (correctTab === 0) {
+          draft.validation.valid_response.value = arrayMove(draft.validation.valid_response.value, oldIndex, newIndex);
+        } else {
+          draft.validation.alt_responses[correctTab - 1].value = arrayMove(
+            draft.validation.alt_responses[correctTab - 1].value,
+            oldIndex,
+            newIndex
+          );
+        }
+      })
+    );
   };
 
   const handlePointsChange = val => {
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        if (correctTab === 0) {
+          draft.validation.valid_response.score = val;
+        } else {
+          draft.validation.alt_responses[correctTab - 1].score = val;
+        }
 
-    if (correctTab === 0) {
-      newItem.validation.valid_response.score = val;
-    } else {
-      newItem.validation.alt_responses[correctTab - 1].score = val;
-    }
-
-    setQuestionData(newItem);
+        updateVariables(draft);
+      })
+    );
   };
 
   const renderOptions = () => (

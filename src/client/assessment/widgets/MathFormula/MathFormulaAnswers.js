@@ -1,6 +1,6 @@
 import React, { useState, Fragment } from "react";
 import PropTypes from "prop-types";
-import { cloneDeep } from "lodash";
+import produce from "immer";
 
 import { math } from "@edulastic/constants";
 
@@ -8,6 +8,7 @@ import withPoints from "../../components/HOC/withPoints";
 import CorrectAnswers from "../../components/CorrectAnswers";
 
 import MathFormulaAnswer from "./components/MathFormulaAnswer";
+import { updateVariables } from "../../utils/variables";
 
 const { methods } = math;
 
@@ -24,85 +25,114 @@ const MathFormulaAnswers = ({ item, setQuestionData }) => {
   const [correctTab, setCorrectTab] = useState(0);
 
   const handleAddAnswer = () => {
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        if (!draft.validation.alt_responses) {
+          draft.validation.alt_responses = [];
+        }
+        draft.validation.alt_responses.push({
+          score: 1,
+          value: [initialMethod]
+        });
 
-    if (!newItem.validation.alt_responses) {
-      newItem.validation.alt_responses = [];
-    }
-    newItem.validation.alt_responses.push({
-      score: 1,
-      value: [initialMethod]
-    });
-
-    setQuestionData(newItem);
+        updateVariables(draft);
+      })
+    );
     setCorrectTab(correctTab + 1);
   };
 
   const handleChangeCorrectPoints = points => {
-    const newItem = cloneDeep(item);
-    newItem.validation.valid_response.score = points;
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.validation.valid_response.score = points;
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleChangeAltPoints = (points, i) => {
-    const newItem = cloneDeep(item);
-    newItem.validation.alt_responses[i].score = points;
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.validation.alt_responses[i].score = points;
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleCloseTab = tabIndex => {
-    const newItem = cloneDeep(item);
-    newItem.validation.alt_responses.splice(tabIndex, 1);
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.validation.alt_responses.splice(tabIndex, 1);
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleChangeCorrectMethod = ({ index, prop, value }) => {
-    const newItem = cloneDeep(item);
-    newItem.validation.valid_response.value[index][prop] = value;
+    setQuestionData(
+      produce(item, draft => {
+        draft.validation.valid_response.value[index][prop] = value;
 
-    if (
-      [
-        methods.IS_SIMPLIFIED,
-        methods.IS_FACTORISED,
-        methods.IS_EXPANDED,
-        methods.IS_TRUE,
-        methods.EQUIV_SYNTAX
-      ].includes(newItem.validation.valid_response.value[index].method)
-    ) {
-      delete newItem.validation.valid_response.value[index].value;
-    }
+        if (
+          [
+            methods.IS_SIMPLIFIED,
+            methods.IS_FACTORISED,
+            methods.IS_EXPANDED,
+            methods.IS_TRUE,
+            methods.EQUIV_SYNTAX
+          ].includes(draft.validation.valid_response.value[index].method)
+        ) {
+          delete draft.validation.valid_response.value[index].value;
+        }
 
-    setQuestionData(newItem);
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleChangeAltMethod = answerIndex => ({ index, prop, value }) => {
-    const newItem = cloneDeep(item);
-    newItem.validation.alt_responses[answerIndex].value[index][prop] = value;
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.validation.alt_responses[answerIndex].value[index][prop] = value;
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleAddCorrectMethod = () => {
-    const newItem = cloneDeep(item);
-    newItem.validation.valid_response.value.push(initialMethod);
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.validation.valid_response.value.push(initialMethod);
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleAddAltMethod = answerIndex => () => {
-    const newItem = cloneDeep(item);
-    newItem.validation.alt_responses[answerIndex].value.push(initialMethod);
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.validation.alt_responses[answerIndex].value.push(initialMethod);
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleDeleteCorrectMethod = index => {
-    const newItem = cloneDeep(item);
-    newItem.validation.valid_response.value.splice(index, 1);
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.validation.valid_response.value.splice(index, 1);
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleDeleteAltMethod = answerIndex => index => {
-    const newItem = cloneDeep(item);
-    newItem.validation.alt_responses[answerIndex].value.splice(index, 1);
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.validation.alt_responses[answerIndex].value.splice(index, 1);
+        updateVariables(draft);
+      })
+    );
   };
 
   return (

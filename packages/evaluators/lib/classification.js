@@ -9,6 +9,8 @@ exports.default = void 0;
 
 var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime/helpers/toConsumableArray"));
 
+var _reduce2 = _interopRequireDefault(require("lodash/reduce"));
+
 var _includes2 = _interopRequireDefault(require("lodash/includes"));
 
 var _scoring = require("./const/scoring");
@@ -33,11 +35,19 @@ var exactCompareFunction = function exactCompareFunction(_ref) {
     }
 
     var matches = 0;
-    var totalMatches = 0;
+    var totalMatches = (0, _reduce2.default)(
+      answer,
+      function(acc, array) {
+        var sum = 0;
+        array.forEach(function() {
+          sum++;
+        });
+        return acc + sum;
+      },
+      0
+    );
     userResponse.forEach(function(col, colIndex) {
       col.forEach(function(ans) {
-        totalMatches++;
-
         if ((0, _includes2.default)(answer[colIndex], ans)) {
           matches++;
         }

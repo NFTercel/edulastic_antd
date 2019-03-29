@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { Row, Col, Select } from "antd";
 import { withTheme } from "styled-components";
 import { compose } from "redux";
+import produce from "immer";
 
 import { Paper } from "@edulastic/common";
 import { withNamespaces } from "@edulastic/localization";
@@ -17,6 +18,8 @@ import withAddButton from "../../components/HOC/withAddButton";
 import withPoints from "../../components/HOC/withPoints";
 import { Subtitle } from "../../styled/Subtitle";
 import { EDIT } from "../../constants/constantsForQuestions";
+
+import { updateVariables } from "../../utils/variables";
 
 import { setQuestionDataAction, setFirstMountAction } from "../../../author/QuestionEditor/ducks";
 
@@ -49,290 +52,315 @@ const EditClassification = ({ item, setQuestionData, setFirstMount, theme, t }) 
   );
 
   const handleItemChangeChange = (prop, uiStyle) => {
-    const newItem = cloneDeep(item);
-
-    newItem[prop] = uiStyle;
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft[prop] = uiStyle;
+        updateVariables(draft);
+      })
+    );
   };
 
   const onGroupPossibleResp = e => {
-    const newItem = cloneDeep(item);
-
-    newItem.group_possible_responses = e.target.checked;
-
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.group_possible_responses = e.target.checked;
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleGroupAdd = () => {
-    const newItem = cloneDeep(item);
-
-    newItem.possible_response_groups.push({ title: "", responses: [] });
-
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.possible_response_groups.push({ title: "", responses: [] });
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleGroupRemove = index => () => {
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        const colCount = draft.ui_style.column_count;
+        const rowCount = draft.ui_style.row_count;
 
-    const colCount = newItem.ui_style.column_count;
-    const rowCount = newItem.ui_style.row_count;
+        const initialLength = (colCount || 2) * (rowCount || 1);
+        draft.validation.valid_response.value = Array(...Array(initialLength)).map(() => []);
 
-    const initialLength = (colCount || 2) * (rowCount || 1);
-    newItem.validation.valid_response.value = Array(...Array(initialLength)).map(() => []);
+        draft.validation.alt_responses.forEach(ite => {
+          ite.value = Array(...Array(initialLength)).map(() => []);
+        });
 
-    newItem.validation.alt_responses.forEach(ite => {
-      ite.value = Array(...Array(initialLength)).map(() => []);
-    });
-
-    newItem.possible_response_groups.splice(index, 1);
-
-    setQuestionData(newItem);
+        draft.possible_response_groups.splice(index, 1);
+        updateVariables(draft);
+      })
+    );
   };
 
   const onAddInner = index => () => {
-    const newItem = cloneDeep(item);
-
-    newItem.possible_response_groups[index].responses.push("");
-
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.possible_response_groups[index].responses.push("");
+        updateVariables(draft);
+      })
+    );
   };
 
   const onRemoveInner = ind => index => {
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        const colCount = draft.ui_style.column_count;
+        const rowCount = draft.ui_style.row_count;
 
-    const colCount = newItem.ui_style.column_count;
-    const rowCount = newItem.ui_style.row_count;
+        const initialLength = (colCount || 2) * (rowCount || 1);
+        draft.validation.valid_response.value = Array(...Array(initialLength)).map(() => []);
 
-    const initialLength = (colCount || 2) * (rowCount || 1);
-    newItem.validation.valid_response.value = Array(...Array(initialLength)).map(() => []);
+        draft.validation.alt_responses.forEach(ite => {
+          ite.value = Array(...Array(initialLength)).map(() => []);
+        });
 
-    newItem.validation.alt_responses.forEach(ite => {
-      ite.value = Array(...Array(initialLength)).map(() => []);
-    });
-
-    newItem.possible_response_groups[ind].responses.splice(index, 1);
-
-    setQuestionData(newItem);
+        draft.possible_response_groups[ind].responses.splice(index, 1);
+        updateVariables(draft);
+      })
+    );
   };
 
   const onGroupTitleChange = (index, value) => {
-    const newItem = cloneDeep(item);
-
-    newItem.possible_response_groups[index].title = value;
-
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.possible_response_groups[index].title = value;
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleGroupSortEnd = index => ({ oldIndex, newIndex }) => {
-    const newItem = cloneDeep(item);
-
-    newItem.possible_response_groups[index].responses = arrayMove(
-      newItem.possible_response_groups[index].responses,
-      oldIndex,
-      newIndex
+    setQuestionData(
+      produce(item, draft => {
+        draft.possible_response_groups[index].responses = arrayMove(
+          draft.possible_response_groups[index].responses,
+          oldIndex,
+          newIndex
+        );
+        updateVariables(draft);
+      })
     );
-
-    setQuestionData(newItem);
   };
 
   const handleGroupChange = ind => (index, value) => {
-    const newItem = cloneDeep(item);
-
-    newItem.possible_response_groups[ind].responses[index] = value;
-
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.possible_response_groups[ind].responses[index] = value;
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleMainPossible = action => restProp => {
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        switch (action) {
+          case actions.ADD:
+            draft.possible_responses.push("");
+            break;
 
-    switch (action) {
-      case actions.ADD:
-        newItem.possible_responses.push("");
-        break;
+          case actions.REMOVE:
+            draft.validation.valid_response.value.forEach(arr => {
+              if (arr.includes(restProp)) {
+                arr.splice(arr.indexOf(restProp), 1);
+              }
+            });
+            draft.validation.alt_responses.forEach(arrs => {
+              arrs.value.forEach(arr => {
+                if (arr.includes(restProp)) {
+                  arr.splice(arr.indexOf(restProp), 1);
+                }
+              });
+            });
+            draft.possible_responses.splice(restProp, 1);
+            break;
 
-      case actions.REMOVE:
-        newItem.validation.valid_response.value.forEach(arr => {
-          if (arr.includes(restProp)) {
-            arr.splice(arr.indexOf(restProp), 1);
-          }
-        });
-        newItem.validation.alt_responses.forEach(arrs => {
-          arrs.value.forEach(arr => {
-            if (arr.includes(restProp)) {
-              arr.splice(arr.indexOf(restProp), 1);
-            }
-          });
-        });
-        newItem.possible_responses.splice(restProp, 1);
-        break;
+          case actions.SORTEND:
+            draft.possible_responses = arrayMove(item.possible_responses, restProp.oldIndex, restProp.newIndex);
+            break;
 
-      case actions.SORTEND:
-        newItem.possible_responses = arrayMove(item.possible_responses, restProp.oldIndex, restProp.newIndex);
-        break;
-
-      default:
-        break;
-    }
-
-    setQuestionData(newItem);
+          default:
+            return;
+        }
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleMain = (action, prop) => restProp => {
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        switch (action) {
+          case actions.ADD:
+            draft.ui_style[prop].push("");
+            if (prop === "column_titles") {
+              draft.ui_style.column_count += 1;
+              Array.from({ length: draft.ui_style.row_count }).forEach(() => {
+                draft.validation.valid_response.value.push([]);
+              });
 
-    switch (action) {
-      case actions.ADD:
-        newItem.ui_style[prop].push("");
-        if (prop === "column_titles") {
-          newItem.ui_style.column_count += 1;
-          Array.from({ length: newItem.ui_style.row_count }).forEach(() => {
-            newItem.validation.valid_response.value.push([]);
-          });
+              draft.validation.alt_responses.forEach(valid => {
+                Array.from({ length: draft.ui_style.row_count }).forEach(() => {
+                  valid.value.push([]);
+                });
+              });
+            } else if (prop === "row_titles") {
+              draft.ui_style.row_count += 1;
+              Array.from({ length: draft.ui_style.column_count }).forEach(() => {
+                draft.validation.valid_response.value.push([]);
+              });
 
-          newItem.validation.alt_responses.forEach(valid => {
-            Array.from({ length: newItem.ui_style.row_count }).forEach(() => {
-              valid.value.push([]);
-            });
-          });
-        } else if (prop === "row_titles") {
-          newItem.ui_style.row_count += 1;
-          Array.from({ length: newItem.ui_style.column_count }).forEach(() => {
-            newItem.validation.valid_response.value.push([]);
-          });
+              draft.validation.alt_responses.forEach(valid => {
+                Array.from({ length: draft.ui_style.column_count }).forEach(() => {
+                  valid.value.push([]);
+                });
+              });
+            }
+            break;
 
-          newItem.validation.alt_responses.forEach(valid => {
-            Array.from({ length: newItem.ui_style.column_count }).forEach(() => {
-              valid.value.push([]);
-            });
-          });
+          case actions.REMOVE:
+            draft.ui_style[prop].splice(restProp, 1);
+            if (prop === "column_titles" && draft.ui_style.column_count !== 1) {
+              draft.validation.valid_response.value.forEach(array => {
+                array.splice(-1, draft.ui_style.row_count);
+              });
+              draft.validation.alt_responses.forEach(valid => {
+                valid.value.forEach(array => {
+                  array.splice(-1, draft.ui_style.row_count);
+                });
+              });
+              draft.ui_style.column_count -= 1;
+            } else if (prop === "row_titles" && draft.ui_style.row_count !== 1) {
+              draft.validation.valid_response.value.splice(-1, draft.ui_style.column_titles);
+              draft.validation.alt_responses.forEach(valid => {
+                valid.value.splice(-1, draft.ui_style.column_titles);
+              });
+              draft.ui_style.row_count -= 1;
+            }
+            break;
+
+          case actions.SORTEND: {
+            const { oldIndex, newIndex } = restProp;
+            draft.ui_style[prop] = arrayMove(item.ui_style[prop], oldIndex, newIndex);
+            break;
+          }
+
+          default:
+            return;
         }
-        break;
 
-      case actions.REMOVE:
-        newItem.ui_style[prop].splice(restProp, 1);
-        if (prop === "column_titles" && newItem.ui_style.column_count !== 1) {
-          newItem.validation.valid_response.value.forEach(array => {
-            array.splice(-1, newItem.ui_style.row_count);
-          });
-          newItem.validation.alt_responses.forEach(valid => {
-            valid.value.forEach(array => {
-              array.splice(-1, newItem.ui_style.row_count);
-            });
-          });
-          newItem.ui_style.column_count -= 1;
-        } else if (prop === "row_titles" && newItem.ui_style.row_count !== 1) {
-          newItem.validation.valid_response.value.splice(-1, newItem.ui_style.column_titles);
-          newItem.validation.alt_responses.forEach(valid => {
-            valid.value.splice(-1, newItem.ui_style.column_titles);
-          });
-          newItem.ui_style.row_count -= 1;
-        }
-        break;
-
-      case actions.SORTEND:
-        newItem.ui_style[prop] = arrayMove(item.ui_style[prop], restProp.oldIndex, restProp.newIndex);
-        break;
-
-      default:
-        break;
-    }
-
-    setQuestionData(newItem);
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleChange = prop => (index, value) => {
-    const newItem = cloneDeep(item);
-
-    newItem.ui_style[prop][index] = value;
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.ui_style[prop][index] = value;
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleChangePossible = () => (index, value) => {
-    const newItem = cloneDeep(item);
-
-    newItem.possible_responses[index] = value;
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.possible_responses[index] = value;
+        updateVariables(draft);
+      })
+    );
   };
 
   const onUiChange = prop => val => {
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        draft.ui_style[prop] = val;
 
-    newItem.ui_style[prop] = val;
+        const colCount = draft.ui_style.column_count;
+        const rowCount = draft.ui_style.row_count;
 
-    const colCount = newItem.ui_style.column_count;
-    const rowCount = newItem.ui_style.row_count;
+        const initialLength = (colCount || 2) * (rowCount || 1);
 
-    const initialLength = (colCount || 2) * (rowCount || 1);
+        if (prop === "column_count" || prop === "row_count") {
+          draft.validation.valid_response.value = Array(...Array(initialLength)).map(() => []);
 
-    if (prop === "column_count" || prop === "row_count") {
-      newItem.validation.valid_response.value = Array(...Array(initialLength)).map(() => []);
+          draft.validation.alt_responses.forEach(ite => {
+            ite.value = Array(...Array(initialLength)).map(() => []);
+          });
+        }
 
-      newItem.validation.alt_responses.forEach(ite => {
-        ite.value = Array(...Array(initialLength)).map(() => []);
-      });
-    }
-
-    setQuestionData(newItem);
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleAddAnswer = () => {
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        if (!draft.validation.alt_responses) {
+          draft.validation.alt_responses = [];
+        }
+        draft.validation.alt_responses.push({
+          score: 1,
+          value: item.validation.valid_response.value
+        });
 
-    if (!newItem.validation.alt_responses) {
-      newItem.validation.alt_responses = [];
-    }
-    newItem.validation.alt_responses.push({
-      score: 1,
-      value: item.validation.valid_response.value
-    });
-
-    setQuestionData(newItem);
+        updateVariables(draft);
+      })
+    );
     setCorrectTab(correctTab + 1);
   };
 
   const handleCloseTab = tabIndex => {
-    const newItem = cloneDeep(item);
-    newItem.validation.alt_responses.splice(tabIndex, 1);
-
+    setQuestionData(
+      produce(item, draft => {
+        draft.validation.alt_responses.splice(tabIndex, 1);
+        updateVariables(draft);
+      })
+    );
     setCorrectTab(0);
-    setQuestionData(newItem);
   };
 
   const handlePointsChange = val => {
-    const newItem = cloneDeep(item);
-
-    if (correctTab === 0) {
-      newItem.validation.valid_response.score = val;
-    } else {
-      newItem.validation.alt_responses[correctTab - 1].score = val;
-    }
-
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        if (correctTab === 0) {
+          draft.validation.valid_response.score = val;
+        } else {
+          draft.validation.alt_responses[correctTab - 1].score = val;
+        }
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleAnswerChange = answer => {
-    const newItem = cloneDeep(item);
-    let groupArray = item.group_possible_responses ? [] : item.possible_responses;
+    setQuestionData(
+      produce(item, draft => {
+        let groupArray = item.group_possible_responses ? [] : item.possible_responses;
 
-    if (item.group_possible_responses) {
-      item.possible_response_groups.forEach(group => {
-        groupArray = [...groupArray, ...group.responses];
-      });
-    }
+        if (item.group_possible_responses) {
+          item.possible_response_groups.forEach(group => {
+            groupArray = [...groupArray, ...group.responses];
+          });
+        }
 
-    if (correctTab === 0) {
-      if (newItem.validation && newItem.validation.valid_response) {
-        newItem.validation.valid_response.value = [...answer];
-      }
-    } else if (
-      newItem.validation &&
-      newItem.validation.alt_responses &&
-      newItem.validation.alt_responses[correctTab - 1]
-    )
-      newItem.validation.alt_responses[correctTab - 1].value = [...answer];
+        if (correctTab === 0) {
+          if (draft.validation && draft.validation.valid_response) {
+            draft.validation.valid_response.value = [...answer];
+          }
+        } else if (draft.validation && draft.validation.alt_responses && draft.validation.alt_responses[correctTab - 1])
+          draft.validation.alt_responses[correctTab - 1].value = [...answer];
 
-    setQuestionData(newItem);
+        updateVariables(draft);
+      })
+    );
   };
 
   const renderOptions = () => (

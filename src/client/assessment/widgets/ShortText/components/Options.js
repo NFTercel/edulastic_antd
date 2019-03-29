@@ -1,8 +1,9 @@
 import React from "react";
-import { get, cloneDeep } from "lodash";
+import { get } from "lodash";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { compose } from "redux";
+import produce from "immer";
 
 import WidgetOptions from "../../../containers/WidgetOptions";
 import { Block } from "../../../styled/WidgetOptions/Block";
@@ -23,21 +24,23 @@ import { setQuestionDataAction, getQuestionDataSelector } from "../../../../auth
 
 const Options = ({ item, setQuestionData }) => {
   const _change = (prop, uiStyle) => {
-    const newItem = cloneDeep(item);
-
-    newItem[prop] = uiStyle;
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft[prop] = uiStyle;
+      })
+    );
   };
 
   const _uiStyleChange = (prop, val) => {
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        if (!draft.ui_style) {
+          draft.ui_style = {};
+        }
 
-    if (!newItem.ui_style) {
-      newItem.ui_style = {};
-    }
-
-    newItem.ui_style[prop] = val;
-    setQuestionData(newItem);
+        draft.ui_style[prop] = val;
+      })
+    );
   };
 
   return (

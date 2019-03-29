@@ -9,6 +9,7 @@ import { Header } from "../../styled/WidgetOptions/Header";
 import { Toggler } from "../../styled/WidgetOptions/Toggler";
 
 import Scoring from "./components/Scoring";
+import Variables from "./components/Variables";
 import { Title } from "./styled/Title";
 
 const types = [evaluationType.exactMatch, evaluationType.partialMatch];
@@ -23,14 +24,16 @@ class WidgetOptions extends Component {
     children: PropTypes.any.isRequired,
     outerStyle: PropTypes.object,
     scoringTypes: PropTypes.array,
-    showScoring: PropTypes.bool
+    showScoring: PropTypes.bool,
+    showVariables: PropTypes.bool
   };
 
   static defaultProps = {
     title: i18n.t("assessment:common.options.title"),
     outerStyle: {},
     scoringTypes: types,
-    showScoring: true
+    showScoring: true,
+    showVariables: true
   };
 
   handleToggle = () => {
@@ -40,7 +43,7 @@ class WidgetOptions extends Component {
   };
 
   render() {
-    const { title, children, outerStyle, scoringTypes, showScoring } = this.props;
+    const { title, children, outerStyle, scoringTypes, showScoring, showVariables } = this.props;
     const { show } = this.state;
 
     return (
@@ -52,6 +55,7 @@ class WidgetOptions extends Component {
         {show && (
           <Fragment>
             {showScoring && <Scoring scoringTypes={scoringTypes} />}
+            {showVariables && <Variables />}
             <div>{children}</div>
           </Fragment>
         )}

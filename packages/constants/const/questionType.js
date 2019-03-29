@@ -26,6 +26,7 @@ const LINE_CHART = "line";
 const BAR_CHART = "bar";
 const HISTOGRAM = "histogram";
 const DOT_PLOT = "dots";
+const LINE_PLOT = "linePlot";
 
 const selectsData = [
   { value: "", text: "All Types" },
@@ -55,7 +56,8 @@ const selectsData = [
   { value: LINE_CHART, text: "Line Chart" },
   { value: BAR_CHART, text: "Bar Chart" },
   { value: HISTOGRAM, text: "Histogram" },
-  { value: DOT_PLOT, text: "Dot plot" }
+  { value: DOT_PLOT, text: "Dot plot" },
+  { value: LINE_PLOT, text: "Line plot" }
 ];
 
 module.exports = {
@@ -87,5 +89,6 @@ module.exports = {
   BAR_CHART,
   HISTOGRAM,
   DOT_PLOT,
+  LINE_PLOT,
   selectsData
 };

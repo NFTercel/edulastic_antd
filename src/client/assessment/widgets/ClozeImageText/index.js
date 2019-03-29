@@ -4,10 +4,13 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 import { withRouter } from "react-router-dom";
 import { cloneDeep } from "lodash";
+import produce from "immer";
 
 import { Checkbox, Paper } from "@edulastic/common";
 import { withNamespaces } from "@edulastic/localization";
 import { setQuestionDataAction } from "../../../author/QuestionEditor/ducks";
+import { EDIT } from "../../constants/constantsForQuestions";
+import { replaceVariables, updateVariables } from "../../utils/variables";
 
 import { CorrectAnswerOptions } from "../../styled/CorrectAnswerOptions";
 
@@ -27,7 +30,9 @@ class ClozeImageText extends Component {
   };
 
   getRenderData = () => {
-    const { item, history } = this.props;
+    const { item: templateItem, history, view } = this.props;
+    const item = view === EDIT ? templateItem : replaceVariables(templateItem);
+
     const locationState = history.location.state;
     const isDetailPage = locationState !== undefined ? locationState.itemDetail : false;
     const previewDisplayOptions = item.options;
@@ -35,14 +40,14 @@ class ClozeImageText extends Component {
     let itemForEdit;
     if (isDetailPage) {
       previewStimulus = item.stimulus;
-      itemForEdit = item;
+      itemForEdit = templateItem;
     } else {
       previewStimulus = item.stimulus;
       itemForEdit = {
         ...item,
-        stimulus: item.stimulus,
-        list: item.options,
-        validation: item.validation
+        stimulus: templateItem.stimulus,
+        list: templateItem.options,
+        validation: templateItem.validation
       };
     }
     return {
@@ -55,38 +60,42 @@ class ClozeImageText extends Component {
 
   handleAddAltResponses = () => {
     const { setQuestionData, item } = this.props;
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        const response = {
+          score: 1,
+          value: []
+        };
 
-    const response = {
-      score: 1,
-      value: []
-    };
-
-    if (newItem.validation.alt_responses && newItem.validation.alt_responses.length) {
-      newItem.validation.alt_responses.push(response);
-    } else {
-      newItem.validation.alt_responses = [response];
-    }
-
-    setQuestionData(newItem);
+        if (draft.validation.alt_responses && draft.validation.alt_responses.length) {
+          draft.validation.alt_responses.push(response);
+        } else {
+          draft.validation.alt_responses = [response];
+        }
+      })
+    );
   };
 
   handleRemoveAltResponses = index => {
     const { setQuestionData, item } = this.props;
-    const newItem = cloneDeep(item);
-
-    if (newItem.validation.alt_responses && newItem.validation.alt_responses.length) {
-      newItem.validation.alt_responses = newItem.validation.alt_responses.filter((response, i) => i !== index);
-    }
-
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        if (draft.validation.alt_responses && draft.validation.alt_responses.length) {
+          draft.validation.alt_responses = draft.validation.alt_responses.filter((response, i) => i !== index);
+        }
+      })
+    );
   };
 
   handleOptionsChange = (name, value) => {
     const { setQuestionData, item } = this.props;
-    const newItem = cloneDeep(item);
-    newItem[name] = value;
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft[name] = value;
+        updateVariables(draft);
+      })
+    );
+
     switch (name) {
       case "duplicated_responses": {
         this.setState({ duplicatedResponses: value });

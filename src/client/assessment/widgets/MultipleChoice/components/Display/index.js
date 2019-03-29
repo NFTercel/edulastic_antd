@@ -23,7 +23,9 @@ Display.propTypes = {
   checkAnswer: PropTypes.bool,
   question: PropTypes.string.isRequired,
   instructorStimulus: PropTypes.string,
-  uiStyle: PropTypes.object
+  uiStyle: PropTypes.object,
+  view: PropTypes.string.isRequired,
+  qIndex: PropTypes.number.isRequired
 };
 
 Display.defaultProps = {

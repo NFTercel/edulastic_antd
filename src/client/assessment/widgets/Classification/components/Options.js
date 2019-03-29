@@ -1,5 +1,6 @@
 import React from "react";
-import { get, cloneDeep } from "lodash";
+import { get } from "lodash";
+import produce from "immer";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { compose } from "redux";
@@ -23,21 +24,22 @@ import { setQuestionDataAction, getQuestionDataSelector } from "../../../../auth
 
 const Options = ({ item, t, setQuestionData }) => {
   const changeItem = (prop, val) => {
-    const newItem = cloneDeep(item);
-
-    newItem[prop] = val;
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft[prop] = val;
+      })
+    );
   };
 
   const changeUIStyle = (prop, val) => {
-    const newItem = cloneDeep(item);
-
-    if (!newItem.ui_style) {
-      newItem.ui_style = {};
-    }
-
-    newItem.ui_style[prop] = val;
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        if (!draft.ui_style) {
+          draft.ui_style = {};
+        }
+        draft.ui_style[prop] = val;
+      })
+    );
   };
 
   return (

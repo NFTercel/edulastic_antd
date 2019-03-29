@@ -1,46 +1,46 @@
-import React, { PureComponent, Fragment } from "react";
+import React, { useMemo, Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 import { setQuestionDataAction } from "../../../author/QuestionEditor/ducks";
 import { CLEAR, EDIT, PREVIEW } from "../../constants/constantsForQuestions";
+import { replaceVariables } from "../../utils/variables";
 
 import SortListPreview from "./SortListPreview";
 import EditSortList from "./EditSortList";
 
-class SortList extends PureComponent {
-  static propTypes = {
-    view: PropTypes.string.isRequired,
-    previewTab: PropTypes.string,
-    smallSize: PropTypes.bool,
-    item: PropTypes.object,
-    setQuestionData: PropTypes.func.isRequired,
-    saveAnswer: PropTypes.func.isRequired,
-    userAnswer: PropTypes.any,
-    testItem: PropTypes.bool,
-    evaluation: PropTypes.any
-  };
+const SortList = props => {
+  const { item, view } = props;
+  const itemForPreview = useMemo(() => replaceVariables(item), [item]);
 
-  static defaultProps = {
-    previewTab: CLEAR,
-    smallSize: false,
-    item: {},
-    userAnswer: [],
-    testItem: false,
-    evaluation: ""
-  };
+  return (
+    <Fragment>
+      {view === EDIT && <EditSortList {...props} />}
+      {view === PREVIEW && <SortListPreview {...props} item={itemForPreview} />}
+    </Fragment>
+  );
+};
 
-  render() {
-    const { view } = this.props;
+SortList.propTypes = {
+  view: PropTypes.string.isRequired,
+  previewTab: PropTypes.string,
+  smallSize: PropTypes.bool,
+  item: PropTypes.object,
+  setQuestionData: PropTypes.func.isRequired,
+  saveAnswer: PropTypes.func.isRequired,
+  userAnswer: PropTypes.any,
+  testItem: PropTypes.bool,
+  evaluation: PropTypes.any
+};
 
-    return (
-      <Fragment>
-        {view === EDIT && <EditSortList {...this.props} />}
-        {view === PREVIEW && <SortListPreview {...this.props} />}
-      </Fragment>
-    );
-  }
-}
+SortList.defaultProps = {
+  previewTab: CLEAR,
+  smallSize: false,
+  item: {},
+  userAnswer: [],
+  testItem: false,
+  evaluation: ""
+};
 
 const SortListContainer = connect(
   null,

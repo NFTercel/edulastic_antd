@@ -4,11 +4,13 @@ import { compose } from "redux";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import "react-quill/dist/quill.snow.css";
+import produce from "immer";
 
 import { PaddingDiv, CustomQuillComponent } from "@edulastic/common";
 import { withNamespaces } from "@edulastic/localization";
 
 import { setQuestionDataAction } from "../../../author/QuestionEditor/ducks";
+import { updateVariables } from "../../utils/variables";
 
 import { Subtitle } from "../../styled/Subtitle";
 
@@ -22,16 +24,24 @@ class Authoring extends Component {
     setQuestionData: PropTypes.func.isRequired
   };
 
-  onChangeQuesiton = html => {
-    const stimulus = html;
+  onChangeQuestion = stimulus => {
     const { item, setQuestionData } = this.props;
-    setQuestionData({ ...item, stimulus });
+    setQuestionData(
+      produce(item, draft => {
+        draft.stimulus = stimulus;
+        updateVariables(draft);
+      })
+    );
   };
 
-  onChangeMarkUp = html => {
-    const templateMarkUp = html;
+  onChangeMarkUp = templateMarkUp => {
     const { item, setQuestionData } = this.props;
-    setQuestionData({ ...item, templateMarkUp });
+    setQuestionData(
+      produce(item, draft => {
+        draft.templateMarkUp = templateMarkUp;
+        updateVariables(draft);
+      })
+    );
   };
 
   render() {
@@ -46,7 +56,7 @@ class Authoring extends Component {
               this.stimulus = instance;
             }}
             placeholder={t("component.cloze.text.thisisstem")}
-            onChange={this.onChangeQuesiton}
+            onChange={this.onChangeQuestion}
             showResponseBtn={false}
             value={item.stimulus}
           />

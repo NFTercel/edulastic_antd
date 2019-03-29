@@ -4,7 +4,7 @@ import { arrayMove } from "react-sortable-hoc";
 import { compose } from "redux";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { cloneDeep } from "lodash";
+import produce from "immer";
 import uuid from "uuid/v4";
 
 import { withNamespaces } from "@edulastic/localization";
@@ -17,6 +17,7 @@ import { AddNewChoiceBtn } from "../../../styled/AddNewChoiceBtn";
 
 import { ALPHABET } from "../constants/alphabet";
 import QuillSortableList from "../../../components/QuillSortableList";
+import { updateVariables } from "../../../utils/variables";
 
 class Authoring extends Component {
   static propTypes = {
@@ -25,83 +26,94 @@ class Authoring extends Component {
     setQuestionData: PropTypes.func.isRequired
   };
 
-  getNewItem() {
-    const { item } = this.props;
-    return cloneDeep(item);
-  }
-
   onChangeQuestion = stimulus => {
     const { item, setQuestionData } = this.props;
-    setQuestionData({ ...item, stimulus });
+    setQuestionData(
+      produce(item, draft => {
+        draft.stimulus = stimulus;
+        updateVariables(draft);
+      })
+    );
   };
 
   onSortEnd = ({ oldIndex, newIndex }) => {
     const { item, setQuestionData } = this.props;
-    const newItem = this.getNewItem();
-    // reorder the options and sort the key based on index
-    // editing is based on on index!
-    newItem.options = arrayMove(newItem.options, oldIndex, newIndex).map(({ label }, index) => ({
-      value: index,
-      label
-    }));
+    setQuestionData(
+      produce(item, draft => {
+        // reorder the options and sort the key based on index
+        // editing is based on on index!
+        draft.options = arrayMove(draft.options, oldIndex, newIndex).map(({ label }, index) => ({
+          value: index,
+          label
+        }));
 
-    let idx = item.validation.valid_response.value.findIndex(val => val === oldIndex);
-    if (idx !== -1) {
-      newItem.validation.valid_response.value[idx] = newIndex;
-    }
-
-    idx = item.validation.valid_response.value.findIndex(val => val === newIndex);
-    if (idx !== -1) {
-      newItem.validation.valid_response.value[idx] = oldIndex;
-    }
-
-    if (newItem.validation.alt_responses) {
-      for (let i = 0; i < item.validation.alt_responses; i++) {
-        const altResponse = newItem.validation.alt_responses[i];
-        idx = item.validation.alt_responses[i].value.findIndex(val => val === oldIndex);
+        let idx = item.validation.valid_response.value.findIndex(val => val === oldIndex);
         if (idx !== -1) {
-          altResponse.value[idx] = newIndex;
+          draft.validation.valid_response.value[idx] = newIndex;
         }
 
-        idx = item.validation.alt_responses[i].value.findIndex(val => val === newIndex);
+        idx = item.validation.valid_response.value.findIndex(val => val === newIndex);
         if (idx !== -1) {
-          altResponse.value[idx] = oldIndex;
+          draft.validation.valid_response.value[idx] = oldIndex;
         }
-        return altResponse;
-      }
-    }
-    setQuestionData(newItem);
+
+        if (draft.validation.alt_responses) {
+          for (let i = 0; i < item.validation.alt_responses; i++) {
+            const altResponse = draft.validation.alt_responses[i];
+            idx = item.validation.alt_responses[i].value.findIndex(val => val === oldIndex);
+            if (idx !== -1) {
+              altResponse.value[idx] = newIndex;
+            }
+
+            idx = item.validation.alt_responses[i].value.findIndex(val => val === newIndex);
+            if (idx !== -1) {
+              altResponse.value[idx] = oldIndex;
+            }
+            return altResponse;
+          }
+        }
+
+        updateVariables(draft);
+      })
+    );
   };
 
   remove = index => {
-    const { setQuestionData } = this.props;
-    const newItem = this.getNewItem();
-
-    newItem.options.splice(index, 1);
-    setQuestionData(newItem);
+    const { item, setQuestionData } = this.props;
+    setQuestionData(
+      produce(item, draft => {
+        draft.options.splice(index, 1);
+        for (let i = index + 1; i < draft.options.length; i++) {
+          draft.variable.variableStatus[`option-${index - 1}`] = draft.variable.variableStatus[`option-${index}`];
+        }
+        updateVariables(draft);
+      })
+    );
   };
 
   addNewChoiceBtn = () => {
-    const { setQuestionData, t } = this.props;
-    const newItem = this.getNewItem();
-    newItem.options.push({
-      value: uuid(),
-      label: `${t("component.multiplechoice.choice")} ${ALPHABET[newItem.options.length]}`
-    });
-
-    setQuestionData(newItem);
+    const { item, setQuestionData, t } = this.props;
+    setQuestionData(
+      produce(item, draft => {
+        draft.options.push({
+          value: uuid(),
+          label: `${t("component.multiplechoice.choice")} ${ALPHABET[draft.options.length]}`
+        });
+      })
+    );
   };
 
   editOptions = (index, value) => {
-    const { setQuestionData } = this.props;
-    const newItem = this.getNewItem();
-
-    newItem.options[index] = {
-      value: index,
-      label: value
-    };
-
-    setQuestionData(newItem);
+    const { item, setQuestionData } = this.props;
+    setQuestionData(
+      produce(item, draft => {
+        draft.options[index] = {
+          value: index,
+          label: value
+        };
+        updateVariables(draft);
+      })
+    );
   };
 
   render() {

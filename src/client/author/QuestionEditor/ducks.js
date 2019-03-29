@@ -1,7 +1,7 @@
 import { createSelector } from "reselect";
-import { testItemsApi, questionsApi } from "@edulastic/api";
-import { call, put, all, takeEvery, select } from "redux-saga/effects";
-import { values } from "lodash";
+import { testItemsApi, evaluateApi, questionsApi } from "@edulastic/api";
+import { call, put, all, takeEvery, takeLatest, select } from "redux-saga/effects";
+import { cloneDeep, values } from "lodash";
 import { message } from "antd";
 import { questionType } from "@edulastic/constants";
 import { getItemDetailSelector, UPDATE_ITEM_DETAIL_SUCCESS } from "../ItemDetail/ducks";
@@ -39,6 +39,9 @@ export const SET_QUESTION_ALIGNMENT_REMOVE_ROW = "[question] set question alignm
 export const SET_QUESTION = "[question] set question";
 export const LOAD_QUESTION = "[quesiton] load question from testItem";
 // actions
+
+// Variable
+export const CALCULATE_FORMULA = "[variable] calculate variable formulation for example value";
 
 export const receiveQuestionByIdAction = id => ({
   type: RECEIVE_QUESTION_REQUEST,
@@ -79,6 +82,11 @@ export const setQuestionAction = data => ({
 export const loadQuestionAction = (data, rowIndex) => ({
   type: LOAD_QUESTION,
   payload: { data, rowIndex }
+});
+
+export const calculateFormulaAction = data => ({
+  type: CALCULATE_FORMULA,
+  payload: { data }
 });
 
 // reducer
@@ -303,6 +311,77 @@ function* saveQuestionSaga() {
     });
   }
 }
+// actions
+
+function* calculateFormulaSaga() {
+  try {
+    const getLatexValuePairs = (id, variables, example) => ({
+      id,
+      latexes: Object.keys(variables)
+        .map(variableName => variables[variableName])
+        .filter(variable => variable.type === "FORMULA")
+        .reduce(
+          (lx, variable) => [
+            ...lx,
+            {
+              id: variable.name,
+              formula: variable.formula
+            }
+          ],
+          []
+        ),
+      variables: Object.keys(variables).map(variableName => ({
+        id: variableName,
+        value:
+          variables[variableName].type === "FORMULA"
+            ? variables[variableName].formula
+            : example
+            ? example[variableName]
+            : variables[variableName].exampleValue
+      }))
+    });
+
+    const question = yield select(getCurrentQuestionSelector);
+
+    if (!question.variable || !question.variable.enabled) {
+      return [];
+    }
+    const variables = question.variable.variables || {};
+
+    const latexValuePairs = [getLatexValuePairs("definition", variables)];
+    if (question.variable.examples) {
+      for (const example of question.variable.examples) {
+        const pair = getLatexValuePairs(`example${example.key}`, variables, example);
+        if (pair.latexes.length > 0) {
+          latexValuePairs.push(pair);
+        }
+      }
+    }
+
+    const results = yield call(evaluateApi.calculate, latexValuePairs);
+    const newQuestion = cloneDeep(question);
+
+    for (const result of results) {
+      if (result.id === "definition") {
+        Object.keys(result.values).forEach(key => {
+          newQuestion.variable.variables[key].exampleValue = result.values[key];
+        });
+      } else {
+        const idx = question.variable.examples.findIndex(example => `example${example.key}` === result.id);
+        Object.keys(result.values).forEach(key => {
+          newQuestion.variable.examples[idx][key] = result.values[key];
+        });
+      }
+    }
+
+    yield put({
+      type: UPDATE_QUESTION,
+      payload: newQuestion
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 function* loadQuestionSaga({ payload }) {
   try {
@@ -328,6 +407,7 @@ export function* watcherSaga() {
   yield all([
     yield takeEvery(RECEIVE_QUESTION_REQUEST, receiveQuestionSaga),
     yield takeEvery(SAVE_QUESTION_REQUEST, saveQuestionSaga),
-    yield takeEvery(LOAD_QUESTION, loadQuestionSaga)
+    yield takeEvery(LOAD_QUESTION, loadQuestionSaga),
+    yield takeLatest(CALCULATE_FORMULA, calculateFormulaSaga)
   ]);
 }

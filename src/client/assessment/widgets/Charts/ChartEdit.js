@@ -1,7 +1,7 @@
 import "rc-color-picker/assets/index.css";
 import React, { Fragment, useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { cloneDeep } from "lodash";
+import produce from "immer";
 import { compose } from "redux";
 import { withTheme } from "styled-components";
 
@@ -39,21 +39,22 @@ const ChartEdit = ({ item, setQuestionData, t }) => {
 
   useEffect(() => {
     if (firstMount) {
-      const newItem = cloneDeep(item);
-      const variables = { oldStep, yAxisCount, yAxisStep, changingStep };
+      setQuestionData(
+        produce(item, draft => {
+          const variables = { oldStep, yAxisCount, yAxisStep, changingStep };
 
-      newItem.chart_data.data = getReCalculatedDATAPoints(newItem.chart_data.data, variables);
+          draft.chart_data.data = getReCalculatedDATAPoints(draft.chart_data.data, variables);
 
-      newItem.validation.alt_responses.forEach(altResp => {
-        altResp.value = getReCalculatedPoints(altResp.value, variables);
-      });
+          draft.validation.alt_responses.forEach(altResp => {
+            altResp.value = getReCalculatedPoints(altResp.value, variables);
+          });
 
-      newItem.validation.valid_response.value = getReCalculatedPoints(
-        newItem.validation.valid_response.value,
-        variables
+          draft.validation.valid_response.value = getReCalculatedPoints(
+            draft.validation.valid_response.value,
+            variables
+          );
+        })
       );
-
-      setQuestionData(newItem);
       setOldStep(yAxisStep);
     }
   }, [yAxisCount, stepSize]);
@@ -63,151 +64,154 @@ const ChartEdit = ({ item, setQuestionData, t }) => {
   }, []);
 
   const handleItemChangeChange = (prop, uiStyle) => {
-    const newItem = cloneDeep(item);
-
-    newItem[prop] = uiStyle;
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft[prop] = uiStyle;
+      })
+    );
   };
 
   const handleUiStyleChange = (prop, uiStyle) => {
-    const newItem = cloneDeep(item);
-
-    if (prop === "yAxisCount") {
-      setLocalMaxValue(uiStyle);
-    } else if (prop === "stepSize" && uiStyle === 0) {
-      newItem.ui_style[prop] = 1;
-      setQuestionData(newItem);
-    } else {
-      newItem.ui_style[prop] = uiStyle;
-      setQuestionData(newItem);
-    }
+    setQuestionData(
+      produce(item, draft => {
+        if (prop === "yAxisCount") {
+          setLocalMaxValue(uiStyle);
+        } else if (prop === "stepSize" && uiStyle === 0) {
+          draft.ui_style[prop] = 1;
+        } else {
+          draft.ui_style[prop] = uiStyle;
+        }
+      })
+    );
   };
 
   const onMaxValueBlur = () => {
-    const newItem = cloneDeep(item);
-
-    newItem.ui_style.yAxisCount = localMaxValue;
-
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.ui_style.yAxisCount = localMaxValue;
+      })
+    );
   };
 
   const handleTitleChange = e => {
-    const newItem = cloneDeep(item);
-
-    newItem.chart_data.name = e.target.value;
-
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.chart_data.name = e.target.value;
+      })
+    );
   };
 
   const handleAddPoint = () => {
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        const newPoint = { x: `Bar ${draft.chart_data.data.length + 1}`, y: 0 };
 
-    const newPoint = { x: `Bar ${newItem.chart_data.data.length + 1}`, y: 0 };
+        draft.chart_data.data.push({ ...newPoint });
 
-    newItem.chart_data.data.push({ ...newPoint });
+        draft.validation.alt_responses.forEach(altResp => {
+          altResp.value.push({ ...newPoint });
+        });
 
-    newItem.validation.alt_responses.forEach(altResp => {
-      altResp.value.push({ ...newPoint });
-    });
-
-    newItem.validation.valid_response.value.push({ ...newPoint });
-
-    setQuestionData(newItem);
+        draft.validation.valid_response.value.push({ ...newPoint });
+      })
+    );
   };
 
   const handlePointChange = index => (prop, value) => {
-    const newItem = cloneDeep(item);
-
-    switch (prop) {
-      case "interactive": {
-        if (newItem.chart_data.data[index].notInteractive === undefined) {
-          newItem.chart_data.data[index].notInteractive = true;
-        } else {
-          delete newItem.chart_data.data[index].notInteractive;
+    setQuestionData(
+      produce(item, draft => {
+        switch (prop) {
+          case "interactive": {
+            if (draft.chart_data.data[index].notInteractive === undefined) {
+              draft.chart_data.data[index].notInteractive = true;
+            } else {
+              delete draft.chart_data.data[index].notInteractive;
+            }
+            break;
+          }
+          case "label": {
+            draft.chart_data.data[index].x = value;
+            draft.validation.alt_responses.forEach(altResp => {
+              altResp.value[index].x = value;
+            });
+            draft.validation.valid_response.value[index].x = value;
+            break;
+          }
+          case "value": {
+            if (yAxisStep * value > yAxisCount * yAxisStep) {
+              draft.chart_data.data[index].y = yAxisCount * yAxisStep;
+            } else {
+              draft.chart_data.data[index].y = yAxisStep * value;
+            }
+            break;
+          }
+          default:
         }
-        break;
-      }
-      case "label": {
-        newItem.chart_data.data[index].x = value;
-        newItem.validation.alt_responses.forEach(altResp => {
-          altResp.value[index].x = value;
-        });
-        newItem.validation.valid_response.value[index].x = value;
-        break;
-      }
-      case "value": {
-        if (yAxisStep * value > yAxisCount * yAxisStep) {
-          newItem.chart_data.data[index].y = yAxisCount * yAxisStep;
-        } else {
-          newItem.chart_data.data[index].y = yAxisStep * value;
-        }
-        break;
-      }
-      default:
-    }
-
-    setQuestionData(newItem);
+      })
+    );
   };
 
   const handleDelete = index => {
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        draft.chart_data.data.splice(index, 1);
 
-    newItem.chart_data.data.splice(index, 1);
+        draft.validation.alt_responses.forEach(altResp => {
+          altResp.value.splice(index, 1);
+        });
 
-    newItem.validation.alt_responses.forEach(altResp => {
-      altResp.value.splice(index, 1);
-    });
-
-    newItem.validation.valid_response.value.splice(index, 1);
-
-    setQuestionData(newItem);
+        draft.validation.valid_response.value.splice(index, 1);
+      })
+    );
   };
 
   const handleCloseTab = tabIndex => {
-    const newItem = cloneDeep(item);
-    newItem.validation.alt_responses.splice(tabIndex, 1);
+    setQuestionData(
+      produce(item, draft => {
+        draft.validation.alt_responses.splice(tabIndex, 1);
 
-    setCorrectTab(0);
-    setQuestionData(newItem);
+        setCorrectTab(0);
+      })
+    );
   };
 
   const handleAddAnswer = () => {
-    const newItem = cloneDeep(item);
-
-    if (!newItem.validation.alt_responses) {
-      newItem.validation.alt_responses = [];
-    }
-    newItem.validation.alt_responses.push({
-      score: 1,
-      value: newItem.validation.valid_response.value
-    });
-
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        if (!draft.validation.alt_responses) {
+          draft.validation.alt_responses = [];
+        }
+        draft.validation.alt_responses.push({
+          score: 1,
+          value: draft.validation.valid_response.value
+        });
+      })
+    );
     setCorrectTab(correctTab + 1);
   };
 
   const handlePointsChange = val => {
-    const newItem = cloneDeep(item);
-
-    if (correctTab === 0) {
-      newItem.validation.valid_response.score = val;
-    } else {
-      newItem.validation.alt_responses[correctTab - 1].score = val;
-    }
-
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        if (correctTab === 0) {
+          draft.validation.valid_response.score = val;
+        } else {
+          draft.validation.alt_responses[correctTab - 1].score = val;
+        }
+      })
+    );
   };
 
   const handleAnswerChange = ans => {
-    const newItem = cloneDeep(item);
-
-    if (correctTab === 0) {
-      newItem.validation.valid_response.value = ans;
-    } else {
-      newItem.validation.alt_responses[correctTab - 1].value = ans;
-    }
-
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        if (correctTab === 0) {
+          draft.validation.valid_response.value = ans;
+        } else {
+          draft.validation.alt_responses[correctTab - 1].value = ans;
+        }
+      })
+    );
   };
 
   const renderOptions = () => (

@@ -1,6 +1,6 @@
-import React, { memo, Component } from "react";
+import React, { memo, useMemo } from "react";
 import PropTypes from "prop-types";
-import { cloneDeep } from "lodash";
+import produce from "immer";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import styled from "styled-components";
@@ -8,6 +8,7 @@ import styled from "styled-components";
 import { Paper } from "@edulastic/common";
 import { withNamespaces } from "@edulastic/localization";
 import { setQuestionDataAction } from "../../../author/QuestionEditor/ducks";
+import { updateVariables, replaceVariables } from "../../utils/variables";
 
 import { Subtitle } from "../../styled/Subtitle";
 
@@ -16,38 +17,37 @@ import ProtractorView from "./ProtractorView";
 
 const EmptyWrapper = styled.div``;
 
-class Protractor extends Component {
-  render() {
-    const { item, view, smallSize, setQuestionData, t } = this.props;
+const Protractor = ({ item, view, smallSize, setQuestionData, t }) => {
+  const Wrapper = smallSize ? EmptyWrapper : Paper;
+  const itemForPreview = useMemo(() => replaceVariables(item), [item]);
 
-    const Wrapper = smallSize ? EmptyWrapper : Paper;
+  const handleItemChangeChange = (prop, value) => {
+    setQuestionData(
+      produce(item, draft => {
+        draft[prop] = value;
+        updateVariables(draft);
+      })
+    );
+  };
 
-    const handleItemChangeChange = (prop, value) => {
-      const newItem = cloneDeep(item);
-
-      newItem[prop] = value;
-      setQuestionData(newItem);
-    };
-
-    if (view === "edit") {
-      return (
-        <Paper style={{ marginBottom: 30 }}>
-          <Subtitle>{t("component.protractor.details")}</Subtitle>
-          <Options onChange={handleItemChangeChange} item={item} />
-          <ProtractorView smallSize={smallSize} item={item} />
-        </Paper>
-      );
-    }
-
-    if (view === "preview") {
-      return (
-        <Wrapper>
-          <ProtractorView smallSize={smallSize} item={item} />
-        </Wrapper>
-      );
-    }
+  if (view === "edit") {
+    return (
+      <Paper style={{ marginBottom: 30 }}>
+        <Subtitle>{t("component.protractor.details")}</Subtitle>
+        <Options onChange={handleItemChangeChange} item={item} />
+        <ProtractorView smallSize={smallSize} item={item} />
+      </Paper>
+    );
   }
-}
+
+  if (view === "preview") {
+    return (
+      <Wrapper>
+        <ProtractorView smallSize={smallSize} item={itemForPreview} />
+      </Wrapper>
+    );
+  }
+};
 
 Protractor.propTypes = {
   item: PropTypes.object.isRequired,

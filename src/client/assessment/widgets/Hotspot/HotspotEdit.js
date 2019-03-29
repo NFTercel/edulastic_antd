@@ -1,16 +1,18 @@
 import "rc-color-picker/assets/index.css";
 import React, { Fragment, useState } from "react";
 import PropTypes from "prop-types";
-import { cloneDeep } from "lodash";
 import Dropzone from "react-dropzone";
 import ColorPicker from "rc-color-picker";
 import { Row, Col } from "antd";
 import { compose } from "redux";
 import { withTheme } from "styled-components";
+import produce from "immer";
 
 import { withNamespaces } from "@edulastic/localization";
 import { Paper, Tabs, Tab, Button, FlexContainer, Image } from "@edulastic/common";
 import { fileApi } from "@edulastic/api";
+
+import { updateVariables } from "../../utils/variables";
 
 import QuestionTextArea from "../../components/QuestionTextArea";
 import CorrectAnswers from "../../components/CorrectAnswers";
@@ -59,27 +61,32 @@ const HotspotEdit = ({ item, setQuestionData, t, theme }) => {
   const [selectedIndexes, setSelectedIndexes] = useState(getAreaIndexes(area_attributes.local));
 
   const handleSelectChange = value => {
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        draft.area_attributes.local[customizeTab - 1].area = value;
 
-    newItem.area_attributes.local[customizeTab - 1].area = value;
-
-    setSelectedIndexes(getAreaIndexes(newItem.area_attributes.local));
-
-    setQuestionData(newItem);
+        setSelectedIndexes(getAreaIndexes(draft.area_attributes.local));
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleItemChangeChange = (prop, uiStyle) => {
-    const newItem = cloneDeep(item);
-
-    newItem[prop] = uiStyle;
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft[prop] = uiStyle;
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleImageToolbarChange = prop => val => {
-    const newItem = cloneDeep(item);
-
-    newItem.image[prop] = val;
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.image[prop] = val;
+        updateVariables(draft);
+      })
+    );
   };
 
   const onDrop = ([files]) => {
@@ -100,85 +107,93 @@ const HotspotEdit = ({ item, setQuestionData, t, theme }) => {
   const thumb = file && <Image width={width} height={height} src={file} alt={altText} />;
 
   const changeHandler = prop => obj => {
-    const newItem = cloneDeep(item);
-
-    newItem.area_attributes.global[prop] = hexToRGB(obj.color, (obj.alpha ? obj.alpha : 1) / 100);
-
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.area_attributes.global[prop] = hexToRGB(obj.color, (obj.alpha ? obj.alpha : 1) / 100);
+      })
+    );
   };
 
   const onCloseAttrTab = index => e => {
     e.stopPropagation();
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        draft.area_attributes.local.splice(index, 1);
 
-    newItem.area_attributes.local.splice(index, 1);
+        setSelectedIndexes(getAreaIndexes(draft.area_attributes.local));
 
-    setSelectedIndexes(getAreaIndexes(newItem.area_attributes.local));
-
-    setCustomizeTab(0);
-
-    setQuestionData(newItem);
+        setCustomizeTab(0);
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleAddAttr = () => {
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        draft.area_attributes.local.push({
+          area: "",
+          fill: area_attributes.global.fill,
+          stroke: area_attributes.global.stroke
+        });
 
-    newItem.area_attributes.local.push({
-      area: "",
-      fill: area_attributes.global.fill,
-      stroke: area_attributes.global.stroke
-    });
+        setSelectedIndexes(getAreaIndexes(draft.area_attributes.local));
 
-    setSelectedIndexes(getAreaIndexes(newItem.area_attributes.local));
-
-    setCustomizeTab(newItem.area_attributes.local.length);
-
-    setQuestionData(newItem);
+        setCustomizeTab(draft.area_attributes.local.length);
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleLocalColorChange = prop => obj => {
-    const newItem = cloneDeep(item);
-
-    newItem.area_attributes.local[customizeTab - 1][prop] = hexToRGB(obj.color, (obj.alpha ? obj.alpha : 1) / 100);
-
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.area_attributes.local[customizeTab - 1][prop] = hexToRGB(obj.color, (obj.alpha ? obj.alpha : 1) / 100);
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleCloseTab = tabIndex => {
-    const newItem = cloneDeep(item);
-    newItem.validation.alt_responses.splice(tabIndex, 1);
+    setQuestionData(
+      produce(item, draft => {
+        draft.validation.alt_responses.splice(tabIndex, 1);
 
-    setCorrectTab(0);
-    setQuestionData(newItem);
+        setCorrectTab(0);
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleResponseMode = () => {
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        if (multiple_responses) {
+          draft.validation.valid_response.value.splice(1);
+          draft.validation.alt_responses.forEach(alt => {
+            alt.value.splice(1);
+          });
+        }
 
-    if (multiple_responses) {
-      newItem.validation.valid_response.value.splice(1);
-      newItem.validation.alt_responses.forEach(alt => {
-        alt.value.splice(1);
-      });
-    }
-
-    newItem.multiple_responses = !multiple_responses;
-
-    setQuestionData(newItem);
+        draft.multiple_responses = !multiple_responses;
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleAddAnswer = () => {
-    const newItem = cloneDeep(item);
-
-    if (!newItem.validation.alt_responses) {
-      newItem.validation.alt_responses = [];
-    }
-    newItem.validation.alt_responses.push({
-      score: 1,
-      value: newItem.validation.valid_response.value
-    });
-
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        if (!draft.validation.alt_responses) {
+          draft.validation.alt_responses = [];
+        }
+        draft.validation.alt_responses.push({
+          score: 1,
+          value: draft.validation.valid_response.value
+        });
+        updateVariables(draft);
+      })
+    );
     setCorrectTab(correctTab + 1);
   };
   const renderPlusButton = () => (
@@ -212,27 +227,29 @@ const HotspotEdit = ({ item, setQuestionData, t, theme }) => {
   };
 
   const handlePointsChange = val => {
-    const newItem = cloneDeep(item);
-
-    if (correctTab === 0) {
-      newItem.validation.valid_response.score = val;
-    } else {
-      newItem.validation.alt_responses[correctTab - 1].score = val;
-    }
-
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        if (correctTab === 0) {
+          draft.validation.valid_response.score = val;
+        } else {
+          draft.validation.alt_responses[correctTab - 1].score = val;
+        }
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleAnswerChange = ans => {
-    const newItem = cloneDeep(item);
-
-    if (correctTab === 0) {
-      newItem.validation.valid_response.value = ans;
-    } else {
-      newItem.validation.alt_responses[correctTab - 1].value = ans;
-    }
-
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        if (correctTab === 0) {
+          draft.validation.valid_response.value = ans;
+        } else {
+          draft.validation.alt_responses[correctTab - 1].value = ans;
+        }
+        updateVariables(draft);
+      })
+    );
   };
 
   const renderOptions = () => (

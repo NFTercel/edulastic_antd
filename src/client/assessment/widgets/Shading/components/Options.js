@@ -1,9 +1,10 @@
 import React from "react";
-import { get, cloneDeep } from "lodash";
+import { get } from "lodash";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import { withNamespaces } from "react-i18next";
+import produce from "immer";
 
 import WidgetOptions from "../../../containers/WidgetOptions";
 import Extras from "../../../containers/Extras";
@@ -25,21 +26,23 @@ const Options = ({ item, t, changeItem, changeUIStyle, setQuestionData, saveAnsw
   const { canvas } = item;
 
   const _cellClick = (rowNumber, colNumber) => () => {
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        if (!Array.isArray(draft.canvas.hidden)) {
+          draft.canvas.hidden = [];
+        }
 
-    if (!Array.isArray(newItem.canvas.hidden)) {
-      newItem.canvas.hidden = [];
-    }
+        const indexOfSameShade = draft.canvas.hidden.findIndex(
+          shade => shade[0] === rowNumber && shade[1] === colNumber
+        );
 
-    const indexOfSameShade = newItem.canvas.hidden.findIndex(shade => shade[0] === rowNumber && shade[1] === colNumber);
-
-    if (indexOfSameShade === -1) {
-      newItem.canvas.hidden.push([rowNumber, colNumber]);
-    } else {
-      newItem.canvas.hidden.splice(indexOfSameShade, 1);
-    }
-
-    setQuestionData(newItem);
+        if (indexOfSameShade === -1) {
+          draft.canvas.hidden.push([rowNumber, colNumber]);
+        } else {
+          draft.canvas.hidden.splice(indexOfSameShade, 1);
+        }
+      })
+    );
   };
 
   return (

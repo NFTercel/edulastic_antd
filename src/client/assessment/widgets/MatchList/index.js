@@ -1,16 +1,19 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useMemo } from "react";
 import PropTypes from "prop-types";
 
+import { replaceVariables } from "../../utils/variables";
 import { PREVIEW, EDIT, CLEAR } from "../../constants/constantsForQuestions";
 
 import MatchListPreview from "./MatchListPreview";
 import MatchListEdit from "./MatchListEdit";
 
 const MatchList = props => {
-  const { view } = props;
+  const { item, view } = props;
+  const itemForPreview = useMemo(() => replaceVariables(item), [item]);
+
   return (
     <Fragment>
-      {view === PREVIEW && <MatchListPreview {...props} />}
+      {view === PREVIEW && <MatchListPreview {...props} item={itemForPreview} />}
       {view === EDIT && <MatchListEdit {...props} />}
     </Fragment>
   );

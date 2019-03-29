@@ -3,8 +3,8 @@ import { Checkbox } from "antd";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { compose } from "redux";
-import { cloneDeep } from "lodash";
 import { arrayMove } from "react-sortable-hoc";
+import produce from "immer";
 
 import { TextField, PaddingDiv } from "@edulastic/common";
 import { withNamespaces } from "@edulastic/localization";
@@ -25,36 +25,44 @@ class AdditionalOptions extends Component {
 
   onSortEnd({ oldIndex, newIndex }) {
     const { questionData, setQuestionData } = this.props;
-    const newItem = cloneDeep(questionData);
-    newItem.distractorRationaleOptions = arrayMove(questionData.distractorRationaleOptions, oldIndex, newIndex);
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(questionData, draft => {
+        draft.distractorRationaleOptions = arrayMove(draft.distractorRationaleOptions, oldIndex, newIndex);
+      })
+    );
   }
 
   remove(index) {
     const { questionData, setQuestionData } = this.props;
-    const newItem = cloneDeep(questionData);
-    newItem.distractorRationaleOptions.splice(index, 1);
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(questionData, draft => {
+        draft.distractorRationaleOptions.splice(index, 1);
+      })
+    );
   }
 
   editOptions(index, e) {
     const { questionData, setQuestionData } = this.props;
-    const newItem = cloneDeep(questionData);
-    if (newItem.distractorRationaleOptions === undefined) {
-      newItem.distractorRationaleOptions = [];
-    }
-    newItem.distractorRationaleOptions[index] = e.target.value;
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(questionData, draft => {
+        if (draft.distractorRationaleOptions === undefined) {
+          draft.distractorRationaleOptions = [];
+        }
+        draft.distractorRationaleOptions[index] = e.target.value;
+      })
+    );
   }
 
   addNewChoiceBtn() {
     const { questionData, setQuestionData, t } = this.props;
-    const newItem = cloneDeep(questionData);
-    if (newItem.distractorRationaleOptions === undefined) {
-      newItem.distractorRationaleOptions = [];
-    }
-    newItem.distractorRationaleOptions.push(t("component.cloze.imageDropDown.newChoice"));
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(questionData, draft => {
+        if (draft.distractorRationaleOptions === undefined) {
+          draft.distractorRationaleOptions = [];
+        }
+        draft.distractorRationaleOptions.push(t("component.cloze.imageDropDown.newChoice"));
+      })
+    );
   }
 
   render() {

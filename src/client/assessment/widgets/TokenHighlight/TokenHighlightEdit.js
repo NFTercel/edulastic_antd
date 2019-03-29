@@ -3,8 +3,10 @@ import PropTypes from "prop-types";
 import { cloneDeep } from "lodash";
 import { withNamespaces } from "@edulastic/localization";
 import { Paper, Tabs, Tab, CustomQuillComponent } from "@edulastic/common";
+import produce from "immer";
 
 import { WORD_MODE, PARAGRAPH_MODE, SENTENCE_MODE, EDIT } from "../../constants/constantsForQuestions";
+import { updateVariables } from "../../utils/variables";
 
 import withPoints from "../../components/HOC/withPoints";
 import QuestionTextArea from "../../components/QuestionTextArea";
@@ -46,103 +48,117 @@ const TokenHighlightEdit = ({ item, setQuestionData, t }) => {
   const [template, setTemplate] = useState();
 
   useEffect(() => {
-    const newItem = cloneDeep(item);
-    if (template || newItem.templeWithTokens.length === 0) {
-      let resultArray = "";
-      if (mode === WORD_MODE) {
-        resultArray = wordsArray;
-      } else if (mode === PARAGRAPH_MODE) {
-        resultArray = paragraphsArray;
-      } else {
-        resultArray = sentencesArray;
-      }
+    setQuestionData(
+      produce(item, draft => {
+        if (template || draft.templeWithTokens.length === 0) {
+          let resultArray = "";
+          if (mode === WORD_MODE) {
+            resultArray = wordsArray;
+          } else if (mode === PARAGRAPH_MODE) {
+            resultArray = paragraphsArray;
+          } else {
+            resultArray = sentencesArray;
+          }
 
-      newItem.templeWithTokens = resultArray;
+          draft.templeWithTokens = resultArray;
 
-      setTemplate(resultArray);
-    } else {
-      newItem.templeWithTokens = item.templeWithTokens;
-      setTemplate(cloneDeep(item.templeWithTokens));
-    }
-    setQuestionData(newItem);
+          setTemplate(resultArray);
+        } else {
+          draft.templeWithTokens = item.templeWithTokens;
+          setTemplate(cloneDeep(item.templeWithTokens));
+        }
+        updateVariables(draft);
+      })
+    );
   }, [mode]);
 
   const handleItemChangeChange = (prop, uiStyle) => {
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        if (prop === "template") {
+          let resultArray = "";
+          if (mode === WORD_MODE) {
+            resultArray = cloneDeep(wordsArray);
+          } else if (mode === PARAGRAPH_MODE) {
+            resultArray = cloneDeep(paragraphsArray);
+          } else {
+            resultArray = cloneDeep(sentencesArray);
+          }
+          setTemplate(resultArray);
+        }
 
-    if (prop === "template") {
-      let resultArray = "";
-      if (mode === WORD_MODE) {
-        resultArray = cloneDeep(wordsArray);
-      } else if (mode === PARAGRAPH_MODE) {
-        resultArray = cloneDeep(paragraphsArray);
-      } else {
-        resultArray = cloneDeep(sentencesArray);
-      }
-      setTemplate(resultArray);
-    }
-
-    newItem[prop] = uiStyle;
-    setQuestionData(newItem);
+        draft[prop] = uiStyle;
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleTemplateClick = i => () => {
     const newTemplate = cloneDeep(template);
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        newTemplate[i].active = !newTemplate[i].active;
 
-    newTemplate[i].active = !newTemplate[i].active;
+        draft.templeWithTokens = newTemplate;
 
-    newItem.templeWithTokens = newTemplate;
-
-    setTemplate(newTemplate);
-    setQuestionData(newItem);
+        setTemplate(newTemplate);
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleAddAnswer = () => {
-    const newItem = cloneDeep(item);
-
-    if (!newItem.validation.alt_responses) {
-      newItem.validation.alt_responses = [];
-    }
-    newItem.validation.alt_responses.push({
-      score: 1,
-      value: newItem.validation.valid_response.value
-    });
-
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        if (!draft.validation.alt_responses) {
+          draft.validation.alt_responses = [];
+        }
+        draft.validation.alt_responses.push({
+          score: 1,
+          value: draft.validation.valid_response.value
+        });
+      })
+    );
     setCorrectTab(correctTab + 1);
   };
 
   const handlePointsChange = val => {
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        if (correctTab === 0) {
+          draft.validation.valid_response.score = val;
+        } else {
+          draft.validation.alt_responses[correctTab - 1].score = val;
+        }
 
-    if (correctTab === 0) {
-      newItem.validation.valid_response.score = val;
-    } else {
-      newItem.validation.alt_responses[correctTab - 1].score = val;
-    }
-
-    setQuestionData(newItem);
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleAnswerChange = ans => {
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        if (correctTab === 0) {
+          draft.validation.valid_response.value = ans;
+        } else {
+          draft.validation.alt_responses[correctTab - 1].value = ans;
+        }
 
-    if (correctTab === 0) {
-      newItem.validation.valid_response.value = ans;
-    } else {
-      newItem.validation.alt_responses[correctTab - 1].value = ans;
-    }
-
-    setQuestionData(newItem);
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleCloseTab = tabIndex => {
-    const newItem = cloneDeep(item);
-    newItem.validation.alt_responses.splice(tabIndex, 1);
+    setQuestionData(
+      produce(item, draft => {
+        draft.validation.alt_responses.splice(tabIndex, 1);
 
-    setCorrectTab(0);
-    setQuestionData(newItem);
+        setCorrectTab(0);
+        updateVariables(draft);
+      })
+    );
   };
 
   const renderOptions = () => (

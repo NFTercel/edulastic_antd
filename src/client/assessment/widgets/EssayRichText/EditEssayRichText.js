@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { cloneDeep, isEqual, get } from "lodash";
+import { isEqual, get } from "lodash";
+import produce from "immer";
 import ReactQuill from "react-quill";
 import { Checkbox, Input } from "antd";
 import { compose } from "redux";
@@ -10,6 +11,8 @@ import { arrayMove } from "react-sortable-hoc";
 
 import { withNamespaces } from "@edulastic/localization";
 import { Paper } from "@edulastic/common";
+
+import { updateVariables } from "../../utils/variables";
 
 import WordLimitAndCount from "../../components/WordLimitAndCount";
 import QuestionTextArea from "../../components/QuestionTextArea";
@@ -47,35 +50,41 @@ const EditEssayRichText = ({ item, setQuestionData, t, changeItem, changeUIStyle
   });
 
   const handleItemChangeChange = (prop, uiStyle) => {
-    const newItem = cloneDeep(item);
-
-    newItem[prop] = uiStyle;
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft[prop] = uiStyle;
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleValidationChange = (prop, uiStyle) => {
-    const newItem = cloneDeep(item);
-
-    newItem.validation[prop] = uiStyle;
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.validation[prop] = uiStyle;
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleActiveChange = index => {
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        draft.formatting_options[index].active = !draft.formatting_options[index].active;
 
-    newItem.formatting_options[index].active = !newItem.formatting_options[index].active;
-
-    setAct(newItem.formatting_options);
-
-    setQuestionData(newItem);
+        setAct(draft.formatting_options);
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleChange = ({ oldIndex, newIndex }) => {
-    const newItem = cloneDeep(item);
-
-    newItem.formatting_options = arrayMove(newItem.formatting_options, oldIndex, newIndex);
-
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.formatting_options = arrayMove(draft.formatting_options, oldIndex, newIndex);
+        updateVariables(draft);
+      })
+    );
   };
 
   return (

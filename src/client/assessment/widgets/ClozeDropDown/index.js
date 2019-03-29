@@ -5,11 +5,13 @@ import { compose } from "redux";
 import { withRouter } from "react-router-dom";
 import { cloneDeep } from "lodash";
 import styled, { withTheme } from "styled-components";
+import produce from "immer";
 
 import { Checkbox, Paper } from "@edulastic/common";
 import { withNamespaces } from "@edulastic/localization";
 
 import { setQuestionDataAction } from "../../../author/QuestionEditor/ducks";
+import { EDIT } from "../../constants/constantsForQuestions";
 
 import { CorrectAnswerOptions } from "../../styled/CorrectAnswerOptions";
 
@@ -19,11 +21,15 @@ import Display from "./Display";
 import Options from "./components/Options";
 import { AdaptiveCloze } from "./styled/AdaptiveCloze";
 
+import { replaceVariables, updateVariables } from "../../utils/variables";
+
 const EmptyWrapper = styled.div``;
 
 class ClozeDropDown extends Component {
   getRenderData = () => {
-    const { item, history } = this.props;
+    const { item: templateItem, history, view } = this.props;
+    const item = view === EDIT ? templateItem : replaceVariables(templateItem);
+
     const locationState = history.location.state;
     const isDetailPage = locationState !== undefined ? locationState.itemDetail : false;
     const previewDisplayOptions = item.hasGroupResponses ? item.groupResponses : item.options;
@@ -31,14 +37,14 @@ class ClozeDropDown extends Component {
     let itemForEdit;
     if (item.smallSize || isDetailPage) {
       previewStimulus = item.stimulus;
-      itemForEdit = item;
+      itemForEdit = templateItem;
     } else {
       previewStimulus = item.stimulus;
       itemForEdit = {
-        ...item,
-        stimulus: item.stimulus,
-        list: item.options,
-        validation: item.validation
+        ...templateItem,
+        stimulus: templateItem.stimulus,
+        list: templateItem.options,
+        validation: templateItem.validation
       };
     }
     return {
@@ -53,64 +59,49 @@ class ClozeDropDown extends Component {
 
   handleAddAltResponses = () => {
     const { setQuestionData, item } = this.props;
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        const response = {
+          score: 1,
+          value: []
+        };
 
-    const response = {
-      score: 1,
-      value: []
-    };
-
-    if (newItem.validation.alt_responses && newItem.validation.alt_responses.length) {
-      newItem.validation.alt_responses.push(response);
-    } else {
-      newItem.validation.alt_responses = [response];
-    }
-
-    setQuestionData(newItem);
+        if (draft.validation.alt_responses && draft.validation.alt_responses.length) {
+          draft.validation.alt_responses.push(response);
+        } else {
+          draft.validation.alt_responses = [response];
+        }
+      })
+    );
   };
 
   handleOptionsChange = (name, value) => {
     const { setQuestionData, item } = this.props;
-    const newItem = cloneDeep(item);
-    newItem[name] = value;
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft[name] = value;
+        updateVariables(draft);
+      })
+    );
   };
 
-  handleAddAnswer = (userAnswer) => {
+  handleAddAnswer = userAnswer => {
     const { saveAnswer } = this.props;
     const newAnswer = cloneDeep(userAnswer);
     saveAnswer(newAnswer);
   };
 
   render() {
-    const {
-      view,
-      previewTab,
-      smallSize,
-      item,
-      userAnswer,
-      t,
-      testItem,
-      evaluation,
-      theme
-    } = this.props;
-    const {
-      previewStimulus,
-      previewDisplayOptions,
-      itemForEdit,
-      uiStyle,
-      instructorStimulus
-    } = this.getRenderData();
+    const { view, previewTab, smallSize, item, userAnswer, t, testItem, evaluation, theme } = this.props;
+    const { previewStimulus, previewDisplayOptions, itemForEdit, uiStyle, instructorStimulus } = this.getRenderData();
     const { shuffleOptions } = item;
 
     const Wrapper = testItem ? EmptyWrapper : Paper;
     return (
       <div>
-        {view === 'edit' && (
+        {view === "edit" && (
           <React.Fragment>
-            <AdaptiveCloze
-              background={theme.widgets.clozeDropDown.editViewBgColor}
-            >
+            <AdaptiveCloze background={theme.widgets.clozeDropDown.editViewBgColor}>
               <div className="authoring">
                 <Authoring item={itemForEdit} />
                 <CorrectAnswers
@@ -129,8 +120,8 @@ class ClozeDropDown extends Component {
                   <Checkbox
                     className="additional-options"
                     key={`shuffleOptions_${shuffleOptions}`}
-                    onChange={() => this.handleOptionsChange('shuffleOptions', !shuffleOptions)}
-                    label={t('component.cloze.dropDown.shuffleoptions')}
+                    onChange={() => this.handleOptionsChange("shuffleOptions", !shuffleOptions)}
+                    label={t("component.cloze.dropDown.shuffleoptions")}
                     checked={shuffleOptions}
                   />
                 </CorrectAnswerOptions>
@@ -141,18 +132,18 @@ class ClozeDropDown extends Component {
                 onChange={this.handleOptionsChange}
                 uiStyle={uiStyle}
                 outerStyle={{
-                  padding: '30px 120px'
+                  padding: "30px 120px"
                 }}
               />
             </div>
           </React.Fragment>
         )}
-        {view === 'preview' && (
+        {view === "preview" && (
           <Wrapper>
             <Display
-              showAnswer={previewTab === 'show'}
-              preview={previewTab === 'clear'}
-              checkAnswer={previewTab === 'check'}
+              showAnswer={previewTab === "show"}
+              preview={previewTab === "clear"}
+              checkAnswer={previewTab === "check"}
               configureOptions={{
                 shuffleOptions
               }}
@@ -191,7 +182,7 @@ ClozeDropDown.propTypes = {
 };
 
 ClozeDropDown.defaultProps = {
-  previewTab: 'clear',
+  previewTab: "clear",
   item: {
     options: []
   },
@@ -203,7 +194,7 @@ ClozeDropDown.defaultProps = {
 
 const enhance = compose(
   withRouter,
-  withNamespaces('assessment'),
+  withNamespaces("assessment"),
   withTheme,
   connect(
     null,

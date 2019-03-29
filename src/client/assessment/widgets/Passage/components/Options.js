@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { cloneDeep } from "lodash";
+import produce from "immer";
 import { arrayMove } from "react-sortable-hoc";
 import { Col, Checkbox, Select } from "antd";
 import { compose } from "redux";
@@ -8,6 +8,8 @@ import { withTheme } from "styled-components";
 
 import { CustomQuillComponent } from "@edulastic/common";
 import { withNamespaces } from "@edulastic/localization";
+
+import { updateVariables } from "../../../utils/variables";
 
 import withAddButton from "../../../components/HOC/withAddButton";
 import QuillSortableList from "../../../components/QuillSortableList";
@@ -20,47 +22,59 @@ const List = withAddButton(QuillSortableList);
 
 const Opt = ({ setQuestionData, item, t, theme }) => {
   const handleChange = (prop, value) => {
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        if (prop === "paginated_content" && value) {
+          draft.pages = [draft.content];
+          delete draft.content;
+        }
 
-    if (prop === "paginated_content" && value) {
-      newItem.pages = [newItem.content];
-      delete newItem.content;
-    }
+        if (prop === "paginated_content" && !value) {
+          if (draft.pages && draft.pages.length) {
+            draft.content = draft.pages.join("");
+          }
 
-    if (prop === "paginated_content" && !value) {
-      if (newItem.pages && newItem.pages.length) {
-        newItem.content = newItem.pages.join("");
-      }
+          delete draft.pages;
+        }
 
-      delete newItem.pages;
-    }
-
-    newItem[prop] = value;
-    setQuestionData(newItem);
+        draft[prop] = value;
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleSortPagesEnd = ({ oldIndex, newIndex }) => {
-    const newItem = cloneDeep(item);
-    newItem.pages = arrayMove(newItem.pages, oldIndex, newIndex);
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.pages = arrayMove(draft.pages, oldIndex, newIndex);
+      })
+    );
   };
 
   const handleRemovePage = index => {
-    const newItem = cloneDeep(item);
-    newItem.pages.splice(index, 1);
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.pages.splice(index, 1);
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleChangePage = (index, value) => {
-    const newItem = cloneDeep(item);
-    newItem.pages[index] = value;
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.pages[index] = value;
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleAddPage = () => {
-    const newItem = cloneDeep(item);
-    newItem.pages.push("");
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.pages.push("");
+      })
+    );
   };
 
   const rendererOptions = [

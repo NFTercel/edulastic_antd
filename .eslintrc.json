@@ -42,12 +42,9 @@
     "no-underscore-dangle": 0,
     "camelcase": 0,
     "import/no-extraneous-dependencies": 0,
-    "no-continue":0,
+    "no-continue": 0,
     "no-restricted-syntax": [0, "ForInStatement"],
-    "comma-dangle": [
-      "warn",
-      "never"
-    ],
+    "comma-dangle": ["warn", "never"],
     "no-await-in-loop": 0
   }
 }

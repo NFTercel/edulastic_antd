@@ -3,7 +3,7 @@ import { cloneDeep, keyBy as _keyBy, omit as _omit } from "lodash";
 import { testItemsApi } from "@edulastic/api";
 import { call, put, all, takeEvery } from "redux-saga/effects";
 import { message } from "antd";
-import { loadQuestionsAction } from "../sharedDucks/questions";
+import { loadQuestionsAction, addItemsQuestionAction } from "../sharedDucks/questions";
 
 // constants
 
@@ -210,7 +210,11 @@ function* receiveItemSaga({ payload }) {
       type: RECEIVE_ITEM_DETAIL_SUCCESS,
       payload: item
     });
-    yield put(loadQuestionsAction(questions));
+    if (payload.params.addItem) {
+      yield put(addItemsQuestionAction(questions));
+    } else {
+      yield put(loadQuestionsAction(questions));
+    }
   } catch (err) {
     console.log("err is", err);
     const errorMessage = "Receive item by id is failing";

@@ -4,13 +4,15 @@ import { arrayMove } from "react-sortable-hoc";
 import { compose } from "redux";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { cloneDeep } from "lodash";
 import { Button, Icon, Input } from "antd";
 import "react-quill/dist/quill.snow.css";
 import { withTheme } from "styled-components";
+import produce from "immer";
 
 import { withNamespaces } from "@edulastic/localization";
 import { PaddingDiv, CustomQuillComponent } from "@edulastic/common";
+
+import { updateVariables } from "../../utils/variables";
 import { setQuestionDataAction } from "../../../author/QuestionEditor/ducks";
 
 import SortableList from "../../components/SortableList/index";
@@ -37,49 +39,62 @@ class Authoring extends Component {
     };
   }
 
-  getNewItem() {
-    const { item } = this.props;
-    return cloneDeep(item);
-  }
-
-  onChangeQuesiton = html => {
-    const stimulus = html;
+  onChangeQuestion = stimulus => {
     const { item, setQuestionData } = this.props;
-    setQuestionData({ ...item, stimulus });
+    setQuestionData(
+      produce(item, draft => {
+        draft.stimulus = stimulus;
+        updateVariables(draft);
+      })
+    );
   };
 
   onSortEnd = ({ oldIndex, newIndex }) => {
-    const { setQuestionData } = this.props;
-    const newItem = this.getNewItem();
-    newItem.options = arrayMove(newItem.options, oldIndex, newIndex);
-    setQuestionData(newItem);
+    const { item, setQuestionData } = this.props;
+    setQuestionData(
+      produce(item, draft => {
+        draft.options = arrayMove(draft.options, oldIndex, newIndex);
+      })
+    );
   };
 
   remove = index => {
-    const { setQuestionData } = this.props;
-    const newItem = this.getNewItem();
-    newItem.options.splice(index, 1);
-    setQuestionData(newItem);
+    const { item, setQuestionData } = this.props;
+    setQuestionData(
+      produce(item, draft => {
+        draft.options.splice(index, 1);
+        updateVariables(draft);
+      })
+    );
   };
 
   editOptions = (index, e) => {
-    const { setQuestionData } = this.props;
-    const newItem = this.getNewItem();
-    newItem.options[index] = e.target.value;
-    setQuestionData(newItem);
+    const { item, setQuestionData } = this.props;
+    setQuestionData(
+      produce(item, draft => {
+        draft.options[index] = e.target.value;
+        updateVariables(draft);
+      })
+    );
   };
 
   addNewChoiceBtn = () => {
-    const { setQuestionData, t } = this.props;
-    const newItem = this.getNewItem();
-    newItem.options.push(t("component.cloze.dragDrop.newChoice"));
-    setQuestionData(newItem);
+    const { item, setQuestionData, t } = this.props;
+    setQuestionData(
+      produce(item, draft => {
+        draft.options.push(t("component.cloze.dragDrop.newChoice"));
+      })
+    );
   };
 
-  onChangeMarkUp = html => {
-    const templateMarkUp = html;
+  onChangeMarkUp = templateMarkUp => {
     const { item, setQuestionData } = this.props;
-    setQuestionData({ ...item, templateMarkUp });
+    setQuestionData(
+      produce(item, draft => {
+        draft.templateMarkUp = templateMarkUp;
+        updateVariables(draft);
+      })
+    );
   };
 
   groupResponsesHandler = e => {
@@ -102,7 +117,13 @@ class Authoring extends Component {
     } else {
       this.setState({ hasGroupResponses });
     }
-    setQuestionData({ ...item, hasGroupResponses });
+
+    setQuestionData(
+      produce(item, draft => {
+        draft.hasGroupResponses = hasGroupResponses;
+        updateVariables(draft);
+      })
+    );
   };
 
   addGroup = () => {
@@ -110,8 +131,13 @@ class Authoring extends Component {
     groupResponses.push({ title: "", options: [] });
     const newGroupResponses = groupResponses.slice();
     this.setState({ groupResponses: newGroupResponses });
+
     const { item, setQuestionData } = this.props;
-    setQuestionData({ ...item, groupResponses: newGroupResponses });
+    setQuestionData(
+      produce(item, draft => {
+        draft.groupResponses = newGroupResponses;
+      })
+    );
   };
 
   removeGroup = index => {
@@ -119,8 +145,14 @@ class Authoring extends Component {
     groupResponses.splice(index, 1);
     const newGroupResponses = groupResponses.slice();
     this.setState({ groupResponses: newGroupResponses });
+
     const { item, setQuestionData } = this.props;
-    setQuestionData({ ...item, groupResponses: newGroupResponses });
+    setQuestionData(
+      produce(item, draft => {
+        draft.groupResponses = newGroupResponses;
+        updateVariables(draft);
+      })
+    );
   };
 
   changeGroupRespTitle = (index, e) => {
@@ -128,8 +160,14 @@ class Authoring extends Component {
     const newGroupResponses = groupResponses.slice();
     newGroupResponses[index].title = e.target.value;
     this.setState({ groupResponses: newGroupResponses });
+
     const { item, setQuestionData } = this.props;
-    setQuestionData({ ...item, groupResponses: newGroupResponses });
+    setQuestionData(
+      produce(item, draft => {
+        draft.groupResponses = newGroupResponses;
+        updateVariables(draft);
+      })
+    );
   };
 
   addNewGroupOption = index => {
@@ -137,9 +175,13 @@ class Authoring extends Component {
     const { t } = this.props;
     const newGroupResponses = groupResponses.slice();
     newGroupResponses[index].options.push(t("component.cloze.dragDrop.newChoice"));
-    this.setState({ groupResponses: newGroupResponses });
+
     const { item, setQuestionData } = this.props;
-    setQuestionData({ ...item, groupResponses: newGroupResponses });
+    setQuestionData(
+      produce(item, draft => {
+        draft.groupResponses = newGroupResponses;
+      })
+    );
   };
 
   editGroupOptions = (index, itemIndex, e) => {
@@ -147,8 +189,14 @@ class Authoring extends Component {
     const newGroupResponses = groupResponses.slice();
     newGroupResponses[index].options[itemIndex] = e.target.value;
     this.setState({ groupResponses: newGroupResponses });
+
     const { item, setQuestionData } = this.props;
-    setQuestionData({ ...item, groupResponses: newGroupResponses });
+    setQuestionData(
+      produce(item, draft => {
+        draft.groupResponses = newGroupResponses;
+        updateVariables(draft);
+      })
+    );
   };
 
   removeGroupOptions = (index, itemIndex) => {
@@ -156,8 +204,14 @@ class Authoring extends Component {
     const newGroupResponses = groupResponses.slice();
     newGroupResponses[index].options.splice(itemIndex, 1);
     this.setState({ groupResponses: newGroupResponses });
+
     const { item, setQuestionData } = this.props;
-    setQuestionData({ ...item, groupResponses: newGroupResponses });
+    setQuestionData(
+      produce(item, draft => {
+        draft.groupResponses = newGroupResponses;
+        updateVariables(draft);
+      })
+    );
   };
 
   onSortEndGroupOptions = () => {};
@@ -175,7 +229,7 @@ class Authoring extends Component {
               this.stimulus = instance;
             }}
             placeholder={t("component.cloze.dragDrop.thisisstem")}
-            onChange={this.onChangeQuesiton}
+            onChange={this.onChangeQuestion}
             showResponseBtn={false}
             value={item.stimulus}
           />

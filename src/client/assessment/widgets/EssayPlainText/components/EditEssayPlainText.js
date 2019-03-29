@@ -1,10 +1,13 @@
 import React, { Fragment } from "react";
 import PropTypes from "prop-types";
-import { cloneDeep, get } from "lodash";
+import { get } from "lodash";
 import { Checkbox, Input } from "antd";
+import produce from "immer";
 
 import { withNamespaces } from "@edulastic/localization";
 import { Paper, FlexContainer } from "@edulastic/common";
+
+import { updateVariables } from "../../../utils/variables";
 
 import { AdaptiveCheckbox } from "../styled/AdaptiveCheckbox";
 import WidgetOptions from "../../../containers/WidgetOptions";
@@ -30,28 +33,34 @@ import { Col } from "../../../styled/WidgetOptions/Col";
 
 const EditEssayPlainText = ({ item, setQuestionData, t }) => {
   const handleItemChangeChange = (prop, uiStyle) => {
-    const newItem = cloneDeep(item);
-
-    newItem[prop] = uiStyle;
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft[prop] = uiStyle;
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleValidationChange = (prop, uiStyle) => {
-    const newItem = cloneDeep(item);
-
-    newItem.validation[prop] = uiStyle;
-    setQuestionData(newItem);
+    setQuestionData(
+      produce(item, draft => {
+        draft.validation[prop] = uiStyle;
+        updateVariables(draft);
+      })
+    );
   };
 
   const handleUIStyleChange = (prop, val) => {
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        if (!draft.ui_style) {
+          draft.ui_style = {};
+        }
 
-    if (!newItem.ui_style) {
-      newItem.ui_style = {};
-    }
-
-    newItem.ui_style[prop] = val;
-    setQuestionData(newItem);
+        draft.ui_style[prop] = val;
+        updateVariables(draft);
+      })
+    );
   };
 
   return (

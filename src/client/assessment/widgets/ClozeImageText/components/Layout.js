@@ -1,9 +1,10 @@
 import React from "react";
-import { cloneDeep, get } from "lodash";
+import { get } from "lodash";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import { withNamespaces } from "react-i18next";
+import produce from "immer";
 
 import SpecialCharacters from "../../../containers/WidgetOptions/components/SpecialCharacters";
 import { Row } from "../../../styled/WidgetOptions/Row";
@@ -24,26 +25,26 @@ const Layout = ({ item, t, changeItem, setQuestionData }) => {
   const mapValues = val => (Number.isNaN(+val) ? "" : val);
 
   const changeUiStyle = (prop, value) => {
-    const newItem = cloneDeep(item);
+    setQuestionData(
+      produce(item, draft => {
+        if (!draft.ui_style) {
+          draft.ui_style = {};
+        }
 
-    if (!newItem.ui_style) {
-      newItem.ui_style = {};
-    }
+        if (prop === "inputtype") {
+          draft.validation.valid_response.value = draft.validation.valid_response.value.map(mapValues);
 
-    if (prop === "inputtype") {
-      newItem.validation.valid_response.value = newItem.validation.valid_response.value.map(mapValues);
+          if (Array.isArray(draft.validation.alt_responses)) {
+            draft.validation.alt_responses = draft.validation.alt_responses.map(res => {
+              res.value = res.value.map(mapValues);
+              return res;
+            });
+          }
+        }
 
-      if (Array.isArray(newItem.validation.alt_responses)) {
-        newItem.validation.alt_responses = newItem.validation.alt_responses.map(res => {
-          res.value = res.value.map(mapValues);
-          return res;
-        });
-      }
-    }
-
-    newItem.ui_style[prop] = value;
-
-    setQuestionData(newItem);
+        draft.ui_style[prop] = value;
+      })
+    );
   };
 
   return (
