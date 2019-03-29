@@ -76,13 +76,14 @@ class ShareModal extends React.Component {
   };
 
   handleSearch(value) {
+    const { sharedType } = this.state;
     const { getUsers, updateShareList } = this.props;
     const searchBody = {
       limit: 10,
       page: 1,
-      type: "school",
+      type: sharedType,
       search: {
-        role: "student",
+        role: "teacher",
         searchString: value
       }
     };

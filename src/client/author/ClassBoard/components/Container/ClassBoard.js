@@ -70,20 +70,17 @@ import {
   StudentGrapContainer
 } from "./styled";
 
-import { Button } from "antd";
-import { Link } from "react-router-dom";
-
 /**
  * right side button group
  * @param {{redirect: Function }} param0
  */
-const StudentActions = ({ redirect, printRedirect }) => (
-  <Button.Group>
-    <Button onClick={printRedirect}>Print</Button>
-    <Button onClick={redirect}>redirect</Button>
-    <Button>more</Button>
-  </Button.Group>
-);
+// const StudentActions = ({ redirect }) => (
+//   <Button.Group>
+//     <Button>Print</Button>
+//     <Button onClick={redirect}>redirect</Button>
+//     <Button>more</Button>
+//   </Button.Group>
+// );
 
 class ClassBoard extends Component {
   constructor(props) {
@@ -182,7 +179,7 @@ class ClassBoard extends Component {
     let id = null;
     data.forEach(item => {
       if (item.testActivityId) {
-        if (!id) id = item.testActivityId;
+        id = item.testActivityId;
       }
     });
     return id;
@@ -206,24 +203,15 @@ class ClassBoard extends Component {
   };
 
   changeCardCheck = (isCheck, studentId) => {
-    let selectedStudents = this.props.selectedStudents;
-    let nCountTrue = Object.keys(selectedStudents).length;
-
-    if (isCheck) {
-      nCountTrue++;
-    } else {
-      nCountTrue--;
-    }
-
-    this.setState({
-      selectAll: nCountTrue == this.props.testActivity.length ? true : false
+    let nCountTrue = 0;
+    const { testActivity } = this.props;
+    testActivity.map(student => {
+      if (student.studentId === studentId) student.check = isCheck;
+      if (student.check) nCountTrue++;
+      return null;
     });
-  };
-
-  onClickCollapse = collapsed => {
     this.setState({
       selectAll: nCountTrue === testActivity.length,
-      isCollapsed: collapsed,
       nCountTrue
     });
   };
@@ -234,7 +222,6 @@ class ClassBoard extends Component {
       testActivity,
       creating,
       match,
-      history,
       classResponse,
       additionalData = {
         classes: []
@@ -244,8 +231,7 @@ class ClassBoard extends Component {
       studentResponse,
       selectedStudents,
       setSelected,
-      allStudents,
-      additionalData: { testId } = {}
+      allStudents
     } = this.props;
     const { selectedTab, flag, selectedQuestion, selectAll, nCountTrue, redirectPopup } = this.state;
     const { assignmentId, classId } = match.params;
@@ -290,18 +276,20 @@ class ClassBoard extends Component {
               <StyledCard bordered={false}>
                 <Graph gradebook={gradebook} />
               </StyledCard>
-              <CollapseButton handleClickCollapse={this.onClickCollapse} collapsed={isCollapsed} />
-            </StyledCardContainer>
-
-            <StyledFlexContainer justifyContent="space-between">
-              <StyledCheckbox checked={this.state.selectAll} onChange={this.onSelectAllChange}>
-                {selectAll ? "UNSELECT ALL" : "SELECT ALL"}
-              </StyledCheckbox>
-              <StudentActions
-                redirect={() => this.setState({ redirectPopup: true })}
-                printRedirect={() => history.push(`/author/printpreview/` + testId)}
-              />
-            </StyledFlexContainer>
+            </GraphContainer>
+            {nCountTrue > 0 && (
+              <StyledFlexContainer justifyContent="space-between" style={{ marginBottom: 0, paddingRight: 20 }}>
+                <CheckContainer>
+                  <StyledCheckbox checked={selectAll} onChange={this.onSelectAllChange}>
+                    {selectAll ? "UNSELECT ALL" : "SELECT ALL"}
+                  </StyledCheckbox>
+                </CheckContainer>
+                <RedirectButton onClick={() => this.setState({ redirectPopup: true })}>
+                  <img src={Elinks} alt="" />
+                  REDIRECT
+                </RedirectButton>
+              </StyledFlexContainer>
+            )}
             {flag ? (
               <DisneyCardContainer
                 selectedStudents={selectedStudents}

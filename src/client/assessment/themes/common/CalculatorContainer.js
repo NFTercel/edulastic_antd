@@ -11,6 +11,10 @@ class CalculatorContainer extends Component {
     this.state = {
       calculateMode: this.props.calculateMode
     };
+
+    this.desmosGraphingRef = React.createRef();
+    this.desmosBasicRef = React.createRef();
+    this.desmosScientificRef = React.createRef();
   }
 
   componentWillReceiveProps(nextProps) {

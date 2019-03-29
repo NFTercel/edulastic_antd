@@ -83,21 +83,8 @@ class ClassHeader extends Component {
   render() {
     const { t, active, assignmentId, classId, testActivityId, additionalData = {}, showScore } = this.props;
     const { showDropdown, visible } = this.state;
-    const endDate = additionalData.endDate;
-    const dueDate = isNaN(endDate) ? new Date(endDate) : new Date(parseInt(endDate));
-
-    const menu = (
-      <Menu>
-        <Menu.Item key={"1"}>Mark as Done</Menu.Item>
-        <Menu.Item
-          key={"2"}
-          onClick={this.handleReleaseScore}
-          style={{ textDecoration: showScore ? "line-through" : "none" }}
-        >
-          Release Score
-        </Menu.Item>
-      </Menu>
-    );
+    const { endDate } = additionalData;
+    const dueDate = Number.isNaN(endDate) ? new Date(endDate) : new Date(parseInt(endDate, 10));
 
     return (
       <Container>

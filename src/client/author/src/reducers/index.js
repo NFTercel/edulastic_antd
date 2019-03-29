@@ -13,7 +13,6 @@ import authorQuestions from "../../sharedDucks/questions";
 import authorUserList from "../../sharedDucks/userDetails";
 import classResponse from "./classResponse";
 import studentResponse from "./studentResponse";
-import classStudentResponse from "./classStudentResponse";
 import feedbackResponse from "./feedbackResponse";
 import studentQuestionResponse from "./studentQuestionResponse";
 import classQuestionResponse from "./classQuestionResponse";
@@ -47,7 +46,6 @@ const authorReducers = {
   author_classboard_testActivity,
   classResponse,
   studentResponse,
-  classStudentResponse,
   feedbackResponse,
   tests,
   testList,

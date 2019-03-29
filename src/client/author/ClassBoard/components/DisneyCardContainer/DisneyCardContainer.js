@@ -152,7 +152,6 @@ export default class DisneyCardContainer extends Component {
                         } else {
                           this.props.studentUnselect(student.studentId);
                         }
-                        this.props.changeCardCheck(e.target.checked, student.studentId);
                       }}
                       studentId={student.studentId}
                     />
