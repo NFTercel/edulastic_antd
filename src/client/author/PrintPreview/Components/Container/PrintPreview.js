@@ -7,7 +7,6 @@ import { get } from "lodash";
 import * as moment from "moment";
 import StudentQuestionContainer from "../StudentQuestionContiner/StudentQuestionContainer";
 const html2canvas = require("html2canvas");
-import jsPDF from "jspdf";
 
 import {
   PrintPreviewBack,
